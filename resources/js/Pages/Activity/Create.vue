@@ -11,19 +11,33 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div>
                         <div class="p-6 sm:px-20 bg-white border-b border-gray-200">
-                            <div>
-                                <jet-application-logo class="block h-12 w-auto" />
-                            </div>
-
                             <div class="mt-8 text-2xl">
                                 Upload an activity
                             </div>
 
                             <div class="mt-6 text-gray-500">
-                                <form action="/" method="post">
-                                    <input type="file" name="file" ref="file"/>
-                                    <button type="submit">Upload</button>
+
+                                <jet-validation-errors class="mb-4" />
+
+                                <form @submit.prevent="uploadActivity">
+
+                                    <div>
+                                        <jet-label for="activity_name" value="Name" />
+                                        <jet-input id="activity_name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <jet-label for="file" value="Activity File" />
+                                        <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                            Upload
+                                        </jet-button>
+                                    </div>
                                 </form>
+
                             </div>
                         </div>
 
@@ -39,7 +53,7 @@
                                         Connect to strava xyz.
                                     </div>
 
-                                    <a href="https://laravel.com/docs">
+                                    <a :href="route('strava.login')">
                                         <div class="mt-3 flex items-center text-sm font-semibold text-indigo-700">
                                             <div>Connect to Strava</div>
 
@@ -111,24 +125,36 @@
 <script>
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
-    import Welcome from '@/Jetstream/Welcome.vue'
+
+    import {useForm} from '@inertiajs/inertia-vue3'
+    import JetInput from '@/Jetstream/Input.vue'
+    import JetLabel from '@/Jetstream/Label.vue'
+    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+    import JetButton from '@/Jetstream/Button.vue'
 
     export default defineComponent({
         components: {
             AppLayout,
-            Welcome,
+            JetButton,
+            JetInput,
+            JetLabel,
+            JetValidationErrors
+        },
+        setup () {
+            const form = useForm({
+                name: null,
+                file: null,
+            })
+
+            function submit() {
+                form.post('/users')
+            }
+
+            return { form, submit }
         },
         methods: {
             uploadActivity() {
-                let formData = new FormData();
-                formData.append('file[]', this.$refs.file[0]);
-                this.$http.post('/upload', formData, {headers: {'Content-Type': 'multipart/form-data'}, name: 'uploading-file'})
-                    .then(response => {
-                        this.$notify.success('File uploaded!');
-                        this.$emit('file-uploaded', response.data);
-                        this.$refs.form.reset();
-                    })
-                    .catch(error => this.$notify.alert('There was a problem uploading your file: ' + error.message));
+                this.form.post('/activity');
             }
         }
     })

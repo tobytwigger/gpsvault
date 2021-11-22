@@ -13,7 +13,7 @@ class StoreActivityRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class StoreActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'file' => 'file',
+            'name' => 'sometimes|nullable|max:255'
         ];
     }
 }

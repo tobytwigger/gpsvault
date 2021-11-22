@@ -15,6 +15,12 @@ class CreateActivitiesTable extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
+            $table->text('filepath');
+            $table->string('type')->nullable();
+            $table->float('distance')->nullable();
+            $table->dateTime('start_at')->nullable();
             $table->timestamps();
         });
     }

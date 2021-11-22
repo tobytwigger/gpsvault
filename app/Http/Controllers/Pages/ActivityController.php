@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pages;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
@@ -16,7 +17,9 @@ class ActivityController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Activity/Index', [
+            'activities' => Activity::orderBy('start_at', 'DESC')->get()
+        ]);
     }
 
     /**
@@ -33,22 +36,32 @@ class ActivityController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreActivityRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreActivityRequest $request)
     {
-        //
+        $path = $request->file('file')->store('uploads');
+
+        $activity = Activity::create([
+            'name' => $request->input('name'),
+            'filepath' => $path,
+            'type' => $request->file('file')->clientExtension()
+        ]);
+
+        return redirect()->route('activity.show', $activity);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Activity $activity)
     {
-        //
+        return Inertia::render('Activity/Show', [
+            'activity' => $activity
+        ]);
     }
 
     /**
