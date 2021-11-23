@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\Integrations\Integration;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ConnectionLog extends Model
 {
@@ -47,7 +50,20 @@ class ConnectionLog extends Model
     protected $fillable = [
         'type',
         'log',
-        'user_id'
+        'user_id',
+        'client_uuid',
+        'request_uuid',
+        'integration'
     ];
+
+    public function scopeForIntegration(Builder $query, Integration $integration)
+    {
+        $query->where('integration', $integration->id());
+    }
+
+    public function scopeForCurrentUser(Builder $query)
+    {
+        $query->where('user_id', Auth::id());
+    }
 
 }

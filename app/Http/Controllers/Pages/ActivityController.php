@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ActivityController extends Controller
 {
@@ -29,7 +31,9 @@ class ActivityController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Activity/Create');
+        return Inertia::render('Activity/Create', [
+            'integrations' => collect(app()->tagged('integrations'))
+        ]);
     }
 
     /**
@@ -80,11 +84,18 @@ class ActivityController extends Controller
      *
      * @param  \App\Http\Requests\UpdateActivityRequest  $request
      * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateActivityRequest $request, Activity $activity)
     {
-        //
+        if(!$activity->hasFilepath() && $request->hasFile('file')) {
+            $path = $request->file('file')->store('uploads');
+            $activity->filepath = $path;
+            $activity->type = $request->file('file')->clientExtension();
+            $activity->save();
+        }
+
+        return redirect()->route('activity.show', $activity->refresh());
     }
 
     /**
@@ -96,5 +107,13 @@ class ActivityController extends Controller
     public function destroy(Activity $activity)
     {
         //
+    }
+
+    public function download(Activity $activity)
+    {
+        if($activity->hasFilepath()) {
+            return Storage::download($activity->filepath);
+        }
+        throw new NotFoundHttpException('This activity does not have a file associated with it');
     }
 }

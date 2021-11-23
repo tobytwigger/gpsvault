@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Strava\Client\Models;
+namespace App\Integrations\Strava\Client\Client\Models;
 
 class StravaActivity
 {

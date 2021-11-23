@@ -1,19 +1,26 @@
 <?php
 
-namespace App\Services\Strava;
+namespace App\Integrations\Strava\Client;
 
-use App\Services\Strava\Authentication\StravaToken;
-use App\Services\Strava\Client\StravaClient;
-use App\Services\Strava\Log\ConnectionLog;
+use App\Integrations\Strava\Client\Authentication\StravaToken;
+use App\Integrations\Strava\Client\Client\StravaClient;
+use App\Integrations\Strava\Client\Log\ConnectionLog;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Ramsey\Uuid\Uuid;
 
 class Strava
 {
 
+    protected string $clientUuid;
+
+    private ConnectionLog $log;
+
     public function __construct(protected Client $client, protected ClientFactory $clientFactory)
     {
+        $this->clientUuid = Uuid::uuid4();
+        $this->log = ConnectionLog::create('strava', $this->clientUuid);
     }
 
     public function redirectUrl(
@@ -27,11 +34,11 @@ class Strava
             'redirect_uri' => $redirectUrl,
             'response_type' => 'code',
             'approval_prompt' => 'auto',
-            'scope' => 'activity:read,read',
+            'scope' => 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write',
             'state  ' => $state
         ];
 
-        app(ConnectionLog::class)->debug('Generating redirect url');
+        $this->log->debug('Generating redirect url');
 
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
     }
@@ -42,7 +49,7 @@ class Strava
         string $code
     ): StravaToken
     {
-        app(ConnectionLog::class)->debug('About to exchange code for token');
+        $this->log->debug('About to exchange code for token');
 
         try {
             $response = $this->client->request('post', 'https://www.strava.com/oauth/token', [
@@ -54,20 +61,20 @@ class Strava
                 ]
             ]);
         } catch (\Exception $e) {
-            app(ConnectionLog::class)->error(sprintf('Could not get access token from Strava: %s', $e->getMessage()));
+            $this->log->error(sprintf('Could not get access token from Strava: %s', $e->getMessage()));
             throw $e;
         }
 
-        app(ConnectionLog::class)->debug('Access token returned by Strava');
+        $this->log->debug('Access token returned by Strava');
 
         $credentials = json_decode(
             $response->getBody()->getContents(),
             true
         );
 
-        app(ConnectionLog::class)->debug('Decoded access token');
+        $this->log->debug('Decoded access token');
 
-        app(ConnectionLog::class)->success('Initial connection to Strava made successfully');
+        $this->log->success('Connected account to Strava');
 
         return StravaToken::create(
             new Carbon((int) $credentials['expires_at']),
@@ -84,7 +91,7 @@ class Strava
         string $refreshToken
     ): StravaToken
     {
-        app(ConnectionLog::class)->debug('About to refresh token');
+        $this->log->debug('About to refresh token');
 
         try {
 
@@ -97,20 +104,20 @@ class Strava
                 ]
             ]);
         } catch (\Exception $e) {
-            app(ConnectionLog::class)->error(sprintf('Could not get refreshed access token from Strava: %s', $e->getMessage()));
+            $this->log->error(sprintf('Could not get refreshed access token from Strava: %s', $e->getMessage()));
             throw $e;
         }
 
-        app(ConnectionLog::class)->debug('Refreshed access token returned by Strava');
+        $this->log->debug('Refreshed access token returned by Strava');
 
         $credentials = json_decode(
             $response->getBody()->getContents(),
             true
         );
 
-        app(ConnectionLog::class)->debug('Decoded refreshed access token');
+        $this->log->debug('Decoded refreshed access token');
 
-        app(ConnectionLog::class)->success('Access token refreshed successfully');
+        $this->log->success('Access token refreshed successfully');
 
         $stravaToken = StravaToken::create(
             new Carbon((int) $credentials['expires_at']),
@@ -119,7 +126,7 @@ class Strava
             (string)$credentials['access_token'],
         );
 
-        $savedToken = \App\Models\StravaToken::makeFromStravaToken($stravaToken);
+        $savedToken = \App\Integrations\Strava\StravaToken::makeFromStravaToken($stravaToken);
         $savedToken->save();
 
         return $stravaToken;
@@ -131,9 +138,9 @@ class Strava
             $userId = Auth::id();
         }
 
-        app(ConnectionLog::class)->debug('Client created ready for connection to Strava');
+        $this->log->debug('Client created ready for connection to Strava');
 
-        return $this->clientFactory->create($userId);
+        return $this->clientFactory->setLog($this->log)->create($userId);
     }
 
 }

@@ -97,49 +97,6 @@ export default defineComponent({
         toKilometers(value) {
             return Math.round(value / 10) / 100;
         }
-    },
-    computed: {
-        hasStats() {
-            return Object.keys(this.stats).length > 0;
-        },
-        distance() {
-            let distance = this.stats.distance ?? null;
-            if (distance !== null) {
-                distance = (Math.round(((distance / 1000) + Number.EPSILON) * 100) / 100) + 'km';
-            }
-            return distance;
-        },
-        movingTime() {
-            return 'N/A';
-        },
-        totalTime() {
-            let duration = this.stats.duration ?? null;
-            if (duration !== null) {
-                duration = moment.utc(duration * 1000).format('HH:mm:ss')
-            }
-            return duration;
-        },
-        elevationGain() {
-            let gain = this.stats.cumulativeElevationGain ?? null;
-            if (gain !== null) {
-                gain = Math.round(gain) + 'm';
-            }
-            return gain;
-        },
-        averageSpeed() {
-            let speed = this.stats.averageSpeed ?? null;
-            if (speed !== null) {
-                speed = Math.round((speed * 3.6) * 100) / 100 + 'km/h';
-            }
-            return speed;
-        },
-        averagePage() {
-            let pace = this.stats.averagePace ?? null;
-            if (pace !== null) {
-                pace = Math.round((pace / 60) * 100) / 100 + 'mins/km';
-            }
-            return pace;
-        }
     }
 })
 </script>

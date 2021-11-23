@@ -17,10 +17,11 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->text('filepath');
+            $table->text('filepath')->nullable();
             $table->string('type')->nullable();
             $table->float('distance')->nullable();
             $table->dateTime('start_at')->nullable();
+            $table->text('additional_data')->nullable();
             $table->timestamps();
         });
     }

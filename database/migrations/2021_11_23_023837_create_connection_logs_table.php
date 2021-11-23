@@ -24,6 +24,9 @@ class CreateConnectionLogsTable extends Migration
             ]);
             $table->text('log')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->string('integration');
+            $table->uuid('client_uuid')->nullable();
+            $table->uuid('request_uuid')->nullable();
             $table->timestamps();
         });
     }

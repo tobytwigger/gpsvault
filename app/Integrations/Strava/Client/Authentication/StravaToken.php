@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Strava\Authentication;
+namespace App\Integrations\Strava\Client\Authentication;
 
 class StravaToken
 {

@@ -1,22 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Integrations\Strava\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\StravaToken;
-use App\Services\Strava\Strava;
+use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Client\Strava;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class StravaController extends Controller
+class StravaController extends \Illuminate\Routing\Controller
 {
-
-    public function index()
-    {
-        return view('connect');
-    }
 
     public function login(Request $request, Strava $strava)
     {

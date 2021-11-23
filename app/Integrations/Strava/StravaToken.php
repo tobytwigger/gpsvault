@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Integrations\Strava;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,9 +35,12 @@ class StravaToken extends Model
         static::addGlobalScope('enabled', function (Builder $builder) {
             $builder->where('disabled', false);
         });
+        static::addGlobalScope('not-expired', function (Builder $builder) {
+            $builder->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->addMinutes(2)->format('Y-m-d H:i:s'));
+        });
     }
 
-    public static function makeFromStravaToken(\App\Services\Strava\Authentication\StravaToken $token)
+    public static function makeFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token)
     {
         $instance = new StravaToken();
 
@@ -59,7 +63,7 @@ class StravaToken extends Model
         return $this->expires_at->subMinutes(2)->isPast();
     }
 
-    public function updateFromStravaToken(\App\Services\Strava\Authentication\StravaToken $newToken)
+    public function updateFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $newToken)
     {
         $instance = new StravaToken();
 
