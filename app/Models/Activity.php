@@ -7,6 +7,7 @@ use App\Services\ActivityData\Analysis;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use function Illuminate\Events\queueable;
 
 class Activity extends Model
@@ -14,18 +15,29 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'filepath', 'type', 'distance', 'start_at', 'additional_data'
+        'name', 'description', 'filepath', 'type', 'distance', 'start_at', 'additional_data', 'linked_to'
     ];
 
     protected $casts = [
         'distance' => 'float',
         'start_at' => 'datetime',
-        'additional_data' => 'array'
+        'additional_data' => 'array',
+        'linked_to' => 'array',
     ];
 
     public function scopeWhereAdditionalDataContains(Builder $query, string $id, $value)
     {
         $query->where('additional_data', 'LIKE', json_encode([$id => $value]));
+    }
+
+    public function scopeLinkedTo(Builder $query, string $linkedTo)
+    {
+        $query->where('linked_to', 'LIKE', sprintf('%%%s%%', $linkedTo));
+    }
+
+    public function scopeWithoutFile(Builder $query)
+    {
+        return $query->whereNull('filepath');
     }
 
     protected static function booted()

@@ -2,8 +2,9 @@
 
 namespace App\Integrations\Strava;
 
+use App\Models\Activity;
 use App\Models\User;
-use App\Services\Integrations\Integration;
+use App\Integrations\Integration;
 
 class StravaIntegration extends Integration
 {
@@ -49,5 +50,20 @@ class StravaIntegration extends Integration
     public function disconnect(User $user): void
     {
         $user->stravaTokens()->withoutGlobalScope('enabled')->withoutGlobalScope('not-expired')->delete();
+    }
+
+    public function vueAddOn(): ?string
+    {
+        return 'integration-strava-addon';
+    }
+
+    public function vueAddOnProps(): array
+    {
+        return [
+            'count' => Activity::withoutFile()
+                ->where('additional_data', 'NOT LIKE', sprintf('%%%s%%', json_encode(['upload_id' => null])))
+                ->linkedTo('strava')
+                ->count()
+        ];
     }
 }

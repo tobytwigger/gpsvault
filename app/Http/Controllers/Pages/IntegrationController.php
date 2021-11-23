@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
-use App\Services\Integrations\Integration;
+use App\Integrations\Integration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 

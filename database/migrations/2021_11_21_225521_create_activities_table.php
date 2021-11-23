@@ -21,6 +21,7 @@ class CreateActivitiesTable extends Migration
             $table->string('type')->nullable();
             $table->float('distance')->nullable();
             $table->dateTime('start_at')->nullable();
+            $table->text('linked_to')->nullable();
             $table->text('additional_data')->nullable();
             $table->timestamps();
         });

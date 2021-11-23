@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Integrations;
+namespace App\Integrations;
 
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
@@ -21,7 +21,9 @@ abstract class Integration implements Arrayable, Jsonable
             'description' => $this->description(),
             'functionality' => $this->functionality(),
             'connected' => $this->connected(Auth::user()),
-            'login_url' => $this->loginUrl()
+            'login_url' => $this->loginUrl(),
+            'vue_addon' => $this->vueAddOn(),
+            'vue_addon_props' => $this->vueAddOnProps()
         ];
     }
 
@@ -50,5 +52,15 @@ abstract class Integration implements Arrayable, Jsonable
     abstract public function loginUrl(): string;
 
     abstract public function disconnect(User $user): void;
+
+    public function vueAddOn(): ?string
+    {
+        return null;
+    }
+
+    public function vueAddOnProps(): array
+    {
+        return [];
+    }
 
 }

@@ -44,6 +44,15 @@
                     </div>
                 </div>
             </a>
+            <div v-if="integration.vue_addon">
+                <component
+                    :is="integration.vue_addon"
+                    :key="'integration-add-on-' + integration.id"
+                    v-bind="integration.vue_addon_props"
+                >
+
+                </component>
+            </div>
         </div>
     </div>
 </template>

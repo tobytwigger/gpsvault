@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Models\ConnectionLog;
-use App\Services\Integrations\Integration;
+use App\Integrations\Integration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

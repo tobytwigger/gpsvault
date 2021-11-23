@@ -35,9 +35,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');
     Route::get('/integration/{integration}/logs', [\App\Http\Controllers\Pages\ConnectionLogController::class, 'index'])->name('integration.logs');
 
-    Route::prefix('strava')->group(function() {
-        Route::get('login', [\App\Http\Controllers\Pages\StravaController::class, 'login'])->name('strava.login');
-        Route::get('callback', [\App\Http\Controllers\Pages\StravaController::class, 'callback'])->name('strava.callback');
-    });
-
 });

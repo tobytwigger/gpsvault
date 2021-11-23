@@ -1144,6 +1144,9 @@ select {
 .col-span-6 {
 	grid-column: span 6 / span 6;
 }
+.float-right {
+	float: right;
+}
 .mx-auto {
 	margin-left: auto;
 	margin-right: auto;
@@ -1655,6 +1658,10 @@ select {
 .py-10 {
 	padding-top: 2.5rem;
 	padding-bottom: 2.5rem;
+}
+.px-12 {
+	padding-left: 3rem;
+	padding-right: 3rem;
 }
 .pt-6 {
 	padding-top: 1.5rem;

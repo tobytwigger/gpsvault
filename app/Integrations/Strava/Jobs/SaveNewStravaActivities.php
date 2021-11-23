@@ -42,11 +42,13 @@ class SaveNewStravaActivities implements ShouldQueue
             $activities = $client->getActivities($page);
             $page = $page + 1;
             foreach($activities as $activity) {
-                if(!Activity::whereAdditionalDataContains('strava_id', $activity['id'])->exists()) {
+                if($activity['id'] && !Activity::whereAdditionalDataContains('strava_id', $activity['id'])->exists()) {
                     Activity::create([
                         'name' => $activity['name'],
                         'distance' => $activity['distance'],
-                        'start_at' => Carbon::make($activity['start_date'])
+                        'start_at' => Carbon::make($activity['start_date']),
+                        'linked_to' => ['strava'],
+                        'additional_data' => ['strava_id' => $activity['id'], 'upload_id' => $activity['upload_id_str'] ?? null]
                     ]);
                 }
             }
