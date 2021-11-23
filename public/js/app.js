@@ -19226,7 +19226,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       show: false,
       form: (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__.useForm)({
-        files: null
+        file: null
       })
     };
   },
@@ -19239,7 +19239,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     upload: function upload() {
-      this.form.post(route('strava.fix'));
+      var _this = this;
+
+      this.form.post(route('strava.fix'), {
+        onSuccess: function onSuccess() {
+          return _this.show = false;
+        }
+      });
     }
   }
 });
@@ -21653,13 +21659,13 @@ var _hoisted_5 = {
   "class": "mt-4"
 };
 
-var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "We can't automatically import the gps files when synchronising from strava. Fortunately, you can quickly attach all these files at once.", -1
+var _hoisted_6 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "We can't automatically import the gps files when synchronising from Strava. Fortunately, you can quickly attach all these files at once.", -1
 /* HOISTED */
 );
 
 var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
   "class": "text-sm mt-4"
-}, "Follow the documentation to get a zip file of all your data, and upload it below.", -1
+}, "Follow the documentation to get your zip file from Strava, then upload it below.", -1
 /* HOISTED */
 );
 
@@ -21705,13 +21711,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_hoisted_6, _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_label, {
         "for": "file",
-        value: "Zip File"
+        value: "Zip file"
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_input, {
         id: "file",
-        multiple: "",
         type: "file",
         onInput: _cache[1] || (_cache[1] = function ($event) {
-          return $data.form.files = $event.target.files;
+          return $data.form.file = $event.target.files[0];
         }),
         "class": "mt-1 block w-full",
         required: ""

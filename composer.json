@@ -9,6 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-zlib": "*",
+        "adriangibbons/php-fit-file-analysis": "^3.2",
+        "alchemy/zippy": "^1.0",
+        "duckfusion/waddle": "^1.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "inertiajs/inertia-laravel": "^0.4.3",
@@ -17,7 +21,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "nelexa/zip": "^4.0",
-        "sibyx/phpgpx": "1.1.3",
+        "sibyx/phpgpx": "^1.1.3",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

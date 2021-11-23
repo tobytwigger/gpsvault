@@ -47,13 +47,13 @@ class GpxParser implements Parser
 
                     $this->analysis->pushPoint(
                         (new Point())
-                            ->setCadence($point->extensions->trackPointExtension->cad)
-                            ->setAverageTemperature($point->extensions->trackPointExtension->aTemp)
+                            ->setCadence($point->extensions?->trackPointExtension?->cad)
+                            ->setAverageTemperature($point->extensions?->trackPointExtension?->aTemp)
                             ->setElevation($point->elevation)
-                            ->setHeartRate($point->extensions->trackPointExtension->hr)
+                            ->setHeartRate($point->extensions?->trackPointExtension?->hr)
                             ->setLatitude($point->latitude)
                             ->setLongitude($point->longitude)
-                            ->setSpeed($point->extensions->trackPointExtension->speed)
+                            ->setSpeed($point->extensions?->trackPointExtension?->speed)
                             ->setTime($point->time ? Carbon::make($point->time) : null)
                     );
                 }

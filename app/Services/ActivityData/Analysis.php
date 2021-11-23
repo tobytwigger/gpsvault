@@ -10,23 +10,23 @@ class Analysis implements Arrayable, Jsonable
 {
 
     /** @var float Distance in meters */
-    private float $distance = 0.0;
+    private ?float $distance = null;
 
-    private ?float $averageSpeed;
+    private ?float $averageSpeed = null;
 
-    private ?float $averagePace;
+    private ?float $averagePace = null;
 
-    private ?float $minAltitude;
+    private ?float $minAltitude = null;
 
-    private ?float $maxAltitude;
+    private ?float $maxAltitude = null;
 
-    private ?float $cumulativeElevationGain;
+    private ?float $cumulativeElevationGain = null;
 
-    private ?float $cumulativeElevationLoss;
+    private ?float $cumulativeElevationLoss = null;
 
-    private Carbon $startedAt;
+    private ?Carbon $startedAt = null;
 
-    private Carbon $finishedAt;
+    private ?Carbon $finishedAt = null;
 
     /**
      * The difference between started at and finished at.
@@ -44,18 +44,18 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getDistance(): float
+    public function getDistance(): ?float
     {
         return $this->distance;
     }
 
     /**
-     * @param float $distance
+     * @param float|null $distance
      * @return Analysis
      */
-    public function setDistance(float $distance): Analysis
+    public function setDistance(?float $distance): Analysis
     {
         $this->distance = $distance;
         return $this;
@@ -172,7 +172,7 @@ class Analysis implements Arrayable, Jsonable
     /**
      * @return Carbon
      */
-    public function getStartedAt(): Carbon
+    public function getStartedAt(): ?Carbon
     {
         return $this->startedAt;
     }
@@ -181,7 +181,7 @@ class Analysis implements Arrayable, Jsonable
      * @param Carbon $startedAt
      * @return Analysis
      */
-    public function setStartedAt(Carbon $startedAt): Analysis
+    public function setStartedAt(?Carbon $startedAt): Analysis
     {
         $this->startedAt = $startedAt;
         return $this;
@@ -190,7 +190,7 @@ class Analysis implements Arrayable, Jsonable
     /**
      * @return Carbon
      */
-    public function getFinishedAt(): Carbon
+    public function getFinishedAt(): ?Carbon
     {
         return $this->finishedAt;
     }
@@ -199,7 +199,7 @@ class Analysis implements Arrayable, Jsonable
      * @param Carbon $finishedAt
      * @return Analysis
      */
-    public function setFinishedAt(Carbon $finishedAt): Analysis
+    public function setFinishedAt(?Carbon $finishedAt): Analysis
     {
         $this->finishedAt = $finishedAt;
         return $this;

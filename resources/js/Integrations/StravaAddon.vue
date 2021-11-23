@@ -15,13 +15,13 @@
                     </div>
 
                     <div class="mt-4">
-                        <p>We can't automatically import the gps files when synchronising from strava. Fortunately, you can quickly attach all these files at once.</p>
+                        <p>We can't automatically import the gps files when synchronising from Strava. Fortunately, you can quickly attach all these files at once.</p>
 
-                        <p class="text-sm mt-4">Follow the documentation to get a zip file of all your data, and upload it below.</p>
+                        <p class="text-sm mt-4">Follow the documentation to get your zip file from Strava, then upload it below.</p>
 
                         <div class="mt-4">
-                            <jet-label for="file" value="Zip File" />
-                            <jet-input id="file" multiple type="file" @input="form.files = $event.target.files" class="mt-1 block w-full" required />
+                            <jet-label for="file" value="Zip file" />
+                            <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
                         </div>
 
                     </div>
@@ -60,7 +60,7 @@ export default {
         return {
             show: false,
             form: useForm({
-                files: null
+                file: null
             })
         }
     },
@@ -73,7 +73,9 @@ export default {
     },
     methods: {
         upload() {
-            this.form.post(route('strava.fix'));
+            this.form.post(route('strava.fix'), {
+                onSuccess: () => this.show = false
+            });
         }
     }
 }

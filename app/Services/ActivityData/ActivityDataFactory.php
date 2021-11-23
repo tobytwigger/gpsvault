@@ -4,7 +4,9 @@ namespace App\Services\ActivityData;
 
 use App\Models\Activity;
 use App\Services\ActivityData\Contracts\Parser;
+use App\Services\ActivityData\Parsers\FitParser;
 use App\Services\ActivityData\Parsers\GpxParser;
+use App\Services\ActivityData\Parsers\TcxParser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ActivityDataFactory implements Contracts\ActivityDataFactory
@@ -42,6 +44,16 @@ class ActivityDataFactory implements Contracts\ActivityDataFactory
     public function createGpxParser()
     {
         return new GpxParser(new Analysis());
+    }
+
+    public function createFitParser()
+    {
+        return new FitParser(new Analysis());
+    }
+
+    public function createTcxParser()
+    {
+        return new TcxParser(new Analysis());
     }
 
 }

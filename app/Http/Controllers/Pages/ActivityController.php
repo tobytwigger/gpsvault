@@ -44,7 +44,7 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $path = $request->file('file')->store('uploads');
+        $path = $request->file('file')->store('activities');
 
         $activity = Activity::create([
             'name' => $request->input('name'),
@@ -89,7 +89,7 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, Activity $activity)
     {
         if(!$activity->hasFilepath() && $request->hasFile('file')) {
-            $path = $request->file('file')->store('uploads');
+            $path = $request->file('file')->store('activities');
             $activity->filepath = $path;
             $activity->type = $request->file('file')->clientExtension();
             $activity->save();

@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava;
 
+use App\Integrations\Strava\Commands\SyncStravaCommand;
 use App\Integrations\Strava\Http\Controllers\StravaController;
 use App\Integrations\Integration;
 use App\Integrations\Strava\Http\Controllers\StravaFixController;
@@ -13,7 +14,9 @@ class StravaServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        $this->commands([
+            SyncStravaCommand::class
+        ]);
     }
 
     public function boot()

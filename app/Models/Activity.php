@@ -27,7 +27,8 @@ class Activity extends Model
 
     public function scopeWhereAdditionalDataContains(Builder $query, string $id, $value)
     {
-        $query->where('additional_data', 'LIKE', json_encode([$id => $value]));
+        $query->where('additional_data', 'LIKE', sprintf('%%"%s":"%s"%%', $id, $value))
+            ->orWhere('additional_data', 'LIKE', sprintf('%%"%s":%s%%', $id, $value));
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)

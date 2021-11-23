@@ -12,47 +12,47 @@ class Point implements Arrayable, Jsonable
     /**
      * @var float
      */
-    private float $latitude;
+    private ?float $latitude = null;
 
     /**
      * @var float
      */
-    private float $longitude;
+    private ?float $longitude = null;
 
     /**
      * @var float|null
      */
-    private ?float $elevation;
+    private ?float $elevation = null;
 
     /**
      * @var Carbon
      */
-    private Carbon $time;
+    private ?Carbon $time = null;
 
     /**
      * @var float|null
      */
-    private ?float $cadence;
+    private ?float $cadence = null;
 
     /**
      * @var float|null
      */
-    private ?float $averageTemperature;
+    private ?float $averageTemperature = null;
 
     /**
      * @var float|null
      */
-    private ?float $heartRate;
+    private ?float $heartRate = null;
 
     /**
      * @var float|null
      */
-    private ?float $speed;
+    private ?float $speed = null;
 
     /**
      * @return float
      */
-    public function getLatitude(): float
+    public function getLatitude(): ?float
     {
         return $this->latitude;
     }
@@ -61,7 +61,7 @@ class Point implements Arrayable, Jsonable
      * @param float $latitude
      * @return Point
      */
-    public function setLatitude(float $latitude): Point
+    public function setLatitude(?float $latitude): Point
     {
         $this->latitude = $latitude;
         return $this;
@@ -70,7 +70,7 @@ class Point implements Arrayable, Jsonable
     /**
      * @return float
      */
-    public function getLongitude(): float
+    public function getLongitude(): ?float
     {
         return $this->longitude;
     }
@@ -79,7 +79,7 @@ class Point implements Arrayable, Jsonable
      * @param float $longitude
      * @return Point
      */
-    public function setLongitude(float $longitude): Point
+    public function setLongitude(?float $longitude): Point
     {
         $this->longitude = $longitude;
         return $this;
@@ -106,7 +106,7 @@ class Point implements Arrayable, Jsonable
     /**
      * @return Carbon
      */
-    public function getTime(): Carbon
+    public function getTime(): ?Carbon
     {
         return $this->time;
     }
@@ -115,7 +115,7 @@ class Point implements Arrayable, Jsonable
      * @param Carbon $time
      * @return Point
      */
-    public function setTime(Carbon $time): Point
+    public function setTime(?Carbon $time): Point
     {
         $this->time = $time;
         return $this;
