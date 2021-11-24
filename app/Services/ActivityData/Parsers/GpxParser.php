@@ -22,7 +22,7 @@ class GpxParser implements Parser
     public function analyse(Activity $activity): Analysis
     {
         $gpx = new phpGPX();
-        $file = $gpx->load(Storage::path($activity->filepath));
+        $file = $gpx->load($activity->activityFile->fullPath());
         foreach ($file->tracks as $track)
         {
             // Statistics for whole track

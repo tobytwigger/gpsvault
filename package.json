@@ -26,7 +26,6 @@
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
-        "mapbox-gl": "^2.6.1",
         "moment": "^2.29.1"
     }
 }

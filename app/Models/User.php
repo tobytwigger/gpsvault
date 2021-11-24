@@ -63,4 +63,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(StravaToken::class);
     }
+
+    public function syncs()
+    {
+        return $this->hasMany(Sync::class);
+    }
+
 }

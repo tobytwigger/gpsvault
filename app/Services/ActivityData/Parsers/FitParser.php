@@ -22,7 +22,7 @@ class FitParser implements Parser
 
     public function analyse(Activity $activity): Analysis
     {
-        $fit = new phpFITFileAnalysis(Storage::get($activity->filepath), ['input_is_data' => true]);
+        $fit = new phpFITFileAnalysis($activity->activityFile->getFileContents(), ['input_is_data' => true]);
 
         $record = $fit->data_mesgs['record'] ?? [];
 

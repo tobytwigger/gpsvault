@@ -8,6 +8,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div>
+                        <sync :sync="sync"></sync>
                         <upload-file @submitted="uploadFile"></upload-file>
                         <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2">
                             <integration v-for="integration in integrations" :key="integration.id" :integration="integration"></integration>
@@ -25,9 +26,11 @@
 
     import UploadFile from './Partials/UploadFile';
     import Integration from './Partials/Integration';
+    import Sync from './Partials/Sync';
 
     export default defineComponent({
         components: {
+            Sync,
             Integration,
             UploadFile,
             AppLayout,
@@ -37,6 +40,18 @@
                 type: Array,
                 required: false,
                 default: () => []
+            },
+            sync: {
+                required: false,
+                type: Object,
+                default: () => {
+                    return {
+                        tasks: [],
+                        sync: null,
+                        lastComplete: null,
+                        openSync: false
+                    }
+                }
             }
         },
         methods: {

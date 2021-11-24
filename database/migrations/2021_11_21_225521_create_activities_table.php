@@ -17,8 +17,7 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
-            $table->text('filepath')->nullable();
-            $table->string('type')->nullable();
+            $table->unsignedBigInteger('activity_file_id')->nullable();
             $table->float('distance')->nullable();
             $table->dateTime('start_at')->nullable();
             $table->text('linked_to')->nullable();

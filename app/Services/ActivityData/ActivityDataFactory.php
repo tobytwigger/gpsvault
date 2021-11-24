@@ -16,8 +16,8 @@ class ActivityDataFactory implements Contracts\ActivityDataFactory
 
     public function analyse(Activity $activity): Analysis
     {
-        if($activity->hasFilepath()) {
-            return $this->parser($activity->type)->analyse($activity);
+        if($activity->activityFile) {
+            return $this->parser($activity->activityFile->extension)->analyse($activity);
         }
         throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it', $activity->id));
     }

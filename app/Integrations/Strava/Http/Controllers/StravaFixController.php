@@ -5,6 +5,7 @@ namespace App\Integrations\Strava\Http\Controllers;
 use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Zippy;
 use App\Models\Activity;
+use App\Models\File;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -79,8 +80,15 @@ class StravaFixController extends Controller
                 throw new \Exception('Could not save the file');
             }
 
-            $activity->filepath = $cloudFileName;
-            $activity->type = pathinfo($fileName, PATHINFO_EXTENSION);
+            $file = File::create([
+                'path' => $cloudFileName,
+                'filename' => $entry,
+                'size' => Storage::size($cloudFileName),
+                'mimetype' => Storage::mimeType($cloudFileName),
+                'extension' => $type
+            ]);
+
+            $activity->activity_file_id = $file->id;
             $activity->save();
 
             return static::SUCCESS;

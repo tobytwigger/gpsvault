@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use App\Models\File;
+use App\Models\Sync;
+use App\Services\Sync\Task;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -32,7 +36,13 @@ class ActivityController extends Controller
     public function create()
     {
         return Inertia::render('Activity/Create', [
-            'integrations' => collect(app()->tagged('integrations'))
+            'integrations' => collect(app()->tagged('integrations')),
+            'sync' => [
+                'tasks' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),
+                'sync' => Auth::user()->syncs()->where('finished', false)->orderBy('created_at', 'DESC')->first(),
+                'lastComplete' => null,
+                'openSync' => session()->has('withSync')
+            ]
         ]);
     }
 
@@ -46,9 +56,17 @@ class ActivityController extends Controller
     {
         $path = $request->file('file')->store('activities');
 
+        $file = File::create([
+            'path' => $path,
+            'filename' => $request->file('file')->getClientOriginalName(),
+            'size' => Storage::size($path),
+            'mimetype' => $request->file('file')->getClientMimeType(),
+            'extension' => $request->file('file')->getClientOriginalExtension()
+        ]);
+
         $activity = Activity::create([
             'name' => $request->input('name'),
-            'filepath' => $path,
+            'activity_file_id' => $file->id,
             'type' => $request->file('file')->clientExtension()
         ]);
 
@@ -64,7 +82,7 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         return Inertia::render('Activity/Show', [
-            'activity' => $activity
+            'activity' => $activity->load('files')
         ]);
     }
 
@@ -88,12 +106,36 @@ class ActivityController extends Controller
      */
     public function update(UpdateActivityRequest $request, Activity $activity)
     {
-        if(!$activity->hasFilepath() && $request->hasFile('file')) {
+        if(!$activity->hasActivityFile() && $request->hasFile('file')) {
             $path = $request->file('file')->store('activities');
-            $activity->filepath = $path;
-            $activity->type = $request->file('file')->clientExtension();
-            $activity->save();
+            $file = File::create([
+                'path' => $path,
+                'filename' => $request->file('file')->getClientOriginalName(),
+                'size' => Storage::size($path),
+                'mimetype' => $request->file('file')->getClientMimeType(),
+                'extension' => $request->file('file')->getClientOriginalExtension()
+            ]);
+
+            $activity->activity_file_id = $file->id;
         }
+
+        if($request->has('files')) {
+            foreach($request->file('files', []) as $uploadedFile) {
+                $path = $uploadedFile->store('media');
+
+                $file = File::create([
+                    'path' => $path,
+                    'filename' => $uploadedFile->getClientOriginalName(),
+                    'size' => Storage::size($path),
+                    'mimetype' => $uploadedFile->getClientMimeType(),
+                    'extension' => $uploadedFile->getClientOriginalExtension()
+                ]);
+
+                $activity->files()->attach($file);
+            }
+        }
+
+        $activity->save();
 
         return redirect()->route('activity.show', $activity->refresh());
     }
@@ -111,8 +153,8 @@ class ActivityController extends Controller
 
     public function download(Activity $activity)
     {
-        if($activity->hasFilepath()) {
-            return Storage::download($activity->filepath);
+        if($activity->activityFile) {
+            return Storage::download($activity->activityFile->getFullPath());
         }
         throw new NotFoundHttpException('This activity does not have a file associated with it');
     }

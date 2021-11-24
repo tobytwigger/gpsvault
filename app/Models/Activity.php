@@ -15,7 +15,7 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'filepath', 'type', 'distance', 'start_at', 'additional_data', 'linked_to'
+        'name', 'description', 'activity_file_id', 'type', 'distance', 'start_at', 'additional_data', 'linked_to'
     ];
 
     protected $casts = [
@@ -24,6 +24,16 @@ class Activity extends Model
         'additional_data' => 'array',
         'linked_to' => 'array',
     ];
+
+    public function activityFile()
+    {
+        return $this->belongsTo(File::class, 'activity_file_id');
+    }
+
+    public function files()
+    {
+        return $this->belongsToMany(File::class);
+    }
 
     public function scopeWhereAdditionalDataContains(Builder $query, string $id, $value)
     {
@@ -38,13 +48,13 @@ class Activity extends Model
 
     public function scopeWithoutFile(Builder $query)
     {
-        return $query->whereNull('filepath');
+        return $query->whereDoesntHave('activityFile');
     }
 
     protected static function booted()
     {
         static::created(queueable(function(Activity $activity) {
-            if($activity->hasFilepath()) {
+            if($activity->hasActivityFile()) {
                 $data = $activity->getActivityData();
                 $activity->distance = $data->getDistance();
                 $activity->start_at = $data->getStartedAt();
@@ -53,9 +63,9 @@ class Activity extends Model
         }));
     }
 
-    public function hasFilepath(): bool
+    public function hasActivityFile(): bool
     {
-        return $this->filepath !== null;
+        return $this->activityFile()->exists();
     }
 
     public function getDataAttribute()

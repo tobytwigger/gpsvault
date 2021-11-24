@@ -11,52 +11,46 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
                         <div class="sm:flex sm:space-x-4">
-                            <data-display-tile title="Distance" :value="convertDistance(stats.distance)" :loading="!loading">
-                            </data-display-tile>
-                            <data-display-tile title="Total Time" :value="convertDuration(stats.duration)" :loading="!loading">
-                            </data-display-tile>
-                            <data-display-tile title="Elevation Gain" :value="convertElevation(stats.cumulativeElevationGain)" :loading="!loading">
-                            </data-display-tile>
-                            <data-display-tile title="Average Speed" :value="convertSpeed(stats.averageSpeed)" :loading="!loading">
-                            </data-display-tile>
-                            <data-display-tile title="Average Pace" :value="convertPace(stats.averagePace)" :loading="!loading">
-                            </data-display-tile>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            <div v-if="hasStats">
+                                <data-display-tile title="Distance" :value="convertDistance(stats.distance)" :loading="!loading">
+                                </data-display-tile>
+                                <data-display-tile title="Total Time" :value="convertDuration(stats.duration)" :loading="!loading">
+                                </data-display-tile>
+                                <data-display-tile title="Elevation Gain" :value="convertElevation(stats.cumulativeElevationGain)" :loading="!loading">
+                                </data-display-tile>
+                                <data-display-tile title="Average Speed" :value="convertSpeed(stats.averageSpeed)" :loading="!loading">
+                                </data-display-tile>
+                                <data-display-tile title="Average Pace" :value="convertPace(stats.averagePace)" :loading="!loading">
+                                </data-display-tile>
+                            </div>
+                            <div v-else>
+                                <data-display-tile title="Distance" :value="convertDistance(activity.distance)" :loading="!loading">
+                                </data-display-tile>
+                                <data-display-tile title="Moving Time" :value="convertTime(activity.start_at)" :loading="!loading">
+                                </data-display-tile>
 
-        <div class="py-12" v-else>
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
-                        <div class="sm:flex sm:space-x-4">
-                            <data-display-tile title="Distance" :value="convertDistance(activity.distance)" :loading="!loading">
-                            </data-display-tile>
-                            <data-display-tile title="Moving Time" :value="convertTime(activity.start_at)" :loading="!loading">
-                            </data-display-tile>
+                                <form @submit.prevent="uploadFile">
 
-                            <form @submit.prevent="uploadFile">
+                                    <div class="mt-4">
+                                        <jet-label for="file" value="Activity File" />
+                                        <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
+                                    </div>
 
-                                <div class="mt-4">
-                                    <jet-label for="file" value="Activity File" />
-                                    <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
-                                </div>
-
-                                <div class="mt-4">
-                                    <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                        Upload
-                                    </jet-button>
-                                </div>
-                            </form>
+                                    <div class="mt-4">
+                                        <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                            Upload
+                                        </jet-button>
+                                    </div>
+                                </form>
+                            </div>
 
                         </div>
                     </div>
+                    <file-manager :activity="activity"></file-manager>
+
                 </div>
             </div>
         </div>
-
 
     </app-layout>
 </template>
@@ -71,9 +65,11 @@
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import {useForm} from '@inertiajs/inertia-vue3'
+    import FileManager from './Partials/FileManager';
 
     export default defineComponent({
         components: {
+            FileManager,
             DataDisplayTile,
             AppLayout,
             JetButton,
@@ -137,6 +133,9 @@
         computed: {
             hasStats() {
                 return this.loading || Object.keys(this.stats).length > 0;
+            },
+            images() {
+                return this.activity.files.filter(file => file.mimetype.startsWith('image'));
             }
         }
     })

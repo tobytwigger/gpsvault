@@ -27,7 +27,14 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class);
-    Route::get('activity/{activity}/download', [\App\Http\Controllers\Pages\ActivityController::class, 'download']);
+
+    Route::post('sync', [\App\Http\Controllers\Pages\SyncController::class, 'sync'])->name('sync');
+
+    Route::prefix('activity/{activity}')->group(function() {
+        Route::get('download', [\App\Http\Controllers\Pages\ActivityController::class, 'download']);
+        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update']);
+        Route::get('file/{file}/download', [\App\Http\Controllers\Pages\ActivityFileController::class, 'download'])->name('activity.file.download');
+    });
 
     Route::get('stats/{activity}', [\App\Http\Controllers\Pages\StatsController::class, 'index'])->name('stats');
 
