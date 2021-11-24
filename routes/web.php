@@ -28,7 +28,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
     Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class);
 
-    Route::post('sync', [\App\Http\Controllers\Pages\SyncController::class, 'sync'])->name('sync');
+    Route::post('sync/start', [\App\Http\Controllers\Pages\SyncController::class, 'sync'])->name('sync');
+    Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class);
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\ActivityController::class, 'download']);

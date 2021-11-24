@@ -36,13 +36,7 @@ class ActivityController extends Controller
     public function create()
     {
         return Inertia::render('Activity/Create', [
-            'integrations' => collect(app()->tagged('integrations')),
-            'sync' => [
-                'tasks' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),
-                'sync' => Auth::user()->syncs()->where('finished', false)->orderBy('created_at', 'DESC')->first(),
-                'lastComplete' => null,
-                'openSync' => session()->has('withSync')
-            ]
+            'integrations' => collect(app()->tagged('integrations'))
         ]);
     }
 
