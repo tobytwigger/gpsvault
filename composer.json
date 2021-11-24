@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "ext-zlib": "*",
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "alchemy/zippy": "^1.0",

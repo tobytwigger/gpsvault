@@ -20,7 +20,7 @@ class IntegrationController extends Controller
 
         $integration->disconnect(Auth::user());
 
-        return redirect()->route('activity.create');
+        return redirect()->route('sync.index');
     }
 
 

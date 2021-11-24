@@ -16,4 +16,9 @@ class SyncRoutes extends Task
     {
         return 'Save new Strava routes';
     }
+
+    public function run()
+    {
+        sleep(10);
+    }
 }

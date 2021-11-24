@@ -13,8 +13,6 @@ class StravaController extends \Illuminate\Routing\Controller
 
     public function login(Request $request, Strava $strava)
     {
-        $state = null;
-
         $request->session()->put('state', $state = Str::random(40));
 
         return new RedirectResponse(
@@ -38,7 +36,7 @@ class StravaController extends \Illuminate\Routing\Controller
 
         $savedToken->save();
 
-        return redirect()->route('activity.create');
+        return redirect()->route('sync.index');
     }
 
 }

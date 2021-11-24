@@ -1227,12 +1227,6 @@ select {
 .mb-8 {
 	margin-bottom: 2rem;
 }
-.mr-1 {
-	margin-right: 0.25rem;
-}
-.ml-10 {
-	margin-left: 2.5rem;
-}
 .block {
 	display: block;
 }
@@ -1635,12 +1629,6 @@ select {
 .p-5 {
 	padding: 1.25rem;
 }
-.p-0\.5 {
-	padding: 0.125rem;
-}
-.p-0 {
-	padding: 0px;
-}
 .px-4 {
 	padding-left: 1rem;
 	padding-right: 1rem;
@@ -1733,9 +1721,6 @@ select {
 }
 .pt-8 {
 	padding-top: 2rem;
-}
-.pl-2 {
-	padding-left: 0.5rem;
 }
 .text-left {
 	text-align: left;

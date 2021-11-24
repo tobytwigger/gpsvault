@@ -46,7 +46,7 @@ class StravaFixController extends Controller
         unlink(sprintf('%s/app/%s', storage_path(), $path));
         $this->delete($zipFileArchivePath);
 
-        return redirect()->route('activity.create');
+        return redirect()->route('sync.index');
     }
 
     private function getStravaTempDir(): string
