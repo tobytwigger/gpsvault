@@ -9,6 +9,7 @@ use App\Models\File;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use RecursiveDirectoryIterator;
@@ -25,67 +26,60 @@ class StravaFixController extends Controller
     {
         $request->validate(['file' => 'file|mimes:zip']);
 
-        // In local
-        $path = $request->file('file')->store('strava_fixes_archive');
-
-        $zipFile = Zippy::load()->open(sprintf('%s/app/%s', storage_path(), $path));
+        // Save the zip file locally
+        $archivePath = $request->file('file')->store('archives', 'temp');
+        $zipFile = Zippy::load()->open(Storage::disk('temp')->path($archivePath));
 
         // Get the entries to extract for the activities
         $entries = collect($zipFile->getMembers())
             ->filter(fn(MemberInterface $member) => Str::startsWith($member->getLocation(), 'activities/') && Str::length($member->getLocation()) > 11);
 
-        // Extract the entries
-        $zipFileArchivePath = sprintf('%s/%s', $this->getStravaTempDir(), Str::random(10));
-        mkdir($zipFileArchivePath, 0775);
-        $zipFile->extractMembers($entries->all(), $zipFileArchivePath);
+        // Extract the zip file
+        $newDirectoryPath = sprintf('extracted/%s', Str::random(10));
+        Storage::disk('temp')->put($newDirectoryPath . '/cycle_store_test.txt', 'test');
+        $extractTo = dirname(
+            Storage::disk('temp')->path($newDirectoryPath . '/cycle_store_test.txt')
+        );
+        $zipFile->extractMembers($entries->all(), $extractTo);
 
         // Upload each entry
         $successes = $entries->map(fn(MemberInterface $member) => Str::substr($member->getLocation(), 11))
-            ->mapWithKeys(fn(string $entry) => [$entry => $this->processEntry($entry, $zipFileArchivePath)]);
+            ->mapWithKeys(fn(string $entry) => [$entry => $this->processEntry($entry, $newDirectoryPath)]);
 
-        unlink(sprintf('%s/app/%s', storage_path(), $path));
-        $this->delete($zipFileArchivePath);
+        Storage::disk('temp')->deleteDirectory($newDirectoryPath);
+        Storage::disk('temp')->delete($archivePath);
 
         return redirect()->route('sync.index');
-    }
-
-    private function getStravaTempDir(): string
-    {
-        $directory = sprintf('%s/app/strava_fixes', storage_path());
-        if(!is_dir($directory)) {
-            mkdir($directory, 0775);
-        }
-        return $directory;
     }
 
     private function processEntry(string $entry, string $directory): string
     {
         try {
+            // Get the activity that this file relates to
             $uploadId = Str::of($entry)->before('.');
-
             try {
                 $activity = Activity::linkedTo('strava')->whereAdditionalDataContains('upload_id', $uploadId)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 return static::UNMATCHED;
             }
 
-            // If file is a tar, then unzip it and update the entry key
-            $fileName = sprintf('%s/activities/%s', $directory, $entry);
-            $fileName = $this->isTar($fileName) ? $this->unzip($fileName) : $fileName;
-            $type = pathinfo($fileName, PATHINFO_EXTENSION);
-            $cloudFileName = sprintf('activities/%s.%s', Str::random(40), $type);
+            // If file is a tar, then unzip it
+            $locationInTemp = sprintf('%s/activities/%s', $directory, $entry);
+            $locationInTemp = $this->isTar($locationInTemp) ? $this->unzip($locationInTemp) : $locationInTemp;
+            $type = pathinfo(Storage::disk('temp')->path($locationInTemp), PATHINFO_EXTENSION);
 
-            // Store in cloud
-            if(!Storage::put($cloudFileName, trim(file_get_contents($fileName)))) {
+            $extractedFileName = sprintf('activities/%s.%s', Str::random(40), $type);
+            if(!Storage::disk(Auth::user()->disk())->put($extractedFileName, trim(file_get_contents($locationInTemp)))) {
                 throw new \Exception('Could not save the file');
             }
 
             $file = File::create([
-                'path' => $cloudFileName,
-                'filename' => $entry,
-                'size' => Storage::size($cloudFileName),
-                'mimetype' => Storage::mimeType($cloudFileName),
-                'extension' => $type
+                'path' => $extractedFileName,
+                'filename' => $this->isTar($entry) ? Str::replace('.gz', '', $entry) : $entry,
+                'size' => Storage::size($extractedFileName),
+                'mimetype' => Storage::mimeType($extractedFileName),
+                'extension' => $type,
+                'disk' => Auth::user()->disk()
             ]);
 
             $activity->activity_file_id = $file->id;
@@ -104,11 +98,13 @@ class StravaFixController extends Controller
 
     private function unzip(string $fileName): string
     {
+        $path = Storage::disk('temp')->path($fileName);
+
         $bufferSize = 4096; // read 4kb at a time
-        $outputFileName = str_replace('.gz', '', $fileName);
+        $outputFileName = str_replace('.gz', '', $path);
 
         // Open the file
-        $file = gzopen($fileName, 'rb');
+        $file = gzopen($path, 'rb');
         $outputFile = fopen($outputFileName, 'wb');
 
         while (!gzeof($file)) {
@@ -121,21 +117,6 @@ class StravaFixController extends Controller
         gzclose($file);
 
         return $outputFileName;
-    }
-
-    private function delete(string $dir)
-    {
-        $it = new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new RecursiveIteratorIterator($it,
-            RecursiveIteratorIterator::CHILD_FIRST);
-        foreach($files as $file) {
-            if ($file->isDir()){
-                rmdir($file->getRealPath());
-            } else {
-                unlink($file->getRealPath());
-            }
-        }
-        rmdir($dir);
     }
 
 }

@@ -13,7 +13,6 @@ class ActivityFileController extends Controller
 
     public function download(Activity $activity, File $file)
     {
-        return Storage::download($file->path);
     }
 
     public function destroy(Activity $activity, File $file)

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class File extends Model
@@ -11,7 +12,7 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk'
     ];
 
     protected $appends = [
@@ -20,17 +21,17 @@ class File extends Model
 
     public function fullPath()
     {
-        return Storage::path($this->path);
+        return Storage::disk($this->disk)->path($this->path);
     }
 
     public function getFileContents()
     {
-        return Storage::get($this->path);
+        return Storage::disk($this->disk)->get($this->path);
     }
 
     public function getPreviewUrlAttribute()
     {
-        return Storage::url($this->path);
+        return Storage::disk($this->disk)->url($this->path);
     }
 
 }

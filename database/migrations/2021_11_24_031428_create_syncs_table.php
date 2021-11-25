@@ -20,6 +20,7 @@ class CreateSyncsTable extends Migration
             $table->text('failed_tasks');
             $table->text('task_messages');
             $table->boolean('finished')->default(false);
+            $table->boolean('cancelled')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });

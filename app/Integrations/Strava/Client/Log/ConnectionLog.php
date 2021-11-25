@@ -12,6 +12,7 @@ class ConnectionLog
     private ?string $clientUuid;
     private ?string $requestUuid;
     private string $integration;
+    private ?int $userId;
 
     public function __construct(string $integration, string $clientUuid = null, string $requestUuid = null)
     {
@@ -32,14 +33,10 @@ class ConnectionLog
 
     public function log(string $type, string $message, int $userId = null)
     {
-        if($userId === null) {
-            $userId = Auth::id();
-        }
-
         ConnectionLogModel::create([
             'type' => $type,
             'log' => $message,
-            'user_id' => $userId,
+            'user_id' => $userId ?? $this->getUserId(),
             'client_uuid' => $this->clientUuid,
             'request_uuid' => $this->requestUuid,
             'integration' => $this->integration
@@ -74,6 +71,27 @@ class ConnectionLog
     public static function create(string $integration, string $clientUuid = null, string $requestUuid = null): ConnectionLog
     {
         return new static($integration, $clientUuid, $requestUuid);
+    }
+
+    /**
+     * @return int
+     * @throws \Exception
+     */
+    public function getUserId(): int
+    {
+        $userId = $this->userId ?? Auth::id();
+        if($userId) {
+            return $userId;
+        }
+        throw new \Exception('Could not find a user to use for the connection log');
+    }
+
+    /**
+     * @param int|null $userId
+     */
+    public function setUserId(?int $userId): void
+    {
+        $this->userId = $userId;
     }
 
 

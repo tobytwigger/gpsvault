@@ -29,14 +29,19 @@ class SaveNewActivities extends Task
 
     public function run()
     {
-        $client = $this->strava->client($this->user()->id);
+        $client = $this->strava->setUserId($this->user()->id)->client();
         $page = 1;
+        $analysisCount = 0;
+        $newCount = 0;
         do {
+            $this->line(sprintf('Collecting activities %u to %u', ($page - 1) * 50, $page * 50));
             $activities = $client->getActivities($page);
             $page = $page + 1;
+            $analysisCount = $analysisCount + count($activities);
             foreach($activities as $activity) {
                 if(isset($activity['id'])) {
                     if(!Activity::whereAdditionalDataContains('strava_id', $activity['id'])->exists()) {
+                        $newCount++;
                         Activity::create([
                             'name' => $activity['name'],
                             'distance' => $activity['distance'],
@@ -48,5 +53,7 @@ class SaveNewActivities extends Task
                 }
             }
         } while(count($activities) > 0);
+
+        $this->line(sprintf('Found %u activities, including %u new.', $analysisCount, $newCount));
     }
 }

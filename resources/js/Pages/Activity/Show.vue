@@ -6,6 +6,14 @@
             </h2>
         </template>
 
+        <a :href="route('activity.track.download', activity.id)" v-if="activity.activity_file_id">
+            Download track file
+        </a>
+
+        <a :href="route('activity.download', activity.id)">
+            Download activity
+        </a>
+
         <div class="py-12" v-if="hasStats">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">

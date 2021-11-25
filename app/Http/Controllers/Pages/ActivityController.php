@@ -48,20 +48,20 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $path = $request->file('file')->store('activities');
+        $path = $request->file('file')->store('activities', Auth::user()->disk());
 
         $file = File::create([
             'path' => $path,
             'filename' => $request->file('file')->getClientOriginalName(),
-            'size' => Storage::size($path),
+            'size' => Storage::disk(Auth::user()->disk())->size($path),
             'mimetype' => $request->file('file')->getClientMimeType(),
-            'extension' => $request->file('file')->getClientOriginalExtension()
+            'extension' => $request->file('file')->getClientOriginalExtension(),
+            'disk' => Auth::user()->disk()
         ]);
 
         $activity = Activity::create([
             'name' => $request->input('name'),
-            'activity_file_id' => $file->id,
-            'type' => $request->file('file')->clientExtension()
+            'activity_file_id' => $file->id
         ]);
 
         return redirect()->route('activity.show', $activity);
@@ -101,28 +101,30 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, Activity $activity)
     {
         if(!$activity->hasActivityFile() && $request->hasFile('file')) {
-            $path = $request->file('file')->store('activities');
+            $path = $request->file('file')->store('activities', Auth::user()->disk());
             $file = File::create([
                 'path' => $path,
                 'filename' => $request->file('file')->getClientOriginalName(),
-                'size' => Storage::size($path),
+                'size' => Storage::disk(Auth::user()->disk())->size($path),
                 'mimetype' => $request->file('file')->getClientMimeType(),
-                'extension' => $request->file('file')->getClientOriginalExtension()
-            ]);
+                'extension' => $request->file('file')->getClientOriginalExtension(),
+                 'disk' => Auth::user()->disk()
+       ]);
 
             $activity->activity_file_id = $file->id;
         }
 
         if($request->has('files')) {
             foreach($request->file('files', []) as $uploadedFile) {
-                $path = $uploadedFile->store('media');
+                $path = $uploadedFile->store('media', Auth::user()->disk());
 
                 $file = File::create([
                     'path' => $path,
                     'filename' => $uploadedFile->getClientOriginalName(),
-                    'size' => Storage::size($path),
+                    'size' => Storage::disk(Auth::user()->disk())->size($path),
                     'mimetype' => $uploadedFile->getClientMimeType(),
-                    'extension' => $uploadedFile->getClientOriginalExtension()
+                    'extension' => $uploadedFile->getClientOriginalExtension(),
+                    'disk' => Auth::user()->disk()
                 ]);
 
                 $activity->files()->attach($file);
@@ -145,11 +147,4 @@ class ActivityController extends Controller
         //
     }
 
-    public function download(Activity $activity)
-    {
-        if($activity->activityFile) {
-            return Storage::download($activity->activityFile->getFullPath());
-        }
-        throw new NotFoundHttpException('This activity does not have a file associated with it');
-    }
 }

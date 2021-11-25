@@ -17,6 +17,8 @@ class Strava
 
     private ConnectionLog $log;
 
+    private ?int $userId;
+
     public function __construct(protected Client $client, protected ClientFactory $clientFactory)
     {
         $this->clientUuid = Uuid::uuid4();
@@ -132,15 +134,18 @@ class Strava
         return $stravaToken;
     }
 
-    public function client(int $userId = null): StravaClient
+    public function setUserId(int $userId = null): Strava
     {
-        if($userId === null) {
-            $userId = Auth::id();
-        }
+        $this->userId = $userId;
+        $this->log->setUserId($userId);
+        return $this;
+    }
 
+    public function client(): StravaClient
+    {
         $this->log->debug('Client created ready for connection to Strava');
 
-        return $this->clientFactory->setLog($this->log)->create($userId);
+        return $this->clientFactory->setLog($this->log)->create($this->userId ?? Auth::id());
     }
 
 }

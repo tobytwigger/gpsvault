@@ -22,6 +22,7 @@ class CreateFilesTable extends Migration
             $table->string('title')->nullable();
             $table->text('caption')->nullable();
             $table->string('mimetype');
+            $table->string('disk');
             $table->timestamps();
         });
     }

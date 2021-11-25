@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasMany(StravaToken::class);
     }
 
+    public function disk()
+    {
+        return 'local';
+    }
+
     public function syncs()
     {
         return $this->hasMany(Sync::class);

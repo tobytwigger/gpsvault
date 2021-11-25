@@ -19,6 +19,6 @@ class SyncRoutes extends Task
 
     public function run()
     {
-        sleep(10);
+        throw new \Exception('You must have a premium Strava account to use Strava routes.');
     }
 }

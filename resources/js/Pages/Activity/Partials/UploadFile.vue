@@ -12,7 +12,7 @@
 
                 <div>
                     <jet-label for="activity_name" value="Name" />
-                    <jet-input id="activity_name" type="text" class="mt-1 block w-full" v-model="form.name" required autofocus />
+                    <jet-input id="activity_name" type="text" class="mt-1 block w-full" v-model="form.name" autofocus />
                 </div>
 
                 <div class="mt-4">
@@ -53,7 +53,7 @@ export default defineComponent({
         return {
             form: useForm({
                 name: null,
-                file: null,
+                file: null
             })
         }
     },

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Sync;
+use App\Models\User;
 use App\Services\Sync\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -15,7 +16,7 @@ class RunSyncTask implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Task $task;
+    public string $taskId;
 
     public Sync $sync;
 
@@ -24,9 +25,9 @@ class RunSyncTask implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Task $task, Sync $sync)
+    public function __construct(string $taskId, Sync $sync)
     {
-        $this->task = $task;
+        $this->taskId = $taskId;
         $this->sync = $sync;
     }
 
@@ -37,6 +38,12 @@ class RunSyncTask implements ShouldQueue
      */
     public function handle()
     {
-        //
+        app($this->taskId)->process($this->sync);
+        $this->sync->markTaskSuccessful($this->taskId);
+    }
+
+    public function failed(\Throwable $exception)
+    {
+        $this->sync->markTaskFailed($this->taskId, $exception->getMessage());
     }
 }

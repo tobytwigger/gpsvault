@@ -29,7 +29,7 @@
         },
         methods: {
             uploadFile(form) {
-                form.post(route('activity.create'));
+                form.post(route('activity.store'));
             }
         }
     })

@@ -58,6 +58,23 @@ class Activity extends Model
                 $data = $activity->getActivityData();
                 $activity->distance = $data->getDistance();
                 $activity->start_at = $data->getStartedAt();
+                if($activity->name === null) {
+                    if($activity->start_at !== null) {
+                        $hour = $activity->start_at->format('H');
+                        if ($hour < 12 && $hour > 4) {
+                            $activity->name = 'Morning Ride';
+                        }
+                        if ($hour < 17) {
+                            $activity->name = 'Afternoon Ride';
+                        }
+                        if ($hour < 23) {
+                            $activity->name = 'Evening Ride';
+                        }
+                        $activity->name = 'Night Ride';
+                    } else {
+                        $activity->name = 'New Ride';
+                    }
+                }
                 $activity->save();
             }
         }));

@@ -8,6 +8,7 @@ use App\Models\Sync;
 use App\Services\Sync\Task;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncController extends Controller
 {
@@ -22,7 +23,7 @@ class SyncController extends Controller
 
         $sync = Sync::start($tasks);
 
-        $tasks->each(fn(Task $task) => RunSyncTask::dispatch($task, $sync));
+        $tasks->each(fn(Task $task) => RunSyncTask::dispatch($task::class, $sync));
 
         return redirect()->route('sync.index');
     }
@@ -31,13 +32,25 @@ class SyncController extends Controller
     {
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),
-            'sync' => [
-                'tasks' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),
-                'sync' => Auth::user()->syncs()->where('finished', false)->orderBy('created_at', 'DESC')->first(),
-                'lastComplete' => null,
-                'openSync' => session()->has('withSync')
-            ]
+            'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),
+            'current' => Auth::user()->syncs()->where('finished', false)->where('cancelled', false)->orderBy('created_at', 'DESC')->first(),
+            'previous' => Auth::user()->syncs()->where('finished', true)->orWhere('cancelled', true)->lastFive()->get(),
+            'userId' => Auth::id()
         ]);
+    }
+
+    public function cancel()
+    {
+        $sync = Auth::user()->syncs()->where('finished', false)->where('cancelled', false)->orderBy('created_at', 'DESC')->first();
+
+        if($sync === null) {
+            throw new NotFoundHttpException('Sync is not currently running');
+        }
+
+        $sync->cancelled = true;
+        $sync->save();
+
+        return redirect()->route('sync.index');
     }
 
 }
