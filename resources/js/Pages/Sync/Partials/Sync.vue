@@ -95,17 +95,12 @@ export default {
         //     }
         // }, 1000)
         window.Echo.private(`user.${this.userId}.sync`)
-            .listen('sync.updated', (e) => {
-                console.log('updated')
-            })
-            .listen('sync.finished', (e) => {
-                console.log(e);
-                // this.refreshSyncData(e.sync.id);
-            });
+            .listen('.sync.updated', (e) => this.refreshSyncData())
+            .listen('.sync.finished', (e) => this.refreshSyncData(e.sync.id));
     },
     methods: {
         refreshSyncData(viewSyncId) {
-            this.$inertia.reload({only: ['current', 'previous', 'integrations']})
+            this.$inertia.reload({only: ['current', 'previous', 'integrations'], data: {showSync: viewSyncId}})
         },
         startSync() {
             if(!this.isSyncing) {

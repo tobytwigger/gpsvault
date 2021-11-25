@@ -30,6 +30,9 @@ class SyncController extends Controller
 
     public function index()
     {
+    if(request()->get('showSync')) {
+    dd(request()->get('showSync'));
+    }
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),
             'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),

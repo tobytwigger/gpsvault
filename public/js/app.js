@@ -21874,21 +21874,26 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
+    var _this = this;
+
     // window.setInterval(() => {
     //     if(this.isSyncing) {
     //         this.refreshSyncData();
     //     }
     // }, 1000)
-    window.Echo["private"]("user.".concat(this.userId, ".sync")).listen('sync.updated', function (e) {
-      console.log('updated');
-    }).listen('sync.finished', function (e) {
-      console.log(e); // this.refreshSyncData(e.sync.id);
+    window.Echo["private"]("user.".concat(this.userId, ".sync")).listen('.sync.updated', function (e) {
+      return _this.refreshSyncData();
+    }).listen('.sync.finished', function (e) {
+      return _this.refreshSyncData(e.sync.id);
     });
   },
   methods: {
     refreshSyncData: function refreshSyncData(viewSyncId) {
       this.$inertia.reload({
-        only: ['current', 'previous', 'integrations']
+        only: ['current', 'previous', 'integrations'],
+        data: {
+          showSync: viewSyncId
+        }
       });
     },
     startSync: function startSync() {
