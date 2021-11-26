@@ -17,6 +17,7 @@ class CreateSyncsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('sync_id');
             $table->text('task_id');
+            $table->text('config');
             $table->enum('status', ['queued', 'processing', 'succeeded', 'failed', 'cancelled'])->default('queued');
             $table->text('messages');
             $table->timestamps();

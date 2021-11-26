@@ -20,24 +20,18 @@ class SyncController extends Controller
      */
     public function sync(Request $request)
     {
-        $tasks = collect();
-        $taskConfig = collect();
 
+        $sync = Sync::start();
         foreach($request->input('tasks', []) as $key => $task) {
-            if($task['enabled']) {
-                $config = $task['config'] ?? [];
-                if($request->file('tasks.' . $key)) {
-                    $config = array_merge($config, $request->file('tasks.' . $key . '.config'));
-                }
-                $taskObject = app('tasks.' . $task['id']);
-                $taskConfig->put($taskObject::id(), $taskObject->processConfig($config ?? []));
-                $tasks->push($taskObject);
+            $config = $task['config'] ?? [];
+            if($request->file('tasks.' . $key)) {
+                $config = array_merge($config, $request->file('tasks.' . $key . '.config'));
             }
+            $taskObject = app('tasks.' . $task['id']);
+            $sync->withTask($taskObject, $taskObject->processConfig($config));
         }
 
-        $sync = Sync::start($tasks);
-
-        $tasks->each(fn(Task $task) => RunSyncTask::dispatch($task::id(), $sync, $taskConfig->get($task::id(), [])));
+        $sync->dispatch();
 
         return redirect()->route('sync.index');
     }
