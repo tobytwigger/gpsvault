@@ -37,14 +37,13 @@ class RunSyncTask implements ShouldQueue
      */
     public function handle()
     {
-        $taskObject = app('tasks.' . $this->task->taskId());
-        $taskObject->setConfig($this->task->config());
-        $task->process($this->sync);
-        $this->sync->markTaskSuccessful($this->taskId);
+        $this->task->createTaskObject()->process($this->task);
+        $this->task->setStatusAsSucceeded();
     }
 
     public function failed(\Throwable $exception)
     {
-        $this->sync->markTaskFailed($this->taskId, $exception->getMessage());
+        $this->task->setStatusAsFailed();
+        $this->task->addMessage($exception->getMessage());
     }
 }

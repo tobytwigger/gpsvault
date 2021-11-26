@@ -3,6 +3,7 @@
 namespace App\Services\Sync;
 
 use App\Models\Sync;
+use App\Models\SyncTask;
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -11,11 +12,9 @@ use Illuminate\Support\Facades\Auth;
 abstract class Task implements Jsonable, Arrayable
 {
 
-    protected Sync $sync;
+    protected SyncTask $task;
 
     private User $user;
-
-    protected array $config = [];
 
     public static function registerTask(string $class)
     {
@@ -48,17 +47,17 @@ abstract class Task implements Jsonable, Arrayable
         return md5(static::class);
     }
 
-    public function process(Sync $sync)
+    public function process(SyncTask $task)
     {
-        $this->sync = $sync;
-        $this->user = $sync->user()->firstOrFail();
+        $this->task = $task;
+        $this->user = $task->sync()->user()->firstOrFail();
         $this->line('Processing task');
         $this->run();
     }
 
     public function line(string $text)
     {
-        $this->sync->updateTaskMessage($this->id(), $text);
+        $this->task->addMessage($text);
     }
 
     public function toArray()
@@ -76,14 +75,9 @@ abstract class Task implements Jsonable, Arrayable
         return $config;
     }
 
-    public function setConfig(array $config)
-    {
-        $this->config = $config;
-    }
-
     protected function config(string $key, $default = null)
     {
-        return data_get($this->config, $key, $default);
+        return data_get($this->task->config(), $key, $default);
     }
 
     public function toJson($options = 0)

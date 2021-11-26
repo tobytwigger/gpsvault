@@ -20,6 +20,8 @@ class Sync extends Model
 
     protected $casts = [];
 
+    protected $with = ['tasks'];
+
     protected static function booted()
     {
         static::creating(fn(Sync $sync) => $sync->user_id = $sync->user_id ?? Auth::id());
@@ -37,6 +39,13 @@ class Sync extends Model
     public static function start(): Sync
     {
         return Sync::create();
+    }
+
+    public function pendingTasks()
+    {
+        return $this->tasks()->whereIn('status', [
+            'queued', 'processing'
+        ]);
     }
 
     public function tasks()

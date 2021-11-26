@@ -22,6 +22,7 @@ class SyncController extends Controller
     {
 
         $sync = Sync::start();
+
         foreach($request->input('tasks', []) as $key => $task) {
             $config = $task['config'] ?? [];
             if($request->file('tasks.' . $key)) {
@@ -41,8 +42,8 @@ class SyncController extends Controller
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),
             'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => $task->toArray()),
-            'current' => Auth::user()->syncs()->where('finished', false)->where('cancelled', false)->orderBy('created_at', 'DESC')->first(),
-            'previous' => Auth::user()->syncs()->where('finished', true)->orWhere('cancelled', true)->lastFive()->get(),
+            'current' => Auth::user()->syncs()->whereDoesntHave('pendingTasks')->orderBy('created_at', 'DESC')->first(),
+            'previous' => Auth::user()->syncs()->whereDoesntHave('pendingTasks')->lastFive()->get(),
             'userId' => Auth::id()
         ]);
     }
