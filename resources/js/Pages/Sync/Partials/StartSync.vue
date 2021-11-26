@@ -59,7 +59,9 @@ export default {
             });
         },
         formData() {
-            return Object.keys(this.tasks).map(key => this.tasks[key]);
+            return Object.keys(this.tasks)
+                // .filter(key => this.tasks[key].enabled)
+                .map(key => this.tasks[key]);
         }
     }
 }

@@ -32,7 +32,7 @@ class SyncTask extends Model
 
     public static function newTask(Task $task, Sync $sync, array $config = [])
     {
-        return Task::create([
+        return SyncTask::create([
             'task_id' => $task::id(),
             'sync_id' => $sync->id,
             'messages' => ['Added to queue'],
@@ -66,6 +66,7 @@ class SyncTask extends Model
     public function setStatusAsCancelled()
     {
         $this->status = 'cancelled';
+        $this->addMessage('Task cancelled');
         $this->save();
     }
 

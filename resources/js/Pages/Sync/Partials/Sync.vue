@@ -2,7 +2,11 @@
     <div>
         <div class="px-6 py-4">
             <div class="mt-4">
-                <view-sync-status v-if="viewingSync" :sync="viewingSync" :task-details="taskDetails"></view-sync-status>
+                <div v-if="viewingSync">
+                    <ul class="bg-white rounded-lg border border-gray-200 text-gray-900 text-sm font-medium">
+                        <view-single-task :task-details="taskDetails" :task="task" v-for="task in viewingSync.tasks" :key="task.id"></view-single-task>
+                    </ul>
+                </div>
                 <start-sync v-else :task-details="taskDetails" @input="syncForm = $event"></start-sync>
 
             </div>
@@ -48,9 +52,10 @@
 </template>
 
 <script>
+import ViewSingleTask from './ViewSingleTask';
+
 import JetButton from '@/Jetstream/Button.vue'
 import Modal from '@/Jetstream/Modal';
-import ViewSyncStatus from './ViewSyncStatus';
 import StartSync from './StartSync';
 import moment from 'moment';
 
@@ -59,8 +64,8 @@ export default {
     components: {
         JetButton,
         Modal,
-        ViewSyncStatus,
-        StartSync
+        StartSync,
+        ViewSingleTask
     },
     props: {
         taskDetails: {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Jobs\RunSyncTask;
 use App\Models\Sync;
+use App\Models\SyncTask;
 use App\Services\Sync\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -50,14 +51,13 @@ class SyncController extends Controller
 
     public function cancel()
     {
-        $sync = Auth::user()->syncs()->where('finished', false)->where('cancelled', false)->orderBy('created_at', 'DESC')->first();
+        $sync = Auth::user()->syncs()->whereHas('pendingTasks')->orderBy('created_at', 'DESC')->first();
 
         if($sync === null) {
             throw new NotFoundHttpException('Sync is not currently running');
         }
 
-        $sync->cancelled = true;
-        $sync->save();
+        $sync->pendingTasks->each(fn(SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
 
         return redirect()->route('sync.index');
     }
