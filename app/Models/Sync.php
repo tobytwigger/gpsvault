@@ -35,15 +35,15 @@ class Sync extends Model
             if($sync->isDirty(['successful_tasks', 'failed_tasks', 'task_messages'])) {
                 SyncUpdated::dispatch($sync);
             }
-            if($sync->isDirty(['finished']) && $sync->finished === true) {
-                SyncFinished::dispatch($sync);
-            }
         });
-        static::saving(function(Sync $sync) {
-            if(count($sync->tasks ?? []) === count($sync->failed_tasks ?? []) + count($sync->successful_tasks ?? [])) {
+        static::saved(function(Sync $sync) {
+            if(
+                (count($sync->tasks ?? []) === count($sync->failed_tasks ?? []) + count($sync->successful_tasks ?? []))
+                && $sync->finished === false
+            ) {
                 $sync->finished = true;
-            } else {
-                $sync->finished = false;
+                $sync->save();
+                SyncFinished::dispatch($sync);
             }
         });
     }
@@ -56,37 +56,37 @@ class Sync extends Model
     public static function start(\Illuminate\Support\Collection $tasks): Sync
     {
         return Sync::create([
-            'tasks' => $tasks->map(fn(Task $task) => $task::class),
+            'tasks' => $tasks->map(fn(Task $task) => $task::id()),
             'successful_tasks' => [],
             'failed_tasks' => [],
             'task_messages' => []
         ]);
     }
 
-    public function markTaskSuccessful(string $taskClass)
+    public function markTaskSuccessful(string $taskId)
     {
-        Log::info(sprintf('Passed task %s', $taskClass));
-        if(!in_array($taskClass, $this->successful_tasks)) {
-            $this->successful_tasks = array_merge($this->successful_tasks, [$taskClass]);
-            $this->save();
+        $instance = Sync::sharedLock()->findOrFail($this->id);
+        if(!in_array($taskId, $instance->successful_tasks)) {
+            $instance->successful_tasks = array_merge($instance->successful_tasks, [$taskId]);
+            $instance->save();
         }
     }
 
-    public function markTaskFailed(string $taskClass, string $error)
+    public function markTaskFailed(string $taskId, string $error)
     {
-        Log::info(sprintf('Failed task %s', $taskClass));
-        if(!in_array($taskClass, $this->failed_tasks)) {
-            $this->failed_tasks = array_merge($this->failed_tasks, [$taskClass]);
-            $this->save();
+        $instance = Sync::sharedLock()->findOrFail($this->id);
+        if(!in_array($taskId, $instance->failed_tasks)) {
+            $instance->failed_tasks = array_merge($instance->failed_tasks, [$taskId]);
+            $instance->save();
         }
-        $this->updateTaskMessage($taskClass, $error);
+        $this->updateTaskMessage($taskId, $error);
     }
 
-    public function updateTaskMessage(string $taskClass, string $message)
+    public function updateTaskMessage(string $taskId, string $message)
     {
-        Log::info(sprintf('Message for %s: %s', $taskClass, $message));
-        $this->task_messages = array_merge($this->task_messages, [$taskClass => $message]);
-        $this->save();
+        $instance = Sync::sharedLock()->findOrFail($this->id);
+        $instance->task_messages = array_merge($instance->task_messages, [$taskId => $message]);
+        $instance->save();
     }
 
     public function scopeLastFive(Builder $query)

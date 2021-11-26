@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RunSyncTask implements ShouldQueue
 {
@@ -20,15 +21,18 @@ class RunSyncTask implements ShouldQueue
 
     public Sync $sync;
 
+    public array $config;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(string $taskId, Sync $sync)
+    public function __construct(string $taskId, Sync $sync, array $config)
     {
         $this->taskId = $taskId;
         $this->sync = $sync;
+        $this->config = $config;
     }
 
     /**
@@ -38,7 +42,9 @@ class RunSyncTask implements ShouldQueue
      */
     public function handle()
     {
-        app($this->taskId)->process($this->sync);
+        $task = app('tasks.' . $this->taskId);
+        $task->setConfig($this->config);
+        $task->process($this->sync);
         $this->sync->markTaskSuccessful($this->taskId);
     }
 

@@ -12,16 +12,24 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
 
-                <!--Running Icon-->
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" v-else-if="status === 'running'">
+                <!--Waiting Icon-->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" v-else-if="inQueue">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
+
+                <!--Running Icon-->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 animate-spin text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" v-else-if="status === 'running'">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+
             </div>
-            <div class="flex flex-col ...">
-                <div>{{task.name}} - {{ task.description }}</div>
-                <div>                <span
-                    :class="{'text-red-400': status === 'failed', 'text-gray-400': status === 'running' || status === 'succeeded'}"
-                    v-if="message">{{message}}</span></div>
+            <div class="flex flex-col">
+                <div>{{task.name}}</div>
+                <div>
+                    <span :class="{'text-red-400': status === 'failed', 'text-gray-400': status === 'running' || status === 'succeeded'}">
+                        {{message}}
+                    </span>
+                </div>
             </div>
         </div>
 
@@ -60,10 +68,14 @@ export default {
             }
             return 'error';
         },
+        inQueue() {
+            return this.status === 'running' && !(this.sync.task_messages ?? {}).hasOwnProperty(this.task.id)
+        },
         message() {
-            if((this.sync.task_messages ?? {}).hasOwnProperty(this.task.id) > -1) {
+            if((this.sync.task_messages ?? {}).hasOwnProperty(this.task.id)) {
                 return this.sync.task_messages[this.task.id];
             }
+            return 'In queue';
         }
     }
 }

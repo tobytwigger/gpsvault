@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\RunSyncTask;
 use App\Models\Sync;
 use App\Services\Sync\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,25 +18,35 @@ class SyncController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function sync()
+    public function sync(Request $request)
     {
-        $tasks = collect(app()->tagged('tasks'));
+        $tasks = collect();
+        $taskConfig = collect();
+
+        foreach($request->input('tasks', []) as $key => $task) {
+            if($task['enabled']) {
+                $config = $task['config'] ?? [];
+                if($request->file('tasks.' . $key)) {
+                    $config = array_merge($config, $request->file('tasks.' . $key . '.config'));
+                }
+                $taskObject = app('tasks.' . $task['id']);
+                $taskConfig->put($taskObject::id(), $taskObject->processConfig($config ?? []));
+                $tasks->push($taskObject);
+            }
+        }
 
         $sync = Sync::start($tasks);
 
-        $tasks->each(fn(Task $task) => RunSyncTask::dispatch($task::class, $sync));
+        $tasks->each(fn(Task $task) => RunSyncTask::dispatch($task::id(), $sync, $taskConfig->get($task::id(), [])));
 
         return redirect()->route('sync.index');
     }
 
     public function index()
     {
-    if(request()->get('showSync')) {
-    dd(request()->get('showSync'));
-    }
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),
-            'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => ['id' => $task::class, 'name' => $task->name(), 'description' => $task->description()]),
+            'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => $task->toArray()),
             'current' => Auth::user()->syncs()->where('finished', false)->where('cancelled', false)->orderBy('created_at', 'DESC')->first(),
             'previous' => Auth::user()->syncs()->where('finished', true)->orWhere('cancelled', true)->lastFive()->get(),
             'userId' => Auth::id()

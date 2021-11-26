@@ -13,9 +13,12 @@ class CreateSyncsTable extends Migration
      */
     public function up()
     {
-        Schema::create('syncs', function (Blueprint $table) {
+        Schema::create('sync_tasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('sync_id');
+            $table->text('task_id');
+            $table->enum('status', ['queued', 'processing', 'succeeded', 'failed', 'cancelled'])->default('queued');
+            $table->text('messages');
             $table->timestamps();
         });
     }

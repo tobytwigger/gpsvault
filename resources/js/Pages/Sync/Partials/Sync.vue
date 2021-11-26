@@ -3,7 +3,8 @@
         <div class="px-6 py-4">
             <div class="mt-4">
                 <view-sync-status v-if="viewingSync" :sync="viewingSync" :task-details="taskDetails"></view-sync-status>
-                <start-sync v-else :task-details="taskDetails"></start-sync>
+                <start-sync v-else :task-details="taskDetails" @input="syncForm = $event"></start-sync>
+
             </div>
         </div>
 
@@ -80,31 +81,48 @@ export default {
         userId: {
             required: true,
             type: Number
+        },
+        showSync: {
+            required: false,
+            default: null
+        }
+    },
+    watch: {
+        showSync() {
+            this.checkCurrentSync();
         }
     },
     data() {
         return {
             viewPreviousSync: null,
-            listening: []
+            listening: [],
+            syncForm: {}
         }
     },
     mounted() {
-        // window.setInterval(() => {
-        //     if(this.isSyncing) {
-        //         this.refreshSyncData();
-        //     }
-        // }, 1000)
+        this.checkCurrentSync();
         window.Echo.private(`user.${this.userId}.sync`)
             .listen('.sync.updated', (e) => this.refreshSyncData())
-            .listen('.sync.finished', (e) => this.refreshSyncData(e.sync.id));
+            .listen('.sync.finished', (e) => {
+                this.viewPreviousSync = e.sync;
+                this.refreshSyncData();
+            });
     },
     methods: {
-        refreshSyncData(viewSyncId) {
-            this.$inertia.reload({only: ['current', 'previous', 'integrations'], data: {showSync: viewSyncId}})
+        checkCurrentSync() {
+            if(this.showSync !== null) {
+                let sync = this.previous.find(s => s.id === this.showSync);
+                if(sync) {
+                    this.viewPreviousSync = sync;
+                }
+            }
+        },
+        refreshSyncData() {
+            this.$inertia.reload({only: ['current', 'previous', 'integrations']})
         },
         startSync() {
             if(!this.isSyncing) {
-                this.$inertia.post(route('sync.start'));
+                this.$inertia.post(route('sync.start'), this.syncForm);
             }
         },
         cancelSync() {

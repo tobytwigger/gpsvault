@@ -64,3 +64,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+[program:queue]
+command=/usr/bin/php /var/www/html/artisan queue:work
+environment=LARAVEL_SAIL="1"
+numprocs=2
+process_name=%(program_name)s_%(process_num)02d
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+autostart=true
+autorestart=true
+user=sail
