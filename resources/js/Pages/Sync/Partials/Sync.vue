@@ -1,8 +1,18 @@
 <template>
     <div>
+
         <div class="px-6 py-4">
             <div class="mt-4">
-                <div v-if="viewingSync">
+                <div v-if="viewHistory">
+                    <view-history :syncs="previous" @view="viewPreviousEvent"></view-history>
+                </div>
+                <div v-else-if="viewingSync">
+                    <span v-if="isViewingCurrentSync">
+                        Syncronising
+                    </span>
+                    <span v-else-if="this.viewingSync !== null">
+                        Sync started at {{ getAsDate(this.viewingSync.started_at) }}
+                    </span>
                     <ul class="bg-white rounded-lg border border-gray-200 text-gray-900 text-sm font-medium">
                         <view-single-task :task-details="taskDetails" :task="task" v-for="task in viewingSync.tasks" :key="task.id"></view-single-task>
                     </ul>
@@ -14,45 +24,51 @@
 
         <div class="px-12 py-4 text-right">
             <div>
+
+                <jet-button class="ml-4 bg-green-600 " @click="viewHistory = true" v-if="!viewHistory">
+                    <div class="flex justify-center">
+                        <span class="ml-1">View History</span>
+                    </div>
+                </jet-button>
+
+                <jet-button class="ml-4 bg-red-600" @click="viewHistory = false" v-if="viewHistory">
+                    <div class="flex justify-center">
+                        <span class="ml-1">Back</span>
+                    </div>
+                </jet-button>
+
                 <jet-button class="ml-4 bg-red-600" @click="cancelSync" v-if="isSyncing">
                     <div class="flex justify-center">
                         <span class="ml-1">Cancel</span>
                     </div>
                 </jet-button>
 
-                <jet-button class="ml-4" @click="startSync" v-if="viewPreviousSync === null">
+                <jet-button class="ml-4" @click="startSync" v-if="viewPreviousSync === null && !viewHistory && !isSyncing">
                     <div class="flex justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-spin" v-if="isSyncing" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                        <span v-if="isSyncing" class="ml-1">Syncing</span>
-                        <span class="ml-1" v-else-if="viewPreviousSync === null">Start Sync</span>
-                        <span class="ml-1" v-else>Prepare Sync</span>
+                        <span class="ml-1">Start Sync</span>
                     </div>
                 </jet-button>
 
-                <jet-button class="ml-4" @click="viewPreviousSync = null" v-else>
+                <jet-button class="ml-4" @click="viewPreviousSync = null; viewHistory = false" v-else>
                     <div class="flex justify-center">
-                        <span class="ml-1">Prepare Sync</span>
+                        <span class="ml-1" v-if="isSyncing">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            View current sync
+                        </span>
+                        <span class="ml-1" v-else>Prepare Sync</span>
                     </div>
                 </jet-button>
             </div>
         </div>
 
-        <h2>Previous Syncs</h2>
-        <ul class="list-disc">
-            <li v-if="isSyncing && !isViewingCurrentSync">
-                <a href="#" @click.prevent="viewPreviousSync = null">Current sync</a>
-            </li>
-            <li v-for="previousSync in previous">
-                <a href="#" @click.prevent="viewPreviousSync = previousSync">Sync started {{ getAsDate(previousSync.created_at) }}</a>
-            </li>
-        </ul>
     </div>
 </template>
 
 <script>
 import ViewSingleTask from './ViewSingleTask';
+import ViewHistory from './ViewHistory';
 
 import JetButton from '@/Jetstream/Button.vue'
 import Modal from '@/Jetstream/Modal';
@@ -65,7 +81,8 @@ export default {
         JetButton,
         Modal,
         StartSync,
-        ViewSingleTask
+        ViewSingleTask,
+        ViewHistory
     },
     props: {
         taskDetails: {
@@ -86,48 +103,35 @@ export default {
         userId: {
             required: true,
             type: Number
-        },
-        showSync: {
-            required: false,
-            default: null
         }
     },
     watch: {
-        showSync() {
-            this.checkCurrentSync();
+        current() {
+            if(this.current !== null) {
+                window.Echo.private(`sync.${this.current.id}`)
+                    .listen('.sync.finished', (e) => {
+                        this.viewPreviousSync = e.sync;
+                        this.$inertia.reload({only: ['current', 'previous']})
+                    });
+            }
         }
     },
     data() {
         return {
             viewPreviousSync: null,
             listening: [],
-            syncForm: {}
+            syncForm: {},
+            viewHistory: false
         }
     },
-    mounted() {
-        this.checkCurrentSync();
-        window.Echo.private(`user.${this.userId}.sync`)
-            .listen('.sync.updated', (e) => this.refreshSyncData())
-            .listen('.sync.finished', (e) => {
-                this.viewPreviousSync = e.sync;
-                this.refreshSyncData();
-            });
-    },
     methods: {
-        checkCurrentSync() {
-            if(this.showSync !== null) {
-                let sync = this.previous.find(s => s.id === this.showSync);
-                if(sync) {
-                    this.viewPreviousSync = sync;
-                }
-            }
-        },
-        refreshSyncData() {
-            this.$inertia.reload({only: ['current', 'previous', 'integrations']})
+        viewPreviousEvent(sync) {
+            this.viewPreviousSync = sync;
+            this.viewHistory = false;
         },
         startSync() {
             if(!this.isSyncing) {
-                this.$inertia.post(route('sync.start'), this.syncForm);
+                this.$inertia.post(route('sync.start'), this.syncForm, {errorBag: 'startSync'});
             }
         },
         cancelSync() {

@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('user.{userId}.sync', function (\App\Models\User $user, $userId) {
-    return (int) $user->id === (int) $userId;
+Broadcast::channel('sync.{syncId}', function (\App\Models\User $user, $syncId) {
+    return (int) $user->id === (int) \App\Models\Sync::findOrFail($syncId)->user_id;
+});
+
+Broadcast::channel('task.{taskId}', function (\App\Models\User $user, $taskId) {
+    return (int) $user->id === (int) \App\Models\SyncTask::findOrFail($taskId)->sync->user_id;
 });

@@ -40,6 +40,14 @@ class StravaUpload extends Task
         return 'task-strava-upload';
     }
 
+    public function validationRules(): array
+    {
+        return [
+            'file' => 'required|array|min:1|max:1',
+            'file.*' => 'file|mimes:zip'
+        ];
+    }
+
     public function processConfig(array $config): array
     {
         $path = $config['file'][0]->store('archives', 'temp');

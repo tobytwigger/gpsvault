@@ -6,6 +6,7 @@ use App\Events\SyncFinished;
 use App\Events\SyncUpdated;
 use App\Jobs\RunSyncTask;
 use App\Services\Sync\Task;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,11 +17,18 @@ class Sync extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['started_at', 'finished_at'];
 
-    protected $casts = [];
+    protected $casts = [
+        'started_at' => 'datetime',
+        'finished_at' => 'datetime'
+    ];
 
     protected $with = ['tasks'];
+
+    protected $appends = [
+        'runtime', 'status_report'
+    ];
 
     protected static function booted()
     {
@@ -38,7 +46,35 @@ class Sync extends Model
      */
     public static function start(): Sync
     {
-        return Sync::create();
+        return Sync::create([
+            'started_at' => Carbon::now()
+        ]);
+    }
+
+    public function getRuntimeAttribute()
+    {
+        if($this->started_at && $this->finished_at) {
+            return $this->started_at->diffInSeconds($this->finished_at);
+        }
+        return null;
+    }
+
+    public function getStatusReportAttribute()
+    {
+        return sprintf(
+            '%u tasks ran: %u succeeded, %u failed and %u cancelled',
+            $this->tasks()->count(),
+            $this->tasks()->where('status', 'succeeded')->count(),
+            $this->tasks()->where('status', 'failed')->count(),
+            $this->tasks()->where('status', 'cancelled')->count(),
+        );
+    }
+
+    public function finish()
+    {
+        $this->finished_at = Carbon::now();
+        $this->save();
+        SyncFinished::dispatch($this);
     }
 
     public function pendingTasks()

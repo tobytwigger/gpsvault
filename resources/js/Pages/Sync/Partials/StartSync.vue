@@ -2,8 +2,9 @@
     <div>
         <ul class="bg-white rounded-lg border border-gray-200 text-gray-900 text-sm font-medium">
             <task
-                v-for="task in filteredTaskDetails"
+                v-for="(task, index) in filteredTaskDetails"
                 :value="task.form"
+                :index="index"
                 @input="updateTask(task.id, $event)"
                 :task="task"
                 :key="task.id"
@@ -60,7 +61,7 @@ export default {
         },
         formData() {
             return Object.keys(this.tasks)
-                // .filter(key => this.tasks[key].enabled)
+                .filter(key => this.tasks[key].enabled)
                 .map(key => this.tasks[key]);
         }
     }

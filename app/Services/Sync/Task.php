@@ -7,6 +7,7 @@ use App\Models\SyncTask;
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 abstract class Task implements Jsonable, Arrayable
@@ -50,9 +51,14 @@ abstract class Task implements Jsonable, Arrayable
     public function process(SyncTask $task)
     {
         $this->task = $task;
-        $this->user = $task->sync()->user()->firstOrFail();
-        $this->line('Processing task');
+        $this->user = $task->sync->user ?? throw new ModelNotFoundException('Could not find the user');
+        $task->setStatusAsProcessing();
         $this->run();
+    }
+
+    public function validationRules(): array
+    {
+        return [];
     }
 
     public function line(string $text)

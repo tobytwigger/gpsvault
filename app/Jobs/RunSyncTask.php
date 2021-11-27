@@ -43,7 +43,7 @@ class RunSyncTask implements ShouldQueue
 
     public function failed(\Throwable $exception)
     {
-        $this->task->setStatusAsFailed();
         $this->task->addMessage($exception->getMessage());
+        $this->task->setStatusAsFailed();
     }
 }

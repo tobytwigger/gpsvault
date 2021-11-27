@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SyncRequest;
 use App\Jobs\RunSyncTask;
 use App\Models\Sync;
 use App\Models\SyncTask;
@@ -19,9 +20,9 @@ class SyncController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function sync(Request $request)
+    public function sync(SyncRequest $request)
     {
-
+        abort_if(Auth::user()->syncs()->whereHas('pendingTasks')->exists(), 400, 'A sync is already running');
         $sync = Sync::start();
 
         foreach($request->input('tasks', []) as $key => $task) {
@@ -33,7 +34,7 @@ class SyncController extends Controller
             $sync->withTask($taskObject, $taskObject->processConfig($config));
         }
 
-        $sync->dispatch();
+        $sync->refresh()->dispatch();
 
         return redirect()->route('sync.index');
     }
@@ -43,7 +44,7 @@ class SyncController extends Controller
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),
             'taskDetails' => collect(app()->tagged('tasks'))->map(fn(Task $task) => $task->toArray()),
-            'current' => Auth::user()->syncs()->whereDoesntHave('pendingTasks')->orderBy('created_at', 'DESC')->first(),
+            'current' => Auth::user()->syncs()->whereHas('pendingTasks')->orderBy('created_at', 'DESC')->first(),
             'previous' => Auth::user()->syncs()->whereDoesntHave('pendingTasks')->lastFive()->get(),
             'userId' => Auth::id()
         ]);

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Events\SyncFinished;
 use App\Events\SyncUpdated;
+use App\Events\TaskUpdated;
 use App\Jobs\RunSyncTask;
 use App\Services\Sync\Task;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,17 +19,49 @@ class SyncTask extends Model
     use HasFactory;
 
     protected $fillable = [
-        'task_id', 'config', 'status', 'messages', 'sync_id'
+        'task_id', 'config', 'status', 'messages', 'sync_id', 'started_at', 'finished_at'
     ];
 
     protected $casts = [
         'config' => 'array',
         'messages' => 'array',
+        'started_at' => 'datetime',
+        'finished_at' => 'datetime'
     ];
 
-    public function sync()
+    protected $appends = [
+        'runtime'
+    ];
+
+    public function getRuntimeAttribute()
     {
-        return $this->belongsTo(Sync::class);
+        if($this->started_at && $this->finished_at) {
+            return $this->started_at->diffInSeconds($this->finished_at);
+        }
+        return null;
+    }
+
+    public function finished()
+    {
+        return in_array($this->status, [
+            'succeeded', 'failed', 'cancelled'
+        ]);
+    }
+
+    protected static function booted()
+    {
+        static::saved(function(SyncTask $task) {
+            TaskUpdated::dispatch($task);
+        });
+        static::saved(function(SyncTask $task) {
+            if(
+                $task->isDirty(['status'])
+                && $task->sync->pendingTasks()->count() === 0
+                && in_array($task->getOriginal('status'), ['processing', 'queued'])
+                && in_array($task->status, ['failed', 'cancelled', 'succeeded'])) {
+                $task->sync->finish();
+            }
+        });
     }
 
     public static function newTask(Task $task, Sync $sync, array $config = [])
@@ -35,9 +69,14 @@ class SyncTask extends Model
         return SyncTask::create([
             'task_id' => $task::id(),
             'sync_id' => $sync->id,
-            'messages' => ['Added to queue'],
+            'messages' => [],
             'config' => $config
         ]);
+    }
+
+    public function sync()
+    {
+        return $this->belongsTo(Sync::class);
     }
 
     public function user()
@@ -48,25 +87,28 @@ class SyncTask extends Model
     public function setStatusAsFailed()
     {
         $this->status = 'failed';
+        $this->finished_at = Carbon::now();
         $this->save();
     }
 
     public function setStatusAsSucceeded()
     {
         $this->status = 'succeeded';
+        $this->finished_at = Carbon::now();
         $this->save();
     }
 
     public function setStatusAsProcessing()
     {
         $this->status = 'processing';
+        $this->started_at = Carbon::now();
         $this->save();
     }
 
     public function setStatusAsCancelled()
     {
         $this->status = 'cancelled';
-        $this->addMessage('Task cancelled');
+        $this->finished_at = Carbon::now();
         $this->save();
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Sync;
+use App\Models\SyncTask;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,20 +12,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class SyncFinished implements ShouldBroadcastNow
+class TaskUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public Sync $sync;
+    public SyncTask $task;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Sync $sync)
+    public function __construct(SyncTask $task)
     {
-        $this->sync = $sync;
+        $this->task = $task;
     }
 
     /**
@@ -35,11 +35,11 @@ class SyncFinished implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(sprintf('sync.%u', $this->sync->id));
+        return new PrivateChannel(sprintf('task.%u', $this->task->id));
     }
 
     public function broadcastAs()
     {
-        return 'sync.finished';
+        return 'task.updated';
     }
 }

@@ -16,6 +16,8 @@ class CreateSyncsTable extends Migration
         Schema::create('syncs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->dateTime('started_at')->nullable();
+            $table->dateTime('finished_at')->nullable();
             $table->timestamps();
         });
     }
