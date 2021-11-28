@@ -61,20 +61,14 @@ export default {
         }
     },
     mounted() {
-        window.Echo.private(`task.${this.task.id}`)
-            .listen('.task.updated', (e) => this.overrideTask = e.task);
-    },
-    data() {
-        return {
-            overrideTask: null
+        if(this.task.status === 'processing' || this.task.status === 'queued') {
+            window.Echo.private(`task.${this.task.id}`)
+                .listen('.task.updated', (e) => this.$emit('taskUpdated', e.task));
         }
     },
     computed: {
-        taskData() {
-            return this.overrideTask ?? this.task;
-        },
         name() {
-            let details = this.taskDetails.find(t => t.id === this.taskData.task_id);
+            let details = this.taskDetails.find(t => t.id === this.task.task_id);
             if(details !== undefined && details.hasOwnProperty('name')) {
                 return details.name;
             }
@@ -89,11 +83,11 @@ export default {
             return 'text-gray-400'
         },
         status() {
-            return this.taskData.status;
+            return this.task.status;
         },
         message() {
-            if(this.taskData.messages.length > 0) {
-                return this.taskData.messages[this.taskData.messages.length - 1];
+            if(this.task.messages.length > 0) {
+                return this.task.messages[this.task.messages.length - 1];
             }
             if(this.status === 'failed') {
                 return 'Task failed';

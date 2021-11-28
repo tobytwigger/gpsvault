@@ -19,7 +19,11 @@ module.exports = {
                 orange: {
                     400: '#ffa726'
                 }
-            }
+            },
+            borderWidth: ['first', 'last'],
+            transitionProperty: {
+                'width': 'width'
+            },
         },
     },
 

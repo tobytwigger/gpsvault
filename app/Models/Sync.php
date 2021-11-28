@@ -59,6 +59,11 @@ class Sync extends Model
         return null;
     }
 
+    public function cancel()
+    {
+        $this->pendingTasks->each(fn(SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
+    }
+
     public function getStatusReportAttribute()
     {
         return sprintf(

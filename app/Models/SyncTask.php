@@ -91,6 +91,11 @@ class SyncTask extends Model
         $this->save();
     }
 
+    public function canRun(): bool
+    {
+        return $this->status === 'queued';
+    }
+
     public function setStatusAsSucceeded()
     {
         $this->status = 'succeeded';

@@ -58,7 +58,7 @@ class SyncController extends Controller
             throw new NotFoundHttpException('Sync is not currently running');
         }
 
-        $sync->pendingTasks->each(fn(SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
+        $sync->cancel();
 
         return redirect()->route('sync.index');
     }
