@@ -51,8 +51,6 @@ class ConnectionLog extends Model
         'type',
         'log',
         'user_id',
-        'client_uuid',
-        'request_uuid',
         'integration'
     ];
 

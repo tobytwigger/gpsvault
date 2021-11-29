@@ -70,6 +70,7 @@ import StartSync from './StartSync';
 import moment from 'moment';
 import SyncLayout from './SyncLayout';
 import SyncProgress from './SyncProgress';
+import {cloneDeep} from 'lodash';
 
 export default {
     name: "Sync",
@@ -103,15 +104,22 @@ export default {
         }
     },
     created() {
-        window.setInterval(() => this.now = moment(), 1000);
+        this.now = moment().toISOString();
+        window.setInterval(() => this.now = moment().toISOString(), 1000);
     },
     watch: {
         current() {
             if(this.current !== null) {
                 window.Echo.private(`sync.${this.current.id}`)
                     .listen('.sync.finished', (e) => {
-                        this.viewPreviousSync = e.sync;
-                        this.$inertia.reload({only: ['current', 'previous']})
+                        this.$inertia.remember(e.sync.id, 'viewing-sync');
+                        this.$inertia.reload({
+                            onSuccess: (page) => {
+                                let viewingId = this.$inertia.restore('viewing-sync');
+                                this.viewPreviousSync = this.previous.find(p => p.id === viewingId) ?? null;
+
+                            }
+                        })
                     });
             }
         }
@@ -121,8 +129,8 @@ export default {
             viewPreviousSync: null,
             listening: [],
             syncForm: {},
-            now: moment(),
-            overriddenTasks: []
+            now: null,
+            overriddenTasks: [],
         }
     },
     methods: {
@@ -153,19 +161,28 @@ export default {
     },
     computed: {
         currentOverriddenTasks() {
+            let current = cloneDeep(this.current);
+            let tasks = [];
             if(this.isSyncing) {
-                return this.current.tasks.map(task => this.checkForOverriddenTask(task));
+                for(let i=0;i<current.tasks.length;i++) {
+                    tasks.push(this.checkForOverriddenTask(current.tasks[i]));
+                }
+                return tasks;
             }
             return [];
+        },
+        currentWithOverriddenTasks() {
+            let current = cloneDeep(this.current);
+            if(current) {
+                current.tasks = this.currentOverriddenTasks;
+            }
+            return current;
         },
         isSyncing() {
             return this.current !== null;
         },
-        isViewingCurrentSync() {
-            return this.viewPreviousSync === null;
-        },
         viewingSync() {
-            return this.viewPreviousSync ?? this.current;
+            return this.viewPreviousSync ?? this.currentWithOverriddenTasks;
         },
         pageType() {
             if(this.viewPreviousSync !== null) {
@@ -188,7 +205,7 @@ export default {
         currentPageTitleData() {
             if(this.pageType === 'history') {
                 return [
-                    {label: 'Started At', value: moment(this.viewingSync.started_at).format('DD/MM/YY hh:mm:ss')},
+                    {label: 'Started At', value: moment(this.viewingSync.started_at).format('DD/MM/YY HH:mm:ss')},
                     {
                         label: 'Runtime',
                         value: this.viewingSync.runtime + 's'
@@ -197,8 +214,8 @@ export default {
             }
             if(this.pageType === 'sync') {
                 return [
-                    {label: 'Started At', value: moment(this.current.started_at).format('DD/MM/YY hh:mm:ss')},
-                    {label: 'Runtime', value: moment.duration(this.now.diff(this.current.started_at)).seconds() + 's'}
+                    {label: 'Started At', value: moment(this.current.started_at).format('DD/MM/YY HH:mm:ss')},
+                    {label: 'Runtime', value: moment.duration(moment(this.now).diff(this.current.started_at, 'seconds')) + 's'}
                 ];
             }
             return [

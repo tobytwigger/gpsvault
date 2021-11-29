@@ -130,7 +130,6 @@ export default {
                 return this.dataValue.config;
             },
             set(val) {
-                console.log(val);
                 let dataValue = this.dataValue;
                 dataValue.config = val;
                 this.dataValue = dataValue;

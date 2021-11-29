@@ -15,24 +15,18 @@ class Strava
 
     protected string $clientUuid;
 
-    private ConnectionLog $log;
-
-    private ?int $userId;
-
-    public function __construct(protected Client $client, protected ClientFactory $clientFactory)
+    public function __construct(protected ClientFactory $clientFactory, private ?int $userId = null)
     {
-        $this->clientUuid = Uuid::uuid4();
-        $this->log = ConnectionLog::create('strava', $this->clientUuid);
+        $this->setUserId($this->userId ?? Auth::id());
     }
 
     public function redirectUrl(
-        int $clientId,
         string $redirectUrl,
         string $state
     ): string
     {
         $params = [
-            'client_id' => $clientId,
+            'client_id' => config('strava.client_id'),
             'redirect_uri' => $redirectUrl,
             'response_type' => 'code',
             'approval_prompt' => 'auto',
@@ -40,112 +34,21 @@ class Strava
             'state  ' => $state
         ];
 
-        $this->log->debug('Generating redirect url');
-
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
-    }
-
-    public function exchangeCode(
-        string $clientId,
-        string $clientSecret,
-        string $code
-    ): StravaToken
-    {
-        $this->log->debug('About to exchange code for token');
-
-        try {
-            $response = $this->client->request('post', 'https://www.strava.com/oauth/token', [
-                'query' => [
-                    'client_id' => $clientId,
-                    'client_secret' => $clientSecret,
-                    'code' => $code,
-                    'grant_type' => 'authorization_code'
-                ]
-            ]);
-        } catch (\Exception $e) {
-            $this->log->error(sprintf('Could not get access token from Strava: %s', $e->getMessage()));
-            throw $e;
-        }
-
-        $this->log->debug('Access token returned by Strava');
-
-        $credentials = json_decode(
-            $response->getBody()->getContents(),
-            true
-        );
-
-        $this->log->debug('Decoded access token');
-
-        $this->log->success('Connected account to Strava');
-
-        return StravaToken::create(
-            new Carbon((int) $credentials['expires_at']),
-            (int)$credentials['expires_in'],
-            (string)$credentials['refresh_token'],
-            (string)$credentials['access_token'],
-        );
-
-    }
-
-    public function refreshToken(
-        string $clientId,
-        string $clientSecret,
-        string $refreshToken
-    ): StravaToken
-    {
-        $this->log->debug('About to refresh token');
-
-        try {
-
-            $response = $this->client->request('post', 'https://www.strava.com/oauth/token', [
-                'query' => [
-                    'client_id' => $clientId,
-                    'client_secret' => $clientSecret,
-                    'refresh_token' => $refreshToken,
-                    'grant_type' => 'refresh_token'
-                ]
-            ]);
-        } catch (\Exception $e) {
-            $this->log->error(sprintf('Could not get refreshed access token from Strava: %s', $e->getMessage()));
-            throw $e;
-        }
-
-        $this->log->debug('Refreshed access token returned by Strava');
-
-        $credentials = json_decode(
-            $response->getBody()->getContents(),
-            true
-        );
-
-        $this->log->debug('Decoded refreshed access token');
-
-        $this->log->success('Access token refreshed successfully');
-
-        $stravaToken = StravaToken::create(
-            new Carbon((int) $credentials['expires_at']),
-            (int)$credentials['expires_in'],
-            (string)$credentials['refresh_token'],
-            (string)$credentials['access_token'],
-        );
-
-        $savedToken = \App\Integrations\Strava\StravaToken::makeFromStravaToken($stravaToken);
-        $savedToken->save();
-
-        return $stravaToken;
     }
 
     public function setUserId(int $userId = null): Strava
     {
         $this->userId = $userId;
-        $this->log->setUserId($userId);
         return $this;
     }
 
     public function client(): StravaClient
     {
-        $this->log->debug('Client created ready for connection to Strava');
-
-        return $this->clientFactory->setLog($this->log)->create($this->userId ?? Auth::id());
+        if(!$this->userId) {
+            throw new \Exception('No user ID has been given to the Strava client');
+        }
+        return $this->clientFactory->create($this->userId);
     }
 
 }

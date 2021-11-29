@@ -19,7 +19,7 @@ class ConnectionLogController extends Controller
     public function index(Integration $integration)
     {
         return Inertia::render('Connection/Log', [
-            'logs' => ConnectionLog::forIntegration($integration)->forCurrentUser()->get()
+            'logs' => ConnectionLog::forIntegration($integration)->forCurrentUser()->where('type', '!=', 'debug')->get()
         ]);
     }
 

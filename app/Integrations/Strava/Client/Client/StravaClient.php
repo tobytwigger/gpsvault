@@ -2,16 +2,21 @@
 
 namespace App\Integrations\Strava\Client\Client;
 
+use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\Models\StravaActivity;
 use App\Integrations\Strava\Client\Log\ConnectionLog;
+use App\Models\User;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\UnauthorizedException;
 
 class StravaClient
 {
 
     protected ?Client $client = null;
 
-    public function __construct(private string $authToken, private int $userId, private ConnectionLog $log)
+    public function __construct(private int $userId, private ConnectionLog $log)
     {
     }
 
@@ -25,15 +30,15 @@ class StravaClient
         return $this->client;
     }
 
-    protected function request(string $method, string $uri, array $options = []): \Psr\Http\Message\ResponseInterface
+    protected function request(string $method, string $uri, array $options = [], bool $authenticated = true): \Psr\Http\Message\ResponseInterface
     {
         $this->log->debug(sprintf('Making a %s request to %s', $method, $uri));
 
         try {
             return $this->client()->request($method, $uri, array_merge([
-                'headers' => array_merge([
-                    'Authorization' => sprintf('Bearer %s', $this->authToken)
-                ], $options['headers'] ?? [])
+                'headers' => array_merge(
+                    $authenticated ? ['Authorization' => sprintf('Bearer %s', $this->getAuthToken())] : [],
+                    $options['headers'] ?? [])
             ], $options));
         } catch (\Exception $e) {
             $this->log->error(sprintf('Request failed with code %d: %s', $e->getCode(), $e->getMessage()));
@@ -41,10 +46,104 @@ class StravaClient
         }
     }
 
+    private function getAuthToken(): string
+    {
+        $this->log->debug(sprintf('Resolving the auth token from the database'));
+
+        try {
+            $token = User::find($this->userId)->stravaTokens()->orderBy('created_at', 'desc')->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            $this->log->error(sprintf('User not connected to Strava'));
+            throw new UnauthorizedException('Your account is not connected to Strava');
+        }
+
+        if($token->expired()) {
+            $this->log->info(sprintf('The access token has expired.'));
+            $token = $this->refreshToken($token);
+        }
+        return $token->access_token;
+    }
+
+    public function exchangeCode(string $code): StravaToken
+    {
+        $this->log->debug('About to exchange code for token');
+
+        try {
+            $response = $this->request('post', 'https://www.strava.com/oauth/token', [
+                'query' => [
+                    'client_id' => config('strava.client_id'),
+                    'client_secret' => config('strava.client_secret'),
+                    'code' => $code,
+                    'grant_type' => 'authorization_code'
+                ]
+            ], false);
+        } catch (\Exception $e) {
+            $this->log->error(sprintf('Could not get access token from Strava: %s', $e->getMessage()));
+            throw $e;
+        }
+
+        $this->log->debug('Access token returned from Strava');
+
+        $credentials = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->success('Connected account to Strava');
+
+        return StravaToken::create(
+            new Carbon((int) $credentials['expires_at']),
+            (int)$credentials['expires_in'],
+            (string)$credentials['refresh_token'],
+            (string)$credentials['access_token'],
+        );
+
+    }
+
+    public function refreshToken(\App\Integrations\Strava\StravaToken $token): \App\Integrations\Strava\StravaToken
+    {
+        $this->log->debug('About to refresh token');
+
+        try {
+
+            $response = $this->request('post', 'https://www.strava.com/oauth/token', [
+                'query' => [
+                    'client_id' => config('strava.client_id'),
+                    'client_secret' => config('strava.client_secret'),
+                    'refresh_token' => $token->refresh_token,
+                    'grant_type' => 'refresh_token'
+                ]
+            ], false);
+        } catch (\Exception $e) {
+            $this->log->error(sprintf('Could not get refreshed access token from Strava: %s', $e->getMessage()));
+            throw $e;
+        }
+
+        $this->log->debug('Refreshed access token returned by Strava');
+
+        $credentials = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+
+        $stravaToken = StravaToken::create(
+            new Carbon((int) $credentials['expires_at']),
+            (int)$credentials['expires_in'],
+            (string)$credentials['refresh_token'],
+            (string)$credentials['access_token'],
+        );
+
+        $token->updateFromStravaToken($stravaToken);
+
+        $this->log->success('Refreshed access token.');
+
+        return $token;
+    }
+
+
     public function getActivities(int $page = 1)
     {
-        $this->log->startRequest();
-
         $this->log->debug(sprintf('About to get user activities, page %d', $page));
 
         $response = $this->request('GET', 'athlete/activities', [
@@ -61,80 +160,7 @@ class StravaClient
 
         $this->log->info(sprintf('Retrieved user activities, page %d', $page));
 
-        $this->log->endRequest();
-
         return $content;
     }
-
-//    /**
-//     * @param int $clubId
-//     * @param int $page
-//     * @return StravaActivity[]|array
-//     * @throws \Exception
-//     */
-//    public function getClubActivityPage(int $clubId, int $page): array
-//    {
-//        $this->log->startRequest();
-//
-//        $this->log->debug(sprintf('About to get activities for club %d, page %d', $clubId, $page));
-//
-//        $response = $this->request('GET', sprintf('clubs/%s/activities', $clubId), [
-//            'query' =>  [
-//                'page' => $page,
-//                'per_page' => 300
-//            ]
-//        ]);
-//
-//        $content = json_decode(
-//            $response->getBody()->getContents(),
-//            true
-//        );
-//
-//        $result = array_map(function(array $parameters) {
-//            return StravaActivity::make(
-//                $this->userId,
-//                $parameters['name'] ?? null,
-//                $parameters['distance'] ?? 0.0,
-//                $parameters['total_elevation_gain'] ?? 0.0,
-//                $parameters['moving_time'] ?? 0,
-//                $parameters['elapsed_time'] ?? 0,
-//                $parameters['type'] ?? 'Other'
-//            );
-//        }, $content);
-//
-//        $this->log->info(sprintf('Retrieved activities for club %d, page %d', $clubId, $page));
-//
-//        $this->log->endRequest();
-//
-//        return $result;
-//    }
-//
-//    /**
-//     * @param int $clubId
-//     * @return array|StravaActivity[]
-//     */
-//    public function getClubActivities(int $clubId): array
-//    {
-//        $this->log->startRequest();
-//
-//        $this->log->debug(sprintf('About to get all club activities'));
-//
-//        $activities = [];
-//        $page = 1;
-//
-//        do {
-//            $activityPage = $this->getClubActivityPage($clubId, $page);
-//            if(count($activityPage) > 0) {
-//                array_push($activities, ...$activityPage);
-//                $page++;
-//            }
-//        } while (count($activityPage) > 0);
-//
-//        $this->log->info(sprintf('Retrieved all activities for club %d from Strava.', $clubId));
-//
-//        $this->log->endRequest();
-//
-//        return $activities;
-//    }
 
 }

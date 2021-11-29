@@ -9,36 +9,23 @@ use Ramsey\Uuid\Uuid;
 class ConnectionLog
 {
 
-    private ?string $clientUuid;
-    private ?string $requestUuid;
-    private string $integration;
+    private ?string $integration;
     private ?int $userId;
 
-    public function __construct(string $integration, string $clientUuid = null, string $requestUuid = null)
+    public function __construct(?string $integration = null)
     {
-        $this->clientUuid = $clientUuid;
-        $this->requestUuid = $requestUuid;
         $this->integration = $integration;
-    }
-
-    public function startRequest()
-    {
-        $this->requestUuid = Uuid::uuid4();
-    }
-
-    public function endRequest()
-    {
-        Uuid::uuid4();
     }
 
     public function log(string $type, string $message, int $userId = null)
     {
+        if(!$this->integration) {
+            throw new \Exception('The integration name has not been set for the connection log');
+        }
         ConnectionLogModel::create([
             'type' => $type,
             'log' => $message,
             'user_id' => $userId ?? $this->getUserId(),
-            'client_uuid' => $this->clientUuid,
-            'request_uuid' => $this->requestUuid,
             'integration' => $this->integration
         ]);
     }
@@ -68,9 +55,15 @@ class ConnectionLog
         $this->log(ConnectionLogModel::ERROR, $log, $userId);
     }
 
-    public static function create(string $integration, string $clientUuid = null, string $requestUuid = null): ConnectionLog
+    public static function create(string $integration): ConnectionLog
     {
-        return new static($integration, $clientUuid, $requestUuid);
+        return new static($integration);
+    }
+
+    public function setIntegration(string $integration): ConnectionLog
+    {
+        $this->integration = $integration;
+        return $this;
     }
 
     /**
@@ -89,9 +82,10 @@ class ConnectionLog
     /**
      * @param int|null $userId
      */
-    public function setUserId(?int $userId): void
+    public function setUserId(?int $userId): ConnectionLog
     {
         $this->userId = $userId;
+        return $this;
     }
 
 

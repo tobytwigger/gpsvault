@@ -17,7 +17,6 @@ class StravaController extends \Illuminate\Routing\Controller
 
         return new RedirectResponse(
             $strava->redirectUrl(
-                (int) config('strava.client_id'),
                 route('strava.callback'),
                 $state
             )
@@ -26,11 +25,7 @@ class StravaController extends \Illuminate\Routing\Controller
 
     public function callback(Request $request, Strava $strava)
     {
-        $token = $strava->exchangeCode(
-            (int) config('strava.client_id'),
-            config('strava.client_secret'),
-            $request->input('code')
-        );
+        $token = $strava->client()->exchangeCode($request->input('code'));
 
         $savedToken = StravaToken::makeFromStravaToken($token);
 

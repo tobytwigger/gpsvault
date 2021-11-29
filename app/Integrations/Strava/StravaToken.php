@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava;
 
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -36,7 +37,8 @@ class StravaToken extends Model
             $builder->where('disabled', false);
         });
         static::addGlobalScope('not-expired', function (Builder $builder) {
-            $builder->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->addMinutes(2)->format('Y-m-d H:i:s'));
+            $builder->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->addMinutes(2)->format('Y-m-d H:i:s'))
+                ->orWhereNotNull('refresh_token');
         });
     }
 
@@ -53,6 +55,14 @@ class StravaToken extends Model
         return $instance;
     }
 
+    public function updateFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token)
+    {
+        $this->access_token = $token->getAccessToken() ?? $this->access_token;
+        $this->refresh_token = $token->getRefreshToken() ?? $this->refresh_token;
+        $this->expires_at = $token->getExpiresAt() ?? $this->expires_at;
+        $this->save();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -61,17 +71,6 @@ class StravaToken extends Model
     public function expired()
     {
         return $this->expires_at->subMinutes(2)->isPast();
-    }
-
-    public function updateFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $newToken)
-    {
-        $instance = new StravaToken();
-
-        $instance->access_token = $newToken->getAccessToken();
-        $instance->refresh_token = $newToken->getRefreshToken();
-        $instance->expires_at = $newToken->getExpiresAt();
-
-        return $instance;
     }
 
 }

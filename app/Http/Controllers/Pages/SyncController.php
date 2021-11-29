@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SyncRequest;
+use App\Integrations\Strava\Client\Strava;
 use App\Jobs\RunSyncTask;
 use App\Models\Sync;
 use App\Models\SyncTask;
@@ -39,7 +40,7 @@ class SyncController extends Controller
         return redirect()->route('sync.index');
     }
 
-    public function index()
+    public function index(Strava $strava)
     {
         return Inertia::render('Sync/Index', [
             'integrations' => collect(app()->tagged('integrations')),

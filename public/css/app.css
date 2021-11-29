@@ -1653,10 +1653,6 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(156, 163, 175, var(--tw-bg-opacity));
 }
-.bg-blue-400 {
-	--tw-bg-opacity: 1;
-	background-color: rgba(96, 165, 250, var(--tw-bg-opacity));
-}
 .bg-green-400 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(52, 211, 153, var(--tw-bg-opacity));
@@ -1668,6 +1664,10 @@ select {
 .bg-orange-400 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(255, 167, 38, var(--tw-bg-opacity));
+}
+.bg-blue-400 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(96, 165, 250, var(--tw-bg-opacity));
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;

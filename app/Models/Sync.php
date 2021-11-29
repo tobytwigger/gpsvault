@@ -79,7 +79,7 @@ class Sync extends Model
     {
         $this->finished_at = Carbon::now();
         $this->save();
-        SyncFinished::dispatch($this);
+        SyncFinished::dispatch(Sync::findOrFail($this->id));
     }
 
     public function pendingTasks()
