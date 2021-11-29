@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -19,7 +20,7 @@ class SyncTask extends Model
     use HasFactory;
 
     protected $fillable = [
-        'task_id', 'config', 'status', 'messages', 'sync_id', 'started_at', 'finished_at'
+        'task_id', 'config', 'status', 'messages', 'sync_id', 'started_at', 'finished_at', 'percentage'
     ];
 
     protected $casts = [
@@ -30,7 +31,7 @@ class SyncTask extends Model
     ];
 
     protected $appends = [
-        'runtime'
+        'runtime', 'latest_message'
     ];
 
     public function getRuntimeAttribute()
@@ -46,6 +47,29 @@ class SyncTask extends Model
         return in_array($this->status, [
             'succeeded', 'failed', 'cancelled'
         ]);
+    }
+
+    public function getLatestMessageAttribute(): string
+    {
+        if(!empty($this->messages)) {
+            return Arr::last($this->messages);
+        }
+        if($this->status === 'failed') {
+            return 'Task failed';
+        }
+        if($this->status === 'cancelled') {
+            return 'Task cancelled';
+        }
+        if($this->status === 'succeeded') {
+            return 'Task ran successfully';
+        }
+        if($this->status === 'queued') {
+            return 'Task in queue';
+        }
+        if($this->status === 'processing') {
+            return 'Task running';
+        }
+        return 'Loading';
     }
 
     protected static function booted()
@@ -91,9 +115,10 @@ class SyncTask extends Model
         $this->save();
     }
 
-    public function canRun(): bool
+    public function setPercentage(int $percentage)
     {
-        return $this->status === 'queued';
+        $this->percentage = $percentage;
+        $this->save();
     }
 
     public function setStatusAsSucceeded()

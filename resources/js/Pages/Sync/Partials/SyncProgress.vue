@@ -3,19 +3,19 @@
         <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-400">
             <div
                 :style="{width: succeeded + '%'}"
-                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
+                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400 transition duration-500 ease-in-out transition-width"
             >Succeeded</div>
             <div
                 :style="{width: failed + '%'}"
-                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-400"
+                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-400 transition duration-500 ease-in-out transition-width"
             >Failed</div>
             <div
                 :style="{width: cancelled + '%'}"
-                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-orange-400"
+                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-orange-400 transition duration-500 ease-in-out transition-width"
             >Cancelled</div>
             <div
                 :style="{width: processing + '%'}"
-                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-400"
+                class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-400 transition duration-500 ease-in-out transition-width"
             >Running</div>
             <div
             :style="{width: queued + '%'}"

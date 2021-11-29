@@ -31,7 +31,7 @@
                 <div>{{name}}</div>
                 <div>
                     <span :class="messageColour">
-                        {{message}}
+                        {{task.latest_message}}
                     </span>
                 </div>
             </div>
@@ -84,27 +84,6 @@ export default {
         },
         status() {
             return this.task.status;
-        },
-        message() {
-            if(this.task.messages.length > 0) {
-                return this.task.messages[this.task.messages.length - 1];
-            }
-            if(this.status === 'failed') {
-                return 'Task failed';
-            }
-            if(this.status === 'failed') {
-                return 'Task cancelled';
-            }
-            if(this.status === 'succeeded') {
-                return 'Task ran successfully';
-            }
-            if(this.status === 'queued') {
-                return 'Task in queue';
-            }
-            if(this.status === 'processing') {
-                return 'Task running';
-            }
-            return '';
         }
     }
 }

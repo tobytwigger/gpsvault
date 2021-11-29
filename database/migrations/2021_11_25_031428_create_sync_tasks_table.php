@@ -20,6 +20,7 @@ class CreateSyncTasksTable extends Migration
             $table->text('config');
             $table->enum('status', ['queued', 'processing', 'succeeded', 'failed', 'cancelled'])->default('queued');
             $table->text('messages');
+            $table->integer('percentage')->nullable();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
             $table->timestamps();

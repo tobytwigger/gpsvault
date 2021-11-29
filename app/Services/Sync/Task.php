@@ -2,6 +2,8 @@
 
 namespace App\Services\Sync;
 
+use App\Exceptions\TaskCancelled;
+use App\Exceptions\TaskSucceeded;
 use App\Models\Sync;
 use App\Models\SyncTask;
 use App\Models\User;
@@ -52,11 +54,53 @@ abstract class Task implements Jsonable, Arrayable
     {
         $this->task = $task;
         $this->user = $task->sync->user ?? throw new ModelNotFoundException('Could not find the user');
-        $task->setStatusAsProcessing();
         $this->run();
     }
 
     public function validationRules(): array
+    {
+        return [];
+    }
+
+    public function requiredConfig(): array
+    {
+        return [];
+    }
+
+    public function fail(string $message)
+    {
+        throw new \Exception($message);
+    }
+
+    public function succeed(string $message)
+    {
+        $this->task->addMessage($message);
+        throw new TaskSucceeded($message);
+    }
+
+    public function isChecked(User $user): bool
+    {
+        return $this->disabled($user) === false;
+    }
+
+    public function disableBecause(User $user): ?string
+    {
+        return null;
+    }
+
+    final public function disabled(User $user): bool
+    {
+        return $this->disableBecause($user) !== null;
+    }
+
+    public function offerBail(string $message = null)
+    {
+        if($this->task->status === 'cancelled') {
+            throw new TaskCancelled($message);
+        }
+    }
+
+    public function runsAfter(): array
     {
         return [];
     }
@@ -66,14 +110,27 @@ abstract class Task implements Jsonable, Arrayable
         $this->task->addMessage($text);
     }
 
+    public function percentage(int $percentage)
+    {
+        $this->task->setPercentage($percentage);
+    }
+
     public function toArray()
     {
-        return [
-            'id' => static::id(),
-            'name' => $this->name(),
-            'description' => $this->description(),
-            'setup_component' => $this->setupComponent()
-        ];
+        return array_merge(
+            [
+                'id' => static::id(),
+                'name' => $this->name(),
+                'description' => $this->description(),
+                'setup_component' => $this->setupComponent(),
+                'required_config' => $this->requiredConfig()
+            ],
+            Auth::check() ? [
+                'checked' => $this->isChecked(Auth::user()),
+                'disable_because' => $this->disableBecause(Auth::user()),
+                'disabled' => $this->disabled(Auth::user())
+            ] : []
+        );
     }
 
     public function processConfig(array $config): array

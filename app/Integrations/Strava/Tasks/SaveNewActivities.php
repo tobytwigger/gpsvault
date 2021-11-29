@@ -4,8 +4,10 @@ namespace App\Integrations\Strava\Tasks;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
+use App\Models\User;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SaveNewActivities extends Task
 {
@@ -25,6 +27,14 @@ class SaveNewActivities extends Task
     public function name(): string
     {
         return 'Save new Strava activities';
+    }
+
+    public function disableBecause(User $user): ?string
+    {
+        if(!$user->stravaTokens()->exists()) {
+            return 'Your account must be connected to Strava';
+        }
+        return null;
     }
 
     public function run()
@@ -52,6 +62,7 @@ class SaveNewActivities extends Task
                     }
                 }
             }
+            $this->offerBail(sprintf('Cancelled with %u new tasks added.', $newCount));
         } while(count($activities) > 0);
 
         $this->line(sprintf('Found %u activities, including %u new.', $analysisCount, $newCount));

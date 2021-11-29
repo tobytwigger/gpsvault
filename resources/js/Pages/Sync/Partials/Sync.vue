@@ -9,7 +9,7 @@
                 </jet-button>
             </div>
             <div v-else-if="pageType === 'new'">
-                <jet-button class="ml-4" @click="startSync">
+                <jet-button class="ml-4" @click="startSync" :disabled="!newSyncIsReady">
                     <div class="flex justify-center">
                         <span class="ml-1">Start Sync</span>
                     </div>
@@ -183,6 +183,9 @@ export default {
         },
         viewingSync() {
             return this.viewPreviousSync ?? this.currentWithOverriddenTasks;
+        },
+        newSyncIsReady() {
+            return (this.syncForm.tasks ?? []).filter(task => task.valid === false).length === 0 && (this.syncForm.tasks ?? []).length > 0;
         },
         pageType() {
             if(this.viewPreviousSync !== null) {

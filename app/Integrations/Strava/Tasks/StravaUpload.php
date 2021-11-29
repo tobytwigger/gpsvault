@@ -7,6 +7,7 @@ use Alchemy\Zippy\Zippy;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
 use App\Models\File;
+use App\Models\User;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -40,6 +41,16 @@ class StravaUpload extends Task
         return 'task-strava-upload';
     }
 
+    public function isChecked(User $user): bool
+    {
+        return false;
+    }
+
+    public function requiredConfig(): array
+    {
+        return ['file'];
+    }
+
     public function validationRules(): array
     {
         return [
@@ -60,8 +71,11 @@ class StravaUpload extends Task
 
     const UNMATCHED = 'unmatched';
 
+    const ALREADY_SAVED = 'already_saved';
+
     public function run()
     {
+        $this->line('Extracting Strava archive');
 
         // Save the zip file locally
         $archivePath = $this->config('file_path');
@@ -80,11 +94,21 @@ class StravaUpload extends Task
         $zipFile->extractMembers($entries->all(), $extractTo);
 
         // Upload each entry
-        $successes = $entries->map(fn(MemberInterface $member) => Str::substr($member->getLocation(), 11))
-            ->mapWithKeys(fn(string $entry) => [$entry => $this->processEntry($entry, $newDirectoryPath)]);
+        $entryKeys = $entries->map(fn(MemberInterface $member) => Str::substr($member->getLocation(), 11))->values();
+        $successes = [];
+        for($i=0;$i<$entryKeys->count();$i++) {
+            if($i%10 === 0) {
+                $this->line(sprintf('Extracting %u/%u activities', $i, $entryKeys->count()));
+            }
+            $successes[$entryKeys[$i]] = $this->processEntry($entryKeys[$i], $newDirectoryPath);
+        }
+
+        $this->line(sprintf('Cleaning up'));
 
         Storage::disk('temp')->deleteDirectory($newDirectoryPath);
         Storage::disk('temp')->delete($archivePath);
+
+        $this->succeed($this->formatSuccesses($successes));
 
     }
 
@@ -97,6 +121,10 @@ class StravaUpload extends Task
                 $activity = Activity::linkedTo('strava')->whereAdditionalDataContains('upload_id', $uploadId)->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 return static::UNMATCHED;
+            }
+
+            if($activity->activityFile()->exists()) {
+                return static::ALREADY_SAVED;
             }
 
             // If file is a tar, then unzip it
@@ -132,6 +160,13 @@ class StravaUpload extends Task
         return Str::endsWith($fileName, '.gz');
     }
 
+    public function runsAfter(): array
+    {
+        return [
+            SaveNewActivities::id()
+        ];
+    }
+
     private function unzip(string $fileName): string
     {
         $path = Storage::disk('temp')->path($fileName);
@@ -153,5 +188,15 @@ class StravaUpload extends Task
         gzclose($file);
 
         return $outputFileName;
+    }
+
+    private function formatSuccesses(array $successes): string
+    {
+        return sprintf(
+            'Matched %u/%u files, of which %u were already saved.',
+            collect($successes)->filter(fn($status) => $status === static::SUCCESS || $status === static::ALREADY_SAVED)->count(),
+            collect($successes)->count(),
+            collect($successes)->filter(fn($status) => $status === static::ALREADY_SAVED)->count()
+        );
     }
 }

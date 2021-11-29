@@ -36,6 +36,9 @@ class SyncRequest extends FormRequest
                 if (!app()->has('tasks.' . $value)) {
                     $fail(sprintf('The task %s is not a valid task.', $value));
                 }
+                if(app()->make('tasks.' . $value)->disabled($this->user())) {
+                    $fail(sprintf('The task %s is disabled and so cannot be used.', $value));
+                }
             }],
             'tasks.*.config' => 'sometimes|array'
         ];

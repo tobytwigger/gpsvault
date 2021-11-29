@@ -16,6 +16,7 @@
 <script>
 import JetButton from '@/Jetstream/Button.vue'
 import Task from './Task';
+import {cloneDeep} from 'lodash';
 
 export default {
     name: "StartSync",
@@ -49,15 +50,27 @@ export default {
     },
     computed: {
         filteredTaskDetails() {
-            return this.taskDetails.map(task => {
+            let tasks = cloneDeep(this.taskDetails.map(task => {
                 if(!this.tasks[task.id]) {
                     this.tasks[task.id] = {
-                        id: task.id, enabled: true, config: {}
+                        id: task.id, enabled: true, config: {}, valid: true
                     }
                 }
                 task.form = this.tasks[task.id];
                 return task;
+            }));
+            tasks.sort((a, b) => {
+                if(a.disabled === b.disabled) {
+                    return 0;
+                }
+                if(a.disabled === true && b.disabled === false) {
+                    return 1;
+                }
+                if(a.disabled === false && b.disabled === true) {
+                    return -1;
+                }
             });
+            return tasks;
         },
         formData() {
             return Object.keys(this.tasks)

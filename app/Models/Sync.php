@@ -27,7 +27,7 @@ class Sync extends Model
     protected $with = ['tasks'];
 
     protected $appends = [
-        'runtime', 'status_report'
+        'runtime'
     ];
 
     protected static function booted()
@@ -62,17 +62,6 @@ class Sync extends Model
     public function cancel()
     {
         $this->pendingTasks->each(fn(SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
-    }
-
-    public function getStatusReportAttribute()
-    {
-        return sprintf(
-            '%u tasks ran: %u succeeded, %u failed and %u cancelled',
-            $this->tasks()->count(),
-            $this->tasks()->where('status', 'succeeded')->count(),
-            $this->tasks()->where('status', 'failed')->count(),
-            $this->tasks()->where('status', 'cancelled')->count(),
-        );
     }
 
     public function finish()
