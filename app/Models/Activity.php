@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use function Illuminate\Events\queueable;
 
 class Activity extends Model
@@ -15,15 +16,20 @@ class Activity extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'activity_file_id', 'type', 'distance', 'start_at', 'additional_data', 'linked_to'
+        'name', 'description', 'activity_file_id', 'type', 'distance', 'start_at', 'linked_to', 'user_id'
     ];
 
     protected $casts = [
         'distance' => 'float',
         'start_at' => 'datetime',
-        'additional_data' => 'array',
         'linked_to' => 'array',
+        'user_id' => 'integer'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function activityFile()
     {
@@ -35,10 +41,38 @@ class Activity extends Model
         return $this->belongsToMany(File::class);
     }
 
-    public function scopeWhereAdditionalDataContains(Builder $query, string $id, $value)
+    public function additionalActivityData()
     {
-        $query->where('additional_data', 'LIKE', sprintf('%%"%s":"%s"%%', $id, $value))
-            ->orWhere('additional_data', 'LIKE', sprintf('%%"%s":%s%%', $id, $value));
+        return $this->hasMany(AdditionalActivityData::class);
+    }
+
+    public function addOrUpdateAdditionalData(string $key, mixed $value): void
+    {
+        $this->additionalActivityData()->updateOrCreate(
+            ['key' => $key, 'activity_id' => $this->id],
+            ['value' => $value]
+        );
+    }
+
+    public function getAdditionalData(string $key, $default = null): mixed
+    {
+        if($this->hasAdditionalData($key)) {
+            return $this->additionalActivityData()->where('key', $key)->get()->value;
+        }
+        return $default;
+    }
+
+    public function hasAdditionalData(string $key): bool
+    {
+        return $this->additionalActivityData()->where(['key' => $key])->exists();
+    }
+
+    public function scopeWhereAdditionalDataContains(Builder $query, string $key, $value)
+    {
+        $query->whereHas(
+            'additionalActivityData',
+            fn(Builder $subQuery) => $subQuery->where('key', $key)->where('value', $value)
+        );
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)
@@ -53,6 +87,16 @@ class Activity extends Model
 
     protected static function booted()
     {
+        static::creating(function(Activity $activity) {
+            if($activity->user_id === null) {
+                $activity->user_id = Auth::id();
+            }
+        });
+        static::deleted(queueable(function(Activity $activity) {
+            $activity->activityFile()->delete();
+            $activity->files()->delete();
+        }));
+
         static::created(queueable(function(Activity $activity) {
             if($activity->hasActivityFile()) {
                 $data = $activity->getActivityData();

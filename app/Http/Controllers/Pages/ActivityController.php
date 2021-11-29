@@ -16,6 +16,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ActivityController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Activity::class, 'activity');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +30,7 @@ class ActivityController extends Controller
     public function index()
     {
         return Inertia::render('Activity/Index', [
-            'activities' => Activity::orderBy('start_at', 'DESC')->get()
+            'activities' => Activity::where('user_id', Auth::id())->orderBy('start_at', 'DESC')->get()
         ]);
     }
 
@@ -56,12 +62,14 @@ class ActivityController extends Controller
             'size' => Storage::disk(Auth::user()->disk())->size($path),
             'mimetype' => $request->file('file')->getClientMimeType(),
             'extension' => $request->file('file')->getClientOriginalExtension(),
-            'disk' => Auth::user()->disk()
+            'disk' => Auth::user()->disk(),
+            'user_id' => Auth::id()
         ]);
 
         $activity = Activity::create([
             'name' => $request->input('name'),
-            'activity_file_id' => $file->id
+            'activity_file_id' => $file->id,
+            'user_id' => Auth::id()
         ]);
 
         return redirect()->route('activity.show', $activity);
@@ -78,17 +86,6 @@ class ActivityController extends Controller
         return Inertia::render('Activity/Show', [
             'activity' => $activity->load('files')
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Activity $activity)
-    {
-        //
     }
 
     /**
@@ -144,7 +141,9 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
-        //
+        $activity->delete();
+
+        return redirect()->route('activity.index');
     }
 
 }

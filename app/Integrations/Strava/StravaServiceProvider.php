@@ -28,7 +28,6 @@ class StravaServiceProvider extends ServiceProvider
         Route::middleware(['web', 'auth:sanctum', 'verified'])->prefix('strava')->group(function() {
             Route::get('login', [StravaController::class, 'login'])->name('strava.login');
             Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
-            Route::post('fix', [StravaFixController::class, 'fix'])->name('strava.fix');
         });
     }
 

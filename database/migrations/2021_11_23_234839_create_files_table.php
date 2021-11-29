@@ -23,6 +23,7 @@ class CreateFilesTable extends Migration
             $table->text('caption')->nullable();
             $table->string('mimetype');
             $table->string('disk');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }

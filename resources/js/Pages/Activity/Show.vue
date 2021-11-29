@@ -6,18 +6,50 @@
             </h2>
         </template>
 
-        <a :href="route('activity.track.download', activity.id)" v-if="activity.activity_file_id">
-            Download track file
-        </a>
+        <confirmation-modal :show="confirmingActivityDeletion" @close="confirmingActivityDeletion = false">
+            <template #title>
+                Delete Activity
+            </template>
 
-        <a :href="route('activity.download', activity.id)">
-            Download activity
-        </a>
+            <template #content>
+                Are you sure you want to delete the activity? Once the activity is deleted, all of its resources and data will be permanently deleted.
 
-        <div class="py-12" v-if="hasStats">
+                If you haven't done so, make sure you have a backup before continuing.
+            </template>
+
+            <template #footer>
+                <secondary-button @click.native="confirmingActivityDeletion = false">
+                    Nevermind
+                </secondary-button>
+
+                <danger-button class="ml-2" @click.native="deleteActivity">
+                    Delete Activity
+                </danger-button>
+            </template>
+        </confirmation-modal>
+
+
+        <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
+                        <div class="text-right">
+                            <a class="px-1" :href="route('activity.download', activity.id)">
+                                <secondary-button>
+                                    Download activity
+                                </secondary-button>
+                            </a>
+
+                            <a class="px-1" :href="route('activity.track.download', activity.id)" v-if="activity.activity_file_id">
+                                <secondary-button>
+                                    Download activity file
+                                </secondary-button>
+                            </a>
+
+                            <danger-button class="px-1" @click.native="confirmingActivityDeletion = true">
+                                Delete activity
+                            </danger-button>
+                        </div>
                         <div class="sm:flex sm:space-x-4">
                             <div v-if="hasStats">
                                 <data-display-tile title="Distance" :value="convertDistance(stats.distance)" :loading="!loading">
@@ -69,11 +101,15 @@
     import DataDisplayTile from './Partials/DataDisplayTile';
     import moment from 'moment';
     import JetInput from '@/Jetstream/Input.vue'
+    import ConfirmationModal from '@/Jetstream/ConfirmationModal.vue'
+    import DangerButton from '@/Jetstream/DangerButton.vue'
+    import SecondaryButton from '@/Jetstream/SecondaryButton.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import {useForm} from '@inertiajs/inertia-vue3'
     import FileManager from './Partials/FileManager';
+    import { Link } from '@inertiajs/inertia-vue3';
 
     export default defineComponent({
         components: {
@@ -83,7 +119,11 @@
             JetButton,
             JetInput,
             JetLabel,
-            JetValidationErrors
+            JetValidationErrors,
+            Link,
+            ConfirmationModal,
+            DangerButton,
+            SecondaryButton,
         },
         props: {
             activity: Object,
@@ -95,10 +135,14 @@
                 form: useForm({
                     file: null,
                     _method: 'patch'
-                })
+                }),
+                confirmingActivityDeletion: false
             }
         },
         methods: {
+            deleteActivity() {
+                this.$inertia.delete(route('activity.destroy', this.activity.id));
+            },
             runConversion(value, convert) {
                 return value === null ? 'N/A' : convert(value);
             },

@@ -12,12 +12,33 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id'
+    ];
+
+    protected $casts = [
+        'user_id' => 'integer'
     ];
 
     protected $appends = [
         'preview_url'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    protected static function booted()
+    {
+        static::creating(function(File $file) {
+            if($file->user_id === null) {
+                $file->user_id = Auth::id();
+            }
+        });
+        static::deleted(function(File $file) {
+            Storage::disk($file->disk)->delete($file->path);
+        });
+    }
 
     public function fullPath()
     {

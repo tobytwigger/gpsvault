@@ -46,7 +46,7 @@ class RunSyncTask implements ShouldQueue
             if(Arr::last($this->task->messages) !== static::DEPENDENCIES_NOT_READY_MESSAGE) {
                 $this->task->addMessage(static::DEPENDENCIES_NOT_READY_MESSAGE);
             }
-            RunSyncTask::dispatch($this->task)->delay(5);
+            RunSyncTask::dispatch($this->task)->delay(2);
             return;
         } else {
             if(Arr::last($this->task->messages) === static::DEPENDENCIES_NOT_READY_MESSAGE) {

@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -143,7 +144,8 @@ class StravaUpload extends Task
                 'size' => Storage::size($extractedFileName),
                 'mimetype' => Storage::mimeType($extractedFileName),
                 'extension' => $type,
-                'disk' => $this->user()->disk()
+                'disk' => $this->user()->disk(),
+                'user_id' => $this->user()->id
             ]);
 
             $activity->activity_file_id = $file->id;

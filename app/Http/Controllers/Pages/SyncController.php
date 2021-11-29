@@ -16,12 +16,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Sync::class, 'sync');
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function sync(SyncRequest $request)
+    public function store(SyncRequest $request)
     {
         abort_if(Auth::user()->syncs()->whereHas('pendingTasks')->exists(), 400, 'A sync is already running');
         $sync = Sync::start();
@@ -51,14 +56,8 @@ class SyncController extends Controller
         ]);
     }
 
-    public function cancel()
+    public function destroy(Sync $sync)
     {
-        $sync = Auth::user()->syncs()->whereHas('pendingTasks')->orderBy('created_at', 'DESC')->first();
-
-        if($sync === null) {
-            throw new NotFoundHttpException('Sync is not currently running');
-        }
-
         $sync->cancel();
 
         return redirect()->route('sync.index');

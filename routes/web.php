@@ -26,11 +26,11 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class);
+    Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class)->except(['edit']);
 
-    Route::post('sync/start', [\App\Http\Controllers\Pages\SyncController::class, 'sync'])->name('sync.start');
-    Route::post('sync/cancel', [\App\Http\Controllers\Pages\SyncController::class, 'cancel'])->name('sync.cancel');
-    Route::get('sync', [\App\Http\Controllers\Pages\SyncController::class, 'index'])->name('sync.index');
+//    Route::post('sync/start', [\App\Http\Controllers\Pages\SyncController::class, 'sync'])->name('sync.start');
+//    Route::post('sync/cancel', [\App\Http\Controllers\Pages\SyncController::class, 'cancel'])->name('sync.cancel');
+    Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
 
     Route::redirect('/upload', route('activity.create'))->name('upload');
     Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away('https://tobytwigger.github.io/cycle-store/'))->name('documentation');

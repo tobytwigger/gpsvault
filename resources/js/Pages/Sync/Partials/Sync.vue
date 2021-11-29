@@ -2,11 +2,11 @@
     <sync-layout :title="currentPageTitle" :data="currentPageTitleData">
         <template #titleAction>
             <div v-if="pageType === 'sync'">
-                <jet-button class="ml-4 bg-red-600" @click="cancelSync">
+                <jet-danger-button class="ml-4 bg-red-600" @click="cancelSync">
                     <div class="flex justify-center">
                         <span class="ml-1">Cancel</span>
                     </div>
-                </jet-button>
+                </jet-danger-button>
             </div>
             <div v-else-if="pageType === 'new'">
                 <jet-button class="ml-4" @click="startSync" :disabled="!newSyncIsReady">
@@ -65,6 +65,7 @@
 import ViewSingleTask from './ViewSingleTask';
 
 import JetButton from '@/Jetstream/Button.vue'
+import JetDangerButton from '@/Jetstream/DangerButton.vue'
 import Modal from '@/Jetstream/Modal';
 import StartSync from './StartSync';
 import moment from 'moment';
@@ -80,7 +81,8 @@ export default {
         JetButton,
         Modal,
         StartSync,
-        ViewSingleTask
+        ViewSingleTask,
+        JetDangerButton
     },
     props: {
         taskDetails: {
@@ -136,12 +138,12 @@ export default {
     methods: {
         startSync() {
             if(!this.isSyncing) {
-                this.$inertia.post(route('sync.start'), this.syncForm, {errorBag: 'startSync'});
+                this.$inertia.post(route('sync.store'), this.syncForm, {errorBag: 'startSync'});
             }
         },
         cancelSync() {
             if(this.isSyncing) {
-                this.$inertia.post(route('sync.cancel'));
+                this.$inertia.delete(route('sync.destroy', this.current.id));
             }
         },
         getAsDate(date) {

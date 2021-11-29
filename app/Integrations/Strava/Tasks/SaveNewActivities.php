@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SaveNewActivities extends Task
 {
@@ -52,13 +53,17 @@ class SaveNewActivities extends Task
                 if(isset($activity['id'])) {
                     if(!Activity::whereAdditionalDataContains('strava_id', $activity['id'])->exists()) {
                         $newCount++;
-                        Activity::create([
+                        /** @var Activity $activity */
+                        $activityModel = Activity::create([
                             'name' => $activity['name'],
                             'distance' => $activity['distance'],
                             'start_at' => Carbon::make($activity['start_date']),
                             'linked_to' => ['strava'],
-                            'additional_data' => ['strava_id' => $activity['id'], 'upload_id' => $activity['upload_id_str'] ?? null]
+                            'user_id' => $this->user()->id
                         ]);
+
+                        $activityModel->addOrUpdateAdditionalData('strava_id', $activity['id']);
+                        $activityModel->addOrUpdateAdditionalData('upload_id', $activity['upload_id_str'] ?? null);
                     }
                 }
             }
