@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Mail\ZipReadyToDownload;
 use App\Models\Activity;
+use App\Models\ConnectionLog;
+use App\Models\Sync;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use Illuminate\Bus\Queueable;
@@ -39,8 +41,15 @@ class DownloadAllData implements ShouldQueue
     public function handle()
     {
         $zipCreator = ZipCreator::start($this->user);
+        $zipCreator->add($this->user);
         foreach(Activity::where('user_id', $this->user->id)->get() as $activity) {
             $zipCreator->add($activity);
+        }
+        foreach(Sync::where('user_id', $this->user->id)->get() as $sync) {
+            $zipCreator->add($sync);
+        }
+        foreach(ConnectionLog::where('user_id', $this->user->id)->get() as $connectionLog) {
+            $zipCreator->add($connectionLog);
         }
         $file = $zipCreator->archive();
 

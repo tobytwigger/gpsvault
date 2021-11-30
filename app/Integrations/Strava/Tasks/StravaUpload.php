@@ -105,7 +105,7 @@ class StravaUpload extends Task
             }
             $successes[$entryKeys[$i]] = $this->processEntry($entryKeys[$i], $newDirectoryPath);
         }
-Log::info($successes);
+
         $this->line(sprintf('Cleaning up'));
 
         Storage::disk('temp')->deleteDirectory($newDirectoryPath);
@@ -133,7 +133,7 @@ Log::info($successes);
             // If file is a tar, then unzip it
             $locationInTemp = sprintf('%s/activities/%s', $directory, $entry);
             $locationInTemp = $this->isTar($locationInTemp) ? $this->unzip($locationInTemp) : $locationInTemp;
-Log::info(mime_content_type($locationInTemp) . '  ' . $locationInTemp);
+
             $file = Upload::withContents(
                 trim(file_get_contents($locationInTemp)),
                 $this->isTar($entry) ? Str::replace('.gz', '', $entry) : $entry,
