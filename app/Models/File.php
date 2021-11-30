@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class File extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type'
     ];
 
     protected $casts = [
@@ -40,6 +41,11 @@ class File extends Model
         });
     }
 
+    public function getDownloadUrl(): string
+    {
+        return url()->route('file.download', $this->id);
+    }
+
     public function fullPath()
     {
         return Storage::disk($this->disk)->path($this->path);
@@ -53,6 +59,11 @@ class File extends Model
     public function getPreviewUrlAttribute()
     {
         return Storage::disk($this->disk)->url($this->path);
+    }
+
+    public function returnDownloadResponse(): StreamedResponse
+    {
+        return Storage::disk($this->disk)->download($this->path, $this->filename);
     }
 
 }

@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Sync;
+use App\Services\File\FileUploader;
+use App\Services\File\Upload;
 use App\Services\Sync\Task;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -54,17 +56,7 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $path = $request->file('file')->store('activities', Auth::user()->disk());
-
-        $file = File::create([
-            'path' => $path,
-            'filename' => $request->file('file')->getClientOriginalName(),
-            'size' => Storage::disk(Auth::user()->disk())->size($path),
-            'mimetype' => $request->file('file')->getClientMimeType(),
-            'extension' => $request->file('file')->getClientOriginalExtension(),
-            'disk' => Auth::user()->disk(),
-            'user_id' => Auth::id()
-        ]);
+        $file = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ACTIVITY_FILE);
 
         $activity = Activity::create([
             'name' => $request->input('name'),
@@ -95,35 +87,19 @@ class ActivityController extends Controller
      * @param  \App\Models\Activity  $activity
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateActivityRequest $request, Activity $activity)
+    public function update(UpdateActivityRequest $request, Activity $activity, FileUploader $fileUploader)
     {
-        if(!$activity->hasActivityFile() && $request->hasFile('file')) {
-            $path = $request->file('file')->store('activities', Auth::user()->disk());
-            $file = File::create([
-                'path' => $path,
-                'filename' => $request->file('file')->getClientOriginalName(),
-                'size' => Storage::disk(Auth::user()->disk())->size($path),
-                'mimetype' => $request->file('file')->getClientMimeType(),
-                'extension' => $request->file('file')->getClientOriginalExtension(),
-                 'disk' => Auth::user()->disk()
-       ]);
-
+        if($request->hasFile('file')) {
+            if($activity->hasActivityFile()) {
+                $activity->activityFile()->delete();
+            }
+            $file = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ACTIVITY_FILE);
             $activity->activity_file_id = $file->id;
         }
 
         if($request->has('files')) {
             foreach($request->file('files', []) as $uploadedFile) {
-                $path = $uploadedFile->store('media', Auth::user()->disk());
-
-                $file = File::create([
-                    'path' => $path,
-                    'filename' => $uploadedFile->getClientOriginalName(),
-                    'size' => Storage::disk(Auth::user()->disk())->size($path),
-                    'mimetype' => $uploadedFile->getClientMimeType(),
-                    'extension' => $uploadedFile->getClientOriginalExtension(),
-                    'disk' => Auth::user()->disk()
-                ]);
-
+                $file = Upload::uploadedFile($uploadedFile, Auth::user(), FileUploader::ACTIVITY_MEDIA);
                 $activity->files()->attach($file);
             }
         }

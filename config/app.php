@@ -134,6 +134,12 @@ return [
     |
     */
 
+    'mimetypes' => [
+        'fit' => 'application/octet-stream',
+        'tcx' => 'text/plain',
+        'gpx' => 'text/xml',
+    ],
+
     'providers' => [
 
         /*
@@ -177,7 +183,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         \App\Services\ActivityData\ActivityDataServiceProvider::class,
-        \App\Integrations\Strava\StravaServiceProvider::class
+        \App\Integrations\Strava\StravaServiceProvider::class,
+        \App\Services\Archive\ArchiveServiceProvider::class
 
     ],
 

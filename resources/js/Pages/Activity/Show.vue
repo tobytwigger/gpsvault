@@ -34,13 +34,13 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
                         <div class="text-right">
-                            <a class="px-1" :href="route('activity.download', activity.id)">
+                            <a :href="route('activity.download', this.activity.id)">
                                 <secondary-button>
                                     Download activity
                                 </secondary-button>
                             </a>
 
-                            <a class="px-1" :href="route('activity.track.download', activity.id)" v-if="activity.activity_file_id">
+                            <a class="px-1" :href="route('file.download', activity.activity_file_id)" v-if="activity.activity_file_id">
                                 <secondary-button>
                                     Download activity file
                                 </secondary-button>

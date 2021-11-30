@@ -8,6 +8,8 @@ use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\User;
+use App\Services\File\FileUploader;
+use App\Services\File\Upload;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -103,7 +105,7 @@ class StravaUpload extends Task
             }
             $successes[$entryKeys[$i]] = $this->processEntry($entryKeys[$i], $newDirectoryPath);
         }
-
+Log::info($successes);
         $this->line(sprintf('Cleaning up'));
 
         Storage::disk('temp')->deleteDirectory($newDirectoryPath);
@@ -131,22 +133,13 @@ class StravaUpload extends Task
             // If file is a tar, then unzip it
             $locationInTemp = sprintf('%s/activities/%s', $directory, $entry);
             $locationInTemp = $this->isTar($locationInTemp) ? $this->unzip($locationInTemp) : $locationInTemp;
-            $type = pathinfo(Storage::disk('temp')->path($locationInTemp), PATHINFO_EXTENSION);
-
-            $extractedFileName = sprintf('activities/%s.%s', Str::random(40), $type);
-            if(!Storage::disk($this->user()->disk())->put($extractedFileName, trim(file_get_contents($locationInTemp)))) {
-                throw new \Exception('Could not save the file');
-            }
-
-            $file = File::create([
-                'path' => $extractedFileName,
-                'filename' => $this->isTar($entry) ? Str::replace('.gz', '', $entry) : $entry,
-                'size' => Storage::size($extractedFileName),
-                'mimetype' => Storage::mimeType($extractedFileName),
-                'extension' => $type,
-                'disk' => $this->user()->disk(),
-                'user_id' => $this->user()->id
-            ]);
+Log::info(mime_content_type($locationInTemp) . '  ' . $locationInTemp);
+            $file = Upload::withContents(
+                trim(file_get_contents($locationInTemp)),
+                $this->isTar($entry) ? Str::replace('.gz', '', $entry) : $entry,
+                $this->user(),
+                FileUploader::ARCHIVE
+            );
 
             $activity->activity_file_id = $file->id;
             $activity->save();

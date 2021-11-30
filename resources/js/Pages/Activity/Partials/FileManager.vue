@@ -38,7 +38,7 @@
                         <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd"/>
                     </svg>
                     <div class="ml-2">
-                        <a :href="route('activity.file.download', [activity.id, file.id])">
+                        <a :href="route('file.download', file.id)">
                             {{ file.title ? file.title : file.filename}}
                         </a>
                         <span class="mt-1 text-sm text-gray-500" v-if="file.caption">
@@ -48,7 +48,7 @@
 
                 </div>
                 <div class="ml-4 flex-shrink-0">
-                    <a :href="route('activity.file.download', [activity.id, file.id])" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    <a :href="route('file.download', file.id)" class="font-medium text-indigo-600 hover:text-indigo-500">
                         Download
                     </a>
                     <span class="text-indigo-600">|</span>
