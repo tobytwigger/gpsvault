@@ -28,13 +28,46 @@
             </template>
         </confirmation-modal>
 
+        <modal :show="uploadActivityFileModal" :closeable="true" @close="uploadActivityFileModal = false">
+            <form @submit.prevent="uploadFile">
+
+                <div class="px-6 py-4">
+                    <div class="text-lg">
+                        Upload activity file
+                    </div>
+
+                    <div class="mt-4">
+                        <p>Upload the fit/tcx/gpx recording of your ride for a deeper analysis.</p>
+
+                        <div class="mt-4">
+                            <jet-label for="file" value="Activity File" />
+                            <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
+                        </div>
+
+                        <div class="mt-4">
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="px-12 py-4 bg-gray-100 text-right">
+                    <div>
+                        <jet-button class="ml-4" type="submit" :disabled="form.processing">
+                            Upload
+                        </jet-button>
+                    </div>
+                </div>
+            </form>
+        </modal>
+
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
                         <div class="text-right">
-                            <a :href="route('activity.download', this.activity.id)">
+                            <a :href="route('activity.download', this.activity.id)" class="px-1">
                                 <secondary-button>
                                     Download activity
                                 </secondary-button>
@@ -45,6 +78,9 @@
                                     Download activity file
                                 </secondary-button>
                             </a>
+                            <secondary-button class="px-1" @click.native="uploadActivityFileModal = true" :disabled="uploadActivityFileModal === true" v-else>
+                                Upload activity file
+                            </secondary-button>
 
                             <danger-button class="px-1" @click.native="confirmingActivityDeletion = true">
                                 Delete activity
@@ -68,20 +104,6 @@
                                 </data-display-tile>
                                 <data-display-tile title="Moving Time" :value="convertTime(activity.start_at)" :loading="!loading">
                                 </data-display-tile>
-
-                                <form @submit.prevent="uploadFile">
-
-                                    <div class="mt-4">
-                                        <jet-label for="file" value="Activity File" />
-                                        <jet-input id="file" type="file" @input="form.file = $event.target.files[0]" class="mt-1 block w-full" required />
-                                    </div>
-
-                                    <div class="mt-4">
-                                        <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                            Upload
-                                        </jet-button>
-                                    </div>
-                                </form>
                             </div>
 
                         </div>
@@ -105,6 +127,7 @@
     import DangerButton from '@/Jetstream/DangerButton.vue'
     import SecondaryButton from '@/Jetstream/SecondaryButton.vue'
     import JetLabel from '@/Jetstream/Label.vue'
+    import Modal from '@/Jetstream/Modal.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import {useForm} from '@inertiajs/inertia-vue3'
@@ -124,6 +147,7 @@
             ConfirmationModal,
             DangerButton,
             SecondaryButton,
+            Modal
         },
         props: {
             activity: Object,
@@ -136,7 +160,8 @@
                     file: null,
                     _method: 'patch'
                 }),
-                confirmingActivityDeletion: false
+                confirmingActivityDeletion: false,
+                uploadActivityFileModal: false
             }
         },
         methods: {
@@ -166,7 +191,11 @@
             },
             uploadFile() {
                 this.form.post(route('activity.update', this.activity.id), {
-                    onSuccess: () => this.loadStats()
+                    onSuccess: () => {
+                        this.loadStats();
+                        this.form.reset();
+                        this.uploadActivityFileModal = false;
+                    }
                 });
             },
             loadStats() {

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CleanTempStorage extends Command
@@ -33,6 +34,8 @@ class CleanTempStorage extends Command
             ->filter(fn(string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()));
 
         $this->line(sprintf('Removing %u files from temp', $files->count()));
+
+        Log::debug(sprintf('Removing %u files from temp', $files->count()));
 
         Storage::disk('temp')->delete($files->all());
 

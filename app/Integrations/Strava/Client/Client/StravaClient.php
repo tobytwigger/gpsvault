@@ -141,6 +141,25 @@ class StravaClient
         return $token;
     }
 
+    public function getActivity(int $activityId)
+    {
+        $this->log->debug(sprintf('About to get activity %d', $activityId));
+
+        $response = $this->request('GET', 'activities/' . $activityId, [
+            'query' => [
+                'include_all_efforts' => true
+            ]
+        ]);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->info(sprintf('Retrieved user activity %d', $activityId));
+
+        return $content;
+    }
 
     public function getActivities(int $page = 1)
     {

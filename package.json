@@ -29,6 +29,8 @@
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
-        "vue-easy-slider": "^5.3.4"
+        "vue-easy-lightbox": "^1.2.4",
+        "vue-easy-slider": "^5.3.4",
+        "vue3-carousel": "^0.1.32"
     }
 }

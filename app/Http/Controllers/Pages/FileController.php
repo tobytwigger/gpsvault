@@ -16,4 +16,9 @@ class FileController extends Controller
         return $file->returnDownloadResponse();
     }
 
+    public function preview(File $file)
+    {
+        return response($file->getFileContents(), 200)->header('Content-Type', $file->mimetype);
+    }
+
 }

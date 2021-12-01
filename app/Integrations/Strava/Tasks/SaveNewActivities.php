@@ -5,6 +5,7 @@ namespace App\Integrations\Strava\Tasks;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
 use App\Models\User;
+use App\Services\ActivityImport\ActivityImporter;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -54,16 +55,14 @@ class SaveNewActivities extends Task
                     if(!Activity::whereAdditionalDataContains('strava_id', $activity['id'])->exists()) {
                         $newCount++;
                         /** @var Activity $activity */
-                        $activityModel = Activity::create([
-                            'name' => $activity['name'],
-                            'distance' => $activity['distance'],
-                            'start_at' => Carbon::make($activity['start_date']),
-                            'linked_to' => ['strava'],
-                            'user_id' => $this->user()->id
-                        ]);
-
-                        $activityModel->addOrUpdateAdditionalData('strava_id', $activity['id']);
-                        $activityModel->addOrUpdateAdditionalData('upload_id', $activity['upload_id_str'] ?? null);
+                        ActivityImporter::for($this->user())
+                            ->withName($activity['name'])
+                            ->withDistance($activity['distance'])
+                            ->linkTo('strava')
+                            ->startedAt(Carbon::make($activity['start_date']))
+                            ->withAdditionalData('strava_id', $activity['id'])
+                            ->withAdditionalData('upload_id', $activity['upload_id_str'] ?? null)
+                            ->import();
                     }
                 }
             }
