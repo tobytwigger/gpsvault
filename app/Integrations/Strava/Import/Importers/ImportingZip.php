@@ -70,4 +70,28 @@ class ImportingZip
         return $this->extractedDirectory . Str::startsWith($append, DIRECTORY_SEPARATOR) ? $append : '/' . $append;
     }
 
+    public function getCsv(string $path): array
+    {
+        $member = collect($this->zip->getMembers())
+            ->filter(fn(MemberInterface $member) => $member->getLocation() === $path)
+            ->first();
+
+        if(!$member) {
+            throw new \Exception('Photos csv not found');
+        }
+
+        $data = [];
+        $lines = explode(PHP_EOL, file_get_contents($this->getFullExtractedDirectory($member->getLocation())));
+
+        array_shift($lines);
+
+        foreach($lines as $line) {
+            $parsedLine = str_getcsv($line);
+            if(count($parsedLine) === 2) {
+                $data[$parsedLine[0]] = $parsedLine[1];
+            }
+        }
+        return $data;
+    }
+
 }

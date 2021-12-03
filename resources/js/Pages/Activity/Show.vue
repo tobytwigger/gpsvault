@@ -67,6 +67,22 @@
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
                         <div class="text-right">
+                            <span
+                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                                v-if="isLoadingPhotos">Loading photos</span>
+                            <span
+                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                                v-if="isLoadingDetails">Loading details</span>
+
+                            <span
+                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                                v-if="isLoadingComments">Loading comments</span>
+
+                            <span
+                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full"
+                                v-if="isLoadingKudos">Loading kudos</span>
+
+
                             <a :href="route('activity.download', this.activity.id)" class="px-1">
                                 <secondary-button>
                                     Download activity
@@ -108,6 +124,29 @@
 
                         </div>
                     </div>
+
+                    <div>
+                        <div v-if="activity.strava_comments.length > 0">
+                            <ul>
+                                <li v-for="comment in activity.strava_comments">
+                                    {{comment.name}}: {{comment.text}} (posted {{formatDateTime(comment.posted_at)}})
+                                </li>
+                            </ul>
+                        </div>
+                        <span v-if="activity.strava_kudos.length === 1">
+                            Kudos from {{activity.strava_kudos[0].name}}.
+                        </span>
+                        <span v-if="activity.strava_kudos.length === 2">
+                            Kudos from {{activity.strava_kudos[0].name}} and {{activity.strava_kudos[1].name}}.
+                        </span>
+                        <span v-if="activity.strava_kudos.length === 3">
+                            Kudos from {{activity.strava_kudos[0].name}}, {{activity.strava_kudos[1].name}} and {{activity.strava_kudos[2].name}}.
+                        </span>
+                        <span v-if="activity.strava_kudos.length > 3">
+                            Kudos from {{activity.strava_kudos[0].name}}, {{activity.strava_kudos[1].name}} and {{activity.strava_kudos.length - 2}} more.
+                        </span>
+                    </div>
+
                     <file-manager :activity="activity"></file-manager>
 
                 </div>
@@ -165,6 +204,9 @@
             }
         },
         methods: {
+            formatDateTime(datetime) {
+                return moment(datetime).format('DD/MM/YYYY HH:mm:ss');
+            },
             deleteActivity() {
                 this.$inertia.delete(route('activity.destroy', this.activity.id));
             },
@@ -217,6 +259,18 @@
             },
             images() {
                 return this.activity.files.filter(file => file.mimetype.startsWith('image'));
+            },
+            isLoadingPhotos() {
+                return this.activity.additional_data.strava_is_loading_photos ?? false;
+            },
+            isLoadingDetails() {
+                return this.activity.additional_data.strava_is_loading_details ?? false;
+            },
+            isLoadingComments() {
+                return this.activity.additional_data.strava_is_loading_comments ?? false;
+            },
+            isLoadingKudos() {
+                return this.activity.additional_data.strava_is_loading_kudos ?? false;
             }
         }
     })

@@ -15,8 +15,14 @@ class Strava
 
     protected string $clientUuid;
 
-    public function __construct(protected ClientFactory $clientFactory, private ?int $userId = null)
+    protected ClientFactory $clientFactory;
+
+    private ?int $userId = null;
+
+    public function __construct(ClientFactory $clientFactory, ?int $userId = null)
     {
+        $this->clientFactory = $clientFactory;
+        $this->userId = $userId;
         $this->setUserId($this->userId ?? Auth::id());
     }
 
@@ -37,7 +43,7 @@ class Strava
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
     }
 
-    public function setUserId(int $userId = null): Strava
+    public function setUserId(?int $userId = null): Strava
     {
         $this->userId = $userId;
         return $this;

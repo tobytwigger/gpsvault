@@ -18,6 +18,8 @@ class ActivityDetails
 
     protected array $additionalData = [];
 
+    protected array $additionalArrayData = [];
+
     protected array $linkedTo = [];
 
     protected ?int $distance = null;
@@ -121,31 +123,6 @@ class ActivityDetails
     }
 
     /**
-     * @return array
-     */
-    public function getAdditionalData(): array
-    {
-        return $this->additionalData;
-    }
-
-    /**
-     * @param array $additionalData
-     * @return ActivityDetails
-     */
-    public function setAdditionalData(array $additionalData): ActivityDetails
-    {
-        $this->additionalData = $additionalData;
-        return $this;
-    }
-
-
-
-    public function addAdditionalData(string $key, mixed $value): void
-    {
-        $this->additionalData[$key] = $value;
-    }
-
-    /**
      * @return int|null
      */
     public function getDistance(): ?int
@@ -179,6 +156,73 @@ class ActivityDetails
     {
         $this->startedAt = $startedAt;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllAdditionalData(): array
+    {
+        return array_merge($this->additionalData, $this->additionalArrayData);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalData(): array
+    {
+        return $this->additionalData;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalArrayData(): array
+    {
+        return $this->additionalArrayData;
+    }
+
+    /**
+     * @param array $additionalData
+     * @return ActivityDetails
+     */
+    public function setAdditionalData(array $additionalData): ActivityDetails
+    {
+        $this->additionalData = $additionalData;
+        return $this;
+    }
+
+    public function unsetAdditionalData(string $key)
+    {
+        if(isset($this->additionalData[$key])) {
+            unset($this->additionalData[$key]);
+        }
+        if(isset($this->additionalArrayData[$key])) {
+            unset($this->additionalArrayData[$key]);
+        }
+    }
+
+    /**
+     * @param array $additionalArrayData
+     * @return ActivityDetails
+     */
+    public function setAdditionalArrayData(array $additionalArrayData): ActivityDetails
+    {
+        $this->additionalArrayData = $additionalArrayData;
+        return $this;
+    }
+
+    public function setAdditionalDataKey(string $key, mixed $value)
+    {
+        $this->additionalData[$key] = $value;
+    }
+
+    public function appendAdditionalDataKey(string $key, mixed $value): void
+    {
+        if(!isset($this->additionalArrayData[$key])) {
+            $this->additionalArrayData[$key] = [];
+        }
+        $this->additionalArrayData[$key][] = $value;
     }
 
 }

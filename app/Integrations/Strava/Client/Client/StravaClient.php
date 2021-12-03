@@ -182,4 +182,66 @@ class StravaClient
         return $content;
     }
 
+    public function getPhotos(int $activityId)
+    {
+        $this->log->debug(sprintf('About to get photos for activity %d', $activityId));
+
+        $response = $this->request('GET', 'activities/' . $activityId . '/photos', [
+            'query' => [
+                'photo_source' => true
+            ]
+        ]);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->info(sprintf('Retrieved user activity %d', $activityId));
+
+        return $content;
+    }
+
+    public function getComments(int $activityId, int $page = 1)
+    {
+        $this->log->debug(sprintf('About to get page %u of comments for activity %d', $page, $activityId));
+
+        $response = $this->request('GET', 'activities/' . $activityId . '/comments', [
+            'query' => [
+                'page' => $page,
+                'per_page' => 200
+            ]
+        ]);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->debug(sprintf('Retrieved %u comments for activity %d', count($content), $activityId));
+
+        return $content;
+    }
+
+    public function getKudos(int $activityId, int $page = 1)
+    {
+        $this->log->debug(sprintf('About to get page %u of kudos for activity %d', $page, $activityId));
+
+        $response = $this->request('GET', 'activities/' . $activityId . '/kudos', [
+            'query' => [
+                'page' => $page,
+                'per_page' => 200
+            ]
+        ]);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->debug(sprintf('Retrieved %u kudos for activity %d', count($content), $activityId));
+
+        return $content;
+    }
+
 }

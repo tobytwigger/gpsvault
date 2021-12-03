@@ -42,7 +42,7 @@ class StravaImporter
         }
         $import = Import::create();
         foreach($results->all() as $result) {
-            ImportResult::saveResult($import, $result['type'], $result['message'], $result['success']);
+            ImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
         }
         $zip->clearUp();
         return $import;

@@ -3,11 +3,13 @@
 namespace App\Services\ActivityImport;
 
 use App\Exceptions\ActivityDuplicate;
+use App\Integrations\Strava\Import\Importers\Importers\PhotoImporter;
 use App\Models\Activity;
-use App\Models\AdditionalActivityData;
+use App\Models\AdditionalData;
 use App\Models\File;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityImporter
@@ -38,10 +40,9 @@ class ActivityImporter
         if($activity->activityFile) {
             $instance->withActivityFile($activity->activityFile);
         }
-        if($activity->additionalActivityData()->exists()) {
-            $instance->activityDetails()->setAdditionalData(
-                $activity->additionalActivityData()->get()->mapWithKeys(fn(AdditionalActivityData $data) => [$data->key => $data->value])->all()
-            );
+        if($activity->additionalData()->exists()) {
+            $instance->activityDetails()->setAdditionalArrayData($activity->getAllArrayAdditionalData()->toArray());
+            $instance->activityDetails()->setAdditionalData($activity->getAllNonArrayAdditionalData()->toArray());
         }
         if($activity->files()->exists()) {
             $instance->activityDetails()->setMedia(
@@ -104,9 +105,31 @@ class ActivityImporter
         return $this;
     }
 
-    public function withAdditionalData(string $key, mixed $value): ActivityImporter
+    public function setAdditionalData(string $key, mixed $value): ActivityImporter
     {
-        $this->activityDetails->addAdditionalData($key, $value);
+        $this->activityDetails->setAdditionalDataKey($key, $value);
+        return $this;
+    }
+
+    public function appendAdditionalData(string $key, mixed $value): ActivityImporter
+    {
+        $this->activityDetails->appendAdditionalDataKey($key, $value);
+        return $this;
+    }
+
+    public function unsetAdditionalData(string $key): ActivityImporter
+    {
+        $this->activityDetails->unsetAdditionalData($key);
+        return $this;
+    }
+
+    public function removeFromAdditionalDataArray(string $key, mixed $value): ActivityImporter
+    {
+        $additionalData = $this->activityDetails->getAdditionalArrayData();
+        if(array_key_exists($key, $additionalData) && is_array($additionalData[$key]) && in_array($value, $additionalData[$key])) {
+            unset($additionalData[$key][array_search($value, $additionalData[$key])]);
+        }
+        $this->activityDetails->setAdditionalArrayData($additionalData);
         return $this;
     }
 
@@ -143,9 +166,42 @@ class ActivityImporter
         ]);
         $activity->save();
         $activity->files()->sync(collect($this->activityDetails->getMedia())->pluck('id'));
-        $activity->additionalActivityData()->whereNotIn('key', array_keys($this->activityDetails->getAdditionalData()))->delete();
-        collect($this->activityDetails->getAdditionalData())
-            ->each(fn($value, string $key) => $activity->addOrUpdateAdditionalData($key, $value));
+
+        $currentAdditionalData = $activity->getAllAdditionalData();
+        $newAdditionalData = collect($this->activityDetails->getAdditionalData());
+        $newAdditionalArrayData = collect($this->activityDetails->getAdditionalArrayData());
+        $currentAdditionalDataModels = $activity->additionalData()->get();
+
+        // Iterate through each of the new additional datas
+        foreach($newAdditionalData as $key => $value) {
+            if(!$currentAdditionalData->has($key)) {
+                $activity->additionalData()->create(['key' => $key, 'value' => $value]);
+            }
+        }
+
+        // Iterate through each of the new additional array datas
+        foreach($newAdditionalArrayData as $key => $value) {
+            foreach($value as $dataElement) {
+                if(!$currentAdditionalData->has($key) || (is_array($currentAdditionalData->get($key)) && !in_array($dataElement, $currentAdditionalData->get($key)))) {
+                    $activity->additionalData()->create(['key' => $key, 'value' => $dataElement]);
+                }
+            }
+        }
+
+        // Iterate through each of the old datas and remove any that aren't in use any more
+        foreach($currentAdditionalDataModels->groupBy(fn(AdditionalData $d) => $d->key) as $key => $additionalDataModels) {
+            if($additionalDataModels->count() > 1) {
+                foreach($additionalDataModels as $additionalDataModel) {
+                    if(!$newAdditionalArrayData->has($key) || !in_array($additionalDataModel->value, $newAdditionalArrayData->get($key))) {
+                        $additionalDataModel->delete();
+                    }
+                }
+            } elseif($additionalDataModels->count() === 1) {
+                if(!$newAdditionalData->has($key)) {
+                    $additionalDataModels->first()->delete();
+                }
+            }
+        }
         return $activity;
     }
 

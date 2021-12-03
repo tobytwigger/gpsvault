@@ -2,21 +2,30 @@
 
 namespace App\Models;
 
+use App\Integrations\Strava\Models\StravaComment;
+use App\Integrations\Strava\Models\StravaKudos;
 use App\Services\ActivityData\ActivityData;
 use App\Services\ActivityData\Analysis;
+use App\Traits\HasAdditionalData;
+use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use function Illuminate\Events\queueable;
 
 class Activity extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAdditionalData;
 
     protected $fillable = [
-        'name', 'description', 'activity_file_id', 'type', 'distance', 'start_at', 'linked_to', 'user_id'
+        'name', 'description', 'activity_file_id', 'distance', 'start_at', 'linked_to', 'user_id'
+    ];
+
+    protected $with = [
+        'stravaComments', 'stravaKudos'
     ];
 
     protected $casts = [
@@ -25,6 +34,17 @@ class Activity extends Model
         'linked_to' => 'array',
         'user_id' => 'integer'
     ];
+
+
+    public function stravaComments()
+    {
+        return $this->hasMany(StravaComment::class);
+    }
+
+    public function stravaKudos()
+    {
+        return $this->hasMany(StravaKudos::class);
+    }
 
     public function user()
     {
@@ -39,40 +59,6 @@ class Activity extends Model
     public function files()
     {
         return $this->belongsToMany(File::class);
-    }
-
-    public function additionalActivityData()
-    {
-        return $this->hasMany(AdditionalActivityData::class);
-    }
-
-    public function addOrUpdateAdditionalData(string $key, mixed $value): void
-    {
-        $this->additionalActivityData()->updateOrCreate(
-            ['key' => $key, 'activity_id' => $this->id],
-            ['value' => $value]
-        );
-    }
-
-    public function getAdditionalData(string $key, $default = null): mixed
-    {
-        if($this->hasAdditionalData($key)) {
-            return $this->additionalActivityData()->where('key', $key)->get()->value;
-        }
-        return $default;
-    }
-
-    public function hasAdditionalData(string $key): bool
-    {
-        return $this->additionalActivityData()->where(['key' => $key])->exists();
-    }
-
-    public function scopeWhereAdditionalDataContains(Builder $query, string $key, $value)
-    {
-        $query->whereHas(
-            'additionalActivityData',
-            fn(Builder $subQuery) => $subQuery->where('key', $key)->where('value', $value)
-        );
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)
@@ -97,31 +83,15 @@ class Activity extends Model
             $activity->files()->delete();
         }));
 
-        static::created(queueable(function(Activity $activity) {
-            if($activity->hasActivityFile()) {
-                $data = $activity->getActivityData();
-                $activity->distance = $data->getDistance();
-                $activity->start_at = $data->getStartedAt();
-                if($activity->name === null) {
-                    if($activity->start_at !== null) {
-                        $hour = $activity->start_at->format('H');
-                        if ($hour < 12 && $hour > 4) {
-                            $activity->name = 'Morning Ride';
-                        }
-                        if ($hour < 17) {
-                            $activity->name = 'Afternoon Ride';
-                        }
-                        if ($hour < 23) {
-                            $activity->name = 'Evening Ride';
-                        }
-                        $activity->name = 'Night Ride';
-                    } else {
-                        $activity->name = 'New Ride';
-                    }
-                }
-                $activity->save();
-            }
-        }));
+//        static::saved(queueable(function(Activity $activity) {
+//                if($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
+//                    $activity->refresh();
+////                $data = $activity->getActivityData();
+////                $activity->distance = $data->getDistance();
+////                $activity->start_at = $data->getStartedAt();
+////                $activity->save();
+//                }
+//        })->onQueue('stats'));
     }
 
     public function hasActivityFile(): bool
@@ -137,5 +107,10 @@ class Activity extends Model
     public function getActivityData(): Analysis
     {
         return ActivityData::analyse($this);
+    }
+
+    protected static function newFactory()
+    {
+        return new ActivityFactory();
     }
 }

@@ -9,6 +9,7 @@ use App\Integrations\Strava\Import\Importer;
 use App\Integrations\Strava\Import\Importers\ImportingZip;
 use App\Models\Activity;
 use App\Models\File;
+use App\Models\SyncTask;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;

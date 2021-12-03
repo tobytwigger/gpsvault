@@ -7,12 +7,13 @@ class ImportResults
 
     protected array $results = [];
 
-    public function addResult(string $type, string $message, bool $success)
+    public function addResult(string $type, string $message, bool $success, array $data = [])
     {
         $this->results[] = [
             'type' => $type,
             'message' => $message,
-            'success' => $success
+            'success' => $success,
+            'data' => $data
         ];
     }
 

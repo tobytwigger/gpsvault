@@ -20,6 +20,8 @@ class FileUploader
 
     const ARCHIVE = 'archive';
 
+    const UNMATCHED_MEDIA = 'unmatched_media';
+
     public function withContents(string $contents, string $filename, User $user, string $type): File
     {
         $path = sprintf('%s/%s', $type, $filename);

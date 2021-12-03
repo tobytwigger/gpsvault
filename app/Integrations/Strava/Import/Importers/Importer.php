@@ -26,7 +26,7 @@ abstract class Importer
         try {
             $this->import();
         } catch (\Exception $e) {
-            $this->failed($e->getMessage(), $this->type());
+            $this->failed($e->getMessage(), [], $this->type());
         }
         return $this->importResults;
     }
@@ -38,20 +38,20 @@ abstract class Importer
         }
     }
 
-    public function succeeded(string $message, ?string $type = null)
+    public function succeeded(string $message, array $data = [], ?string $type = null)
     {
-        $this->importResults->addResult($type ?? $this->type(), $message, true);
+        $this->importResults->addResult($type ?? $this->type(), $message, true, $data);
     }
 
-    public function failed(string $message, ?string $type = null)
+    public function failed(string $message, array $data = [], ?string $type = null)
     {
-        $this->importResults->addResult($type ?? $this->type(), $message, false);
+        $this->importResults->addResult($type ?? $this->type(), $message, false, $data);
     }
 
     protected function updateProgress(int $number, int $outOf)
     {
         if($number%20 === 0) {
-            $this->statusUpdate(sprintf('Extracting %u/%u activities', $number, $outOf));
+            $this->statusUpdate(sprintf('Extracting %u/%u %s', $number, $outOf, $this->type()));
         }
     }
 

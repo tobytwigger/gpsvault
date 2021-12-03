@@ -10,11 +10,12 @@ class ImportResult extends Model
     protected $table = 'import_results';
 
     protected $fillable = [
-        'type', 'message', 'success', 'import_id'
+        'type', 'message', 'success', 'import_id', 'data'
     ];
 
     protected $casts = [
-        'success' => 'boolean'
+        'success' => 'boolean',
+        'data' => 'array'
     ];
 
     public function import()
@@ -22,13 +23,14 @@ class ImportResult extends Model
         return $this->belongsTo(Import::class);
     }
 
-    public static function saveResult(Import $import, string $type, string $message, bool $success): ImportResult
+    public static function saveResult(Import $import, string $type, string $message, bool $success, array $data): ImportResult
     {
         return ImportResult::create([
             'type' => $type,
             'message' => $message,
             'success' => $success,
-            'import_id' => $import->id
+            'import_id' => $import->id,
+            'data' => $data
         ]);
     }
 

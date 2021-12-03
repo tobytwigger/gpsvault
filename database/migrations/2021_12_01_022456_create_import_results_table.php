@@ -16,8 +16,9 @@ class CreateImportResultsTable extends Migration
         Schema::create('import_results', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('message');
+            $table->text('message');
             $table->boolean('success');
+            $table->text('data')->nullable();
             $table->unsignedBigInteger('import_id');
             $table->timestamps();
         });
