@@ -8,10 +8,12 @@ use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
 use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
 use App\Models\Activity;
+use App\Models\ActivityStats;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class SaveNewActivities extends Task
 {
@@ -35,7 +37,7 @@ class SaveNewActivities extends Task
 
     public function disableBecause(User $user): ?string
     {
-        if(!$user->stravaTokens()->exists()) {
+        if (!$user->stravaTokens()->exists()) {
             return 'Your account must be connected to Strava';
         }
         return null;
@@ -53,10 +55,10 @@ class SaveNewActivities extends Task
             $activities = $client->getActivities($page);
             $page = $page + 1;
             $analysisCount = $analysisCount + count($activities);
-            foreach($activities as $activityData) {
+            foreach ($activities as $activityData) {
                 $matchingActivity = Activity::whereAdditionalData('strava_id', $activityData['id'])->first();
 
-                if($matchingActivity === null) {
+                if ($matchingActivity === null) {
                     $this->createActivity($activityData);
                     $newCount++;
                 } else {
@@ -108,7 +110,7 @@ class SaveNewActivities extends Task
                 }
             }
             $this->offerBail(sprintf('Cancelled with %u new tasks added.', $newCount));
-        } while(count($activities) > 0);
+        } while (count($activities) > 0);
 
         $this->line(sprintf('Found %u activities, including %u new and %u updated.', $analysisCount, $newCount, $updatedCount));
     }
@@ -117,29 +119,53 @@ class SaveNewActivities extends Task
     {
         $activity = ActivityImporter::for($this->user())
             ->withName($activityData['name'])
-            ->withDistance($activityData['distance'])
             ->linkTo('strava')
-            ->startedAt(Carbon::make($activityData['start_date']))
-            ->setAdditionalData('strava_id', (int) $activityData['id'])
-            ->setAdditionalData('strava_upload_id', array_key_exists('upload_id_str', $activityData) ? (int) $activityData['upload_id_str'] : null)
-            ->setAdditionalData('strava_photo_count', (int) $activityData['total_photo_count'] ?? null)
-            ->setAdditionalData('strava_comment_count', (int) $activityData['comment_count'] ?? null)
-            ->setAdditionalData('strava_kudos_count', (int) $activityData['kudos_count'] ?? null)
-            ->setAdditionalData('strava_pr_count', (int) $activityData['pr_count'] ?? null)
-            ->setAdditionalData('strava_achievement_count', (int) $activityData['achievement_count'] ?? null)
+            ->setAdditionalData('strava_id', (int)$activityData['id'])
+            ->setAdditionalData('strava_upload_id', array_key_exists('upload_id_str', $activityData) ? (int)$activityData['upload_id_str'] : null)
+            ->setAdditionalData('strava_photo_count', (int)$activityData['total_photo_count'] ?? null)
+            ->setAdditionalData('strava_comment_count', (int)$activityData['comment_count'] ?? null)
+            ->setAdditionalData('strava_kudos_count', (int)$activityData['kudos_count'] ?? null)
+            ->setAdditionalData('strava_pr_count', (int)$activityData['pr_count'] ?? null)
+            ->setAdditionalData('strava_achievement_count', (int)$activityData['achievement_count'] ?? null)
             ->import();
 
+
+        /** @var ActivityStats $stats */
+        $stats = ActivityStats::create([
+            'integration' => 'strava',
+            'activity_id' => $activity->id,
+            'distance' => $activityData['distance'] ?? null,
+            'start_date' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : null,
+            'duration' => $activityData['elapsed_time'] ?? null,
+            'average_speed' => $activityData['average_speed'] ?? null,
+            'min_altitude' => $activityData['elev_low'] ?? null,
+            'max_altitude' => $activityData['elev_high'] ?? null,
+            'elevation_gain' => $activityData['total_elevation_gain'] ?? null,
+            'moving_time' => $activityData['moving_time'] ?? null,
+        ]);
+
+        $stats->setAdditionalData('max_speed', $activityData['max_speed'] ?? null);
+        $stats->setAdditionalData('average_cadence', $activityData['average_cadence'] ?? null);
+        $stats->setAdditionalData('average_temp', $activityData['average_temp'] ?? null);
+        $stats->setAdditionalData('average_watts', $activityData['average_watts'] ?? null);
+        $stats->setAdditionalData('kilojoules', $activityData['kilojoules'] ?? null);
+        $stats->setAdditionalData('start_latitude', Arr::first($activityData['start_latlng'] ?? []));
+        $stats->setAdditionalData('start_longitude', Arr::last($activityData['start_latlng'] ?? []));
+        $stats->setAdditionalData('end_latitude', Arr::first($activityData['end_latlng'] ?? []));
+        $stats->setAdditionalData('end_longitude', Arr::last($activityData['end_latlng'] ?? []));
+
         StravaActivityUpdated::dispatch($activity);
-        if((int) $activityData['comment_count'] > 0) {
+        if ((int)$activityData['comment_count'] > 0) {
             StravaActivityCommentsUpdated::dispatch($activity);
         }
-        if((int) $activityData['kudos_count'] > 0) {
+        if ((int)$activityData['kudos_count'] > 0) {
             StravaActivityKudosUpdated::dispatch($activity);
         }
-        if((int) $activityData['total_photo_count'] > 0) {
+        if ((int)$activityData['total_photo_count'] > 0) {
             StravaActivityPhotosUpdated::dispatch($activity);
         }
 
         return $activity;
     }
+
 }

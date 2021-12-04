@@ -4,15 +4,12 @@ namespace App\Models;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
-use App\Services\ActivityData\ActivityData;
-use App\Services\ActivityData\Analysis;
+use App\Jobs\AnalyseActivityFile;
 use App\Traits\HasAdditionalData;
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use function Illuminate\Events\queueable;
 
@@ -21,7 +18,7 @@ class Activity extends Model
     use HasFactory, HasAdditionalData;
 
     protected $fillable = [
-        'name', 'description', 'activity_file_id', 'distance', 'start_at', 'linked_to', 'user_id'
+        'name', 'description', 'activity_file_id', 'linked_to', 'user_id'
     ];
 
     protected $with = [
@@ -29,8 +26,6 @@ class Activity extends Model
     ];
 
     protected $casts = [
-        'distance' => 'float',
-        'start_at' => 'datetime',
         'linked_to' => 'array',
         'user_id' => 'integer'
     ];
@@ -61,6 +56,21 @@ class Activity extends Model
         return $this->belongsToMany(File::class);
     }
 
+    public function getStatsAttribute()
+    {
+        return $this->activityStats()->get()->mapWithKeys(fn(ActivityStats $stats) => [$stats->integration => $stats->toArray()]);
+    }
+
+    public function activityStatsFrom(string $integration)
+    {
+        return $this->activityStats()->whereIntegration($integration);
+    }
+
+    public function activityStats()
+    {
+        return $this->hasMany(ActivityStats::class);
+    }
+
     public function scopeLinkedTo(Builder $query, string $linkedTo)
     {
         $query->where('linked_to', 'LIKE', sprintf('%%%s%%', $linkedTo));
@@ -83,30 +93,17 @@ class Activity extends Model
             $activity->files()->delete();
         }));
 
-//        static::saved(queueable(function(Activity $activity) {
-//                if($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
-//                    $activity->refresh();
-////                $data = $activity->getActivityData();
-////                $activity->distance = $data->getDistance();
-////                $activity->start_at = $data->getStartedAt();
-////                $activity->save();
-//                }
-//        })->onQueue('stats'));
+        static::saved(function(Activity $activity) {
+            if ($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
+                $activity->refresh();
+                AnalyseActivityFile::dispatch($activity);
+            }
+        });
     }
 
     public function hasActivityFile(): bool
     {
         return $this->activityFile()->exists();
-    }
-
-    public function getDataAttribute()
-    {
-        return $this->getActivityData();
-    }
-
-    public function getActivityData(): Analysis
-    {
-        return ActivityData::analyse($this);
     }
 
     protected static function newFactory()

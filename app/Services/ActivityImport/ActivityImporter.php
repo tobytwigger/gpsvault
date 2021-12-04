@@ -55,18 +55,6 @@ class ActivityImporter
         return $instance;
     }
 
-    public function withDistance(int $distance): ActivityImporter
-    {
-        $this->activityDetails->setDistance($distance);
-        return $this;
-    }
-
-    public function startedAt(Carbon $startedAt): ActivityImporter
-    {
-        $this->activityDetails->setStartedAt($startedAt);
-        return $this;
-    }
-
     public function activityDetails(): ActivityDetails
     {
         return $this->activityDetails;
@@ -160,8 +148,6 @@ class ActivityImporter
             'description' => $this->activityDetails->getDescription(),
             'linked_to' => $this->activityDetails->getLinkedTo(),
             'activity_file_id' => $this->activityDetails->getActivityFile()?->id,
-            'start_at' => $this->activityDetails->getStartedAt(),
-            'distance' => $this->activityDetails->getDistance(),
             'user_id' => $this->user?->id ?? Auth::id() ?? throw new \Exception('A user could not be found to run the import against')
         ]);
         $activity->save();

@@ -22,10 +22,6 @@ class ActivityDetails
 
     protected array $linkedTo = [];
 
-    protected ?int $distance = null;
-
-    protected ?Carbon $startedAt = null;
-
     /**
      * @return array
      */
@@ -119,42 +115,6 @@ class ActivityDetails
     public function setMedia(array $media): ActivityDetails
     {
         $this->media = $media;
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getDistance(): ?int
-    {
-        return $this->distance;
-    }
-
-    /**
-     * @param int|null $distance
-     * @return ActivityDetails
-     */
-    public function setDistance(?int $distance): ActivityDetails
-    {
-        $this->distance = $distance;
-        return $this;
-    }
-
-    /**
-     * @return Carbon|null
-     */
-    public function getStartedAt(): ?Carbon
-    {
-        return $this->startedAt;
-    }
-
-    /**
-     * @param Carbon|null $startedAt
-     * @return ActivityDetails
-     */
-    public function setStartedAt(?Carbon $startedAt): ActivityDetails
-    {
-        $this->startedAt = $startedAt;
         return $this;
     }
 

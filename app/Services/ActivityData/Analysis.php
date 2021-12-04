@@ -2,6 +2,8 @@
 
 namespace App\Services\ActivityData;
 
+use App\Models\Activity;
+use App\Models\ActivityStats;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;

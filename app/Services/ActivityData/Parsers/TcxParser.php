@@ -21,7 +21,7 @@ class TcxParser implements Parser
     public function analyse(Activity $activity): Analysis
     {
         $parser = new BaseParser();
-        $file = $parser->parse($activity->activityFile->getFullPath());
+        $file = $parser->parse($activity->activityFile->fullPath());
 
         $this->analysis->setDistance($file->getTotalDistance())
             ->setAverageSpeed($file->getAverageSpeedInKPH() / 3.6)

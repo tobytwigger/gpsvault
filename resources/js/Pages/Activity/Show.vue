@@ -83,6 +83,10 @@
                                 v-if="isLoadingKudos">Loading kudos</span>
 
 
+                            <select-data-source :data-sources="dataSources" v-model="selectedDataSource">
+
+                            </select-data-source>
+
                             <a :href="route('activity.download', this.activity.id)" class="px-1">
                                 <secondary-button>
                                     Download activity
@@ -104,22 +108,19 @@
                         </div>
                         <div class="sm:flex sm:space-x-4">
                             <div v-if="hasStats">
-                                <data-display-tile title="Distance" :value="convertDistance(stats.distance)" :loading="!loading">
+                                <data-display-tile title="Distance" :value="convertDistance(stats.distance)">
                                 </data-display-tile>
-                                <data-display-tile title="Total Time" :value="convertDuration(stats.duration)" :loading="!loading">
+                                <data-display-tile title="Total Time" :value="convertDuration(stats.duration)">
                                 </data-display-tile>
-                                <data-display-tile title="Elevation Gain" :value="convertElevation(stats.cumulativeElevationGain)" :loading="!loading">
+                                <data-display-tile title="Elevation Gain" :value="convertElevation(stats.elevation_gain)">
                                 </data-display-tile>
-                                <data-display-tile title="Average Speed" :value="convertSpeed(stats.averageSpeed)" :loading="!loading">
+                                <data-display-tile title="Average Speed" :value="convertSpeed(stats.average_speed)">
                                 </data-display-tile>
-                                <data-display-tile title="Average Pace" :value="convertPace(stats.averagePace)" :loading="!loading">
+                                <data-display-tile title="Average Pace" :value="convertPace(stats.average_pace)">
                                 </data-display-tile>
                             </div>
                             <div v-else>
-                                <data-display-tile title="Distance" :value="convertDistance(activity.distance)" :loading="!loading">
-                                </data-display-tile>
-                                <data-display-tile title="Moving Time" :value="convertTime(activity.start_at)" :loading="!loading">
-                                </data-display-tile>
+                                This activity doesn't have a recording attached, and so we can't show you any data from your ride
                             </div>
 
                         </div>
@@ -172,9 +173,11 @@
     import {useForm} from '@inertiajs/inertia-vue3'
     import FileManager from './Partials/FileManager';
     import { Link } from '@inertiajs/inertia-vue3';
+    import SelectDataSource from './Partials/SelectDataSource';
 
     export default defineComponent({
         components: {
+            SelectDataSource,
             FileManager,
             DataDisplayTile,
             AppLayout,
@@ -193,14 +196,13 @@
         },
         data() {
             return {
-                stats: {},
-                loading: false,
                 form: useForm({
                     file: null,
                     _method: 'patch'
                 }),
                 confirmingActivityDeletion: false,
-                uploadActivityFileModal: false
+                uploadActivityFileModal: false,
+                selectedDataSource: 'php'
             }
         },
         methods: {
@@ -239,24 +241,9 @@
                         this.uploadActivityFileModal = false;
                     }
                 });
-            },
-            loadStats() {
-                this.loading = true;
-                axios.get('/stats/' + this.activity.id)
-                    .then(response => {
-                        this.stats = response.data;
-                    })
-                    .catch((error) => this.stats = {})
-                    .then(() => this.loading = false);
-            },
-        },
-        created() {
-            this.loadStats();
+            }
         },
         computed: {
-            hasStats() {
-                return this.loading || Object.keys(this.stats).length > 0;
-            },
             images() {
                 return this.activity.files.filter(file => file.mimetype.startsWith('image'));
             },
@@ -271,6 +258,27 @@
             },
             isLoadingKudos() {
                 return this.activity.additional_data.strava_is_loading_kudos ?? false;
+            },
+            hasStats() {
+                return this.activeDataSource !== null;
+            },
+            dataSources() {
+                return Object.keys(this.activity.stats);
+            },
+            activeDataSource() {
+                if(this.selectedDataSource) {
+                    return this.selectedDataSource;
+                }
+                if(Object.keys(this.activity.stats).length > 0) {
+                    return Object.keys(this.activity.stats)[0];
+                }
+                return null;
+            },
+            stats() {
+                if(this.hasStats) {
+                    return this.activity.stats[this.activeDataSource];
+                }
+                return null;
             }
         }
     })

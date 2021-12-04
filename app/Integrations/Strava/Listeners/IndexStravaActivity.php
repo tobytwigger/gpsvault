@@ -22,6 +22,7 @@ class IndexStravaActivity implements ShouldQueue
 
     public function __construct(Strava $strava)
     {
+        $this->queue = 'indexing';
         $this->strava = $strava;
     }
 
@@ -46,6 +47,12 @@ class IndexStravaActivity implements ShouldQueue
             $activity->description = $stravaActivity['description'];
         } else {
             $activity->description = PHP_EOL . PHP_EOL . 'Imported from Strava: ' . PHP_EOL . $stravaActivity['description'];
+        }
+
+        if($stats = $activity->activityStatsFrom('strava')->get()) {
+            $stats->setAdditionalData('average_heartrate', $stravaActivity['average_heartrate']);
+            $stats->setAdditionalData('max_heartrate', $stravaActivity['max_heartrate']);
+            $stats->setAdditionalData('calories', $stravaActivity['calories']);
         }
         $activity->setAdditionalData('strava_is_loading_details', false);
     }

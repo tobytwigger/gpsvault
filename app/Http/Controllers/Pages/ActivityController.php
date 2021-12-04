@@ -35,7 +35,9 @@ class ActivityController extends Controller
     public function index()
     {
         return Inertia::render('Activity/Index', [
-            'activities' => Activity::where('user_id', Auth::id())->orderBy('start_at', 'DESC')->get()
+            'activities' => Activity::where('user_id', Auth::id())
+                //->orderBy('start_at', 'DESC')
+                ->get()
         ]);
     }
 
@@ -78,7 +80,7 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         return Inertia::render('Activity/Show', [
-            'activity' => $activity->load('files')
+            'activity' => $activity->load(['files', 'activityStats'])->append('stats')
         ]);
     }
 

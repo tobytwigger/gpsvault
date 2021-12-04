@@ -43,14 +43,14 @@ class FitParser implements Parser
         }
 
         $this->analysis->setDistance(Arr::last(data_get($record, 'distance', 0)) * 1000)
-            ->setAverageSpeed(collect(array_values($record['speed']))->avg() / 3.6)
+            ->setAverageSpeed(collect(array_values($record['speed'] ?? []))->avg() / 3.6)
             ->setAveragePace(0)
             ->setMinAltitude(isset($record['altitude']) ? min($record['altitude']) : null)
             ->setMaxAltitude(isset($record['altitude']) ? min($record['altitude']) : null)
 //            ->setCumulativeElevationGain($stats->cumulativeElevationGain)
 //            ->setCumulativeElevationLoss($stats->cumulativeElevationLoss)
-            ->setStartedAt(Carbon::createFromTimestamp(Arr::first($record['timestamp'])))
-            ->setFinishedAt(Carbon::createFromTimestamp(Arr::last($record['timestamp'])))
+            ->setStartedAt(Carbon::createFromTimestamp(isset($record['timestamp']) ? Arr::first($record['timestamp']) : null))
+            ->setFinishedAt(Carbon::createFromTimestamp(isset($record['timestamp']) ? Arr::last($record['timestamp']) : null))
             ->setDuration((float) Carbon::createFromTimestamp(Arr::first($record['timestamp']))->diffInSeconds(Carbon::createFromTimestamp(Arr::last($record['timestamp']))));
 
         return $this->analysis;

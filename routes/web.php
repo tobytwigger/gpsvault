@@ -43,8 +43,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::post('/data/download', [\App\Http\Controllers\Pages\DownloadController::class, 'all'])->name('data.download');
 
-    Route::get('stats/{activity}', [\App\Http\Controllers\Pages\StatsController::class, 'index'])->name('stats');
-
     Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');
     Route::get('/integration/{integration}/logs', [\App\Http\Controllers\Pages\ConnectionLogController::class, 'index'])->name('integration.logs');

@@ -24,6 +24,7 @@ class IndexStravaActivityComments implements ShouldQueue
 
     public function __construct(Strava $strava)
     {
+        $this->queue = 'indexing';
         $this->strava = $strava;
     }
 
