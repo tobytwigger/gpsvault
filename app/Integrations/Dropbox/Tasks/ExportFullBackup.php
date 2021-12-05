@@ -57,7 +57,7 @@ class ExportFullBackup extends Task
         $fileName = 'Full backup - ' . Carbon::now()->format('d M Y H:i:s') . '.zip';
         Storage::disk('temp')->put('/dropbox/backup-task/' . $fileName, $file->getFileContents());
         Dropbox::client($this->user())->upload(
-            DropboxFile::createByPath('/dropbox/backup-task/' . $fileName),
+            DropboxFile::createByPath(Storage::disk('temp')->path('/dropbox/backup-task/' . $fileName), DropboxFile::MODE_WRITE),
             '/Apps/CycleStore/' . $fileName
         );
 

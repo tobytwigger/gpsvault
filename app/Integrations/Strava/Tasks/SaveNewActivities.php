@@ -142,17 +142,16 @@ class SaveNewActivities extends Task
             'max_altitude' => $activityData['elev_high'] ?? null,
             'elevation_gain' => $activityData['total_elevation_gain'] ?? null,
             'moving_time' => $activityData['moving_time'] ?? null,
+            'max_speed' => $activityData['max_speed'] ?? null,
+            'average_cadence' => $activityData['average_cadence'] ?? null,
+            'average_temp' => $activityData['average_temp'] ?? null,
+            'average_watts' => $activityData['average_watts'] ?? null,
+            'kilojoules' => $activityData['kilojoules'] ?? null,
+            'start_latitude' => Arr::first($activityData['start_latlng'] ?? []),
+            'start_longitude' => Arr::last($activityData['start_latlng'] ?? []),
+            'end_latitude' => Arr::first($activityData['end_latlng'] ?? []),
+            'end_longitude' => Arr::last($activityData['end_latlng'] ?? []),
         ]);
-
-        $stats->setAdditionalData('max_speed', $activityData['max_speed'] ?? null);
-        $stats->setAdditionalData('average_cadence', $activityData['average_cadence'] ?? null);
-        $stats->setAdditionalData('average_temp', $activityData['average_temp'] ?? null);
-        $stats->setAdditionalData('average_watts', $activityData['average_watts'] ?? null);
-        $stats->setAdditionalData('kilojoules', $activityData['kilojoules'] ?? null);
-        $stats->setAdditionalData('start_latitude', Arr::first($activityData['start_latlng'] ?? []));
-        $stats->setAdditionalData('start_longitude', Arr::last($activityData['start_latlng'] ?? []));
-        $stats->setAdditionalData('end_latitude', Arr::first($activityData['end_latlng'] ?? []));
-        $stats->setAdditionalData('end_longitude', Arr::last($activityData['end_latlng'] ?? []));
 
         StravaActivityUpdated::dispatch($activity);
         if ((int)$activityData['comment_count'] > 0) {

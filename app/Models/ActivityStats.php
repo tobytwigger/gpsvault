@@ -14,17 +14,46 @@ class ActivityStats extends Model
     protected $fillable = [
         'integration',
         'activity_id',
+        // Distance in metres
         'distance',
+        // Date and time the ride was started
         'started_at',
+        // Date and time the ride was ended
         'finished_at',
+        // The duration of the ride in seconds
         'duration',
+        // The average speed of the ride in metres per second
         'average_speed',
+        // The average pace of the ride in seconds per metre
         'average_pace',
+        // The minimum altitude in metres
         'min_altitude',
+        // The maximum altitude in metres
         'max_altitude',
+        // The cumulative elevation gained in metres
         'elevation_gain',
+        // The cumulative elevation lost in metres
         'elevation_loss',
+        // The moving time in seconds
         'moving_time',
+        // The maximum speed in metres per second
+        'max_speed',
+        // The average cadence in rpm
+        'average_cadence',
+        // The average temperature in deg C
+        'average_temp',
+        // The average watts in W
+        'average_watts',
+        // The average energy output in kjoules
+        'kilojoules',
+        // The start latitude
+        'start_latitude',
+        // The start longitude
+        'start_longitude',
+        // The end latitude
+        'end_latitude',
+        // The end longitude
+        'end_longitude'
     ];
 
     protected $casts = [
@@ -39,7 +68,28 @@ class ActivityStats extends Model
         'elevation_gain' => 'float',
         'elevation_loss' => 'float',
         'moving_time' => 'float',
+        'max_speed' => 'float',
+        'average_cadence' => 'float',
+        'average_temp' => 'float',
+        'average_watts' => 'float',
+        'kilojoules' => 'float',
+        'start_latitude' => 'float',
+        'start_longitude' => 'float',
+        'end_latitude' => 'float',
+        'end_longitude' => 'float'
     ];
+
+    protected static function booted()
+    {
+        static::created(function(ActivityStats $activityStats) {
+            if($activityStats->activity->distance === null && $activityStats->distance !== null) {
+                $activityStats->activity()->update(['distance' => $activityStats->distance]);
+            }
+            if($activityStats->activity->started_at === null && $activityStats->started_at !== null) {
+                $activityStats->activity()->update(['started_at' => $activityStats->started_at]);
+            }
+        });
+    }
 
     public static function default()
     {

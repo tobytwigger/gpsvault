@@ -18,7 +18,7 @@ class Activity extends Model
     use HasFactory, HasAdditionalData;
 
     protected $fillable = [
-        'name', 'description', 'activity_file_id', 'linked_to', 'user_id'
+        'name', 'description', 'activity_file_id', 'linked_to', 'user_id', 'distance', 'started_at'
     ];
 
     protected $with = [
@@ -27,7 +27,9 @@ class Activity extends Model
 
     protected $casts = [
         'linked_to' => 'array',
-        'user_id' => 'integer'
+        'user_id' => 'integer',
+        'distance' => 'float',
+        'started_at' => 'datetime'
     ];
 
 
@@ -69,6 +71,11 @@ class Activity extends Model
     public function activityStats()
     {
         return $this->hasMany(ActivityStats::class);
+    }
+
+    public function defaultStats()
+    {
+        return $this->belongsTo(ActivityStats::class, 'default_stats_id');
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)

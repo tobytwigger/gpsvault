@@ -120,7 +120,7 @@
                                 </data-display-tile>
                             </div>
                             <div v-else>
-                                This activity doesn't have a recording attached, and so we can't show you any data from your ride
+                                We haven't yet processed your activity file.
                             </div>
 
                         </div>
@@ -266,6 +266,9 @@
                 return Object.keys(this.activity.stats);
             },
             activeDataSource() {
+                if(this.activity.stats.length === 0) {
+                    return null;
+                }
                 if(this.selectedDataSource) {
                     return this.selectedDataSource;
                 }

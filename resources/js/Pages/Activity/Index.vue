@@ -34,7 +34,7 @@
                                             </div>
                                         </td>
                                         <td class="px-4 py-3 text-ms font-semibold border">
-                                            {{ toDateTime(activity.start_at) }}
+                                            {{ toDateTime(activity.started_at) }}
                                         </td>
                                         <td class="px-4 py-3 text-sm border">{{
                                                 toKilometers(activity.distance)

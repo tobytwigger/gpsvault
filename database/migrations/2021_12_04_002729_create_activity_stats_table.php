@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 
 class CreateActivityStatsTable extends Migration
@@ -28,6 +29,15 @@ class CreateActivityStatsTable extends Migration
             $table->float('elevation_gain')->nullable();
             $table->float('elevation_loss')->nullable();
             $table->float('moving_time')->nullable();
+            $table->float('max_speed')->nullable();
+            $table->float('average_cadence')->nullable();
+            $table->float('average_temp')->nullable();
+            $table->float('average_watts')->nullable();
+            $table->float('kilojoules')->nullable();
+            $table->float('start_latitude')->nullable();
+            $table->float('start_longitude')->nullable();
+            $table->float('end_latitude')->nullable();
+            $table->float('end_longitude')->nullable();
             $table->timestamps();
 
             $table->unique(['integration', 'activity_id']);

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -34,6 +36,11 @@ class File extends Model
         static::creating(function(File $file) {
             if($file->user_id === null) {
                 $file->user_id = Auth::id();
+            }
+        });
+        static::creating(function(File $file) {
+            if($file->hash === null) {
+                $file->hash = md5($file->getFileContents());
             }
         });
         static::deleted(function(File $file) {
