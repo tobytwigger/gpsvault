@@ -184,7 +184,8 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         \App\Services\ActivityData\ActivityDataServiceProvider::class,
         \App\Integrations\Strava\StravaServiceProvider::class,
-        \App\Services\Archive\ArchiveServiceProvider::class
+        \App\Services\Archive\ArchiveServiceProvider::class,
+        \App\Integrations\Dropbox\DropboxServiceProvider::class
 
     ],
 

@@ -37,7 +37,7 @@ class Strava
             'response_type' => 'code',
             'approval_prompt' => 'auto',
             'scope' => 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write',
-            'state  ' => $state
+            'state' => $state
         ];
 
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
