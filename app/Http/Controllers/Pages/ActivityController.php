@@ -80,7 +80,7 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         return Inertia::render('Activity/Show', [
-            'activity' => $activity->load(['files', 'activityStats'])->append('stats')
+            'activity' => $activity->load(['files'])
         ]);
     }
 

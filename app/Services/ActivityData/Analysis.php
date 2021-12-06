@@ -30,6 +30,26 @@ class Analysis implements Arrayable, Jsonable
 
     private ?Carbon $finishedAt = null;
 
+    private ?string $polyline = null;
+
+    /**
+     * @return string|null
+     */
+    public function getPolyline(): ?string
+    {
+        return $this->polyline;
+    }
+
+    /**
+     * @param string|null $polyline
+     * @return Analysis
+     */
+    public function setPolyline(?string $polyline): Analysis
+    {
+        $this->polyline = $polyline;
+        return $this;
+    }
+
     /**
      * The difference between started at and finished at.
      *

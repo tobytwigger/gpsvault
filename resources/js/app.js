@@ -5,6 +5,7 @@ import { InertiaProgress } from '@inertiajs/progress';
 import StravaFixSetup from './Integrations/StravaFixSetup';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import VueEasyLightbox from 'vue-easy-lightbox'
+import 'leaflet/dist/leaflet.css';
 
 require('./bootstrap');
 

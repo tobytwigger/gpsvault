@@ -107,7 +107,10 @@
                             </danger-button>
                         </div>
                         <div class="sm:flex sm:space-x-4">
-                            <div v-if="hasStats">
+                            <div v-if="loadingStats">
+                                Loading activity analysis
+                            </div>
+                            <div v-else-if="hasStats">
                                 <data-display-tile title="Distance" :value="convertDistance(stats.distance)">
                                 </data-display-tile>
                                 <data-display-tile title="Total Time" :value="convertDuration(stats.duration)">
@@ -118,6 +121,10 @@
                                 </data-display-tile>
                                 <data-display-tile title="Average Pace" :value="convertPace(stats.average_pace)">
                                 </data-display-tile>
+
+                                <elevation :stats="stats"></elevation>
+
+                                <vue-map :stats="stats"></vue-map>
                             </div>
                             <div v-else>
                                 We haven't yet processed your activity file.
@@ -174,9 +181,12 @@
     import FileManager from './Partials/FileManager';
     import { Link } from '@inertiajs/inertia-vue3';
     import SelectDataSource from './Partials/SelectDataSource';
+    import Elevation from './Partials/Charts/Elevation';
+    import Map from './Partials/Charts/Map';
 
     export default defineComponent({
         components: {
+            Elevation,
             SelectDataSource,
             FileManager,
             DataDisplayTile,
@@ -189,23 +199,38 @@
             ConfirmationModal,
             DangerButton,
             SecondaryButton,
-            Modal
+            Modal,
+            'vue-map': Map
         },
         props: {
             activity: Object,
         },
         data() {
             return {
+                rawActivityStats: {},
                 form: useForm({
                     file: null,
                     _method: 'patch'
                 }),
                 confirmingActivityDeletion: false,
                 uploadActivityFileModal: false,
-                selectedDataSource: 'php'
+                selectedDataSource: 'php',
+                loadingStats: false
             }
         },
+        created() {
+            this.loadStats();
+        },
         methods: {
+            loadStats() {
+                this.loadingStats = true;
+                axios.get(route('activity.stats', this.activity.id))
+                    .then(response => {
+                        this.rawActivityStats = response.data;
+                    })
+                    .catch((error) => this.rawActivityStats = {})
+                    .then(() => this.loadingStats = false);
+            },
             formatDateTime(datetime) {
                 return moment(datetime).format('DD/MM/YYYY HH:mm:ss');
             },
@@ -263,23 +288,23 @@
                 return this.activeDataSource !== null;
             },
             dataSources() {
-                return Object.keys(this.activity.stats);
+                return Object.keys(this.rawActivityStats);
             },
             activeDataSource() {
-                if(this.activity.stats.length === 0) {
+                if(this.rawActivityStats.length === 0) {
                     return null;
                 }
                 if(this.selectedDataSource) {
                     return this.selectedDataSource;
                 }
-                if(Object.keys(this.activity.stats).length > 0) {
-                    return Object.keys(this.activity.stats)[0];
+                if(Object.keys(this.rawActivityStats).length > 0) {
+                    return Object.keys(this.rawActivityStats)[0];
                 }
                 return null;
             },
             stats() {
                 if(this.hasStats) {
-                    return this.activity.stats[this.activeDataSource];
+                    return this.rawActivityStats[this.activeDataSource];
                 }
                 return null;
             }

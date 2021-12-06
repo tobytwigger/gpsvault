@@ -23,6 +23,7 @@
         "laravel/jetstream": "^2.4",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "mjaschen/phpgeo": "^4.0",
         "nelexa/zip": "^4.0",
         "psr/log": "^1.0.0",
         "pusher/pusher-php-server": "^5.0",

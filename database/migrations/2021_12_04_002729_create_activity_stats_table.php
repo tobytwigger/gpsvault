@@ -38,6 +38,7 @@ class CreateActivityStatsTable extends Migration
             $table->float('start_longitude')->nullable();
             $table->float('end_latitude')->nullable();
             $table->float('end_longitude')->nullable();
+            $table->string('json_points_file_id')->nullable();
             $table->timestamps();
 
             $table->unique(['integration', 'activity_id']);

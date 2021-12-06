@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @method static File withContents(string $contents, string $filename, User $User, string $type) Create a file from the given contents.
+ * @method static File uploadedFile(UploadedFile $uploadedFile, User $User, string $type) Create a file from an uploaded file.
+ */
 class Upload extends Facade
 {
 

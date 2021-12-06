@@ -11,6 +11,10 @@ class ActivityStats extends Model
 {
     use HasFactory, HasAdditionalData;
 
+    protected $appends = [
+        'points'
+    ];
+
     protected $fillable = [
         'integration',
         'activity_id',
@@ -53,7 +57,9 @@ class ActivityStats extends Model
         // The end latitude
         'end_latitude',
         // The end longitude
-        'end_longitude'
+        'end_longitude',
+        // A file that contains the points as json
+        'json_points_file_id'
     ];
 
     protected $casts = [
@@ -104,6 +110,24 @@ class ActivityStats extends Model
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    public function jsonPointsFile()
+    {
+        return $this->belongsTo(File::class, 'json_points_file_id');
+    }
+
+    public function getPointsAttribute()
+    {
+        return $this->points();
+    }
+
+    public function points()
+    {
+        if($this->json_points_file_id === null) {
+            return [];
+        }
+        return json_decode($this->jsonPointsFile?->getFileContents() ?? []);
     }
 
 }

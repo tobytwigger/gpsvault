@@ -22,6 +22,8 @@ class FileUploader
 
     const UNMATCHED_MEDIA = 'unmatched_media';
 
+    const ACTIVITY_FILE_POINT_JSON = 'activity_file_point_json';
+
     public function withContents(string $contents, string $filename, User $user, string $type): File
     {
         $path = sprintf('%s/%s', $type, $filename);
