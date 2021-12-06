@@ -124,6 +124,7 @@
 
                                 <elevation :stats="stats"></elevation>
 
+                                <heartrate :stats="stats"></heartrate>
                                 <vue-map :stats="stats"></vue-map>
                             </div>
                             <div v-else>
@@ -183,9 +184,11 @@
     import SelectDataSource from './Partials/SelectDataSource';
     import Elevation from './Partials/Charts/Elevation';
     import Map from './Partials/Charts/Map';
+    import Heartrate from './Partials/Charts/Heartrate';
 
     export default defineComponent({
         components: {
+            Heartrate,
             Elevation,
             SelectDataSource,
             FileManager,
