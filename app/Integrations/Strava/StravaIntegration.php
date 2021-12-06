@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava;
 
+use App\Integrations\Strava\Import\Models\Import;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\User;
@@ -66,7 +67,10 @@ class StravaIntegration extends Integration
         return [
             'activitiesLoading' => 1 ?? Activity::whereAdditionalData('strava_is_loading_photos', true)
                 ->orWhere(fn(Builder $query) => $query->whereAdditionalData('strava_is_loading_details', true))
-                ->count(),
+                    ->count(),
+//            'neededActivities' => Activity::linkedTo('strava')
+//                ->whereDoesntHave('activityFile')
+//                ->when($lastRun, fn(Builder $query) => $query->where('created_at', '>', $lastRun->))
             'activitiesWithoutFile' => 1 ?? Activity::linkedTo('strava')->whereDoesntHave('activityFile')->count(),
             'activitiesWithoutPhotos' => 1 ?? Activity::linkedTo('strava')
                 ->whereHasAdditionalData('strava_photo_ids')

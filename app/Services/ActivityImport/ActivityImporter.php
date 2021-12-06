@@ -3,13 +3,12 @@
 namespace App\Services\ActivityImport;
 
 use App\Exceptions\ActivityDuplicate;
-use App\Integrations\Strava\Import\Importers\Importers\PhotoImporter;
 use App\Models\Activity;
 use App\Models\AdditionalData;
 use App\Models\File;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use App\Services\File\FileUploader;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityImporter
@@ -20,6 +19,8 @@ class ActivityImporter
     private Activity $existingActivity;
 
     private ActivityDetails $activityDetails;
+
+    private bool $checkForDuplicates = true;
 
     public function __construct(?User $user = null)
     {
@@ -93,6 +94,12 @@ class ActivityImporter
         return $this;
     }
 
+    public function withoutDuplicateChecking(): ActivityImporter
+    {
+        $this->checkForDuplicates = false;
+        return $this;
+    }
+
     public function setAdditionalData(string $key, mixed $value): ActivityImporter
     {
         $this->activityDetails->setAdditionalDataKey($key, $value);
@@ -129,7 +136,9 @@ class ActivityImporter
 
     public function import(): Activity
     {
-        $this->checkForDuplication();
+        if($this->activityDetails->getActivityFile() !== null) {
+            $this->checkForDuplication();
+        }
         return $this->saveActivityModel(new Activity());
     }
 
@@ -202,11 +211,15 @@ class ActivityImporter
 
     private function checkForDuplication()
     {
-        // TODO
-
-//        if($isDuplicate) {
-//            throw new ActivityDuplicate($duplicatedActivity);
-//        }
+        if($this->checkForDuplicates === true) {
+            $hash = md5($this->activityDetails->getActivityFile()->getFileContents());
+            $duplicatedActivity = Activity::whereHas('activityFile',
+                fn(Builder $query) => $query->where('hash', $hash)->where('type', FileUploader::ACTIVITY_FILE)
+            )->first();
+            if($duplicatedActivity !== null) {
+                throw new ActivityDuplicate($duplicatedActivity);
+            }
+        }
     }
 
 }

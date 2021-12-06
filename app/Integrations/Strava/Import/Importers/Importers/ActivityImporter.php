@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Import\Importers\Importers;
 
 use Alchemy\Zippy\Archive\MemberInterface;
+use App\Exceptions\ActivityDuplicate;
 use App\Integrations\Strava\Import\Importers\Importer;
 use App\Models\Activity;
 use App\Models\File;
@@ -59,9 +60,13 @@ class ActivityImporter extends Importer
 
             $file = $this->convertMemberToFile($activityFile);
 
-            $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
-                ->withActivityFile($file)
-                ->save();
+            try {
+                $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
+                    ->withActivityFile($file)
+                    ->save();
+            } catch (ActivityDuplicate $exception) {
+                $this->failed('duplicate', ['duplicate_id' => $exception->activity->id]);
+            }
 
             $this->succeeded('Activity file added to activity ' . $activity->id);
         } catch (\Exception $e) {

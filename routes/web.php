@@ -34,7 +34,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::redirect('/upload', route('activity.create'))->name('upload');
     Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away('https://tobytwigger.github.io/cycle-store/'))->name('documentation');
 
-    Route::get('/activity/{activity}/stats', [\App\Http\Controllers\Pages\StatsController::class, 'index'])->name('activity.stats');
+    Route::get('/activity/{activity}/stats', [\App\Http\Controllers\Api\StatsController::class, 'index'])->name('activity.stats');
+    Route::post('/activity/file/duplicate', [\App\Http\Controllers\Api\DuplicateController::class, 'index'])->name('activity.file.duplicate');
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
