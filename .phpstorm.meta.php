@@ -12,7 +12,8 @@ namespace PHPSTORM_META {
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -246,7 +247,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Container\Container::makeWith(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -480,7 +482,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::get(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -714,7 +717,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -948,7 +952,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -1182,7 +1187,8 @@ namespace PHPSTORM_META {
     override(\App::get(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -1416,7 +1422,8 @@ namespace PHPSTORM_META {
     override(\App::make(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -1650,7 +1657,8 @@ namespace PHPSTORM_META {
     override(\App::makeWith(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -1884,7 +1892,8 @@ namespace PHPSTORM_META {
     override(\app(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -2118,7 +2127,8 @@ namespace PHPSTORM_META {
     override(\resolve(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,
@@ -2352,7 +2362,8 @@ namespace PHPSTORM_META {
     override(\Psr\Container\ContainerInterface::get(0), map([
         '' => '@',
             'App\Integrations\Strava\Import\StravaImporter' => \App\Integrations\Strava\Import\StravaImporter::class,
-            'App\Services\ActivityData\Contracts\ActivityDataFactory' => \App\Services\ActivityData\ActivityDataFactory::class,
+            'App\Services\Analysis\Analyser\AnalysisFactoryContract' => \App\Services\Analysis\Analyser\AnalysisFactory::class,
+            'App\Services\Analysis\Parser\ParserFactoryContract' => \App\Services\Analysis\Parser\ParserFactory::class,
             'App\Services\Archive\Parser\ResourceParser' => \App\Services\Archive\Parser\ResourceParser::class,
             'Asm89\Stack\CorsService' => \Asm89\Stack\CorsService::class,
             'BeyondCode\LaravelWebSockets\Apps\AppProvider' => \BeyondCode\LaravelWebSockets\Apps\ConfigAppProvider::class,

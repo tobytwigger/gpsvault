@@ -138,6 +138,9 @@ return [
         'fit' => 'application/octet-stream',
         'tcx' => 'text/plain',
         'gpx' => 'text/xml',
+        'json' => [
+            'gz' => 'application/gzip'
+        ]
     ],
 
     'providers' => [
@@ -182,7 +185,7 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
-        \App\Services\ActivityData\ActivityDataServiceProvider::class,
+        \App\Services\Analysis\AnalysisServiceProvider::class,
         \App\Integrations\Strava\StravaServiceProvider::class,
         \App\Services\Archive\ArchiveServiceProvider::class,
         \App\Integrations\Dropbox\DropboxServiceProvider::class

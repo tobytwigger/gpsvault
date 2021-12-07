@@ -17,6 +17,7 @@ class ActivityStats extends Model
 
     protected $fillable = [
         'integration',
+
         'activity_id',
         // Distance in metres
         'distance',
@@ -58,6 +59,12 @@ class ActivityStats extends Model
         'end_latitude',
         // The end longitude
         'end_longitude',
+        // The average heartrate in bpm
+        'average_heartrate',
+        // The max heartrate in bpm
+        'max_heartrate',
+        // The number of calories burned
+        'calories',
         // A file that contains the points as json
         'json_points_file_id'
     ];
@@ -82,7 +89,10 @@ class ActivityStats extends Model
         'start_latitude' => 'float',
         'start_longitude' => 'float',
         'end_latitude' => 'float',
-        'end_longitude' => 'float'
+        'end_longitude' => 'float',
+        'max_heartrate' => 'float',
+        'average_heartrate' => 'float',
+        'calories' => 'float'
     ];
 
     protected static function booted()
@@ -127,7 +137,7 @@ class ActivityStats extends Model
         if($this->json_points_file_id === null) {
             return [];
         }
-        return json_decode($this->jsonPointsFile?->getFileContents() ?? []);
+        return json_decode(gzuncompress($this->jsonPointsFile?->getFileContents()) ?? []);
     }
 
 }

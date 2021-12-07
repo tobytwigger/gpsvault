@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\ActivityData;
+namespace App\Services\Analysis\Parser;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
@@ -8,6 +8,14 @@ use Illuminate\Contracts\Support\Jsonable;
 
 class Point implements Arrayable, Jsonable
 {
+
+    private ?float $cumulativeDistance = null;
+
+    private ?float $grade = null;
+
+    private ?float $battery = null;
+
+    private ?float $calories = null;
 
     /**
      * @var float
@@ -37,7 +45,7 @@ class Point implements Arrayable, Jsonable
     /**
      * @var float|null
      */
-    private ?float $averageTemperature = null;
+    private ?float $temperature = null;
 
     /**
      * @var float|null
@@ -55,6 +63,24 @@ class Point implements Arrayable, Jsonable
     public function getLatitude(): ?float
     {
         return $this->latitude;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getGrade(): ?float
+    {
+        return $this->grade;
+    }
+
+    /**
+     * @param float|null $grade
+     * @return Point
+     */
+    public function setGrade(?float $grade): Point
+    {
+        $this->grade = $grade;
+        return $this;
     }
 
     /**
@@ -142,18 +168,18 @@ class Point implements Arrayable, Jsonable
     /**
      * @return float|null
      */
-    public function getAverageTemperature(): ?float
+    public function getTemperature(): ?float
     {
-        return $this->averageTemperature;
+        return $this->temperature;
     }
 
     /**
-     * @param float|null $averageTemperature
+     * @param float|null $temperature
      * @return Point
      */
-    public function setAverageTemperature(?float $averageTemperature): Point
+    public function setTemperature(?float $temperature): Point
     {
-        $this->averageTemperature = $averageTemperature;
+        $this->temperature = $temperature;
         return $this;
     }
 
@@ -193,6 +219,60 @@ class Point implements Arrayable, Jsonable
         return $this;
     }
 
+    /**
+     * @return float|null
+     */
+    public function getBattery(): ?float
+    {
+        return $this->battery;
+    }
+
+    /**
+     * @param float|null $battery
+     * @return Point
+     */
+    public function setBattery(?float $battery): Point
+    {
+        $this->battery = $battery;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCalories(): ?float
+    {
+        return $this->calories;
+    }
+
+    /**
+     * @param float|null $calories
+     * @return Point
+     */
+    public function setCalories(?float $calories): Point
+    {
+        $this->calories = $calories;
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getCumulativeDistance(): ?float
+    {
+        return $this->cumulativeDistance;
+    }
+
+    /**
+     * @param float|null $cumulativeDistance
+     * @return Point
+     */
+    public function setCumulativeDistance(?float $cumulativeDistance): Point
+    {
+        $this->cumulativeDistance = $cumulativeDistance;
+        return $this;
+    }
+
     public function toArray(): array
     {
         return [
@@ -201,9 +281,13 @@ class Point implements Arrayable, Jsonable
             'elevation' => $this->getElevation(),
             'time' => $this->getTime(),
             'cadence' => $this->getCadence(),
-            'averageTemperature' => $this->getAverageTemperature(),
+            'temperature' => $this->getTemperature(),
             'heartRate' => $this->getHeartRate(),
             'speed' => $this->getSpeed(),
+            'grade' => $this->getGrade(),
+            'battery' => $this->getBattery(),
+            'calories' => $this->getCalories(),
+            'cumulative_distance' => $this->getCumulativeDistance()
         ];
     }
 

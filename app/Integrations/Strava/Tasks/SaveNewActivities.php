@@ -135,7 +135,7 @@ class SaveNewActivities extends Task
             'integration' => 'strava',
             'activity_id' => $activity->id,
             'distance' => $activityData['distance'] ?? null,
-            'start_date' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : null,
+            'started_at' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : null,
             'duration' => $activityData['elapsed_time'] ?? null,
             'average_speed' => $activityData['average_speed'] ?? null,
             'min_altitude' => $activityData['elev_low'] ?? null,

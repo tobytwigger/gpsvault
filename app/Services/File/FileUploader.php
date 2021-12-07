@@ -50,7 +50,7 @@ class FileUploader
     {
         $path = $uploadedFile->store('activities', $user->disk());
 
-        return File::create([
+        $file = File::create([
             'path' => $path,
             'filename' => $uploadedFile->getClientOriginalName(),
             'size' => Storage::disk($user->disk())->size($path),
@@ -60,6 +60,12 @@ class FileUploader
             'user_id' => $user->id,
             'type' => $type
         ]);
+
+        if($uploadedFile->getClientOriginalExtension() === 'tcx') {
+            Storage::disk($file->disk)->update($file->path, trim($file->getFileContents()));
+        }
+
+        return $file;
     }
 
 }

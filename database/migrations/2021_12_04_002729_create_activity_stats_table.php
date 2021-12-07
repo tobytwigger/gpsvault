@@ -38,6 +38,9 @@ class CreateActivityStatsTable extends Migration
             $table->float('start_longitude')->nullable();
             $table->float('end_latitude')->nullable();
             $table->float('end_longitude')->nullable();
+            $table->float('max_heartrate')->nullable();
+            $table->float('average_heartrate')->nullable();
+            $table->float('calories')->nullable();
             $table->string('json_points_file_id')->nullable();
             $table->timestamps();
 
