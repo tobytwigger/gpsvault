@@ -17,9 +17,20 @@ class TimesAndDurations extends AnalyserContract
         $startTime = collect($analysis->getPoints())->first()->getTime();
         $endTime = collect($analysis->getPoints())->last()->getTime();
 
-        $analysis->setDuration($endTime->diffInSeconds($startTime));
-        $analysis->setStartedAt($startTime);
-        $analysis->setFinishedAt($endTime);
+        if ($analysis->getDuration() === null) {
+            $analysis->setDuration($endTime->diffInSeconds($startTime));
+        }
+        if ($analysis->getStartedAt() === null) {
+            $analysis->setStartedAt($startTime);
+        }
+        if ($analysis->getFinishedAt() === null) {
+            $analysis->setFinishedAt($endTime);
+        }
         return $analysis;
+    }
+
+    public function canRun(Analysis $analysis): bool
+    {
+        return count($analysis->getPoints()) > 1;
     }
 }

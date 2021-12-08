@@ -40,7 +40,7 @@ class AnalyseActivityFiles extends Command
      */
     public function handle()
     {
-        $activities = $this->argument('activity') ? Arr::wrap($this->argument('activity')) : Activity::get();
+        $activities = $this->argument('activity') ? Arr::wrap(Activity::findOrFail($this->argument('activity'))) : Activity::get();
         foreach($activities as $activity) {
             AnalyseActivityFile::dispatch($activity);
         }

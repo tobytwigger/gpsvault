@@ -35,8 +35,7 @@ class AnalysisServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Analyser::registerAnalyser(AddPointsToAnalysis::class)
-            ->registerAnalyser(TimesAndDurations::class)
+        Analyser::registerAnalyser(TimesAndDurations::class)
             ->registerAnalyser(Distance::class)
             ->registerAnalyser(AverageSpeed::class)
             ->registerAnalyser(Elevation::class)

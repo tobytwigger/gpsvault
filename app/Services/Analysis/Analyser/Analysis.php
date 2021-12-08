@@ -36,7 +36,6 @@ class Analysis implements Arrayable, Jsonable
 
     private ?float $endLongitude = null;
 
-    /** @var float Distance in meters */
     private ?float $distance = null;
 
     private ?float $averageSpeed = null;
@@ -60,7 +59,7 @@ class Analysis implements Arrayable, Jsonable
      *
      * @var float
      */
-    private ?float $duration;
+    private ?float $duration = null;
 
     private array $points = [];
 

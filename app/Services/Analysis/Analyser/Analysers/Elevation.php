@@ -8,6 +8,11 @@ use App\Services\Analysis\Parser\Point;
 class Elevation extends AnalyserContract
 {
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return true;
+    }
+
     /**
      * @param Analysis $analysis
      * @return Analysis
@@ -19,29 +24,40 @@ class Elevation extends AnalyserContract
         $elevationGain = 0;
         $elevationLoss = 0;
 
+        $elevationPoints = collect($analysis->getPoints())
+            ->filter(fn(Point $point) => $point->getElevation() !== null);
+
         $previousElevation = null;
         /** @var Point $point */
-        foreach(collect($analysis->getPoints()) as $point) {
-            if($maxAltitude === null || $maxAltitude < $point->getElevation()) {
+        foreach ($elevationPoints as $point) {
+            if ($maxAltitude === null || $maxAltitude < $point->getElevation()) {
                 $maxAltitude = $point->getElevation();
             }
-            if($minAltitude === null || $minAltitude > $point->getElevation()) {
+            if ($minAltitude === null || $minAltitude > $point->getElevation()) {
                 $minAltitude = $point->getElevation();
             }
-            if($previousElevation !== null) {
-                if($previousElevation < $point->getElevation()) {
+            if ($previousElevation !== null) {
+                if ($previousElevation < $point->getElevation()) {
                     $elevationGain += $point->getElevation() - $previousElevation;
-                } elseif($previousElevation > $point->getElevation()) {
+                } elseif ($previousElevation > $point->getElevation()) {
                     $elevationLoss += $previousElevation - $point->getElevation();
                 }
             }
             $previousElevation = $point->getElevation();
         }
 
-        $analysis->setMaxAltitude($maxAltitude);
-        $analysis->setMinAltitude($minAltitude);
-        $analysis->setCumulativeElevationGain($elevationGain);
-        $analysis->setCumulativeElevationLoss($elevationLoss);
+        if ($analysis->getMaxAltitude() === null) {
+            $analysis->setMaxAltitude($maxAltitude);
+        }
+        if ($analysis->getMinAltitude() === null) {
+            $analysis->setMinAltitude($minAltitude);
+        }
+        if ($analysis->getCumulativeElevationGain() === null) {
+            $analysis->setCumulativeElevationGain($elevationGain);
+        }
+        if ($analysis->getCumulativeElevationLoss() === null) {
+            $analysis->setCumulativeElevationLoss($elevationLoss);
+        }
         return $analysis;
     }
 }

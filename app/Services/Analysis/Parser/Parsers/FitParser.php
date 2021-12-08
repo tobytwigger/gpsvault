@@ -31,7 +31,7 @@ class FitParser implements ParserContract
             ->merge(array_keys($fit->data_mesgs['record']['battery_soc']))
             ->merge(array_keys($fit->data_mesgs['record']['temperature']))
             ->unique();
-        dd($fit->data_mesgs);
+
         $record = $fit->data_mesgs['record'] ?? [];
         foreach ($timestamps as $timestamp) {
             $get = function ($key) use ($timestamp, $record) {

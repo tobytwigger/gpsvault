@@ -10,7 +10,9 @@ use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function Illuminate\Events\queueable;
 
 class Activity extends Model
@@ -58,9 +60,19 @@ class Activity extends Model
         return $this->belongsToMany(File::class);
     }
 
+    public function getStatsAsArray(bool $withPoints = false)
+    {
+        return $this->activityStats()->get()->mapWithKeys(function(ActivityStats $stats) use ($withPoints) {
+            if($withPoints) {
+                $stats->append('points');
+            }
+            return [$stats->integration => $stats->toArray()];
+        });
+    }
+
     public function getStatsAttribute()
     {
-        return $this->activityStats()->get()->mapWithKeys(fn(ActivityStats $stats) => [$stats->integration => $stats->toArray()]);
+        return $this->getStatsAsArray(false);
     }
 
     public function activityStatsFrom(string $integration)
@@ -73,9 +85,16 @@ class Activity extends Model
         return $this->hasMany(ActivityStats::class);
     }
 
-    public function defaultStats()
+    public function defaultStats(bool $withPoints = false)
     {
-        return $this->belongsTo(ActivityStats::class, 'default_stats_id');
+        $stats = $this->getStatsAsArray($withPoints);
+        if(count($stats) === 0) {
+            throw new \Exception('There is no position information for this activity', 404);
+        }
+        if(array_key_exists($stats['php'])) {
+            return $stats['php'];
+        }
+        return Arr::first($stats);
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)

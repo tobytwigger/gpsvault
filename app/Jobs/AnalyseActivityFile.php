@@ -46,38 +46,30 @@ class AnalyseActivityFile implements ShouldQueue
             ['integration' => 'php', 'activity_id' => $this->activity->id],
             [
                 'distance' => $analysis->getDistance(),
-                'averageSpeed' => $analysis->getAverageSpeed(),
-                'averagePace' => $analysis->getAveragePace(),
+                'average_speed' => $analysis->getAverageSpeed(),
+                'average_pace' => $analysis->getAveragePace(),
                 'minAltitude' => $analysis->getMinAltitude(),
                 'maxAltitude' => $analysis->getMaxAltitude(),
-                'cumulativeElevationGain' => $analysis->getCumulativeElevationGain(),
-                'cumulativeElevationLoss' => $analysis->getCumulativeElevationLoss(),
+                'elevation_gain' => $analysis->getCumulativeElevationGain(),
+                'elevation_loss' => $analysis->getCumulativeElevationLoss(),
                 'startedAt' => $analysis->getStartedAt(),
                 'finishedAt' => $analysis->getFinishedAt(),
                 'duration' => $analysis->getDuration(),
                 'average_heartrate' => $analysis->getAverageHeartrate(),
-                'maxHeartrate' => $analysis->getMaxHeartrate(),
+                'max_heartrate' => $analysis->getMaxHeartrate(),
                 'calories' => $analysis->getCalories(),
-                'movingTime' => $analysis->getMovingTime(),
-                'maxSpeed' => $analysis->getMaxSpeed(),
-                'averageCadence' => $analysis->getAverageCadence(),
-                'averageTemp' => $analysis->getAverageTemp(),
-                'averageWatts' => $analysis->getAverageWatts(),
+                'moving_time' => $analysis->getMovingTime(),
+                'max_speed' => $analysis->getMaxSpeed(),
+                'average_cadence' => $analysis->getAverageCadence(),
+                'average_temp' => $analysis->getAverageTemp(),
+                'average_watts' => $analysis->getAverageWatts(),
                 'kilojoules' => $analysis->getKilojoules(),
                 'start_latitude' => $analysis->getStartLatitude(),
                 'start_longitude' => $analysis->getStartLongitude(),
                 'end_latitude' => $analysis->getEndLatitude(),
                 'end_longitude' => $analysis->getEndLongitude(),
-
-                'distance' => $analysis->getDistance(),
-                'average_speed' => $analysis->getAverageSpeed(),
-                'average_pace' => $analysis->getAveragePace(),
-                'duration' => $analysis->getDuration(),
                 'min_altitude' => $analysis->getMinAltitude(),
                 'max_altitude' => $analysis->getMaxAltitude(),
-                'elevation_gain' => $analysis->getCumulativeElevationGain(),
-                'elevation_loss' => $analysis->getCumulativeElevationLoss(),
-                'moving_time' => $analysis->getDuration(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
                 'json_points_file_id' => $this->convertPointsToJsonPath($analysis->getPoints())->id
@@ -99,6 +91,16 @@ class AnalyseActivityFile implements ShouldQueue
 
         $filename = Str::random(40) . '.json.gz';
         return Upload::withContents(gzcompress($json, 9), $filename, $this->activity->user, FileUploader::ACTIVITY_FILE_POINT_JSON);
+    }
+
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return \DateTime
+     */
+    public function retryUntil()
+    {
+        return now()->addMinutes(20);
     }
 
 }

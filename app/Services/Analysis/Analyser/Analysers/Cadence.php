@@ -8,6 +8,13 @@ use App\Services\Analysis\Parser\Point;
 class Pace extends AnalyserContract
 {
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return $analysis->getDuration() !== null
+            && $analysis->getDistance() !== null
+            && $analysis->getAverageSpeed() === null;
+    }
+
     /**
      * @param Analysis $analysis
      * @return Analysis

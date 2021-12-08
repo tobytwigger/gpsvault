@@ -16,12 +16,17 @@ class MaxSpeed extends AnalyserContract
     {
         $maxSpeed = null;
         /** @var Point $point */
-        foreach(collect($analysis->getPoints()) as $point) {
+        foreach(collect($analysis->getPoints())->filter(fn(Point $point) => $point->getSpeed() !== null) as $point) {
             if($maxSpeed === null || $maxSpeed < $point->getSpeed()) {
                 $maxSpeed = $point->getSpeed();
             }
         }
 
         return $analysis->setMaxSpeed($maxSpeed);
+    }
+
+    public function canRun(Analysis $analysis): bool
+    {
+        return count($analysis->getPoints()) > 0;
     }
 }

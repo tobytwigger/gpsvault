@@ -12,7 +12,14 @@ class ActivityStats extends Model
     use HasFactory, HasAdditionalData;
 
     protected $appends = [
-        'points'
+        'is_power_data_available',
+        'is_heartrate_data_available',
+        'is_position_data_available',
+        'is_temperature_data_available',
+        'is_cadence_data_available',
+        'is_speed_data_available',
+        'is_time_data_available',
+        'is_elevation_data_available',
     ];
 
     protected $fillable = [
@@ -137,7 +144,62 @@ class ActivityStats extends Model
         if($this->json_points_file_id === null) {
             return [];
         }
-        return json_decode(gzuncompress($this->jsonPointsFile?->getFileContents()) ?? []);
+        return json_decode(gzuncompress($this->jsonPointsFile?->getFileContents()) ?? [], true);
     }
 
+    public function getAvailableDataAttribute(): array
+    {
+        return [
+            'power' => $this->is_power_data_available,
+            'heartrate' => $this->is_heartrate_data_available,
+            'position' => $this->is_position_data_available,
+            'temperature' => $this->is_temperature_data_available,
+            'cadence' => $this->is_cadence_data_available,
+            'speed' => $this->is_speed_data_available,
+            'time' => $this->is_time_data_available,
+            'elevation' => $this->is_elevation_data_available,
+        ];
+    }
+
+    public function getIsPowerDataAvailableAttribute(): bool
+    {
+        return $this->calories !== null && $this->kilojoules !== null && $this->average_watts !== null;
+    }
+
+    public function getIsHeartrateDataAvailableAttribute(): bool
+    {
+        return $this->max_heartrate !== null && $this->average_heartrate !== null;
+    }
+
+    public function getIsPositionDataAvailableAttribute(): bool
+    {
+        return $this->start_latitude !== null && $this->start_longitude !== null && $this->end_latitude !== null
+            && $this->end_longitude !== null && $this->distance !== null;
+    }
+
+    public function getIsTemperatureDataAvailableAttribute(): bool
+    {
+        return $this->average_temp !== null;
+    }
+
+    public function getIsCadenceDataAvailableAttribute(): bool
+    {
+        return $this->average_cadence !== null;
+    }
+
+    public function getIsSpeedDataAvailableAttribute(): bool
+    {
+        return $this->max_speed !== null && $this->average_speed !== null && $this->average_pace !== null;
+    }
+
+    public function getIsTimeDataAvailableAttribute(): bool
+    {
+        return $this->moving_time !== null && $this->duration !== null && $this->finished_at !== null
+            && $this->started_at !== null;
+    }
+
+    public function getIsElevationDataAvailableAttribute(): bool
+    {
+        return $this->elevation_loss !== null && $this->elevation_gain !== null && $this->min_altitude !== null && $this->max_altitude !== null;
+    }
 }

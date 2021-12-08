@@ -107,25 +107,15 @@
                             </danger-button>
                         </div>
                         <div class="sm:flex sm:space-x-4">
-                            <div v-if="loadingStats">
-                                Loading activity analysis
-                            </div>
-                            <div v-else-if="hasStats">
-                                <data-display-tile title="Distance" :value="convertDistance(stats.distance)">
-                                </data-display-tile>
-                                <data-display-tile title="Total Time" :value="convertDuration(stats.duration)">
-                                </data-display-tile>
-                                <data-display-tile title="Elevation Gain" :value="convertElevation(stats.elevation_gain)">
-                                </data-display-tile>
-                                <data-display-tile title="Average Speed" :value="convertSpeed(stats.average_speed)">
-                                </data-display-tile>
-                                <data-display-tile title="Average Pace" :value="convertPace(stats.average_pace)">
-                                </data-display-tile>
+                            <div v-if="hasStats">
+                                <stats :stats="stats"></stats>
 
-                                <elevation :stats="stats"></elevation>
+<!--                                <elevation :stats="stats"></elevation>-->
 
-                                <heartrate :stats="stats"></heartrate>
+<!--                                <heartrate :stats="stats"></heartrate>-->
                                 <vue-map :stats="stats"></vue-map>
+
+                                <generic-chart :stats="stats"></generic-chart>
                             </div>
                             <div v-else>
                                 We haven't yet processed your activity file.
@@ -168,7 +158,6 @@
 <script>
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
-    import DataDisplayTile from './Partials/DataDisplayTile';
     import moment from 'moment';
     import JetInput from '@/Jetstream/Input.vue'
     import ConfirmationModal from '@/Jetstream/ConfirmationModal.vue'
@@ -185,6 +174,8 @@
     import Elevation from './Partials/Charts/Elevation';
     import Map from './Partials/Charts/Map';
     import Heartrate from './Partials/Charts/Heartrate';
+    import GenericChart from './Partials/GenericChart';
+    import Stats from './Partials/Stats';
 
     export default defineComponent({
         components: {
@@ -192,7 +183,6 @@
             Elevation,
             SelectDataSource,
             FileManager,
-            DataDisplayTile,
             AppLayout,
             JetButton,
             JetInput,
@@ -202,7 +192,9 @@
             ConfirmationModal,
             DangerButton,
             SecondaryButton,
+            Stats,
             Modal,
+            GenericChart,
             'vue-map': Map
         },
         props: {
@@ -210,61 +202,25 @@
         },
         data() {
             return {
-                rawActivityStats: {},
                 form: useForm({
                     file: null,
                     _method: 'patch'
                 }),
                 confirmingActivityDeletion: false,
                 uploadActivityFileModal: false,
-                selectedDataSource: 'php',
-                loadingStats: false
+                selectedDataSource: 'php'
             }
         },
-        created() {
-            this.loadStats();
-        },
         methods: {
-            loadStats() {
-                this.loadingStats = true;
-                axios.get(route('activity.stats', this.activity.id))
-                    .then(response => {
-                        this.rawActivityStats = response.data;
-                    })
-                    .catch((error) => this.rawActivityStats = {})
-                    .then(() => this.loadingStats = false);
-            },
             formatDateTime(datetime) {
                 return moment(datetime).format('DD/MM/YYYY HH:mm:ss');
             },
             deleteActivity() {
                 this.$inertia.delete(route('activity.destroy', this.activity.id));
             },
-            runConversion(value, convert) {
-                return value === null ? 'N/A' : convert(value);
-            },
-            convertTime(time) {
-                return this.runConversion(time, (time) => moment(time).format('DD/MM/YYYY HH:mm:ss'))
-            },
-            convertDistance(distance) {
-                return this.runConversion(distance, (distance) => (Math.round(((distance / 1000) + Number.EPSILON) * 100) / 100) + 'km')
-            },
-            convertDuration(duration) {
-                return this.runConversion(duration, (duration) => moment.utc(duration*1000).format('HH:mm:ss'))
-            },
-            convertElevation(elevation) {
-                return this.runConversion(elevation, (elevation) => Math.round(elevation) + 'm')
-            },
-            convertSpeed(speed) {
-                return this.runConversion(speed, (speed) => Math.round((speed * 3.6) * 100)/100 + 'km/h')
-            },
-            convertPace(pace) {
-                return this.runConversion(pace, (pace) => Math.round((pace / 60) * 100)/100 + 'mins/km')
-            },
             uploadFile() {
                 this.form.post(route('activity.update', this.activity.id), {
                     onSuccess: () => {
-                        this.loadStats();
                         this.form.reset();
                         this.uploadActivityFileModal = false;
                     }
@@ -291,23 +247,23 @@
                 return this.activeDataSource !== null;
             },
             dataSources() {
-                return Object.keys(this.rawActivityStats);
+                return Object.keys(this.activity.stats);
             },
             activeDataSource() {
-                if(this.rawActivityStats.length === 0) {
+                if(this.activity.stats.length === 0) {
                     return null;
                 }
                 if(this.selectedDataSource) {
                     return this.selectedDataSource;
                 }
-                if(Object.keys(this.rawActivityStats).length > 0) {
-                    return Object.keys(this.rawActivityStats)[0];
+                if(Object.keys(this.activity.stats).length > 0) {
+                    return Object.keys(this.activity.stats)[0];
                 }
                 return null;
             },
             stats() {
                 if(this.hasStats) {
-                    return this.rawActivityStats[this.activeDataSource];
+                    return this.activity.stats[this.activeDataSource];
                 }
                 return null;
             }

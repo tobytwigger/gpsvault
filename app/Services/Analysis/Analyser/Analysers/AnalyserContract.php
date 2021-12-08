@@ -16,7 +16,9 @@ abstract class AnalyserContract
 
     public function analyse(Analysis $analysis): Analysis
     {
-        $analysis = $this->run($analysis);
+        if($this->canRun($analysis)) {
+            $analysis = $this->run($analysis);
+        }
         if($this->nextAnalyser !== null) {
             return $this->nextAnalyser->analyse($analysis);
         }
@@ -24,5 +26,7 @@ abstract class AnalyserContract
     }
 
     abstract protected function run(Analysis $analysis): Analysis;
+
+    abstract public function canRun(Analysis $analysis): bool;
 
 }

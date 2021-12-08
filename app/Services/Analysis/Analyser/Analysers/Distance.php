@@ -18,9 +18,16 @@ class Distance extends AnalyserContract
     protected function run(Analysis $analysis): Analysis
     {
         $polyline = new Polyline();
-        collect($analysis->getPoints())->each(fn(Point $point) => $polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude())));
+        collect($analysis->getPoints())
+            ->filter(fn(Point $point) => $point->getLatitude() !== null && $point->getLongitude() !== null)
+            ->each(fn(Point $point) => $polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude())));
         $distance = $polyline->getLength(new Vincenty());
 
-        return $analysis->setdistance($distance);
+        return $analysis->setDistance($distance);
+    }
+
+    public function canRun(Analysis $analysis): bool
+    {
+        return count($analysis->getPoints()) > 0 && $analysis->getDistance() === null;
     }
 }

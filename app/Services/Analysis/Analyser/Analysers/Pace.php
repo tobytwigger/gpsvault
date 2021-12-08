@@ -20,4 +20,11 @@ class Pace extends AnalyserContract
 
         return $analysis->setAveragePace($pace);
     }
+
+    public function canRun(Analysis $analysis): bool
+    {
+        return $analysis->getDuration() !== null
+            && $analysis->getDistance() !== null
+            && $analysis->getAveragePace() === null;
+    }
 }
