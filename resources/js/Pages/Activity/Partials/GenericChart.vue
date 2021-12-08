@@ -5,7 +5,7 @@
     <div v-else-if="!hasChartData">
         Chart not available
     </div>
-    <chart type="line" :options="chartOptions" :data="chartData">
+    <chart type="line" :options="chartOptions" :data="chartData" v-else>
 
     </chart>
 </template>
@@ -62,8 +62,7 @@ export default {
                 .then(() => this.loadingChartData = false);
         },
         calculateChartData() {
-            console.log('about to calculate')
-            let result = {
+            return {
                 datasets: [
                     {
                         data: this.rawData.map(p =>  {
@@ -76,8 +75,6 @@ export default {
                     }
                 ]
             };
-            console.log('calculated');
-            return result;
         }
     },
     computed: {
