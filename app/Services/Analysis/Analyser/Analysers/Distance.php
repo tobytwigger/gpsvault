@@ -8,8 +8,15 @@ use Location\Coordinate;
 use Location\Distance\Vincenty;
 use Location\Polyline;
 
-class Distance extends AnalyserContract
+class Distance extends AnalyserContract implements PointAnalyser
 {
+
+    private Polyline $polyline;
+
+    public function __construct(Polyline $polyline)
+    {
+        $this->polyline = $polyline;
+    }
 
     /**
      * @param Analysis $analysis
@@ -17,17 +24,18 @@ class Distance extends AnalyserContract
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $polyline = new Polyline();
-        collect($analysis->getPoints())
-            ->filter(fn(Point $point) => $point->getLatitude() !== null && $point->getLongitude() !== null)
-            ->each(fn(Point $point) => $polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude())));
-        $distance = $polyline->getLength(new Vincenty());
-
-        return $analysis->setDistance($distance);
+        return $analysis->setDistance($this->polyline->getLength(new Vincenty()));
     }
 
     public function canRun(Analysis $analysis): bool
     {
-        return count($analysis->getPoints()) > 0 && $analysis->getDistance() === null;
+        return $analysis->getDistance() === null;
+    }
+
+    public function processPoint(Point $point): void
+    {
+        if($point->getLatitude() !== null && $point->getLongitude() !== null) {
+            $this->polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude()));
+        }
     }
 }

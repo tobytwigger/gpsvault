@@ -6,6 +6,7 @@ import StravaFixSetup from './Integrations/StravaFixSetup';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import VueEasyLightbox from 'vue-easy-lightbox'
 import 'leaflet/dist/leaflet.css';
+import Units from './Plugins/units';
 
 require('./bootstrap');
 
@@ -16,6 +17,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(VueEasyLightbox)
+            .use(Units)
             .component('task-strava-upload', StravaFixSetup)
             .component('strava-integration-addon', StravaIntegrationAddon)
             .mixin({ methods: { route } })

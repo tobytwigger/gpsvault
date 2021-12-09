@@ -275,7 +275,7 @@ class Point implements Arrayable, Jsonable
 
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
             'elevation' => $this->getElevation(),
@@ -288,7 +288,7 @@ class Point implements Arrayable, Jsonable
             'battery' => $this->getBattery(),
             'calories' => $this->getCalories(),
             'cumulative_distance' => $this->getCumulativeDistance()
-        ];
+        ]);
     }
 
     public function toJson($options = 0): string

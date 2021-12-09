@@ -15,7 +15,7 @@
             </data-display-tile>
         </div>
         <div v-if="stats.is_position_data_available">
-            <data-display-tile title="Distance" :value="convertDistance(stats.distance)?.toString()">
+            <data-display-tile title="Distance" :value="$converter(stats.distance, 'm/s')">
             </data-display-tile>
             <data-display-tile title="Start" :value="stats.start_latitude + ', ' + stats.start_longitude?.toString()">
             </data-display-tile>
@@ -23,7 +23,7 @@
             </data-display-tile>
         </div>
         <div v-if="stats.is_temperature_data_available">
-            <data-display-tile title="Average Temperature" :value="stats.average_temp?.toString()">
+            <data-display-tile title="Average Temperature" :value="$converter(stats.average_temp, 'C')">
             </data-display-tile>
         </div>
         <div v-if="stats.is_cadence_data_available">
@@ -31,17 +31,17 @@
             </data-display-tile>
         </div>
         <div v-if="stats.is_speed_data_available">
-            <data-display-tile title="Max Speed" :value="stats.max_speed?.toString()">
+            <data-display-tile title="Max Speed" :value="$converter(stats.max_speed, 'm/s')">
             </data-display-tile>
-            <data-display-tile title="Average Speed" :value="convertSpeed(stats.average_speed)?.toString()">
+            <data-display-tile title="Average Speed" :value="$converter(stats.average_speed, 'm/s')">
             </data-display-tile>
-            <data-display-tile title="Average Pace" :value="convertPace(stats.average_pace)?.toString()">
+            <data-display-tile title="Average Pace" :value="$converter(stats.average_page, 's/m')">
             </data-display-tile>
         </div>
         <div v-if="stats.is_time_data_available">
-            <data-display-tile title="Moving Time" :value="stats.moving_time?.toString()">
+            <data-display-tile title="Moving Time" :value="$converter(stats.moving_time, 's')">
             </data-display-tile>
-            <data-display-tile title="Total Time" :value="convertDuration(stats.duration)?.toString()">
+            <data-display-tile title="Total Time" :value="$converter(stats.duration, 's')">
             </data-display-tile>
             <data-display-tile title="Started At" :value="stats.started_at?.toString()">
             </data-display-tile>
@@ -49,13 +49,13 @@
             </data-display-tile>
         </div>
         <div v-if="stats.is_elevation_data_available">
-            <data-display-tile title="Elevation Loss" :value="convertElevation(stats.elevation_loss)?.toString()">
+            <data-display-tile title="Elevation Loss" :value="$converter(stats.elevation_loss, 'm')">
             </data-display-tile>
-            <data-display-tile title="Elevation Gain" :value="convertElevation(stats.elevation_gain)?.toString()">
+            <data-display-tile title="Elevation Gain" :value="$converter(stats.elevation_gain, 'm')">
             </data-display-tile>
-            <data-display-tile title="Max Altitude" :value="convertElevation(stats.min_altitude)?.toString()">
+            <data-display-tile title="Max Altitude" :value="$converter(stats.min_altitude, 'm')">
             </data-display-tile>
-            <data-display-tile title="Min Altitude" :value="convertElevation(stats.max_altitude)?.toString()">
+            <data-display-tile title="Min Altitude" :value="$converter(stats.max_altitude, 'm')">
             </data-display-tile>
         </div>
 

@@ -28,6 +28,7 @@ use App\Services\Sync\Task;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -72,8 +73,11 @@ class StravaServiceProvider extends ServiceProvider
             Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
         });
 
-        \RateLimiter::for('strava', function(CallQueuedListener $job) {
-            return Limit::perHour(70)->by($job->data[0]->activity->id);
+        RateLimiter::for('strava-15-mins', function(CallQueuedListener $job) {
+            return Limit::perMinutes(15, 70)->by($job->data[0]->activity->id);
+        });
+        RateLimiter::for('strava-15-mins', function(CallQueuedListener $job) {
+            return Limit::perMinutes(15, 70)->by($job->data[0]->activity->id);
         });
     }
 

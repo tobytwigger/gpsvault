@@ -10,8 +10,9 @@ use Inertia\Inertia;
 class DashboardController extends Controller
 {
 
-    public function index()
+    public function index(Strava $strava)
     {
+        dd($strava->client()->getActivityData(6193576241));
         return Inertia::render('Dashboard/Dashboard');
     }
 

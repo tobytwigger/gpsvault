@@ -1,6 +1,7 @@
 <template>
     <div>
-        <canvas ref="chartContainer" width="600" height="300" :key="chartKey"></canvas>
+        <button @click="createChart">CREATE THE CHART</button>
+        <canvas ref="chartContainer" width="600" height="300"></canvas>
     </div>
 </template>
 
@@ -37,23 +38,15 @@ export default {
     created() {
         Chart.register(...registerables);
     },
-    watch: {
-        chartConfig: {
-            handler() {
-                this.createChart();
-            },
-            deep: true
-        }
-    },
     mounted() {
         this.createChart();
     },
     methods: {
         createChart() {
-            if(this.chart !== null) {
-                this.chart.destroy();
-            }
-            this.chartKey = uuidv4();
+            // if(this.chart !== null) {
+            //     this.chart.destroy();
+            // }
+            // this.chartKey = uuidv4();
             this.$nextTick(() => this.chart = new Chart(this.$refs.chartContainer.getContext('2d'), this.chartConfig));
         }
     },

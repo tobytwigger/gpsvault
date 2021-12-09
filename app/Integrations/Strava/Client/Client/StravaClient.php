@@ -244,4 +244,20 @@ class StravaClient
         return $content;
     }
 
+    public function getActivityData($activityId)
+    {
+        $this->log->debug(sprintf('About to get in depth data for activity %d', $activityId));
+
+        $response = $this->request('GET', 'https://www.strava.com/api/v3/activities/' . $activityId . '/streams/time,altitude,heartrate,cadence,watts,temp,moving,latlng,distance,velocity_smooth');
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $this->log->debug(sprintf('Retrieved in depth data for activity %d', $activityId));
+
+        return $content;
+    }
+
 }
