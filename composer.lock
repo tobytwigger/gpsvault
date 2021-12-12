@@ -2863,23 +2863,23 @@
         },
         {
             "name": "nelexa/zip",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ne-Lexa/php-zip.git",
-                "reference": "668afcf81ac4f05fbc428fd137507a13eb49fa9e"
+                "reference": "a18f80db509b1b6e9798e2745dc100759107f50c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/668afcf81ac4f05fbc428fd137507a13eb49fa9e",
-                "reference": "668afcf81ac4f05fbc428fd137507a13eb49fa9e",
+                "url": "https://api.github.com/repos/Ne-Lexa/php-zip/zipball/a18f80db509b1b6e9798e2745dc100759107f50c",
+                "reference": "a18f80db509b1b6e9798e2745dc100759107f50c",
                 "shasum": ""
             },
             "require": {
                 "ext-zlib": "*",
                 "php": "^7.4 || ^8.0",
-                "psr/http-message": "^1.0",
-                "symfony/finder": "^3.0 || ^4.0 || ^5.0"
+                "psr/http-message": "*",
+                "symfony/finder": "*"
             },
             "require-dev": {
                 "ext-bz2": "*",
@@ -2888,11 +2888,11 @@
                 "ext-iconv": "*",
                 "ext-openssl": "*",
                 "ext-xml": "*",
-                "friendsofphp/php-cs-fixer": "^2.18",
+                "friendsofphp/php-cs-fixer": "^3.4.0",
                 "guzzlehttp/psr7": "^1.6",
                 "phpunit/phpunit": "^9",
-                "symfony/http-foundation": "^5.2",
-                "symfony/var-dumper": "^5.0",
+                "symfony/http-foundation": "*",
+                "symfony/var-dumper": "*",
                 "vimeo/psalm": "^4.6"
             },
             "suggest": {
@@ -2930,9 +2930,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Ne-Lexa/php-zip/issues",
-                "source": "https://github.com/Ne-Lexa/php-zip/tree/4.0.0"
+                "source": "https://github.com/Ne-Lexa/php-zip/tree/4.0.1"
             },
-            "time": "2021-02-24T12:51:19+00:00"
+            "time": "2021-12-12T09:50:45+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -10435,5 +10435,5 @@
         "ext-zlib": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
