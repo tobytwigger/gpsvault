@@ -25,6 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('temp:clear')->twiceDaily();
+        $schedule->command('strava:ratelimit minute')->everyFifteenMinutes();
+        $schedule->command('strava:ratelimit day')->daily();
     }
 
     /**
