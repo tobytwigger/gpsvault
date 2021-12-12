@@ -15,7 +15,7 @@
             </data-display-tile>
         </div>
         <div v-if="stats.is_position_data_available">
-            <data-display-tile title="Distance" :value="$converter(stats.distance, 'm/s')">
+            <data-display-tile title="Distance" :value="$converter(stats.distance, 'm')">
             </data-display-tile>
             <data-display-tile title="Start" :value="stats.start_latitude + ', ' + stats.start_longitude?.toString()">
             </data-display-tile>

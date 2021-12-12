@@ -1,14 +1,12 @@
 <template>
     <div>
-        <button @click="createChart">CREATE THE CHART</button>
-        <canvas ref="chartContainer" width="600" height="300"></canvas>
+        <canvas ref="chartContainer" width="600" height="300" ></canvas>
     </div>
 </template>
 
 <script>
 import { Chart, registerables} from 'chart.js';
 import 'chartjs-adapter-moment';
-import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name: "Chart",
@@ -32,7 +30,7 @@ export default {
     data() {
         return {
             chart: null,
-            chartKey: uuidv4()
+            mutableChartData: {},
         }
     },
     created() {
@@ -43,11 +41,16 @@ export default {
     },
     methods: {
         createChart() {
-            // if(this.chart !== null) {
-            //     this.chart.destroy();
-            // }
-            // this.chartKey = uuidv4();
-            this.$nextTick(() => this.chart = new Chart(this.$refs.chartContainer.getContext('2d'), this.chartConfig));
+            console.log('Calling create chart');
+            if(this.chart !== null) {
+                this.chart.destroy();
+            }
+            this.mutableChartData = this.data;
+            this.$nextTick(() => this.chart = new Chart(this.$refs.chartContainer.getContext('2d'), {
+                data: this.mutableChartData,
+                type: this.type,
+                options: this.options
+            }));
         }
     },
     computed: {

@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava;
 
+use App\Integrations\Strava\Commands\ResetRateLimitCommand;
 use App\Integrations\Strava\Events\NewStravaActivity;
 use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
 use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
@@ -22,7 +23,7 @@ use App\Integrations\Strava\Listeners\MarkActivityAsLoadingComments;
 use App\Integrations\Strava\Listeners\MarkActivityAsLoadingDetails;
 use App\Integrations\Strava\Listeners\MarkActivityAsLoadingKudos;
 use App\Integrations\Strava\Listeners\MarkActivityAsLoadingPhotos;
-use App\Integrations\Strava\Tasks\SaveNewActivities;
+use App\Integrations\Strava\Tasks\SaveAllActivities;
 use App\Integrations\Strava\Tasks\StravaUpload;
 use App\Services\Sync\Task;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -42,8 +43,12 @@ class StravaServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->commands([
+            ResetRateLimitCommand::class
+        ]);
         if(config('strava.enable_detail_fetching', true)) {
-            // Load segments for an activity
+
+            // Load segments and additional stats for an activity
             Event::listen(StravaActivityUpdated::class, MarkActivityAsLoadingDetails::class);
             Event::listen(StravaActivityUpdated::class, IndexStravaActivity::class);
 
@@ -63,7 +68,7 @@ class StravaServiceProvider extends ServiceProvider
         Integration::registerIntegration('strava', StravaIntegration::class);
         Importer::registerImporter(ActivityImporter::class);
         Importer::registerImporter(PhotoImporter::class);
-        Task::registerTask(SaveNewActivities::class);
+        Task::registerTask(SaveAllActivities::class);
         Task::registerTask(StravaUpload::class);
         Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function() {
             Route::resource('import', ImportController::class)->only('show');
@@ -73,12 +78,15 @@ class StravaServiceProvider extends ServiceProvider
             Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
         });
 
-        RateLimiter::for('strava-15-mins', function(CallQueuedListener $job) {
-            return Limit::perMinutes(15, 70)->by($job->data[0]->activity->id);
-        });
-        RateLimiter::for('strava-15-mins', function(CallQueuedListener $job) {
-            return Limit::perMinutes(15, 70)->by($job->data[0]->activity->id);
-        });
+        RateLimiter::for('strava', fn($job) => static::stravaLimiters());
+    }
+
+    public static function stravaLimiters(): array
+    {
+        return [
+            Limit::perMinutes(15, 2)->by('strava-15-mins'),
+//            Limit::perDay(900)->by('strava-daily')
+        ];
     }
 
 }

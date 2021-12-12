@@ -97,6 +97,11 @@ class RunSyncTask implements ShouldQueue
         $this->task->setStatusAsCancelled();
     }
 
+    public function retryUntil()
+    {
+        return now()->addMinutes(360);
+    }
+
     private function dependenciesNotReady(): bool
     {
         return collect($this->task->createTaskObject()->runsAfter())

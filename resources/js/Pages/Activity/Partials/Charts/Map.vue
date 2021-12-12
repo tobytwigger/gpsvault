@@ -39,6 +39,14 @@ export default {
             zoom: 9
         }
     },
+    watch: {
+        stats: {
+            handler() {
+                this.loadGeoJson();
+            },
+            deep: true
+        },
+    },
     mounted() {
         this.loadGeoJson();
     },

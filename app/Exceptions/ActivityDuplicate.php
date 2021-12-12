@@ -3,8 +3,6 @@
 namespace App\Exceptions;
 
 use App\Models\Activity;
-use App\Models\File;
-use Throwable;
 
 class ActivityDuplicate extends \Exception
 {

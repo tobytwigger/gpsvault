@@ -2,13 +2,11 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Strava\Import\Models\Import;
+use App\Integrations\Integration;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\User;
-use App\Integrations\Integration;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class StravaIntegration extends Integration
@@ -64,27 +62,38 @@ class StravaIntegration extends Integration
 
     public function vueAddOnProps(): array
     {
+        $timeUntilReady = null;
+        foreach(StravaServiceProvider::stravaLimiters() as $limit) {
+            $key = 'strava' . $limit->key;
+            if(RateLimiter::tooManyAttempts($key, $limit->maxAttempts)) {
+                $newTimeUntilReady = RateLimiter::availableIn($key);
+                $timeUntilReady = $newTimeUntilReady === null && ($timeUntilReady === null || $timeUntilReady > $newTimeUntilReady)
+                    ? $timeUntilReady
+                    : $newTimeUntilReady;
+            }
+        }
+
         return [
-            'activitiesLoading' => 1 ?? Activity::whereAdditionalData('strava_is_loading_photos', true)
-                ->orWhere(fn(Builder $query) => $query->whereAdditionalData('strava_is_loading_details', true))
-                    ->count(),
-//            'neededActivities' => Activity::linkedTo('strava')
-//                ->whereDoesntHave('activityFile')
-//                ->when($lastRun, fn(Builder $query) => $query->where('created_at', '>', $lastRun->))
-            'activitiesWithoutFile' => 1 ?? Activity::linkedTo('strava')->whereDoesntHave('activityFile')->count(),
-            'activitiesWithoutPhotos' => 1 ?? Activity::linkedTo('strava')
+            'activitiesLoadingKudos' => Activity::whereAdditionalData('strava_is_loading_kudos', true)->count(),
+            'activitiesLoadingComments' => Activity::whereAdditionalData('strava_is_loading_comments', true)->count(),
+            'activitiesLoadingStats' => Activity::whereAdditionalData('strava_is_loading_stats', true)->count(),
+            'activitiesLoadingPhotos' => Activity::whereAdditionalData('strava_is_loading_photos', true)->count(),
+            'activitiesLoadingBasicData' => Activity::whereAdditionalData('strava_is_loading_details', true)->count(),
+            'activitiesWithoutFiles' => Activity::linkedTo('strava')->whereDoesntHave('activityFile')->count(),
+            'activitiesWithoutPhotos' => Activity::linkedTo('strava')
                 ->whereHasAdditionalData('strava_photo_ids')
                 ->withCount('files')
                 ->with('files')
-                ->with('additionalActivityData')
+                ->with('additionalData')
                 ->get()
                 ->filter(function (Activity $activity) {
                     $uploadedFiles = $activity->files->map(fn(File $file) => Str::of($file->filename)->before('.'));
-                    return collect(Arr::wrap($activity->getAdditionalData('strava_photo_ids')))
-                        ->filter(fn(string $photoId) => $uploadedFiles->contains($photoId))
-                        ->count() > 0;
-                 })
-                ->count()
+                    return collect($activity->getAdditionalData('strava_photo_ids'))
+                            ->filter(fn(string $photoId) => !$uploadedFiles->contains($photoId))
+                            ->count() > 0;
+                })
+                ->count(),
+            'timeUntilReady' => $timeUntilReady
         ];
     }
 

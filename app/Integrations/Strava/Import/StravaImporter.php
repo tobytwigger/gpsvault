@@ -40,7 +40,7 @@ class StravaImporter
                 $importer->run($zip, $syncTask, $user)
             );
         }
-        $import = Import::create();
+        $import = Import::create(['user_id' => $user->id]);
         foreach($results->all() as $result) {
             ImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
         }

@@ -92,7 +92,7 @@ class StravaUpload extends Task
     public function runsAfter(): array
     {
         return [
-            SaveNewActivities::id()
+            SaveAllActivities::id()
         ];
     }
 }

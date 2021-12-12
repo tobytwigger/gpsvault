@@ -117,6 +117,9 @@ class Activity extends Model
         static::deleted(queueable(function(Activity $activity) {
             $activity->activityFile()->delete();
             $activity->files()->delete();
+            $activity->activityStats()->delete();
+            $activity->stravaComments()->delete();
+            $activity->stravaKudos()->delete();
         }));
 
         static::saved(function(Activity $activity) {

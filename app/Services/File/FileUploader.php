@@ -68,4 +68,16 @@ class FileUploader
         return $file;
     }
 
+    public function activityPoints(array $points, User $user): File
+    {
+        $array = [];
+        foreach($points as $point) {
+            $array[] = $point->toArray();
+        }
+        $json = json_encode($array);
+
+        $filename = Str::random(40) . '.json.gz';
+        return $this->withContents(gzcompress($json, 9), $filename, $user, FileUploader::ACTIVITY_FILE_POINT_JSON);
+    }
+
 }

@@ -4,6 +4,7 @@ namespace App\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\Models\StravaActivity;
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
 use App\Integrations\Strava\Client\Log\ConnectionLog;
 use App\Models\User;
 use Carbon\Carbon;
@@ -42,6 +43,9 @@ class StravaClient
             ], $options));
         } catch (\Exception $e) {
             $this->log->error(sprintf('Request failed with code %d: %s', $e->getCode(), $e->getMessage()));
+            if($e->getCode() === 429) {
+                throw new StravaRateLimitedException();
+            }
             throw $e;
         }
     }
@@ -51,7 +55,7 @@ class StravaClient
         $this->log->debug(sprintf('Resolving the auth token from the database'));
 
         try {
-            $token = User::find($this->userId)->stravaTokens()->orderBy('created_at', 'desc')->firstOrFail();
+            $token = User::findOrFail($this->userId)->stravaTokens()->orderBy('created_at', 'desc')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->log->error(sprintf('User not connected to Strava'));
             throw new UnauthorizedException('Your account is not connected to Strava');
@@ -197,7 +201,7 @@ class StravaClient
             true
         );
 
-        $this->log->info(sprintf('Retrieved user activity %d', $activityId));
+        $this->log->info(sprintf('Retrieved %u photos for activity %d', count($content), $activityId));
 
         return $content;
     }
@@ -218,7 +222,7 @@ class StravaClient
             true
         );
 
-        $this->log->debug(sprintf('Retrieved %u comments for activity %d', count($content), $activityId));
+        $this->log->info(sprintf('Retrieved %u comments for activity %d', count($content), $activityId));
 
         return $content;
     }
@@ -239,23 +243,28 @@ class StravaClient
             true
         );
 
-        $this->log->debug(sprintf('Retrieved %u kudos for activity %d', count($content), $activityId));
+        $this->log->info(sprintf('Retrieved %u kudos for activity %d', count($content), $activityId));
 
         return $content;
     }
 
-    public function getActivityData($activityId)
+    public function getActivityStream($activityId)
     {
-        $this->log->debug(sprintf('About to get in depth data for activity %d', $activityId));
+        $this->log->debug(sprintf('About to get in depth data stream for activity %d', $activityId));
 
-        $response = $this->request('GET', 'https://www.strava.com/api/v3/activities/' . $activityId . '/streams/time,altitude,heartrate,cadence,watts,temp,moving,latlng,distance,velocity_smooth');
+        $response = $this->request('GET', 'https://www.strava.com/api/v3/activities/' . $activityId . '/streams', [
+            'query' => [
+                'keys' => 'time,altitude,heartrate,cadence,watts,temp,moving,latlng,distance,velocity_smooth',
+                'key_by_type' => false
+            ]
+        ]);
 
         $content = json_decode(
             $response->getBody()->getContents(),
             true
         );
 
-        $this->log->debug(sprintf('Retrieved in depth data for activity %d', $activityId));
+        $this->log->info(sprintf('Retrieved in depth data stream for activity %d', $activityId));
 
         return $content;
     }

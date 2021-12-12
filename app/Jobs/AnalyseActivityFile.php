@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Activity;
 use App\Models\ActivityStats;
 use App\Models\File;
+use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Parser\Point;
 use App\Services\File\FileUploader;
@@ -72,25 +73,9 @@ class AnalyseActivityFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'json_points_file_id' => $this->convertPointsToJsonPath($analysis->getPoints())->id
+                'json_points_file_id' => Upload::activityPoints($analysis->getPoints(), $this->activity->user)->id
             ]
         );
-    }
-
-    /**
-     * @param array|Point[] $points
-     * @return File
-     */
-    private function convertPointsToJsonPath(array $points): File
-    {
-        $array = [];
-        foreach($points as $point) {
-            $array[] = $point->toArray();
-        }
-        $json = json_encode($array);
-
-        $filename = Str::random(40) . '.json.gz';
-        return Upload::withContents(gzcompress($json, 9), $filename, $this->activity->user, FileUploader::ACTIVITY_FILE_POINT_JSON);
     }
 
     /**
@@ -100,7 +85,7 @@ class AnalyseActivityFile implements ShouldQueue
      */
     public function retryUntil()
     {
-        return now()->addMinutes(20);
+        return now()->addDay();
     }
 
 }
