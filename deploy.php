@@ -45,6 +45,7 @@ task('assets:compile', function() {
 
 task('assets:upload', function() {
     upload('public/dist', '{{release_path}}/public');
+    upload('public/mix-manifest.json', '{{release_path}}/public');
 });
 
 after('deploy:failed', 'deploy:unlock');

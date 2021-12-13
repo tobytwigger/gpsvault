@@ -16,3 +16,4 @@ yarn-error.log
 resources/functions/parse-activities/venv
 public/dist
 public/vendor
+public/mix-manifest.json

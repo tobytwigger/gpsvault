@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-mix.setPublicPath('public/dist');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,10 +10,17 @@ mix.setPublicPath('public/dist');
  | file for the application as well as bundling up all the JS files.
  |
  */
+mix.setPublicPath('public');
 
-mix.js('resources/js/app.js', 'js')
+mix.js('resources/js/app.js', 'dist/js')
+    .options({
+        fileLoaderDirs: {
+            images: 'dist/images',
+            fonts: 'dist/fonts'
+        }
+    })
     .vue()
-    .postCss('resources/css/app.css', 'css', [
+    .postCss('resources/css/app.css', 'dist/css', [
         require('postcss-import'),
         require('tailwindcss'),
     ])
