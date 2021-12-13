@@ -13,6 +13,7 @@
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "alchemy/zippy": "^1.0",
         "beyondcode/laravel-websockets": "^1.12",
+        "deployer/deployer": "^7.0",
         "duckfusion/waddle": "^1.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.0.1",
