@@ -35,7 +35,7 @@ class ActivityController extends Controller
     public function index()
     {
         return Inertia::render('Activity/Index', [
-            'activities' => Activity::where('user_id', Auth::id())
+            'activities' => Auth::user()->activities()
                 ->orderBy('started_at', 'DESC')
                 ->get()
         ]);

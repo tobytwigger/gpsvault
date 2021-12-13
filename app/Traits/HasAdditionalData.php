@@ -16,7 +16,7 @@ trait HasAdditionalData
 
     public static function bootHasAdditionalData()
     {
-        static::deleted(function($model) {
+        static::deleting(function($model) {
             $model->additionalData()->delete();
         });
     }

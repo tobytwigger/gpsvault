@@ -43,7 +43,7 @@ class File extends Model
                 $file->hash = md5($file->getFileContents());
             }
         });
-        static::deleted(function(File $file) {
+        static::deleting(function(File $file) {
             Storage::disk($file->disk)->delete($file->path);
         });
     }

@@ -42,13 +42,13 @@ class Activity extends Model
                 $activity->user_id = Auth::id();
             }
         });
-        static::deleted(queueable(function(Activity $activity) {
+        static::deleting(function(Activity $activity) {
             $activity->activityFile()->delete();
             $activity->files()->delete();
             $activity->activityStats()->delete();
             $activity->stravaComments()->delete();
             $activity->stravaKudos()->delete();
-        }));
+        });
 
         static::saved(function(Activity $activity) {
             if ($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {

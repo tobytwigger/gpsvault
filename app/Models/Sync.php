@@ -33,7 +33,7 @@ class Sync extends Model
     protected static function booted()
     {
         static::creating(fn(Sync $sync) => $sync->user_id = $sync->user_id ?? Auth::id());
-        static::deleted(fn(Sync $sync) => $sync->tasks()->delete());
+        static::deleting(fn(Sync $sync) => $sync->tasks()->delete());
     }
 
     public function user()

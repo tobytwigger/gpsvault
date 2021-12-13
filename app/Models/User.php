@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::deleted(function(User $user) {
+        static::deleting(function(User $user) {
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();
             $user->stravaTokens()->delete();
