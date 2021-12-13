@@ -27,9 +27,14 @@ task('deploy', [
     'deploy:vendors',
     'assets:compile',
     'assets:upload',
+    'artisan:migrate',
+    'artisan:storage:link',
+    'artisan:cache:clear',
+    'artisan:route:cache',
     'artisan:view:cache',
     'artisan:config:cache',
-    'artisan:migrate',
+    'artisan:event:cache',
+    'artisan:optimize',
     'deploy:publish'
 ]);
 
@@ -39,7 +44,9 @@ task('assets:compile', function() {
 });
 
 task('assets:upload', function() {
-    upload('public/dist', '{{release_path}}/public/dist');
+    upload('public/dist', '{{release_path}}/public');
 });
 
 after('deploy:failed', 'deploy:unlock');
+
+after('deploy:success', 'artisan:horizon:terminate');
