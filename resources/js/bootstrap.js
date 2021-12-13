@@ -27,7 +27,6 @@ window.Echo = new Echo({
     key: 'cycle-store',
     wsHost: window.location.hostname,
     wsPort: 6001,
-    forceTLS: false,
     disableStats: true,
-    enabledTransports: ['ws', 'wss'],
+    forceTLS: true
 });
