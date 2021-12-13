@@ -14,3 +14,4 @@ yarn-error.log
 /.idea
 /.vscode
 resources/functions/parse-activities/venv
+public/dist

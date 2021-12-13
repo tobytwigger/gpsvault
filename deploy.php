@@ -25,10 +25,21 @@ host('cycle.linkeys.app')
 task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
+    'assets:compile',
+    'assets:upload',
     'artisan:view:cache',
     'artisan:config:cache',
     'artisan:migrate',
     'deploy:publish'
 ]);
+
+task('assets:compile', function() {
+    runLocally('npm install');
+    runLocally('npm run prod');
+});
+
+task('assets:upload', function() {
+    upload('public/dist', '{{release_path}}/public/dist');
+});
 
 after('deploy:failed', 'deploy:unlock');
