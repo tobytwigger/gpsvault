@@ -17,6 +17,7 @@ add('writable_dirs', []);
 host('cycle.linkeys.app')
     ->setSshMultiplexing(true)
     ->set('remote_user', 'ubuntu')
+    ->set('branch', 'develop')
     ->set('deploy_path', '/var/www/cycle.linkeys.app');
 
 // Tasks
