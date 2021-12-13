@@ -28,26 +28,27 @@ class FitParser implements ParserContract
                 'units' => 'metric'
             ]);
         $points = collect();
+        $getTimeData = fn(string $property) => array_key_exists($property, $fit->data_mesgs['record']) && is_array($fit->data_mesgs['record'][$property]) ? $fit->data_mesgs['record'][$property] : [];
 
         $timestamps = collect([])
-            ->merge($fit->data_mesgs['record']['timestamp'])
-            ->merge(array_keys($fit->data_mesgs['record']['position_lat']))
-            ->merge(array_keys($fit->data_mesgs['record']['position_long']))
-            ->merge(array_keys($fit->data_mesgs['record']['altitude']))
-            ->merge(array_keys($fit->data_mesgs['record']['distance']))
-            ->merge(array_keys($fit->data_mesgs['record']['speed']))
-            ->merge(array_keys($fit->data_mesgs['record']['grade']))
-            ->merge(array_keys($fit->data_mesgs['record']['heart_rate']))
-            ->merge(array_keys($fit->data_mesgs['record']['calories']))
-            ->merge(array_keys($fit->data_mesgs['record']['cadence']))
-            ->merge(array_keys($fit->data_mesgs['record']['battery_soc']))
-            ->merge(array_keys($fit->data_mesgs['record']['temperature']))
+            ->merge($getTimeData('timestamp'))
+            ->merge(array_keys($getTimeData('position_lat')))
+            ->merge(array_keys($getTimeData('position_long')))
+            ->merge(array_keys($getTimeData('altitude')))
+            ->merge(array_keys($getTimeData('distance')))
+            ->merge(array_keys($getTimeData('speed')))
+            ->merge(array_keys($getTimeData('grade')))
+            ->merge(array_keys($getTimeData('heart_rate')))
+            ->merge(array_keys($getTimeData('calories')))
+            ->merge(array_keys($getTimeData('cadence')))
+            ->merge(array_keys($getTimeData('battery_soc')))
+            ->merge(array_keys($getTimeData('temperature')))
             ->unique();
 
         $record = $fit->data_mesgs['record'] ?? [];
         foreach ($timestamps as $timestamp) {
             $get = function ($key, array $units = []) use ($timestamp, $record) {
-                if(array_key_exists($key, $record) && array_key_exists($timestamp, $record[$key])) {
+                if(array_key_exists($key, $record) && is_array($record[$key]) && array_key_exists($timestamp, $record[$key])) {
                     $data = $record[$key][$timestamp];
                     unset($record[$key][$timestamp]);
                     if(count($units) === 2) {

@@ -17,21 +17,17 @@ class AnalysisFactory implements AnalysisFactoryContract
 
     public function analyse(Activity $activity): Analysis
     {
-        \Log::info('Analysing at ' . Carbon::now());
         return $this->runAnalysis(Parser::parse($activity));
     }
 
     public function runAnalysis(Analysis $analysis): Analysis
     {
-        \Log::info('Running analysis at ' . Carbon::now());
         $pointAnalyser = $this->getChain(fn(AnalyserContract $analyser) => $analyser instanceof PointAnalyser);
         foreach($this->pointsFor($analysis) as $point) {
             $pointAnalyser->processPoint($point);
         }
         $analysis = $pointAnalyser->analyse($analysis);
-        \Log::info('Finished point analysis at ' . Carbon::now());
         $analysis = $this->getChain(fn(AnalyserContract $analyser) => !($analyser instanceof PointAnalyser))->analyse($analysis);
-        \Log::info('Finished full analysis at ' . Carbon::now());
         return $analysis;
     }
 
