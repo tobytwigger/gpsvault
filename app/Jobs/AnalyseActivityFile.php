@@ -11,9 +11,11 @@ use App\Services\Analysis\Parser\Point;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 
@@ -78,6 +80,13 @@ class AnalyseActivityFile implements ShouldQueue
                 'json_points_file_id' => Upload::activityPoints($analysis->getPoints(), $this->activity->user)->id
             ]
         );
+    }
+
+    public function middleware()
+    {
+        return [
+            (new WithoutOverlapping(static::class))->releaseAfter(5)
+        ];
     }
 
 }
