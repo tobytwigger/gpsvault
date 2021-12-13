@@ -26,7 +26,6 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: 'cycle-store',
     wsHost: window.location.hostname,
-    wsPort: 6001,
     wssPort: 6001,
     disableStats: true,
     forceTLS: true
