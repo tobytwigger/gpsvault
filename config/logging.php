@@ -50,10 +50,12 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily', 'larabug'],
             'ignore_exceptions' => false,
         ],
-
+        'larabug' => [
+            'driver' => 'larabug'
+        ],
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
