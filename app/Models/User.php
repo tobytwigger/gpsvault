@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Integrations\Strava\StravaToken;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -59,9 +60,33 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    protected static function booted()
+    {
+        static::deleted(function(User $user) {
+            $user->deleteProfilePhoto();
+            $user->tokens->each->delete();
+            $user->stravaTokens()->delete();
+            $user->syncs()->delete();
+            $user->dropboxTokens()->delete();
+            $user->activities()->delete();
+            $user->files()->delete();
+            $user->connectionLogs()->delete();
+        });
+    }
+
+    public function connectionLogs()
+    {
+        return $this->hasMany(ConnectionLog::class);
+    }
+
     public function stravaTokens()
     {
         return $this->hasMany(StravaToken::class);
+    }
+
+    public function dropboxTokens()
+    {
+        return $this->hasMany(DropboxToken::class);
     }
 
     public function disk()
@@ -72,6 +97,16 @@ class User extends Authenticatable
     public function syncs()
     {
         return $this->hasMany(Sync::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
     }
 
 }

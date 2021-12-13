@@ -183,7 +183,7 @@ return [
 
                 // A max of 1 process created every three seconds
                 'balanceMaxShift' => 1,
-                'balanceCooldown' => 3,
+                'balanceCooldown' => 3
             ],
         ],
 

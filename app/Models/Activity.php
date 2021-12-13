@@ -35,6 +35,29 @@ class Activity extends Model
     ];
 
 
+    protected static function booted()
+    {
+        static::creating(function(Activity $activity) {
+            if($activity->user_id === null) {
+                $activity->user_id = Auth::id();
+            }
+        });
+        static::deleted(queueable(function(Activity $activity) {
+            $activity->activityFile()->delete();
+            $activity->files()->delete();
+            $activity->activityStats()->delete();
+            $activity->stravaComments()->delete();
+            $activity->stravaKudos()->delete();
+        }));
+
+        static::saved(function(Activity $activity) {
+            if ($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
+                $activity->refresh();
+                AnalyseActivityFile::dispatch($activity);
+            }
+        });
+    }
+
     public function stravaComments()
     {
         return $this->hasMany(StravaComment::class);
@@ -105,29 +128,6 @@ class Activity extends Model
     public function scopeWithoutFile(Builder $query)
     {
         return $query->whereDoesntHave('activityFile');
-    }
-
-    protected static function booted()
-    {
-        static::creating(function(Activity $activity) {
-            if($activity->user_id === null) {
-                $activity->user_id = Auth::id();
-            }
-        });
-        static::deleted(queueable(function(Activity $activity) {
-            $activity->activityFile()->delete();
-            $activity->files()->delete();
-            $activity->activityStats()->delete();
-            $activity->stravaComments()->delete();
-            $activity->stravaKudos()->delete();
-        }));
-
-        static::saved(function(Activity $activity) {
-            if ($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
-                $activity->refresh();
-                AnalyseActivityFile::dispatch($activity);
-            }
-        });
     }
 
     public function hasActivityFile(): bool

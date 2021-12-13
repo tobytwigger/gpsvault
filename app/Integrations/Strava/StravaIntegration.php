@@ -64,7 +64,7 @@ class StravaIntegration extends Integration
     {
         $timeUntilReady = null;
         foreach(StravaServiceProvider::stravaLimiters() as $limit) {
-            $key = 'strava' . $limit->key;
+            $key = md5('strava'.$limit->key);
             if(RateLimiter::tooManyAttempts($key, $limit->maxAttempts)) {
                 $newTimeUntilReady = RateLimiter::availableIn($key);
                 $timeUntilReady = $newTimeUntilReady === null && ($timeUntilReady === null || $timeUntilReady > $newTimeUntilReady)

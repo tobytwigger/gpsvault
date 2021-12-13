@@ -25,6 +25,7 @@
         "laravel/tinker": "^2.5",
         "mjaschen/phpgeo": "^4.0",
         "nelexa/zip": "^4.0",
+        "php-unit-conversion/php-unit-conversion": "^1.30",
         "psr/log": "^1.0.0",
         "pusher/pusher-php-server": "^5.0",
         "sibyx/phpgpx": "^1.1.3",

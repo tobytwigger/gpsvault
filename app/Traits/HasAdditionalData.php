@@ -14,6 +14,13 @@ trait HasAdditionalData
         $this->append('additional_data');
     }
 
+    public static function bootHasAdditionalData()
+    {
+        static::deleted(function($model) {
+            $model->additionalData()->delete();
+        });
+    }
+
     public function additionalData()
     {
         return $this->morphMany(AdditionalData::class, 'additional_data');

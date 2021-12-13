@@ -22,7 +22,7 @@ class TcxParser implements ParserContract
         $averages = [
             'avg_heart_rate' => [],
             'max_heart_rate' => null,
-            'cadence' => []
+            'avg_cadence' => []
         ];
         foreach($file->getLaps() as $lap) {
             foreach($lap->getTrackPoints() as $trackPoint) {

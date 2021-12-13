@@ -84,8 +84,8 @@ class StravaServiceProvider extends ServiceProvider
     public static function stravaLimiters(): array
     {
         return [
-            Limit::perMinutes(15, 2)->by('strava-15-mins'),
-//            Limit::perDay(900)->by('strava-daily')
+            Limit::perMinutes(15, 70)->by('strava-15-mins'),
+            Limit::perDay(900)->by('strava-daily')
         ];
     }
 

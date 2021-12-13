@@ -23,6 +23,8 @@ class AnalyseActivityFile implements ShouldQueue
 
     public Activity $activity;
 
+    public $tries = 3;
+
     /**
      * Create a new job instance.
      *
@@ -76,16 +78,6 @@ class AnalyseActivityFile implements ShouldQueue
                 'json_points_file_id' => Upload::activityPoints($analysis->getPoints(), $this->activity->user)->id
             ]
         );
-    }
-
-    /**
-     * Determine the time at which the job should timeout.
-     *
-     * @return \DateTime
-     */
-    public function retryUntil()
-    {
-        return now()->addDay();
     }
 
 }

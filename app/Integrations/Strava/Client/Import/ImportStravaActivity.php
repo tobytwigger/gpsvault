@@ -12,6 +12,7 @@ use App\Models\ActivityStats;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class ImportStravaActivity
@@ -22,6 +23,8 @@ class ImportStravaActivity
     public const CREATED = 'created';
 
     public const UPDATED = 'updated';
+
+    public const LINKED = 'linked';
 
     private ?string $action = null;
 
@@ -35,6 +38,9 @@ class ImportStravaActivity
         $this->user = $user;
     }
 
+    /**
+     * @throws ActivityDuplicate
+     */
     public static function importFromApi(array $data, User $user): static
     {
         return (new static($data, $user))->import();
@@ -42,7 +48,12 @@ class ImportStravaActivity
 
     public function import(): ImportStravaActivity
     {
-        $existingActivity = $this->getExistingActivity();
+        try {
+            $existingActivity = $this->getExistingActivity();
+        } catch (ActivityDuplicate $e) {
+            $this->linkActivity($e->activity);
+            return $this;
+        }
 
         $this->activity = $existingActivity === null
             ? $this->createActivity()
@@ -51,9 +62,28 @@ class ImportStravaActivity
         return $this;
     }
 
+    /**
+     * @throws ActivityDuplicate
+     */
     public function getExistingActivity(): ?Activity
     {
-        return Activity::whereAdditionalData('strava_id', $this->data['id'])->first();
+        $existing = array_key_exists('id', $this->data)
+            ? Activity::whereAdditionalData('strava_id', $this->data['id'])->first()
+            : null;
+        if($existing === null && ($this->data['start_date'] ?? false) && ($this->data['distance'] ?? false)) {
+            $existing = Activity::where('user_id', $this->user->id)
+                ->whereBetween('started_at', [Carbon::make($this->data['start_date'])->subSeconds(30), Carbon::make($this->data['start_date'])->addSeconds(30)])
+                ->where('distance', '<', (float) $this->data['distance'] + 2.0)
+                ->where('distance', '>', (float) $this->data['distance'] - 2.0)
+                ->first();
+            if($existing !== null) {
+                $existing->linked_to = array_unique(array_merge($existing->linked_to, ['strava']));
+                $existing->save();
+                $existing->setAdditionalData('strava_id', $this->data['id']);
+                throw new ActivityDuplicate($existing);
+            }
+        }
+        return $existing;
     }
 
     public function wasUpdated(): bool
@@ -66,6 +96,11 @@ class ImportStravaActivity
         return $this->action === static::CREATED;
     }
 
+    public function wasLinked(): bool
+    {
+        return $this->action === static::LINKED;
+    }
+
     private function getIntegerData(string $key)
     {
         return array_key_exists($key, $this->data) ? (int) $this->data[$key] : null;
@@ -74,10 +109,7 @@ class ImportStravaActivity
     private function createActivity(): Activity
     {
         $this->action = static::CREATED;
-        $duplicateActivity = $this->activityWithSameData();
-        if($duplicateActivity !== null) {
-            throw new ActivityDuplicate($duplicateActivity);
-        }
+
         $activity = ActivityImporter::for($this->user)
             ->withName(data_get($this->data, 'name'))
             ->linkTo('strava')
@@ -90,27 +122,7 @@ class ImportStravaActivity
             ->setAdditionalData('strava_achievement_count', $this->getIntegerData('achievement_count'))
             ->import();
 
-        ActivityStats::create([
-            'integration' => 'strava',
-            'activity_id' => $activity->id,
-            'distance' => $this->data['distance'] ?? null,
-            'started_at' => isset($this->data['start_date']) ? Carbon::make($this->data['start_date']) : null,
-            'duration' => $this->data['elapsed_time'] ?? null,
-            'average_speed' => $this->data['average_speed'] ?? null,
-            'min_altitude' => $this->data['elev_low'] ?? null,
-            'max_altitude' => $this->data['elev_high'] ?? null,
-            'elevation_gain' => $this->data['total_elevation_gain'] ?? null,
-            'moving_time' => $this->data['moving_time'] ?? null,
-            'max_speed' => $this->data['max_speed'] ?? null,
-            'average_cadence' => $this->data['average_cadence'] ?? null,
-            'average_temp' => $this->data['average_temp'] ?? null,
-            'average_watts' => $this->data['average_watts'] ?? null,
-            'kilojoules' => $this->data['kilojoules'] ?? null,
-            'start_latitude' => Arr::first($this->data['start_latlng'] ?? []),
-            'start_longitude' => Arr::last($this->data['start_latlng'] ?? []),
-            'end_latitude' => Arr::first($this->data['end_latlng'] ?? []),
-            'end_longitude' => Arr::last($this->data['end_latlng'] ?? []),
-        ]);
+        $stats = $this->fillStats(new ActivityStats(['activity_id' => $activity->id]))->save();
 
         StravaActivityUpdated::dispatch($activity);
 
@@ -156,6 +168,9 @@ class ImportStravaActivity
             $updated[] = $this->getIntegerData('kudos_count') > 0 ? 'details' : null;
         }
 
+        $this->fillStats($existingActivity->activityStatsFrom('strava')->first() ?? new ActivityStats(['activity_id' => $existingActivity->id]))
+            ->save();
+
         $existingActivity = $importer->save();
 
         $events = [
@@ -176,12 +191,65 @@ class ImportStravaActivity
         return $existingActivity;
     }
 
-    private function activityWithSameData(): ?Activity
+    private function linkActivity(Activity $activity)
     {
-        return null;
-//        $stats = ActivityStats::where([
-//
-//        ])->count() > 0;
+        $this->action = static::CREATED;
+
+        $importer = ActivityImporter::update($activity);
+        if($activity->name === 'New Ride') {
+            $importer->withName(data_get($this->data, 'name'));
+        }
+        $activity = $importer
+            ->linkTo('strava')
+            ->setAdditionalData('strava_id', $this->getIntegerData('id'))
+            ->setAdditionalData('strava_upload_id', $this->getIntegerData('upload_id_str'))
+            ->setAdditionalData('strava_photo_count', $this->getIntegerData('total_photo_count'))
+            ->setAdditionalData('strava_comment_count', $this->getIntegerData('comment_count'))
+            ->setAdditionalData('strava_kudos_count', $this->getIntegerData('kudos_count'))
+            ->setAdditionalData('strava_pr_count', $this->getIntegerData('pr_count'))
+            ->setAdditionalData('strava_achievement_count', $this->getIntegerData('achievement_count'))
+            ->import();
+
+        $stats = $this->fillStats($activity->activityStatsFrom('strava')->first() ?? new ActivityStats(['activity_id' => $activity->id]))->save();
+
+        StravaActivityUpdated::dispatch($activity);
+
+        if ($this->getIntegerData('comment_count') > 0) {
+            StravaActivityCommentsUpdated::dispatch($activity);
+        }
+        if ($this->getIntegerData('kudos_count') > 0) {
+            StravaActivityKudosUpdated::dispatch($activity);
+        }
+        if ($this->getIntegerData('total_photo_count') > 0) {
+            StravaActivityPhotosUpdated::dispatch($activity);
+        }
+
+        return $activity;
+    }
+
+    private function fillStats(ActivityStats $stats): ActivityStats
+    {
+        $stats->fill([
+            'integration' => 'strava',
+            'distance' => $this->data['distance'] ?? null,
+            'started_at' => isset($this->data['start_date']) ? Carbon::make($this->data['start_date']) : null,
+            'duration' => $this->data['elapsed_time'] ?? null,
+            'average_speed' => $this->data['average_speed'] ?? null,
+            'min_altitude' => $this->data['elev_low'] ?? null,
+            'max_altitude' => $this->data['elev_high'] ?? null,
+            'elevation_gain' => $this->data['total_elevation_gain'] ?? null,
+            'moving_time' => $this->data['moving_time'] ?? null,
+            'max_speed' => $this->data['max_speed'] ?? null,
+            'average_cadence' => $this->data['average_cadence'] ?? null,
+            'average_temp' => $this->data['average_temp'] ?? null,
+            'average_watts' => $this->data['average_watts'] ?? null,
+            'kilojoules' => $this->data['kilojoules'] ?? null,
+            'start_latitude' => Arr::first($this->data['start_latlng'] ?? []),
+            'start_longitude' => Arr::last($this->data['start_latlng'] ?? []),
+            'end_latitude' => Arr::first($this->data['end_latlng'] ?? []),
+            'end_longitude' => Arr::last($this->data['end_latlng'] ?? []),
+        ]);
+        return $stats;
     }
 
 }

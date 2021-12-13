@@ -30,9 +30,9 @@ class ResetRateLimitCommand extends Command
     public function handle()
     {
         if($this->argument('limiter') === 'minute') {
-            RateLimiter::clear('strava-15-mins');
+            RateLimiter::clear(md5('stravastrava-15-mins'));
         } elseif($this->argument('limiter') === 'day') {
-            RateLimiter::clear('strava-daily');
+            RateLimiter::clear(md5('stravastrava-daily'));
         } else {
             $this->error('Argument must be one of minute or day');
             return Command::FAILURE;

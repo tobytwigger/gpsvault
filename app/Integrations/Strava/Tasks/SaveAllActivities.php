@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava\Tasks;
 
+use App\Exceptions\ActivityDuplicate;
 use App\Integrations\Strava\Client\Import\ImportStravaActivity;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\User;
@@ -15,6 +16,8 @@ class SaveAllActivities extends Task
     private int $totalActivities = 0;
 
     private int $newActivites = 0;
+
+    private int $linkedActivities = 0;
 
     private int $updatedActivities = 0;
 
@@ -56,14 +59,16 @@ class SaveAllActivities extends Task
                     $this->newActivites++;
                 } elseif($importer->wasUpdated()) {
                     $this->updatedActivities++;
+                } elseif($importer->wasLinked()) {
+                    $this->linkedActivities++;
                 }
             }
-            $this->offerBail(sprintf('Cancelled after %u activities, added %u and updated %u.', $this->totalActivities, $this->newActivites, $this->updatedActivities));
+            $this->offerBail(sprintf('Cancelled after %u activities, added %u, updated %u and %u were linked.', $this->totalActivities, $this->newActivites, $this->updatedActivities, $this->linkedActivities));
 
             $page = $page + 1;
-        } while (count($activities) > 0);
+        } while (count($activities) > 0 && false);
 
-        $this->line(sprintf('Found %u activities, including %u new and %u updated.', $this->totalActivities, $this->newActivites, $this->updatedActivities));
+        $this->line(sprintf('Found %u activities, including %u new, %u updated and %u newly linked.', $this->totalActivities, $this->newActivites, $this->updatedActivities, $this->linkedActivities));
     }
 
 
