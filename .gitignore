@@ -15,3 +15,4 @@ yarn-error.log
 /.vscode
 resources/functions/parse-activities/venv
 public/dist
+public/vendor

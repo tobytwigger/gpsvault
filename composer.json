@@ -25,6 +25,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/telescope": "^4.6",
         "laravel/tinker": "^2.5",
+        "league/flysystem-aws-s3-v3": "^1.0",
         "mjaschen/phpgeo": "^4.0",
         "nelexa/zip": "^4.0",
         "php-unit-conversion/php-unit-conversion": "^1.30",
@@ -59,7 +60,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
-        "post-update-cmd": [
+        "post-install-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi"
         ],
         "post-root-package-install": [
