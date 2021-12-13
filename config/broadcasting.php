@@ -37,9 +37,9 @@ return [
             'secret' => env('PUSHER_APP_SECRET'),
             'options' => [
                 'encrypted' => true,
-                'host' => 'cycle-store.test',
+                'host' => env('PUSHER_HOST', 'cycle.linkeys.app'),
                 'port' => 6001,
-                'scheme' => 'http'
+                'scheme' => env('PUSHER_SCHEME', 'https')
             ],
         ],
 
