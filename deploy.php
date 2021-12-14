@@ -6,6 +6,7 @@ require 'contrib/php-fpm.php';
 
 // Config
 
+set('keep_releases', 3);
 set('repository', 'git@github.com:tobytwigger/cycle-store');
 
 add('shared_files', []);
