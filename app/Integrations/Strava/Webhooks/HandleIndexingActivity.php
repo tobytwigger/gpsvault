@@ -20,6 +20,6 @@ class HandleIndexingActivity extends HandleStravaWebhookJob
     public function handle()
     {
         $user = User::whereAdditionalData('strava_athlete_id', $this->payload->getOwnerId())->firstOrFail();
-        ImportStravaActivity::importFromApi($this->getActivityData($user), $user);
+        ImportStravaActivity::importFromApi($this->getActivityData($user), $user, true);
     }
 }
