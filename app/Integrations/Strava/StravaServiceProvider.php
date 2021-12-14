@@ -2,13 +2,15 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Strava\Commands\ResetRateLimitCommand;
+use App\Integrations\Strava\Commands\ResetRateLimit;
+use App\Integrations\Strava\Commands\SetupWebhooks;
 use App\Integrations\Strava\Events\NewStravaActivity;
 use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
 use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
 use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
 use App\Integrations\Strava\Http\Controllers\ImportController;
+use App\Integrations\Strava\Http\Controllers\IncomingWebhookController;
 use App\Integrations\Strava\Http\Controllers\StravaController;
 use App\Integrations\Integration;
 use App\Integrations\Strava\Import\Importer;
@@ -44,7 +46,8 @@ class StravaServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->commands([
-            ResetRateLimitCommand::class
+            ResetRateLimit::class,
+            SetupWebhooks::class
         ]);
         if(config('strava.enable_detail_fetching', true)) {
 
@@ -77,6 +80,7 @@ class StravaServiceProvider extends ServiceProvider
             Route::get('login', [StravaController::class, 'login'])->name('strava.login');
             Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
         });
+        Route::middleware(['web'])->get('/strava/webhook/incoming', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
 
         RateLimiter::for('strava', fn($job) => static::stravaLimiters());
     }

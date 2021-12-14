@@ -252,7 +252,7 @@ class StravaClient
     {
         $this->log->debug(sprintf('About to get in depth data stream for activity %d', $activityId));
 
-        $response = $this->request('GET', 'https://www.strava.com/api/v3/activities/' . $activityId . '/streams', [
+        $response = $this->request('GET', 'activities/' . $activityId . '/streams', [
             'query' => [
                 'keys' => 'time,altitude,heartrate,cadence,watts,temp,moving,latlng,distance,velocity_smooth',
                 'key_by_type' => false
@@ -267,6 +267,57 @@ class StravaClient
         $this->log->info(sprintf('Retrieved in depth data stream for activity %d', $activityId));
 
         return $content;
+    }
+
+    public function webhookExists(): bool
+    {
+        return false;
+        $this->log->debug('Checking if a webhook exists');
+
+        $response = $this->request('GET', 'push_subscriptions', [
+            'json' => [
+                'client_id' => config('strava.client_id'),
+                'client_secret' => config('strava.client_secret'),
+            ]
+        ], false);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        $exists = true;
+        if(count($content) === 0) {
+            $exists = false;
+        }
+
+        $this->log->info(sprintf('The webhook is%s set up.', $exists ? '' : ' not'));
+
+        return $exists;
+    }
+
+    public function createWebhook()
+    {
+        $this->log->debug('Sending webhook creation request');
+
+        $response = $this->request('POST', 'push_subscriptions', [
+            'json' => [
+                'client_id' => config('strava.client_id'),
+                'client_secret' => config('strava.client_secret'),
+                'callback_url' => route('strava.webhook.incoming'),
+                'verify_token' => config('strava.verify_token')
+            ]
+        ], false);
+
+        $content = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        dd($content);
+
+        $this->log->info(sprintf('Created webhook with an ID of %s', $content['id']));
+
     }
 
 }

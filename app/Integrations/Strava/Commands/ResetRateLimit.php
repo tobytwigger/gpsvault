@@ -5,7 +5,7 @@ namespace App\Integrations\Strava\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\RateLimiter;
 
-class ResetRateLimitCommand extends Command
+class ResetRateLimit extends Command
 {
 
     /**
