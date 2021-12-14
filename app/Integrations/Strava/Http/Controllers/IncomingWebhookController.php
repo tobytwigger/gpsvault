@@ -29,6 +29,8 @@ class IncomingWebhookController extends Controller
     {
         $request->validate(Payload::rules());
         $payload = Payload::createFromRequest($request);
+        \Log::info($payload->toArray());
+        
         if($payload->getObjectType() === 'activity') {
             if(in_array($payload->getAspectType(), ['update', 'create'])) {
                 HandleIndexingActivity::dispatch($payload);
