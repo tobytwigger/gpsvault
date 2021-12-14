@@ -14,7 +14,7 @@ class IncomingWebhookController extends Controller
             if(config('strava.verify_token') !== $request->input('hub.verify_token')) {
                 throw new \Exception('Strava verify token mismatch');
             }
-            return response($request->input('hub.challenge'), 200);
+            return response()->json(['hub.challenge' => $request->input('hub.challenge')]);
         }
         return response('Verification not complete', 200);
     }
