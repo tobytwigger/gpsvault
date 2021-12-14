@@ -9,6 +9,7 @@ use App\Integrations\Strava\Webhooks\Payload;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class IncomingWebhookController extends Controller
 {
@@ -27,8 +28,13 @@ class IncomingWebhookController extends Controller
 
     public function incoming(Request $request)
     {
+
         \Log::info($request->all());
-        $request->validate(Payload::rules());
+        try {
+            $request->validate(Payload::rules());
+        } catch (ValidationException $e) {
+            \Log::info(json_encode($e->errors()));
+        }
         $payload = Payload::createFromRequest($request);
         \Log::info($payload->toArray());
 
