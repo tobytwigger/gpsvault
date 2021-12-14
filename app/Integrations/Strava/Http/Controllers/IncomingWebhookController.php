@@ -24,6 +24,7 @@ class IncomingWebhookController extends Controller
 
     public function incoming(Request $request)
     {
+        \Log::info('INCOMING');
         $request->validate([
             'object_type' => 'required|string|in:activity,athlete',
             'object_id' => 'required|integer',
