@@ -52,5 +52,5 @@ after('deploy:failed', 'deploy:unlock');
 
 after('deploy:success', 'artisan:horizon:terminate');
 after('deploy:success', function() {
-    run('php artisan websockets:restart');
+    run('php {{release_path}}/artisan websockets:restart');
 });
