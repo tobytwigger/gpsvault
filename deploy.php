@@ -51,3 +51,6 @@ task('assets:upload', function() {
 after('deploy:failed', 'deploy:unlock');
 
 after('deploy:success', 'artisan:horizon:terminate');
+after('deploy:success', function() {
+    run('php artisan websockets:restart');
+});
