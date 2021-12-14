@@ -80,7 +80,11 @@ class StravaServiceProvider extends ServiceProvider
             Route::get('login', [StravaController::class, 'login'])->name('strava.login');
             Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
         });
-        Route::middleware(['webhooks'])->get('/strava/webhook/incoming', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
+        Route::middleware(['webhooks'])->prefix('strava/webhook/incoming')->group(function() {
+            Route::get('/', [IncomingWebhookController::class, 'verify'])->name('strava.webhook.verify');
+            Route::post('/', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
+        });
+
 
         RateLimiter::for('strava', fn($job) => static::stravaLimiters());
     }

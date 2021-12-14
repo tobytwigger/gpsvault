@@ -303,7 +303,7 @@ class StravaClient
             'json' => [
                 'client_id' => config('strava.client_id'),
                 'client_secret' => config('strava.client_secret'),
-                'callback_url' => route('strava.webhook.incoming'),
+                'callback_url' => route('strava.webhook.verify'),
                 'verify_token' => config('strava.verify_token')
             ]
         ], false);
