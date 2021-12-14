@@ -32,18 +32,24 @@ class ImportStravaActivity
 
     private ?Activity $activity = null;
 
-    public function __construct(array $data, User $user)
+    private bool $fullData;
+
+    public function __construct(array $data, User $user, bool $fullData = false)
     {
         $this->data = $data;
         $this->user = $user;
+        $this->fullData = $fullData;
     }
 
     /**
-     * @throws ActivityDuplicate
+     * @param array $data
+     * @param User $user
+     * @param bool $fullData Whether the data is all the activity data (true), or from a pagination result (false)
+     * @return ImportStravaActivity
      */
-    public static function importFromApi(array $data, User $user): static
+    public static function importFromApi(array $data, User $user, bool $fullData = false): static
     {
-        return (new static($data, $user))->import();
+        return (new static($data, $user, $fullData))->import();
     }
 
     public function import(): ImportStravaActivity

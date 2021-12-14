@@ -3,6 +3,9 @@
 namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Integrations\Strava\Webhooks\HandleDeletedActivity;
+use App\Integrations\Strava\Webhooks\HandleIndexingActivity;
+use App\Integrations\Strava\Webhooks\Payload;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -24,23 +27,14 @@ class IncomingWebhookController extends Controller
 
     public function incoming(Request $request)
     {
-        \Log::info('INCOMING');
-        $request->validate([
-            'object_type' => 'required|string|in:activity,athlete',
-            'object_id' => 'required|integer',
-            'aspect_type' => 'required|string|in:create,update,delete',
-            'updates' => 'required|array',
-            'owner_id' => ['required', 'integer', function ($attribute, $value, $fail) {
-                if (!User::whereAdditionalData('strava_athlete_id', $value)->exists()) {
-                    $fail('The '.$attribute.' has not requested webhooks.');
-                }
-            }],
-            'subscription_id' => 'required|integer',
-            'event_time' => 'required|date_format:U'
-        ]);
-        \Log::info(json_encode($request->all()));
-        if($request->input('object_type', 'activity')) {
-
+        $request->validate(Payload::rules());
+        $payload = Payload::createFromRequest($request);
+        if($payload->getObjectType() === 'activity') {
+            if(in_array($payload->getAspectType(), ['update', 'create'])) {
+                HandleIndexingActivity::dispatch($payload);
+            } elseif($payload->getAspectType() === 'delete') {
+                HandleDeletedActivity::dispatch($payload);
+            }
         }
         return response('', 200);
     }
