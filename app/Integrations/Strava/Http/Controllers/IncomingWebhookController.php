@@ -16,7 +16,7 @@ class IncomingWebhookController extends Controller
             }
             return response()->json(['hub.challenge' => $request->input('hub.challenge')]);
         }
-        return response('Verification not complete', 200);
+        return response('Verification not complete', 404);
     }
 
 }
