@@ -42,6 +42,8 @@ class SetupWebhooks extends Command
         if(!$client->webhookExists()) {
             $this->line('Webhook missing, creating.');
             $client->createWebhook();
+        } else {
+            $this->line('Webhook already exists');
         }
         return Command::SUCCESS;
     }

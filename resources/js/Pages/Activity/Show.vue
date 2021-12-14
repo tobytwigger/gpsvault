@@ -88,6 +88,10 @@
                                 v-if="isLoadingAnalysis"
                                 class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading analysis</span>
 
+                            <a :href="'https://www.strava.com/activities/' + stravaId"
+                                v-if="stravaId !== null"
+                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">View on strava</a>
+
 
                             <select-data-source v-model="selectedDataSource" :data-sources="dataSources">
 
@@ -263,6 +267,9 @@ export default defineComponent({
         },
         isLoadingAnalysis() {
             return this.activity.additional_data.strava_is_loading_stats ?? false;
+        },
+        stravaId() {
+            return this.activity.additional_data.strava_id ?? null;
         },
         hasStats() {
             return this.stats !== null;
