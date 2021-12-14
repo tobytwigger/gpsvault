@@ -137,6 +137,7 @@ class StravaClient
             (int)$credentials['expires_in'],
             (string)$credentials['refresh_token'],
             (string)$credentials['access_token'],
+            User::findOrFail($this->userId)->getAdditionalData('strava_athlete_id') ?? throw new \Exception('Athlete ID not set for user ' . $this->userId)
         );
 
         $token->updateFromStravaToken($stravaToken);

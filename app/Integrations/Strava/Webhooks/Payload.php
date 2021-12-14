@@ -169,7 +169,7 @@ class Payload
         $instance->setObjectType($request->input('object_type'));
         $instance->setObjectId($request->input('object_id'));
         $instance->setAspectType($request->input('aspect_type'));
-        $instance->setUpdates($request->input('updates'));
+        $instance->setUpdates($request->input('updates', []));
         $instance->setOwnerId($request->input('owner_id'));
         $instance->setSubscriptionId($request->input('subscription_id'));
         $instance->setEventTime(Carbon::createFromFormat('U', $request->input('event_time')));
@@ -182,7 +182,7 @@ class Payload
             'object_type' => 'required|string|in:activity,athlete',
             'object_id' => 'required|integer',
             'aspect_type' => 'required|string|in:create,update,delete',
-            'updates' => 'required|array',
+            'updates' => 'sometimes|array',
             'owner_id' => ['required', 'integer', function ($attribute, $value, $fail) {
                 if (!User::whereAdditionalData('strava_athlete_id', $value)->exists()) {
                     $fail('The '.$attribute.' has not requested webhooks.');
