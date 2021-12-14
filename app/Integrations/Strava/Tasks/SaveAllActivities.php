@@ -26,6 +26,11 @@ class SaveAllActivities extends Task
         $this->strava = $strava;
     }
 
+    public function isChecked(User $user): bool
+    {
+        return false;
+    }
+
     public function description(): string
     {
         return 'Save any new or updated Strava activities';

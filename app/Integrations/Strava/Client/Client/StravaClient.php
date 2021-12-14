@@ -271,7 +271,6 @@ class StravaClient
 
     public function webhookExists(): bool
     {
-        return false;
         $this->log->debug('Checking if a webhook exists');
 
         $response = $this->request('GET', 'push_subscriptions', [
