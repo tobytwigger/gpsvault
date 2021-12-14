@@ -172,7 +172,7 @@ class Payload
         $instance->setUpdates($request->input('updates'));
         $instance->setOwnerId($request->input('owner_id'));
         $instance->setSubscriptionId($request->input('subscription_id'));
-        $instance->setEventTime($request->input('event_time'));
+        $instance->setEventTime(Carbon::createFromFormat('U', $request->input('event_time')));
         return $instance;
     }
 
