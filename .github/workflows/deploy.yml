@@ -25,6 +25,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           dev: no
+          args: --ignore-platform-reqs
 
       - name: Deploy
         uses: deployphp/action@v1
