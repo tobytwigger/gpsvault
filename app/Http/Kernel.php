@@ -40,6 +40,12 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
+        'webhooks' => [
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Laravel\Jetstream\Http\Middleware\AuthenticateSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
+        ],
+
         'api' => [
              \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
