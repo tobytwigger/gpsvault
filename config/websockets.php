@@ -24,9 +24,9 @@ return [
     'apps' => [
         [
             'name' => env('APP_NAME'),
-            'id' => env('PUSHER_APP_ID'),
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
+            'id' => 'cycle-store-id',
+            'key' => 'cycle-store',
+            'secret' => 'cycle-store-secret',
             'capacity' => null,
             'enable_client_messages' => false,
             'enable_statistics' => true,

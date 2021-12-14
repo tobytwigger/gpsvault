@@ -32,9 +32,9 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'app_id' => env('PUSHER_APP_ID'),
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => 'cycle-store-id',
+            'key' => 'cycle-store',
+            'secret' => 'cycle-store-secret',
             'options' => [
                 'host' => env('PUSHER_DOMAIN', '127.0.0.1'),
                 'port' => 6001,
