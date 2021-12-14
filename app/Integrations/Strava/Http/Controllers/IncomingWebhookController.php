@@ -35,9 +35,13 @@ class IncomingWebhookController extends Controller
                 }
             }],
             'subscription_id' => 'required|integer',
-            'event_time' => 'required|timestamp'
+            'event_time' => 'required|date_format:U'
         ]);
         \Log::info(json_encode($request->all()));
+        if($request->input('object_type', 'activity')) {
+
+        }
+        return response('', 200);
     }
 
 }
