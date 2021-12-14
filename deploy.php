@@ -51,7 +51,11 @@ task('assets:upload', function() {
 
 after('deploy:failed', 'deploy:unlock');
 
-after('deploy:success', 'artisan:horizon:terminate');
+// Not currently working, as they don't change their release reference
+//after('deploy:success', 'artisan:horizon:terminate');
+//after('deploy:success', function() {
+//    run('php {{release_path}}/artisan websockets:restart');
+//});
 after('deploy:success', function() {
-    run('php {{release_path}}/artisan websockets:restart');
+    run('sudo supervisorctl restart all');
 });
