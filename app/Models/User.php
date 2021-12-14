@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Integrations\Strava\StravaToken;
+use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,6 +20,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use HasAdditionalData;
 
     /**
      * The attributes that are mass assignable.

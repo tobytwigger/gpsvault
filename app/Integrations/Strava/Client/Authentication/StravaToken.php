@@ -13,6 +13,8 @@ class StravaToken
 
     private string $accessToken;
 
+    private int $athleteId;
+
     /**
      * @return \DateTime
      */
@@ -77,12 +79,30 @@ class StravaToken
         $this->accessToken = $accessToken;
     }
 
+    /**
+     * @return int
+     */
+    public function getAthleteId(): int
+    {
+        return $this->athleteId;
+    }
+
+    /**
+     * @param int $athleteId
+     * @return StravaToken
+     */
+    public function setAthleteId(int $athleteId): StravaToken
+    {
+        $this->athleteId = $athleteId;
+        return $this;
+    }
 
     public static function create(
         \DateTime $expiresAt,
         int $expiresIn,
         string $refreshToken,
-        string $accessToken
+        string $accessToken,
+        int $athleteId
     ): static
     {
         $instance = new static();
@@ -90,7 +110,7 @@ class StravaToken
         $instance->setExpiresIn($expiresIn);
         $instance->setRefreshToken($refreshToken);
         $instance->setAccessToken($accessToken);
-
+        $instance->setAthleteId($athleteId);
         return $instance;
     }
 

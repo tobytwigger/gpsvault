@@ -100,6 +100,7 @@ class StravaClient
             (int)$credentials['expires_in'],
             (string)$credentials['refresh_token'],
             (string)$credentials['access_token'],
+            (int)$credentials['athlete']['id']
         );
 
     }
