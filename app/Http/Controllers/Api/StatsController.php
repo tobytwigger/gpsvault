@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\ActivityStats;
-use App\Services\Analysis\Parser\Point;
 use Location\Coordinate;
-use Location\Distance\Vincenty;
 use Location\Formatter\Polyline\GeoJSON;
 use Location\Polyline;
 

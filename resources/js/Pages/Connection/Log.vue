@@ -1,6 +1,6 @@
 <template>
 
-    <app-layout title="Logs">
+    <app-layout title="Strava Logs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Strava Logs

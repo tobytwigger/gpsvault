@@ -1,8 +1,8 @@
 <template>
-    <app-layout title="Dashboard">
+    <app-layout :title="activityName">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Viewing {{ activity.name ? activity.name : 'Unnamed Activity' }}
+                Viewing {{ activityName }}
             </h2>
         </template>
 
@@ -250,6 +250,9 @@ export default defineComponent({
         }
     },
     computed: {
+        activityName() {
+            return this.activity.name ?? 'Unnamed Activity';
+        },
         images() {
             return this.activity.files.filter(file => file.mimetype.startsWith('image'));
         },

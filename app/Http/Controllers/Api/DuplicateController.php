@@ -8,16 +8,19 @@ use App\Models\File;
 use App\Services\File\FileUploader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DuplicateController extends Controller
 {
 
     public function index(Request $request)
     {
+        $this->authorize('create', Activity::class);
+
         $request->validate([
             'hash' => 'required|string'
         ]);
-        $activity = Activity::whereHas('activityFile',
+        $activity = Activity::where('user_id', Auth::id())->whereHas('activityFile',
             fn(Builder $query) => $query->where('hash', $request->input('hash'))->where('type', FileUploader::ACTIVITY_FILE)
         )->first();
 

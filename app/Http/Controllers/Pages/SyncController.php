@@ -5,20 +5,16 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SyncRequest;
 use App\Integrations\Strava\Client\Strava;
-use App\Jobs\RunSyncTask;
 use App\Models\Sync;
-use App\Models\SyncTask;
 use App\Services\Sync\Task;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SyncController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Sync::class, 'sync');
+        $this->authorizeResource(Sync::class);
     }
 
     /**

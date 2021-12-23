@@ -73,6 +73,7 @@ class StravaServiceProvider extends ServiceProvider
         Importer::registerImporter(PhotoImporter::class);
         Task::registerTask(SaveAllActivities::class);
         Task::registerTask(StravaUpload::class);
+
         Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function() {
             Route::resource('import', ImportController::class)->only('show');
         });

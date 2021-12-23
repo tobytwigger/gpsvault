@@ -18,6 +18,8 @@ class FileController extends Controller
 
     public function preview(File $file)
     {
+        $this->authorize('view', $file);
+
         return response($file->getFileContents(), 200)->header('Content-Type', $file->mimetype);
     }
 

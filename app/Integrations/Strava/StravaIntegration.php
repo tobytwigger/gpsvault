@@ -50,6 +50,11 @@ class StravaIntegration extends Integration
         return route('strava.login');
     }
 
+    public function loginImageUrl(): ?string
+    {
+        return mix('dist/images/strava_logo.svg');
+    }
+
     public function disconnect(User $user): void
     {
         $user->stravaTokens()->withoutGlobalScope('enabled')->withoutGlobalScope('not-expired')->delete();

@@ -25,7 +25,8 @@ mix.js('resources/js/app.js', 'dist/js')
         require('tailwindcss'),
     ])
     .webpackConfig(require('./webpack.config'))
-    .sourceMaps();
+    .sourceMaps()
+    .copy('resources/images', 'public/dist/images');
 
 if (mix.inProduction()) {
     mix.version();

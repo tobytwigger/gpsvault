@@ -23,7 +23,8 @@ abstract class Integration implements Arrayable, Jsonable
             'connected' => $this->connected(Auth::user()),
             'login_url' => $this->loginUrl(),
             'vue_addon' => $this->vueAddOn(),
-            'vue_addon_props' => $this->vueAddOnProps()
+            'vue_addon_props' => $this->vueAddOnProps(),
+            'login_image_url' => $this->loginImageUrl()
         ];
     }
 
@@ -61,6 +62,11 @@ abstract class Integration implements Arrayable, Jsonable
     public function vueAddOnProps(): array
     {
         return [];
+    }
+
+    public function loginImageUrl(): ?string
+    {
+        return null;
     }
 
 }
