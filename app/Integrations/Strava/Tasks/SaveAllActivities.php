@@ -71,7 +71,7 @@ class SaveAllActivities extends Task
             $this->offerBail(sprintf('Cancelled after %u activities, added %u, updated %u and %u were linked.', $this->totalActivities, $this->newActivites, $this->updatedActivities, $this->linkedActivities));
 
             $page = $page + 1;
-        } while (count($activities) > 0);
+        } while (count($activities) > 0 && false);
 
         $this->line(sprintf('Found %u activities, including %u new, %u updated and %u newly linked.', $this->totalActivities, $this->newActivites, $this->updatedActivities, $this->linkedActivities));
     }
