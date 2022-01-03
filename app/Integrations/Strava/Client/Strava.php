@@ -50,12 +50,12 @@ class Strava
         return $this;
     }
 
-    public function client(): StravaClient
+    public function client(StravaClientModel $stravaClientModel): StravaClient
     {
         if(!$this->userId) {
             throw new \Exception('No user ID has been given to the Strava client');
         }
-        return $this->clientFactory->create($this->userId);
+        return $this->clientFactory->create($this->userId, $stravaClientModel);
     }
 
 }

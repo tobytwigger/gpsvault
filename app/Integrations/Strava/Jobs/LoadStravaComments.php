@@ -26,7 +26,7 @@ class LoadStravaComments extends StravaActivityBaseJob
         $strava->setUserId($this->activity->user_id);
         $page = 1;
         do {
-            $comments = $strava->client()->getComments($this->activity->getAdditionalData('strava_id'), $page);
+            $comments = $strava->client($this->activity->user->availableClient())->getComments($this->activity->getAdditionalData('strava_id'), $page);
             foreach($comments as $comment) {
                 $this->importComment($comment);
             }

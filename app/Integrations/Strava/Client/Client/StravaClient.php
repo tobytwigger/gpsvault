@@ -26,7 +26,7 @@ class StravaClient
 
     private StravaClientModel $stravaClientModel;
 
-    public function __construct(int $userId, ConnectionLog $log)
+    public function __construct(int $userId, ConnectionLog $log, StravaClientModel $stravaClientModel)
     {
         $this->userId = $userId;
         $this->user = User::findOrFail($this->userId);
@@ -34,7 +34,7 @@ class StravaClient
         $this->client = new Client([
             'base_uri' => 'https://www.strava.com/api/v3/',
         ]);
-        $this->stravaClientModel = $this->user->availableClient();
+        $this->stravaClientModel = $stravaClientModel;
     }
 
     protected function request(string $method, string $uri, array $options = [], bool $authenticated = true): \Psr\Http\Message\ResponseInterface
@@ -61,7 +61,7 @@ class StravaClient
         $this->log->debug(sprintf('Resolving the auth token from the database'));
 
         try {
-            $token = User::findOrFail($this->userId)->stravaTokens()->orderBy('created_at', 'desc')->firstOrFail();
+            $token = $this->user->stravaTokens()->where('client_id', $this->stravaClientModel->id)->orderBy('created_at', 'desc')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->log->error(sprintf('User not connected to Strava'));
             throw new UnauthorizedException('Your account is not connected to Strava');
@@ -142,7 +142,7 @@ class StravaClient
             (int)$credentials['expires_in'],
             (string)$credentials['refresh_token'],
             (string)$credentials['access_token'],
-            User::findOrFail($this->userId)->getAdditionalData('strava_athlete_id') ?? throw new \Exception('Athlete ID not set for user ' . $this->userId)
+            $this->user->getAdditionalData('strava_athlete_id') ?? throw new \Exception('Athlete ID not set for user ' . $this->userId)
         );
 
         $token->updateFromStravaToken($stravaToken);
@@ -310,7 +310,7 @@ class StravaClient
             'json' => [
                 'client_id' => $this->stravaClientModel->client_id,
                 'client_secret' => $this->stravaClientModel->client_secret,
-                'callback_url' => route('strava.webhook.verify'),
+                'callback_url' => route('strava.webhook.verify', ['client' => $this->stravaClientModel]),
                 'verify_token' => $this->stravaClientModel->webhook_verify_token
             ]
         ], false);
@@ -319,8 +319,6 @@ class StravaClient
             $response->getBody()->getContents(),
             true
         );
-
-        dd($content);
 
         $this->log->info(sprintf('Created webhook with an ID of %s', $content['id']));
 

@@ -51,7 +51,7 @@ class SaveAllActivities extends Task
 
     public function run()
     {
-        $client = $this->strava->setUserId($this->user()->id)->client();
+        $client = $this->strava->setUserId($this->user()->id)->client($this->user()->availableClient());
         $page = 1;
         do {
             $this->line(sprintf('Collecting activities %u to %u', ($page - 1) * 50, $page * 50));

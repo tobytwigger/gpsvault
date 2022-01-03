@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Commands;
 
 use App\Integrations\Strava\Client\Strava;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class SetupWebhooks extends Command
@@ -36,8 +37,9 @@ class SetupWebhooks extends Command
             return Command::SUCCESS;
         }
 
-        $strava->setUserId((int) $this->option('user'));
-        $client = $strava->client();
+        $user = User::findOrFail((int) $this->option('user'));
+        $strava->setUserId($user->id);
+        $client = $strava->client($user->availableClient());
 
         if(!$client->webhookExists()) {
             $this->line('Webhook missing, creating.');

@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Integrations\Strava\Models\StravaClient;
 use App\Integrations\Strava\Webhooks\HandleDeletedActivity;
 use App\Integrations\Strava\Webhooks\HandleIndexingActivity;
 use App\Integrations\Strava\Webhooks\Payload;
@@ -14,19 +15,18 @@ use Illuminate\Validation\ValidationException;
 class IncomingWebhookController extends Controller
 {
 
-    public function verify(Request $request)
+    public function verify(Request $request, StravaClient $client)
     {
         $request->validate([
             'hub_mode' => 'required|string|in:subscribe',
-            'hub_verify_token' => 'required|string|in:' . config('strava.verify_token'),
+            'hub_verify_token' => 'required|string|in:' . $client->webhook_verify_token,
             'hub_challenge' => 'required|string'
         ]);
 
         return response()->json(['hub.challenge' => $request->input('hub_challenge')]);
-
     }
 
-    public function incoming(Request $request)
+    public function incoming(Request $request, StravaClient $client)
     {
 
         \Log::info($request->all());

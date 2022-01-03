@@ -16,12 +16,13 @@ class ClientFactory
         $this->log = $connectionLog;
     }
 
-    public function create(int $userId): StravaClient
+    public function create(int $userId, \App\Integrations\Strava\Models\StravaClient $stravaClientModel): StravaClient
     {
         $this->log->setUserId($userId);
         return new StravaClient(
             $userId,
-            $this->log
+            $this->log,
+            $stravaClientModel
         );
     }
 }

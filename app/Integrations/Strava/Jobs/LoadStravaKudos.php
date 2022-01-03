@@ -26,7 +26,7 @@ class LoadStravaKudos extends StravaActivityBaseJob
         $strava->setUserId($this->activity->user_id);
         $page = 1;
         do {
-            $kudoses = $strava->client()->getKudos($this->activity->getAdditionalData('strava_id'), $page);
+            $kudoses = $strava->client($this->activity->user->availableClient())->getKudos($this->activity->getAdditionalData('strava_id'), $page);
             foreach($kudoses as $kudos) {
                 $this->importKudos($kudos);
             }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d10f45826dafea5d49a9afa99091212",
+    "content-hash": "6e453537231a6217ea83d5c44b97c2a8",
     "packages": [
         {
             "name": "adriangibbons/php-fit-file-analysis",
@@ -3096,6 +3096,76 @@
             "time": "2021-11-21T11:48:40+00:00"
         },
         {
+            "name": "linkeys/signed-url",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/linkeys-app/signed-url.git",
+                "reference": "d2a50b806dc7e1885f89568c3b61c405587bd5f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/linkeys-app/signed-url/zipball/d2a50b806dc7e1885f89568c3b61c405587bd5f1",
+                "reference": "d2a50b806dc7e1885f89568c3b61c405587bd5f1",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0",
+                "nesbot/carbon": "^2.17",
+                "php": "^7.2|^8.0",
+                "ramsey/uuid": "^4.0",
+                "spatie/url": "^1.3"
+            },
+            "require-dev": {
+                "laravel/legacy-factories": "^1.0",
+                "orchestra/testbench": "^6.0",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Linkeys\\UrlSigner\\Providers\\UrlSignerServiceProvider"
+                    ],
+                    "aliases": {
+                        "UrlSigner": "Linkeys\\UrlSigner\\Facade\\UrlSigner"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Linkeys\\UrlSigner\\": "src/",
+                    "Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Toby Twigger",
+                    "email": "tobytwigger@hotmail.co.uk"
+                }
+            ],
+            "description": "Enhanced signed URLs for Laravel, including attaching data, click limits and expiry.",
+            "keywords": [
+                "expire",
+                "laravel",
+                "link",
+                "linkeys",
+                "signed",
+                "single use",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/linkeys-app/signed-url/issues",
+                "source": "https://github.com/linkeys-app/signed-url/tree/v3.0.2"
+            },
+            "time": "2021-08-23T21:29:07+00:00"
+        },
+        {
             "name": "mjaschen/phpgeo",
             "version": "4.0.0",
             "source": {
@@ -5820,6 +5890,108 @@
                 "source": "https://github.com/Sibyx/phpGPX/tree/1.1.3"
             },
             "time": "2021-07-29T14:51:51+00:00"
+        },
+        {
+            "name": "spatie/macroable",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/macroable.git",
+                "reference": "7a99549fc001c925714b329220dea680c04bfa48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/macroable/zipball/7a99549fc001c925714b329220dea680c04bfa48",
+                "reference": "7a99549fc001c925714b329220dea680c04bfa48",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Macroable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A trait to dynamically add methods to a class",
+            "homepage": "https://github.com/spatie/macroable",
+            "keywords": [
+                "macroable",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/macroable/issues",
+                "source": "https://github.com/spatie/macroable/tree/1.0.1"
+            },
+            "time": "2020-11-03T10:15:05+00:00"
+        },
+        {
+            "name": "spatie/url",
+            "version": "1.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/url.git",
+                "reference": "3633de58e0709ea98cecceff61ee51caf1fde7e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/url/zipball/3633de58e0709ea98cecceff61ee51caf1fde7e3",
+                "reference": "3633de58e0709ea98cecceff61ee51caf1fde7e3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0",
+                "psr/http-message": "^1.0",
+                "spatie/macroable": "^1.0.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Url\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian De Deyne",
+                    "email": "sebastian@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Parse, build and manipulate URL's",
+            "homepage": "https://github.com/spatie/url",
+            "keywords": [
+                "spatie",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/url/issues",
+                "source": "https://github.com/spatie/url/tree/1.3.5"
+            },
+            "time": "2020-11-03T10:36:20+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -11152,9 +11324,9 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^8.0",
-        "ext-zlib": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-zlib": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }

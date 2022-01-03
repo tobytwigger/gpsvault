@@ -4,6 +4,7 @@ namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Models\StravaClient;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -14,7 +15,36 @@ class ClientController extends Controller
     public function index()
     {
         return Inertia::render('Strava/Client/Index', [
-            'clients' => Auth::user()->stravaClients()
+            'ownedClients' => Auth::user()->ownedClients()->get()->map(function(StravaClient $client) {
+                return array_merge($client->toArray(), [
+                    'client_id' => $client->client_id,
+                    'client_secret' => $client->client_secret,
+                ]);
+            }),
+            'sharedClients' => Auth::user()->sharedClients()->get()->map(function(StravaClient $client) {
+                return [
+                    'id' => $client->id,
+                    'user' => $client->owner->name,
+                    'enabled' => $client->enabled,
+                    'used_15_min_calls' => $client->used_15_min_calls,
+                    'used_daily_calls' => $client->used_daily_calls,
+                    'pending_calls' => $client->pending_calls,
+                    '15_mins_resets_at' => $client['15_mins_resets_at'],
+                    'daily_resets_at' => $client->daily_resets_at,
+                    'is_connected' => $client->is_connected,
+                ];
+            }),
+            'publicClients' => StravaClient::where('public', true)->enabled()->where('user_id', '!=', Auth::id())->get()->map(function(StravaClient $client) {
+                return [
+                    'id' => $client->id,
+                    'used_15_min_calls' => $client->used_15_min_calls,
+                    'used_daily_calls' => $client->used_daily_calls,
+                    'pending_calls' => $client->pending_calls,
+                    '15_mins_resets_at' => $client['15_mins_resets_at'],
+                    'daily_resets_at' => $client->daily_resets_at,
+                    'is_connected' => $client->is_connected,
+                ];
+            }),
         ]);
     }
 

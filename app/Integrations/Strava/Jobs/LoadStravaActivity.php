@@ -18,7 +18,7 @@ class LoadStravaActivity extends StravaActivityBaseJob
     public function handle(Strava $strava)
     {
         $strava->setUserId($this->activity->user_id);
-        $stravaActivity = $strava->client()->getActivity($this->activity->getAdditionalData('strava_id'));
+        $stravaActivity = $strava->client($this->activity->user->availableClient())->getActivity($this->activity->getAdditionalData('strava_id'));
 
         if(!$this->activity->description) {
             $this->activity->description = $stravaActivity['description'];

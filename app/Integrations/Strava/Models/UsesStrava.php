@@ -29,7 +29,18 @@ trait UsesStrava
 
     public function availableClient(): StravaClient
     {
+
         return StravaClient::forUser($this->id)->firstOrFail();
+    }
+
+    public function ownedClients()
+    {
+        return $this->hasMany(StravaClient::class);
+    }
+
+    public function sharedClients()
+    {
+        return $this->belongsToMany(StravaClient::class);
     }
 
 }

@@ -13,7 +13,7 @@ class HandleUpdatedActivity extends HandleStravaWebhookJob
     {
         $strava = app(Strava::class);
         $strava->setUserId($activity->user_id);
-        return $strava->client()->getActivity($activity->getAdditionalData($this->payload->getObjectId()));
+        return $strava->client($activity->user->availableClient())->getActivity($activity->getAdditionalData($this->payload->getObjectId()));
     }
 
     public function handle()

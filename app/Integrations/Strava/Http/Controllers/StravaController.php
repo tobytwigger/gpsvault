@@ -33,7 +33,7 @@ class StravaController extends \Illuminate\Routing\Controller
         ]);
         abort_if($request->input('state') !== $request->session()->get('state'), 403, 'The states do not match');
 
-        $token = $strava->client()->exchangeCode($request->input('code'), $client);
+        $token = $strava->client($client)->exchangeCode($request->input('code'), $client);
 
         $savedToken = StravaToken::makeFromStravaToken($token, $client->id);
 
@@ -41,7 +41,7 @@ class StravaController extends \Illuminate\Routing\Controller
 
         Auth::user()->setAdditionalData('strava_athlete_id', $token->getAthleteId());
 
-        return redirect()->route('sync.index');
+        return redirect()->route('strava.client.index');
     }
 
 }

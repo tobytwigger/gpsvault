@@ -14,7 +14,7 @@ class HandleIndexingActivity extends HandleStravaWebhookJob
     {
         $strava = app(Strava::class);
         $strava->setUserId($user->id);
-        return $strava->client()->getActivity($this->payload->getObjectId());
+        return $strava->client($user->availableClient())->getActivity($this->payload->getObjectId());
     }
 
     public function handle()
