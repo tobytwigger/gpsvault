@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava;
 
+use App\Integrations\Strava\Models\StravaClient;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,7 +43,12 @@ class StravaToken extends Model
         });
     }
 
-    public static function makeFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token)
+    public function stravaClient()
+    {
+        return $this->belongsTo(StravaClient::class);
+    }
+
+    public static function makeFromStravaToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token, int $clientId)
     {
         $instance = new StravaToken();
 
@@ -51,6 +57,7 @@ class StravaToken extends Model
         $instance->expires_at = $token->getExpiresAt();
         $instance->user_id = Auth::id();
         $instance->disabled = false;
+        $instance->strava_client_id = $clientId;
 
         return $instance;
     }
@@ -66,6 +73,11 @@ class StravaToken extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function scopeForUser(Builder $query, int $userId)
+    {
+        $query->where('user_id', $userId);
     }
 
     public function expired()

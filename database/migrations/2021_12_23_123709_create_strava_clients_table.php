@@ -18,6 +18,7 @@ class CreateStravaClientsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('client_id');
             $table->text('client_secret');
+            $table->text('webhook_verify_token');
             $table->unsignedBigInteger('used_15_min_calls')->default(0);
             $table->unsignedBigInteger('used_daily_calls')->default(0);
             $table->dateTime('15_mins_resets_at')->nullable();

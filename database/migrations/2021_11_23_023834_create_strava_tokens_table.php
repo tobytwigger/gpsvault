@@ -18,6 +18,7 @@ class CreateStravaTokensTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->text('access_token');
             $table->text('refresh_token');
+            $table->unsignedBigInteger('strava_client_id');
             $table->dateTime('expires_at');
             $table->boolean('disabled')->default(false);
             $table->timestamps();

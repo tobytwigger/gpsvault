@@ -6,6 +6,7 @@ use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\Models\StravaActivity;
 use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
 use App\Integrations\Strava\Client\Log\ConnectionLog;
+use App\Integrations\Strava\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -17,18 +18,23 @@ class StravaClient
 
     protected ?Client $client = null;
 
-    public function __construct(private int $userId, private ConnectionLog $log)
-    {
-    }
+    protected User $user;
 
-    protected function client(): Client
+    protected int $userId;
+
+    protected ConnectionLog $log;
+
+    private StravaClientModel $stravaClientModel;
+
+    public function __construct(int $userId, ConnectionLog $log)
     {
-        if($this->client === null) {
-            $this->client = new Client([
-                'base_uri' => 'https://www.strava.com/api/v3/',
-            ]);
-        }
-        return $this->client;
+        $this->userId = $userId;
+        $this->user = User::findOrFail($this->userId);
+        $this->log = $log;
+        $this->client = new Client([
+            'base_uri' => 'https://www.strava.com/api/v3/',
+        ]);
+        $this->stravaClientModel = $this->user->availableClient();
     }
 
     protected function request(string $method, string $uri, array $options = [], bool $authenticated = true): \Psr\Http\Message\ResponseInterface
@@ -36,7 +42,7 @@ class StravaClient
         $this->log->debug(sprintf('Making a %s request to %s', $method, $uri));
 
         try {
-            return $this->client()->request($method, $uri, array_merge([
+            return $this->client->request($method, $uri, array_merge([
                 'headers' => array_merge(
                     $authenticated ? ['Authorization' => sprintf('Bearer %s', $this->getAuthToken())] : [],
                     $options['headers'] ?? [])
@@ -68,15 +74,15 @@ class StravaClient
         return $token->access_token;
     }
 
-    public function exchangeCode(string $code): StravaToken
+    public function exchangeCode(string $code, StravaClientModel $stravaClient): StravaToken
     {
         $this->log->debug('About to exchange code for token');
 
         try {
             $response = $this->request('post', 'https://www.strava.com/oauth/token', [
                 'query' => [
-                    'client_id' => config('strava.client_id'),
-                    'client_secret' => config('strava.client_secret'),
+                    'client_id' => $stravaClient->client_id,
+                    'client_secret' => $stravaClient->client_secret,
                     'code' => $code,
                     'grant_type' => 'authorization_code'
                 ]
@@ -102,7 +108,6 @@ class StravaClient
             (string)$credentials['access_token'],
             (int)$credentials['athlete']['id']
         );
-
     }
 
     public function refreshToken(\App\Integrations\Strava\StravaToken $token): \App\Integrations\Strava\StravaToken
@@ -113,8 +118,8 @@ class StravaClient
 
             $response = $this->request('post', 'https://www.strava.com/oauth/token', [
                 'query' => [
-                    'client_id' => config('strava.client_id'),
-                    'client_secret' => config('strava.client_secret'),
+                    'client_id' => $this->stravaClientModel->client_id,
+                    'client_secret' => $this->stravaClientModel->client_secret,
                     'refresh_token' => $token->refresh_token,
                     'grant_type' => 'refresh_token'
                 ]
@@ -277,8 +282,8 @@ class StravaClient
 
         $response = $this->request('GET', 'push_subscriptions', [
             'json' => [
-                'client_id' => config('strava.client_id'),
-                'client_secret' => config('strava.client_secret'),
+                'client_id' => $this->stravaClientModel->client_id,
+                'client_secret' => $this->stravaClientModel->client_secret,
             ]
         ], false);
 
@@ -303,10 +308,10 @@ class StravaClient
 
         $response = $this->request('POST', 'push_subscriptions', [
             'json' => [
-                'client_id' => config('strava.client_id'),
-                'client_secret' => config('strava.client_secret'),
+                'client_id' => $this->stravaClientModel->client_id,
+                'client_secret' => $this->stravaClientModel->client_secret,
                 'callback_url' => route('strava.webhook.verify'),
-                'verify_token' => config('strava.verify_token')
+                'verify_token' => $this->stravaClientModel->webhook_verify_token
             ]
         ], false);
 

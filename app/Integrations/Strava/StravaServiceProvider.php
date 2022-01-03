@@ -9,6 +9,7 @@ use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
 use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
 use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
+use App\Integrations\Strava\Http\Controllers\ClientController;
 use App\Integrations\Strava\Http\Controllers\ImportController;
 use App\Integrations\Strava\Http\Controllers\IncomingWebhookController;
 use App\Integrations\Strava\Http\Controllers\StravaController;
@@ -78,14 +79,14 @@ class StravaServiceProvider extends ServiceProvider
             Route::resource('import', ImportController::class)->only('show');
         });
         Route::middleware(['web', 'auth:sanctum', 'verified'])->prefix('strava')->group(function() {
-            Route::get('login', [StravaController::class, 'login'])->name('strava.login');
-            Route::get('callback', [StravaController::class, 'callback'])->name('strava.callback');
+            Route::get('client/{client}/login', [StravaController::class, 'login'])->name('strava.login');
+            Route::get('client/{client}/callback', [StravaController::class, 'callback'])->name('strava.callback');
+            Route::resource('client', ClientController::class, ['as' => 'strava'])->only('index', 'store', 'destroy');
         });
         Route::middleware(['webhooks'])->prefix('strava/webhook/incoming')->group(function() {
             Route::get('/', [IncomingWebhookController::class, 'verify'])->name('strava.webhook.verify');
             Route::post('/', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
         });
-
 
         RateLimiter::for('strava', fn($job) => static::stravaLimiters());
     }
