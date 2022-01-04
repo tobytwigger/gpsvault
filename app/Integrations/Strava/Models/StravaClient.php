@@ -3,8 +3,10 @@
 namespace App\Integrations\Strava\Models;
 
 use App\Integrations\Strava\StravaToken;
+use App\Models\ConnectionLog;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -94,6 +96,11 @@ class StravaClient extends Model
     public static function scopeEnabled(Builder $query)
     {
         $query->where('enabled', true);
+    }
+
+    public function connectionLogs(): Collection
+    {
+        return ConnectionLog::whereAdditionalData('strava_client_id', $this->id)->get();
     }
 
     public function redirectUrl(): string

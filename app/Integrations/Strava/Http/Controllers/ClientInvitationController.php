@@ -13,7 +13,8 @@ class ClientInvitationController extends Controller
 
     public function invite(Request $request, StravaClient $client)
     {
-        // Create the link
+        abort_if($client->user_id !== Auth::id(), 403, 'You can only invite users to a client you own.');
+
         $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
             route('strava.client.accept', ['client' => $client->id]),
             ['client_id' => $client->id],

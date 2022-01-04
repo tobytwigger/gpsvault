@@ -58,6 +58,8 @@ class ClientController extends Controller
 
     public function destroy(StravaClient $client)
     {
+        abort_if($client->user_id !== Auth::id(), 403, 'You can only delete a client you own.');
+
         $client->delete();
 
         return redirect()->route('strava.client.index');

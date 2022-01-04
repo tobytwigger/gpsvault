@@ -17,7 +17,7 @@
         "deployer/deployer": "^7.0",
         "duckfusion/waddle": "^1.1",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^6.0.1",
+        "guzzlehttp/guzzle": "^7.0",
         "inertiajs/inertia-laravel": "^0.4.3",
         "kunalvarma05/dropbox-php-sdk": "^0.2.2",
         "larabug/larabug": "^2.4",

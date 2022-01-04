@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Integrations\Integration;
+use App\Integrations\Strava\Models\StravaClient;
+use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ConnectionLog extends Model
 {
-    use HasFactory;
+    use HasFactory, HasAdditionalData;
 
     /**
      * Represents a successful connection
