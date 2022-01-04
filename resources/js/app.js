@@ -7,6 +7,7 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 import VueEasyLightbox from 'vue-easy-lightbox'
 import 'leaflet/dist/leaflet.css';
 import Units from './Plugins/units';
+import moment from 'moment';
 
 require('./bootstrap');
 
@@ -20,7 +21,26 @@ createInertiaApp({
             .use(Units)
             .component('task-strava-upload', StravaFixSetup)
             .component('strava-integration-addon', StravaIntegrationAddon)
-            .mixin({ methods: { route } })
+            .mixin({
+                methods: { route },
+                computed: {
+                    next15Mins() {
+                        let now = moment();
+                        return now
+                            .add(15 - (now.minute() % 15), "minutes")
+                            .seconds(0)
+                            .format("HH:mm:ss");
+                    },
+                    nextDay() {
+                        return moment()
+                            .add(1, 'days')
+                            .seconds(0)
+                            .minutes(0)
+                            .hours(0)
+                            .format('DD/MM/YYYY');
+                    }
+                },
+            })
             .mount(el);
     },
 });

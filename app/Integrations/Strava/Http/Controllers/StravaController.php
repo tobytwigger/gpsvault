@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava\Http\Controllers;
 
+use App\Integrations\Strava\Models\StravaClient;
 use App\Integrations\Strava\StravaToken;
 use App\Integrations\Strava\Client\Strava;
 use Illuminate\Http\RedirectResponse;
@@ -12,29 +13,35 @@ use Illuminate\Support\Str;
 class StravaController extends \Illuminate\Routing\Controller
 {
 
-    public function login(Request $request, Strava $strava)
+    public function login(Request $request, StravaClient $client, Strava $strava)
     {
         $request->session()->put('state', $state = Str::random(40));
 
         return new RedirectResponse(
             $strava->redirectUrl(
-                route('strava.callback'),
-                $state
+                $state,
+                $client
             )
         );
     }
 
-    public function callback(Request $request, Strava $strava)
+    public function callback(Request $request, StravaClient $client, Strava $strava)
     {
-        $token = $strava->client()->exchangeCode($request->input('code'));
+        $request->validate([
+            'code' => 'required|string',
+            'state' => 'required|string'
+        ]);
+        abort_if($request->input('state') !== $request->session()->get('state'), 403, 'The states do not match');
 
-        $savedToken = StravaToken::makeFromStravaToken($token);
+        $token = $strava->client($client)->exchangeCode($request->input('code'), $client);
+
+        $savedToken = StravaToken::makeFromStravaToken($token, $client->id);
 
         $savedToken->save();
 
         Auth::user()->setAdditionalData('strava_athlete_id', $token->getAthleteId());
 
-        return redirect()->route('sync.index');
+        return redirect()->route('strava.client.index');
     }
 
 }

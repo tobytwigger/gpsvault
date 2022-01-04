@@ -4,6 +4,7 @@ namespace App\Integrations\Strava\Client;
 
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\StravaClient;
+use App\Integrations\Strava\Models\StravaClient as StravaClientModel;
 use App\Integrations\Strava\Client\Log\ConnectionLog;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -27,13 +28,13 @@ class Strava
     }
 
     public function redirectUrl(
-        string $redirectUrl,
-        string $state
+        string $state,
+        StravaClientModel $client
     ): string
     {
         $params = [
-            'client_id' => config('strava.client_id'),
-            'redirect_uri' => $redirectUrl,
+            'client_id' => $client->client_id,
+            'redirect_uri' => $client->redirectUrl(),
             'response_type' => 'code',
             'approval_prompt' => 'auto',
             'scope' => 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write',
@@ -49,12 +50,12 @@ class Strava
         return $this;
     }
 
-    public function client(): StravaClient
+    public function client(StravaClientModel $stravaClientModel): StravaClient
     {
         if(!$this->userId) {
             throw new \Exception('No user ID has been given to the Strava client');
         }
-        return $this->clientFactory->create($this->userId);
+        return $this->clientFactory->create($this->userId, $stravaClientModel);
     }
 
 }

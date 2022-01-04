@@ -38,8 +38,8 @@
             </div>
             <a :href="route('integration.login', integration.id)" v-else>
                 <div v-if="integration.login_image_url !== null">
-                    <button :style="'background-image: url(\'' + integration.login_image_url + '\');'">
-
+                    <button type="button">
+                        <img :src="integration.login_image_url" :alt="'Connect to ' + integration.name" />
                     </button>
                 </div>
                 <div v-else>

@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava\Commands;
 
+use App\Integrations\Strava\Models\StravaClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -30,9 +31,9 @@ class ResetRateLimit extends Command
     public function handle()
     {
         if($this->argument('limiter') === 'minute') {
-            RateLimiter::clear(md5('stravastrava-15-mins'));
+            StravaClient::update(['used_15_min_calls' => 0]);
         } elseif($this->argument('limiter') === 'day') {
-            RateLimiter::clear(md5('stravastrava-daily'));
+            StravaClient::update(['used_daily_calls' => 0]);
         } else {
             $this->error('Argument must be one of minute or day');
             return Command::FAILURE;

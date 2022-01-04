@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Integrations\Dropbox\Models\DropboxToken;
-use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Models\UsesStrava;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,12 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
-    use HasAdditionalData;
+    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasAdditionalData, UsesStrava;
 
     /**
      * The attributes that are mass assignable.
@@ -68,7 +63,6 @@ class User extends Authenticatable
         static::deleting(function(User $user) {
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();
-            $user->stravaTokens()->delete();
             $user->syncs()->delete();
             $user->dropboxTokens()->delete();
             $user->activities()->delete();
@@ -80,11 +74,6 @@ class User extends Authenticatable
     public function connectionLogs()
     {
         return $this->hasMany(ConnectionLog::class);
-    }
-
-    public function stravaTokens()
-    {
-        return $this->hasMany(StravaToken::class);
     }
 
     public function dropboxTokens()

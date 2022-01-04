@@ -12,9 +12,17 @@ class ConnectionLog
     private ?string $integration;
     private ?int $userId;
 
+    private array $afterModelSaved = [];
+
     public function __construct(?string $integration = null)
     {
         $this->integration = $integration;
+    }
+
+    public function afterModelSaved(\Closure $callback): static
+    {
+        $this->afterModelSaved[] = $callback;
+        return $this;
     }
 
     public function log(string $type, string $message, int $userId = null)
@@ -22,12 +30,17 @@ class ConnectionLog
         if(!$this->integration) {
             throw new \Exception('The integration name has not been set for the connection log');
         }
-        ConnectionLogModel::create([
+        $model = ConnectionLogModel::create([
             'type' => $type,
             'log' => $message,
             'user_id' => $userId ?? $this->getUserId(),
             'integration' => $this->integration
         ]);
+        if(count($this->afterModelSaved) > 0) {
+            foreach($this->afterModelSaved as $callback) {
+                call_user_func($callback, $model);
+            }
+        }
     }
 
     public function success(string $log, int $userId = null)
@@ -87,6 +100,5 @@ class ConnectionLog
         $this->userId = $userId;
         return $this;
     }
-
 
 }
