@@ -183,7 +183,7 @@ class StravaClient
         $response = $this->request('GET', 'athlete/activities', [
             'query' =>  [
                 'page' => $page,
-                'per_page' => 10
+                'per_page' => 50
             ]
         ]);
 
