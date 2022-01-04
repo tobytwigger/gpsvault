@@ -35,8 +35,6 @@ class CleanTempStorage extends Command
 
         $this->line(sprintf('Removing %u files from temp', $files->count()));
 
-        Log::debug(sprintf('Removing %u files from temp', $files->count()));
-
         Storage::disk('temp')->delete($files->all());
 
         return Command::SUCCESS;
