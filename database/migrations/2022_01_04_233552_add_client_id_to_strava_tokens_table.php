@@ -13,7 +13,7 @@ class AddClientIdToStravaTokensTable extends Migration
      */
     public function up()
     {
-        \App\Integrations\Strava\StravaToken::delete();
+        \App\Integrations\Strava\StravaToken::getQuery()->delete();
         Schema::table('strava_tokens', function (Blueprint $table) {
             $table->unsignedBigInteger('strava_client_id');
         });
