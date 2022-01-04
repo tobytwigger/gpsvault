@@ -20,10 +20,8 @@
                 <td class="px-4 py-3 border">
                     <div class="flex items-center text-sm">
                         <div>
-                            <p class="text-black">{{ client.used_15_min_calls }}/100 until
-                                {{ toDateTime(client['15_mins_resets_at']) }}</p>
-                            <p class="text-black">{{ client.used_daily_calls }}/1000 until
-                                {{ toDateTime(client['daily_resets_at']) }}</p>
+                            <p class="text-black">{{ client.used_15_min_calls }}/100 used until {{ next15Mins }}</p>
+                            <p class="text-black">{{ client.used_daily_calls }}/1000 used until {{ nextDay }}</p>
                         </div>
                     </div>
                 </td>

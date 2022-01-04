@@ -4,15 +4,7 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Models\StravaComment;
-use App\Models\Activity;
 use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\RateLimited;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
-use Illuminate\Queue\SerializesModels;
 
 class LoadStravaComments extends StravaActivityBaseJob
 {
@@ -26,7 +18,7 @@ class LoadStravaComments extends StravaActivityBaseJob
         $strava->setUserId($this->activity->user_id);
         $page = 1;
         do {
-            $comments = $strava->client($this->activity->user->availableClient())->getComments($this->activity->getAdditionalData('strava_id'), $page);
+            $comments = $strava->client($this->stravaClientModel)->getComments($this->activity->getAdditionalData('strava_id'), $page);
             foreach($comments as $comment) {
                 $this->importComment($comment);
             }

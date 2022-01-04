@@ -25,8 +25,6 @@ class CreateStravaClientsTable extends Migration
             $table->unsignedBigInteger('used_15_min_calls')->default(0);
             $table->unsignedBigInteger('used_daily_calls')->default(0);
             $table->unsignedBigInteger('pending_calls')->default(0);
-            $table->dateTime('15_mins_resets_at')->nullable();
-            $table->dateTime('daily_resets_at')->nullable();
             $table->timestamps();
         });
     }

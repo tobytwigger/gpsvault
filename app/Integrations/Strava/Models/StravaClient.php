@@ -37,11 +37,9 @@ class StravaClient extends Model
         'client_secret' => 'encrypted',
         'webhook_verify_token' => 'encrypted',
         'used_15_min_calls' => 'integer',
-        'used_daily_min_calls' => 'integer',
+        'used_daily_calls' => 'integer',
         'pending_calls' => 'integer',
         'invitation_link_expires_at' => 'datetime',
-        '15_mins_resets_at' => 'datetime',
-        'daily_resets_at' => 'datetime',
         'enabled' => 'boolean'
     ];
 
@@ -107,9 +105,9 @@ class StravaClient extends Model
     {
         $query->where('user_id', $userId)
             ->orWhereHas('sharedUsers', function(Builder $query) use ($userId) {
-                $query->where('id', $userId);
-            });
-            // or where system
+                $query->where('users.id', $userId);
+            })
+            ->orWhere('public', true);
     }
 
     public function sharedUsers()
@@ -122,4 +120,24 @@ class StravaClient extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * Check if the strava client has space to make a new request
+     * @return bool
+     */
+    public function hasSpaces(): bool
+    {
+        return $this->used_15_min_calls < 100 && $this->used_daily_calls < 1000;
+    }
+
+    public static function scopeWithSpaces(Builder $query)
+    {
+        $query->where('used_15_min_calls', '<', 100)
+            ->where('used_daily_calls', '<', 1000);
+    }
+
+    public function reserveSpace()
+    {
+        $this->pending_calls = $this->pending_calls + 1;
+        $this->save();
+    }
 }

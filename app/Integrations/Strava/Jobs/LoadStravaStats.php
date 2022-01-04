@@ -27,7 +27,7 @@ class LoadStravaStats extends StravaActivityBaseJob
             throw new \Exception('The activity must have a start date to retrieve stats from Strava');
         }
         $strava->setUserId($this->activity->user_id);
-        $activityStreams = $strava->client($this->activity->user->availableClient())->getActivityStream($this->activity->getAdditionalData('strava_id'));
+        $activityStreams = $strava->client($this->stravaClientModel)->getActivityStream($this->activity->getAdditionalData('strava_id'));
         $timeData = $activityStreams['time'] ?? throw new \Exception('No time stream was returned from Strava');
 
         $points = [];

@@ -23,7 +23,7 @@ class LoadStravaPhotos extends StravaActivityBaseJob
     public function handle(Strava $strava)
     {
         $strava->setUserId($this->activity->user_id);
-        $photos = $strava->client($this->activity->user->availableClient())->getPhotos($this->activity->getAdditionalData('strava_id'));
+        $photos = $strava->client($this->stravaClientModel)->getPhotos($this->activity->getAdditionalData('strava_id'));
         $existingPhotoIds = collect(Arr::wrap($this->activity->getAdditionalData('strava_photo_ids')));
         foreach($photos as $photo) {
             if(isset($photo['unique_id']) && !$existingPhotoIds->contains($photo['unique_id'])) {

@@ -11,6 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\UnauthorizedException;
 
 class StravaClient
@@ -42,16 +43,19 @@ class StravaClient
         $this->log->debug(sprintf('Making a %s request to %s', $method, $uri));
 
         try {
-            return $this->client->request($method, $uri, array_merge([
+            $response = $this->client->request($method, $uri, array_merge([
                 'headers' => array_merge(
                     $authenticated ? ['Authorization' => sprintf('Bearer %s', $this->getAuthToken())] : [],
                     $options['headers'] ?? [])
             ], $options));
+            $this->updateRateLimits($response);
+            return $response;
         } catch (\Exception $e) {
-            $this->log->error(sprintf('Request failed with code %d: %s', $e->getCode(), $e->getMessage()));
             if($e->getCode() === 429) {
+                $this->log->warning('Rate limit reached');
                 throw new StravaRateLimitedException();
             }
+            $this->log->error(sprintf('Request failed with code %d: %s', $e->getCode(), $e->getMessage()));
             throw $e;
         }
     }
@@ -61,7 +65,7 @@ class StravaClient
         $this->log->debug(sprintf('Resolving the auth token from the database'));
 
         try {
-            $token = $this->user->stravaTokens()->where('client_id', $this->stravaClientModel->id)->orderBy('created_at', 'desc')->firstOrFail();
+            $token = $this->user->stravaTokens()->where('strava_client_id', $this->stravaClientModel->id)->orderBy('created_at', 'desc')->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->log->error(sprintf('User not connected to Strava'));
             throw new UnauthorizedException('Your account is not connected to Strava');
@@ -322,6 +326,20 @@ class StravaClient
 
         $this->log->info(sprintf('Created webhook with an ID of %s', $content['id']));
 
+    }
+
+    private function updateRateLimits(\Psr\Http\Message\ResponseInterface $response)
+    {
+        // Get the rate limit usage from the header
+        if($response->hasHeader('X-RateLimit-Usage')) {
+            $usage = explode(',', Arr::first($response->getHeader('X-RateLimit-Usage')));
+            if(count($usage) !== 2) {
+                throw new \Exception(sprintf('The Strava API must return rate limit usage, %s given.', Arr::first($response->getHeader('X-RateLimit-Limit'))));
+            }
+            $this->stravaClientModel->used_15_min_calls = $usage[0];
+            $this->stravaClientModel->used_daily_calls = $usage[1];
+            $this->stravaClientModel->save();
+        }
     }
 
 }

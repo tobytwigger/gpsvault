@@ -29,8 +29,6 @@ class ClientController extends Controller
                     'used_15_min_calls' => $client->used_15_min_calls,
                     'used_daily_calls' => $client->used_daily_calls,
                     'pending_calls' => $client->pending_calls,
-                    '15_mins_resets_at' => $client['15_mins_resets_at'],
-                    'daily_resets_at' => $client->daily_resets_at,
                     'is_connected' => $client->is_connected,
                 ];
             }),
@@ -40,8 +38,6 @@ class ClientController extends Controller
                     'used_15_min_calls' => $client->used_15_min_calls,
                     'used_daily_calls' => $client->used_daily_calls,
                     'pending_calls' => $client->pending_calls,
-                    '15_mins_resets_at' => $client['15_mins_resets_at'],
-                    'daily_resets_at' => $client->daily_resets_at,
                     'is_connected' => $client->is_connected,
                 ];
             }),

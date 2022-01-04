@@ -2,7 +2,11 @@
 
 namespace App\Integrations\Strava\Jobs;
 
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
+use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\StravaRateLimited;
 use App\Models\Activity;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,6 +23,8 @@ class StravaActivityBaseJob implements ShouldQueue
 
     public $backoff = [5, 10, 60];
 
+    protected StravaClient $stravaClientModel;
+
     /**
      * Create a new job instance.
      *
@@ -28,14 +34,7 @@ class StravaActivityBaseJob implements ShouldQueue
     {
         $this->queue = 'indexing';
         $this->activity = $activity;
-    }
-
-    public function middleware()
-    {
-        return [
-            new RateLimited('strava'),
-            (new WithoutOverlapping('strava'))->expireAfter(180)
-        ];
+        $this->stravaClientModel = $this->activity->user->availableClient();
     }
 
     public function retryUntil()
@@ -45,7 +44,12 @@ class StravaActivityBaseJob implements ShouldQueue
 
     public function failed(\Throwable $e)
     {
-        $this->release(900);
+        if($e instanceof StravaRateLimitedException) {
+            $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
+                ->seconds(0);
+
+            $this->release(Carbon::now()->diffInSeconds($time));
+        }
     }
 
 }

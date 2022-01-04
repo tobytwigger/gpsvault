@@ -29,8 +29,7 @@ trait UsesStrava
 
     public function availableClient(): StravaClient
     {
-
-        return StravaClient::forUser($this->id)->firstOrFail();
+        return StravaClient::forUser($this->id)->enabled()->withSpaces()->firstOrFail();
     }
 
     public function ownedClients()
