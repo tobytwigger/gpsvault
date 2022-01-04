@@ -58,4 +58,5 @@ after('deploy:failed', 'deploy:unlock');
 //});
 after('deploy:success', function() {
     run('sudo supervisorctl restart all');
+    run('sudo apachectl graceful');
 });

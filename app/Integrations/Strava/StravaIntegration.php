@@ -47,7 +47,7 @@ class StravaIntegration extends Integration
 
     public function loginUrl(): string
     {
-        return route('strava.login');
+        return route('strava.client.index');
     }
 
     public function loginImageUrl(): ?string
