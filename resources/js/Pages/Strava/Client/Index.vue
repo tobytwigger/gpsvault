@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="Sync">
+    <v-app-layout title="Sync">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Clients</h2>
         </template>
@@ -83,11 +83,10 @@
             </form>
         </modal>
 
-    </app-layout>
+    </v-app-layout>
 </template>
 
 <script>
-import AppLayout from '@/Layouts/AppLayout.vue'
 import Modal from '@/Jetstream/Modal';
 import JetButton from '@/Jetstream/Button.vue'
 import JetDangerButton from '@/Jetstream/Button.vue'
@@ -103,7 +102,6 @@ export default {
         PublicClientRow,
         SharedClientRow,
         ClientRow,
-        AppLayout,
         Modal,
         JetButton,
         JetInput,

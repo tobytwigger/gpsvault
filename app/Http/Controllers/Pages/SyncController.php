@@ -7,6 +7,7 @@ use App\Http\Requests\SyncRequest;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Sync;
 use App\Services\Sync\Task;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 

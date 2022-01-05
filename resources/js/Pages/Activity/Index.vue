@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="My Activities">
+    <v-app-layout title="My Activities">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Your Activities
@@ -64,12 +64,11 @@
         </div>
 
 
-    </app-layout>
+    </v-app-layout>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
 import DataDisplayTile from './Partials/DataDisplayTile';
 import moment from 'moment';
 import {Link} from '@inertiajs/inertia-vue3'
@@ -77,7 +76,6 @@ import {Link} from '@inertiajs/inertia-vue3'
 export default defineComponent({
     components: {
         DataDisplayTile,
-        AppLayout,
         Link
     },
     props: {

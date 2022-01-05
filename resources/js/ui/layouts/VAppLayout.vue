@@ -2,8 +2,6 @@
     <div>
         <Head :title="title" />
 
-        <jet-banner />
-
         <div class="min-h-screen bg-gray-100">
             <nav class="bg-white border-b border-gray-100">
                 <!-- Primary Navigation Menu -->
@@ -13,7 +11,7 @@
                             <!-- Logo -->
                             <div class="flex-shrink-0 flex items-center">
                                 <Link :href="route('dashboard')">
-                                    <jet-application-mark class="block h-9 w-auto" />
+                                    <v-app-icon class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
@@ -224,24 +222,20 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import JetApplicationMark from '@/Jetstream/ApplicationMark.vue'
-    import JetBanner from '@/Jetstream/Banner.vue'
     import JetDropdown from '@/Jetstream/Dropdown.vue'
     import JetDropdownLink from '@/Jetstream/DropdownLink.vue'
     import JetNavLink from '@/Jetstream/NavLink.vue'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
 
-    export default defineComponent({
+    export default {
+        name: 'VAppLayout',
         props: {
             title: String,
         },
 
         components: {
             Head,
-            JetApplicationMark,
-            JetBanner,
             JetDropdown,
             JetDropdownLink,
             JetNavLink,
@@ -268,5 +262,5 @@
                 this.$inertia.post(route('logout'));
             },
         }
-    })
+    }
 </script>

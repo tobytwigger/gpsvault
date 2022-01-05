@@ -1,6 +1,6 @@
 <template>
 
-    <app-layout title="Strava Logs">
+    <v-app-layout title="Strava Logs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Strava Logs
@@ -53,20 +53,16 @@
         </div>
 
 
-    </app-layout>
+    </v-app-layout>
 
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
 import moment from 'moment';
 
 export default defineComponent({
     name: "Log",
-    components: {
-        AppLayout,
-    },
     props: {
         logs: {
             required: false,

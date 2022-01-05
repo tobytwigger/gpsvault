@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="Sync">
+    <v-app-layout title="Sync">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Sync</h2>
         </template>
@@ -16,12 +16,11 @@
                 </div>
             </div>
         </div>
-    </app-layout>
+    </v-app-layout>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
 
     import Integration from './Partials/Integration';
     import Sync from './Partials/Sync';
@@ -30,7 +29,6 @@
         components: {
             Sync,
             Integration,
-            AppLayout,
         },
         props: {
             integrations: {

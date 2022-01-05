@@ -8,6 +8,7 @@ import VueEasyLightbox from 'vue-easy-lightbox'
 import 'leaflet/dist/leaflet.css';
 import Units from './Plugins/units';
 import moment from 'moment';
+import UiKit from 'ui/install';
 
 require('./bootstrap');
 
@@ -19,28 +20,10 @@ createInertiaApp({
             .use(plugin)
             .use(VueEasyLightbox)
             .use(Units)
+            .use(UiKit)
             .component('task-strava-upload', StravaFixSetup)
             .component('strava-integration-addon', StravaIntegrationAddon)
-            .mixin({
-                methods: { route },
-                computed: {
-                    next15Mins() {
-                        let now = moment();
-                        return now
-                            .add(15 - (now.minute() % 15), "minutes")
-                            .seconds(0)
-                            .format("HH:mm:ss");
-                    },
-                    nextDay() {
-                        return moment()
-                            .add(1, 'days')
-                            .seconds(0)
-                            .minutes(0)
-                            .hours(0)
-                            .format('DD/MM/YYYY');
-                    }
-                },
-            })
+            .mixin({methods: { route }})
             .mount(el);
     },
 });

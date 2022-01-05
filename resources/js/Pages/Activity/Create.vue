@@ -1,5 +1,5 @@
 <template>
-    <app-layout title="New Activity">
+    <v-app-layout title="New Activity">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Upload</h2>
         </template>
@@ -13,19 +13,17 @@
                 </div>
             </div>
         </div>
-    </app-layout>
+    </v-app-layout>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
 
     import UploadFile from './Partials/UploadFile';
 
     export default defineComponent({
         components: {
             UploadFile,
-            AppLayout,
         },
         methods: {
             uploadFile(form) {

@@ -1,5 +1,5 @@
 <template>
-    <app-layout :title="activityName">
+    <v-app-layout :title="activityName">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Viewing {{ activityName }}
@@ -164,12 +164,11 @@
             </div>
         </div>
 
-    </app-layout>
+    </v-app-layout>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
 import moment from 'moment';
 import JetInput from '@/Jetstream/Input.vue'
 import ConfirmationModal from '@/Jetstream/ConfirmationModal.vue'
@@ -192,7 +191,6 @@ export default defineComponent({
         PageTabs,
         SelectDataSource,
         FileManager,
-        AppLayout,
         JetButton,
         JetInput,
         JetLabel,
