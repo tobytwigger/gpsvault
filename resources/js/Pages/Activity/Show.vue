@@ -1,10 +1,5 @@
 <template>
     <v-app-layout :title="activityName">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Viewing {{ activityName }}
-            </h2>
-        </template>
 
         <confirmation-modal :show="confirmingActivityDeletion" @close="confirmingActivityDeletion = false">
             <template #title>
@@ -185,9 +180,11 @@ import Map from './Partials/Charts/Map';
 import GenericChart from './Partials/GenericChart';
 import Stats from './Partials/Stats';
 import PageTabs from '../../Jetstream/PageTabs';
+import VAppLayout from '../../ui/layouts/VAppLayout';
 
 export default defineComponent({
     components: {
+        VAppLayout,
         PageTabs,
         SelectDataSource,
         FileManager,

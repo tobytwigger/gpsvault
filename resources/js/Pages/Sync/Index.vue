@@ -1,8 +1,5 @@
 <template>
     <v-app-layout title="Sync">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Sync</h2>
-        </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -24,9 +21,11 @@
 
     import Integration from './Partials/Integration';
     import Sync from './Partials/Sync';
+    import VAppLayout from '../../ui/layouts/VAppLayout';
 
     export default defineComponent({
         components: {
+            VAppLayout,
             Sync,
             Integration,
         },

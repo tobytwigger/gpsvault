@@ -1,8 +1,5 @@
 <template>
     <v-app-layout title="New Activity">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Upload</h2>
-        </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -20,9 +17,11 @@
     import { defineComponent } from 'vue'
 
     import UploadFile from './Partials/UploadFile';
+    import VAppLayout from '../../ui/layouts/VAppLayout';
 
     export default defineComponent({
         components: {
+            VAppLayout,
             UploadFile,
         },
         methods: {

@@ -1,16 +1,11 @@
 <template>
     <v-app-layout title="My Activities">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Your Activities
-            </h2>
-        </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
 
-
+                    <Link :href="route('activity.create')">New Activity</Link>
                     <section class="container mx-auto p-6">
                         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
                             <div class="w-full overflow-x-auto">
@@ -72,9 +67,11 @@ import {defineComponent} from 'vue'
 import DataDisplayTile from './Partials/DataDisplayTile';
 import moment from 'moment';
 import {Link} from '@inertiajs/inertia-vue3'
+import VAppLayout from '../../ui/layouts/VAppLayout';
 
 export default defineComponent({
     components: {
+        VAppLayout,
         DataDisplayTile,
         Link
     },

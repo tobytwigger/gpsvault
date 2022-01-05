@@ -1,8 +1,5 @@
 <template>
-    <v-app-layout title="Sync">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Clients</h2>
-        </template>
+    <v-app-layout title="Clients">
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -95,10 +92,12 @@ import JetLabel from '@/Jetstream/Label.vue'
 import ClientRow from './Partials/ClientRow';
 import SharedClientRow from './Partials/SharedClientRow';
 import PublicClientRow from './Partials/PublicClientRow';
+import VAppLayout from '../../../ui/layouts/VAppLayout';
 
 export default {
     name: "Index",
     components: {
+        VAppLayout,
         PublicClientRow,
         SharedClientRow,
         ClientRow,

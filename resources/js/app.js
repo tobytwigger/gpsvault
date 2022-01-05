@@ -9,6 +9,8 @@ import 'leaflet/dist/leaflet.css';
 import Units from './Plugins/units';
 import moment from 'moment';
 import UiKit from 'ui/install';
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 require('./bootstrap');
 
@@ -21,6 +23,7 @@ createInertiaApp({
             .use(VueEasyLightbox)
             .use(Units)
             .use(UiKit)
+            .use(VueSidebarMenu)
             .component('task-strava-upload', StravaFixSetup)
             .component('strava-integration-addon', StravaIntegrationAddon)
             .mixin({methods: { route }})
