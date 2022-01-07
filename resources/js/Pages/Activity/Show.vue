@@ -28,13 +28,8 @@
 </select-data-source>
 
                     <page-tabs :menu-items="menuItems">
-                        <template #summary>
-                            This is a test
-                        </template>
-
                         <template #analysis>
                             <stats :stats="stats"></stats>
-                            <vue-map :stats="stats"></vue-map>
                             <generic-chart :stats="stats"></generic-chart>
                         </template>
 
@@ -63,9 +58,6 @@
                             </div>
                         </template>
 
-                        <template #files>
-                            <file-manager :activity="activity"></file-manager>
-                        </template>
                     </page-tabs>
 </template>
 
@@ -107,27 +99,6 @@ export default {
         GenericChart,
         'vue-map': Map
     },
-    props: {
-        activity: Object,
-    },
-    data() {
-        return {
-            menuItems: [
-                {title: 'Summary', id: 'summary'},
-                {title: 'Analysis', id: 'analysis'},
-                {title: 'Social', id: 'social'},
-                {title: 'Files', id: 'files'}
-            ],
-            selectedDataSource: 'php'
-        }
-    },
-    mounted() {
-        if (this.activity.stats && Object.keys(this.activity.stats).length > 0) {
-            if (!this.activity.stats.hasOwnProperty('php')) {
-                this.selectedDataSource = Object.keys(this.activity.stats)[0];
-            }
-        }
-    },
     methods: {
         formatDateTime(datetime) {
             return moment(datetime).format('DD/MM/YYYY HH:mm:ss');
@@ -136,9 +107,6 @@ export default {
     computed: {
         activityName() {
             return this.activity.name ?? 'Unnamed Activity';
-        },
-        images() {
-            return this.activity.files.filter(file => file.mimetype.startsWith('image'));
         },
         isLoadingPhotos() {
             return this.activity.additional_data.strava_is_loading_photos ?? false;
@@ -158,30 +126,6 @@ export default {
         stravaId() {
             return this.activity.additional_data.strava_id ?? null;
         },
-        hasStats() {
-            return this.stats !== null;
-        },
-        dataSources() {
-            return Object.keys(this.activity.stats);
-        },
-        activeDataSource() {
-            if (this.activity.stats.length === 0) {
-                return null;
-            }
-            if (this.selectedDataSource) {
-                return this.selectedDataSource;
-            }
-            if (Object.keys(this.activity.stats).length > 0) {
-                return Object.keys(this.activity.stats)[0];
-            }
-            return null;
-        },
-        stats() {
-            if (this.activeDataSource !== null && this.activity.stats.hasOwnProperty(this.activeDataSource)) {
-                return this.activity.stats[this.activeDataSource];
-            }
-            return null;
-        }
     }
 }
 </script>

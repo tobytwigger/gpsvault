@@ -92,17 +92,6 @@ class ActivityController extends Controller
     {
         $importer = ActivityImporter::update($activity);
 
-        if($request->hasFile('file')) {
-            $file = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ACTIVITY_FILE);
-            $importer->withActivityFile($file);
-        }
-
-        if($request->has('files')) {
-            $files = collect($request->file('files', []))
-                ->map(fn(UploadedFile $uploadedFile) => Upload::uploadedFile($uploadedFile, Auth::user(), FileUploader::ACTIVITY_MEDIA));
-            $importer->addMedia($files->all());
-        }
-
         $activity = $importer->save();
         return redirect()->route('activity.show', $activity);
     }

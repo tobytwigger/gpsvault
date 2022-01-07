@@ -7,15 +7,13 @@
         <v-main >
             <v-container style="background-color: #f3f4f6; height: 100%" fluid>
                 <v-row align="start">
-                    <v-spacer></v-spacer>
-                    <v-col cols="12" md="6" lg="4" xl="3">
+                    <v-col>
                         <v-sheet color="white" elevation="3" rounded class="text-center">
                             <h1 class="px-4">
                                 {{title}}
                             </h1>
                         </v-sheet>
                     </v-col>
-                    <v-spacer></v-spacer>
                 </v-row>
                 <v-row>
                     <v-col>

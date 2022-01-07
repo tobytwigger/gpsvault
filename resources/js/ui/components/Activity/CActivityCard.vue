@@ -14,8 +14,8 @@
             {{activity.name}}
         </v-card-title>
 
-        <v-card-subtitle>
-            {{ activity.description ? activity.description : 'A ' + activity.distance + 'm ride.' }}
+        <v-card-subtitle v-if="activity.description">
+            {{ activity.description }}
         </v-card-subtitle>
 
         <v-card-text>

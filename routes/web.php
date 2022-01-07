@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
-        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update']);
+        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
     });
 
     Route::post('/data/download', [\App\Http\Controllers\Pages\DownloadController::class, 'all'])->name('data.download');

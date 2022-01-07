@@ -36,6 +36,7 @@
                         <v-tabs-items v-model="tab">
                             <v-tab-item value="tab-summary">
                                 Basic Stats
+                                Images being shown in a nicer slider
                                 <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
                                 <c-image-gallery :images="images"></c-image-gallery>
                             </v-tab-item>
@@ -48,7 +49,19 @@
                                 Show comments, kudos, segments
                             </v-tab-item>
                             <v-tab-item value="tab-files">
-                                File manager
+                                <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
+                                    <template v-slot:activator="{trigger,showing}">
+                                        <v-btn
+                                            color="secondary"
+                                            @click.stop="trigger"
+                                            :disabled="showing"
+                                        >
+                                            <v-icon>mdi-upload</v-icon>
+                                            Upload file
+                                        </v-btn>
+                                    </template>
+                                </c-file-form-dialog>
+                                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>
                             </v-tab-item>
                         </v-tabs-items>
                     </v-sheet>
@@ -84,10 +97,14 @@ import CDeleteActivityButton from '../../ui/components/Activity/CDeleteActivityB
 import CUploadActivityFileButton from '../../ui/components/Activity/CUploadActivityFileButton';
 import CMap from '../../ui/components/CMap';
 import CImageGallery from '../../ui/components/CImageGallery';
+import CFileManager from '../../ui/components/Activity/CFileManager';
+import CFileFormDialog from '../../ui/components/Activity/CFileFormDialog';
 
 export default {
     name: "Show",
-    components: {CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton},
+    components: {
+        CFileFormDialog,
+        CFileManager, CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton},
     props: {
         activity: {
             required: true,

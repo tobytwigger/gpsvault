@@ -7,7 +7,6 @@
             @click="showImg(index)"
         >
             <v-img :src="image.src" :alt="image.alt"></v-img>
-            <img :src="src">
         </div>
         <vue-easy-lightbox
             :visible="showLightbox"
@@ -41,10 +40,10 @@ export default {
     methods: {
         showImg (index) {
             this.index = index
-            this.visible = true
+            this.showLightbox = true
         },
         handleHide () {
-            this.visible = false
+            this.showLightbox = false
         }
     }
 }
