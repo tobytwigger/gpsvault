@@ -35,16 +35,20 @@
 
                         <v-tabs-items v-model="tab">
                             <v-tab-item value="tab-summary">
+                                Basic Stats
                                 <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
+                                <c-image-gallery :images="images"></c-image-gallery>
                             </v-tab-item>
                             <v-tab-item value="tab-analysis">
-                                Analysis
+                                Raw stats
+                                Charts
+                                Able to change the data source
                             </v-tab-item>
                             <v-tab-item value="tab-social">
-                                Social
+                                Show comments, kudos, segments
                             </v-tab-item>
                             <v-tab-item value="tab-files">
-                                Files
+                                File manager
                             </v-tab-item>
                         </v-tabs-items>
                     </v-sheet>
@@ -79,10 +83,11 @@ import CAppWrapper from '../../ui/wrappers/CAppWrapper';
 import CDeleteActivityButton from '../../ui/components/Activity/CDeleteActivityButton';
 import CUploadActivityFileButton from '../../ui/components/Activity/CUploadActivityFileButton';
 import CMap from '../../ui/components/CMap';
+import CImageGallery from '../../ui/components/CImageGallery';
 
 export default {
     name: "Show",
-    components: {CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton},
+    components: {CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton},
     props: {
         activity: {
             required: true,
@@ -96,8 +101,17 @@ export default {
         }
     },
     computed: {
-        images() {
+        files() {
 
+        },
+        images() {
+            return this.activity.files.filter(file => file.mimetype.startsWith('image/'))
+                .map(file => {
+                    return {
+                        alt: file.caption,
+                        src: route('file.preview', file.id)
+                    }
+                });
         },
         hasStats() {
             return this.stats !== null;
@@ -109,7 +123,7 @@ export default {
             if (this.activity.stats.length === 0) {
                 return null;
             }
-            if (this.dataSource) {
+            if (this.dataSource && this.dataSources.indexOf(this.dataSource) > -1) {
                 return this.dataSource;
             }
             if (Object.keys(this.activity.stats).length > 0) {

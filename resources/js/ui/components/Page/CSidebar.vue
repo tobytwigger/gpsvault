@@ -36,13 +36,21 @@
                 </v-list-item-icon>
                 <v-list-item-title>Activities</v-list-item-title>
             </v-list-item>
-            <v-list-item link @click="$inertia.visit(route('sync.index'))">
-                <v-list-item-icon>
-                    <v-icon>mdi-autorenew</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Sync</v-list-item-title>
-            </v-list-item>
 
+        </v-list>
+
+        <v-divider></v-divider>
+
+        <v-list
+            nav
+            dense
+        >
+            <v-list-item link @click="$inertia.visit(route('profile.show'))">
+                <v-list-item-icon>
+                    <v-icon>mdi-account</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item>
             <v-list-group
                 :value="false"
                 no-action
@@ -61,22 +69,6 @@
                     </v-list-item-icon>
                 </v-list-item>
             </v-list-group>
-
-
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list
-            nav
-            dense
-        >
-            <v-list-item link @click="$inertia.visit(route('profile.show'))">
-                <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Profile</v-list-item-title>
-            </v-list-item>
             <v-list-item link>
                 <v-list-item-icon>
                     <v-icon>mdi-safe</v-icon>

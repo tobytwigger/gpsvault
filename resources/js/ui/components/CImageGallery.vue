@@ -1,20 +1,20 @@
 <template>
-    <div v-if="images.length > 0">
-        <carousel :items-to-show="3.95" :wrap-around="true">
-            <slide v-for="image in images" :key="image.id" class="p-2">
-                <div class="carousel__item cursor-pointer" @click="viewingImage = image">
-                    <img
-                        :src="route('file.preview', image.id)"
-                        :alt="image.caption ?? 'Activity media'"
-                        class="shadow-lg rounded max-w-full h-auto align-middle border-none"/>
-                </div>
-            </slide>
-
-            <template #addons>
-                <navigation />
-                <pagination />
-            </template>
-        </carousel>
+    <div>
+        <div
+            v-for="(image, index) in images"
+            :key="index"
+            class="pic"
+            @click="showImg(index)"
+        >
+            <v-img :src="image.src" :alt="image.alt"></v-img>
+            <img :src="src">
+        </div>
+        <vue-easy-lightbox
+            :visible="showLightbox"
+            :imgs="imageSrcs"
+            :index="index"
+            @hide="handleHide"
+        ></vue-easy-lightbox>
     </div>
 </template>
 
@@ -25,6 +25,26 @@ export default {
         images: {
             required: true,
             type: Array
+        }
+    },
+    data() {
+        return {
+            showLightbox: false,
+            index: 0
+        }
+    },
+    computed: {
+        imageSrcs() {
+            return this.images.map(image => image.src);
+        }
+    },
+    methods: {
+        showImg (index) {
+            this.index = index
+            this.visible = true
+        },
+        handleHide () {
+            this.visible = false
         }
     }
 }
