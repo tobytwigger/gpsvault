@@ -14,12 +14,11 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
 
     import UploadFile from './Partials/UploadFile';
     import VAppLayout from '../../ui/layouts/VAppLayout';
 
-    export default defineComponent({
+    export default {
         components: {
             VAppLayout,
             UploadFile,
@@ -29,5 +28,5 @@
                 form.post(route('activity.store'));
             }
         }
-    })
+    }
 </script>

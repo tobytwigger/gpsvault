@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -20,13 +21,16 @@ mix.js('resources/js/app.js', 'dist/js')
         }
     })
     .vue()
-    .postCss('resources/css/app.css', 'dist/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-    ])
+    .css('resources/css/app.css', 'dist/css')
     .webpackConfig(require('./webpack.config'))
     .sourceMaps()
     .copy('resources/images', 'public/dist/images');
+
+mix.webpackConfig({
+    plugins: [
+        new VuetifyLoaderPlugin()
+    ]
+})
 
 if (mix.inProduction()) {
     mix.version();

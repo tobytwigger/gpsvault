@@ -1,11 +1,13 @@
 <template>
-    <label id="listbox-label" class="block text-sm font-medium text-gray-700">
-        Data Source
-    </label>
     <div>
-        <select v-model="dynamicValue">
-            <option v-for="source in dataSources" :value="source">{{source}}</option>
-        </select>
+        <label id="listbox-label" class="block text-sm font-medium text-gray-700">
+            Data Source
+        </label>
+        <div>
+            <select v-model="dynamicValue">
+                <option v-for="source in dataSources" :value="source">{{ source }}</option>
+            </select>
+        </div>
     </div>
 </template>
 

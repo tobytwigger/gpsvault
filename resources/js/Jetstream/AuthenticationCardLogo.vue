@@ -8,12 +8,11 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import { Link } from '@inertiajs/inertia-vue3';
+    import { Link } from '@inertiajs/inertia-vue';
 
-    export default defineComponent({
+    export default {
         components: {
             Link,
         },
-    })
+    }
 </script>

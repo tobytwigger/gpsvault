@@ -53,7 +53,6 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
     import JetActionSection from '@/Jetstream/ActionSection.vue'
     import JetDialogModal from '@/Jetstream/DialogModal.vue'
     import JetDangerButton from '@/Jetstream/DangerButton.vue'
@@ -61,7 +60,7 @@
     import JetInputError from '@/Jetstream/InputError.vue'
     import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
 
-    export default defineComponent({
+    export default {
         components: {
             JetActionSection,
             JetDangerButton,
@@ -103,5 +102,5 @@
                 this.form.reset()
             },
         },
-    })
+    }
 </script>

@@ -4,21 +4,21 @@
         <div class="flex flex-row w-full flex-wrap">
 
             <div class="flex-grow px-4" v-if="images.length > 0">
-                <carousel :items-to-show="3.95" :wrap-around="true">
-                    <slide v-for="image in images" :key="image.id" class="p-2">
-                        <div class="carousel__item cursor-pointer" @click="viewingImage = image">
-                            <img
-                                :src="route('file.preview', image.id)"
-                                :alt="image.caption ?? 'Activity media'"
-                                class="shadow-lg rounded max-w-full h-auto align-middle border-none"/>
-                        </div>
-                    </slide>
+<!--                <carousel :items-to-show="3.95" :wrap-around="true">-->
+<!--                    <slide v-for="image in images" :key="image.id" class="p-2">-->
+<!--                        <div class="carousel__item cursor-pointer" @click="viewingImage = image">-->
+<!--                            <img-->
+<!--                                :src="route('file.preview', image.id)"-->
+<!--                                :alt="image.caption ?? 'Activity media'"-->
+<!--                                class="shadow-lg rounded max-w-full h-auto align-middle border-none"/>-->
+<!--                        </div>-->
+<!--                    </slide>-->
 
-                    <template #addons>
-                        <navigation />
-                        <pagination />
-                    </template>
-                </carousel>
+<!--                    <template #addons>-->
+<!--                        <navigation />-->
+<!--                        <pagination />-->
+<!--                    </template>-->
+<!--                </carousel>-->
             </div>
 
             <div class="flex-grow">
@@ -66,15 +66,15 @@
             </div>
         </div>
 
-        <vue-easy-lightbox
-            scrollDisabled
-            escDisabled
-            moveDisabled
-            :imgs="lightboxImages"
-            :index="viewingImageIndex"
-            :visible="viewingImage && viewingImage.hasOwnProperty('id')"
-            @hide="viewingImage = null"
-        ></vue-easy-lightbox>
+<!--        <vue-easy-lightbox-->
+<!--            scrollDisabled-->
+<!--            escDisabled-->
+<!--            moveDisabled-->
+<!--            :imgs="lightboxImages"-->
+<!--            :index="viewingImageIndex"-->
+<!--            :visible="viewingImage && viewingImage.hasOwnProperty('id')"-->
+<!--            @hide="viewingImage = null"-->
+<!--        ></vue-easy-lightbox>-->
 
         <modal :show="uploadingMedia" :closeable="true" @close="uploadingMedia = false">
             <form @submit.prevent="uploadFiles">
@@ -116,11 +116,6 @@
 </template>
 
 <script>
-// https://onycat.com/vue-easy-lightbox/#demo
-// https://github.com/ismail9k/vue3-carousel
-import 'vue3-carousel/dist/carousel.css';
-import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel';
-import {useForm} from '@inertiajs/inertia-vue3';
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
@@ -137,10 +132,10 @@ export default {
         JetInput,
         JetLabel,
         JetValidationErrors,
-        Carousel,
-        Slide,
-        Pagination,
-        Navigation,
+        // Carousel,
+        // Slide,
+        // Pagination,
+        // Navigation,
     },
     props: {
         activity: {
@@ -150,7 +145,7 @@ export default {
     },
     data() {
         return {
-            form: useForm({
+            form: this.$inertia.form({
                 files: null,
                 _method: 'patch'
             }),

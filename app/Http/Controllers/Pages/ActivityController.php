@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Models\Activity;
+use App\Models\Sync;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use App\Services\Sync\Task;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -31,7 +33,7 @@ class ActivityController extends Controller
         return Inertia::render('Activity/Index', [
             'activities' => Auth::user()->activities()
                 ->orderBy('started_at', 'DESC')
-                ->get()
+                ->paginate(15)
         ]);
     }
 

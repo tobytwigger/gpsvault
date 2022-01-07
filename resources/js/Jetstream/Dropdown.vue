@@ -16,11 +16,11 @@
             leave-from-class="transform opacity-100 scale-100"
             leave-to-class="transform opacity-0 scale-95">
             <div v-show="open"
-                    class="absolute z-50 mt-2 rounded-md shadow-lg"
-                    :class="[widthClass, alignmentClasses]"
-                    style="display: none;"
-                    @click="open = false">
-                <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
+                 :class="[widthClass, alignmentClasses]"
+                 class="absolute z-50 mt-2 rounded-md shadow-lg"
+                 style="display: none;"
+                 @click="open = false">
+                <div :class="contentClasses" class="rounded-md ring-1 ring-black ring-opacity-5">
                     <slot name="content"></slot>
                 </div>
             </div>
@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, onUnmounted, ref } from "vue";
 
-export default defineComponent({
+export default {
+    name: 'Dropdown',
     props: {
         align: {
             default: 'right'
@@ -44,20 +44,25 @@ export default defineComponent({
         }
     },
 
-    setup() {
-        let open = ref(false)
-
-        const closeOnEscape = (e) => {
-            if (open.value && e.keyCode === 27) {
-                open.value = false
-            }
-        }
-
-        onMounted(() => document.addEventListener('keydown', closeOnEscape))
-        onUnmounted(() => document.removeEventListener('keydown', closeOnEscape))
-
+    data() {
         return {
-            open,
+            open: false
+        }
+    },
+
+    mounted() {
+        document.addEventListener('keydown', this.closeOnEscape)
+    },
+
+    destroyed() {
+        document.removeEventListener('keydown', this.closeOnEscape)
+    },
+
+    methods: {
+        closeOnEscape: (e) => {
+            if (this.open && e.keyCode === 27) {
+                this.open = false
+            }
         }
     },
 
@@ -78,5 +83,5 @@ export default defineComponent({
             }
         },
     }
-})
+}
 </script>

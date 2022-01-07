@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import {Link} from '@inertiajs/inertia-vue3'
+import {Link} from '@inertiajs/inertia-vue'
 import moment from 'moment';
 
 export default {

@@ -63,9 +63,7 @@
 
 
 <script>
-import {defineComponent} from 'vue'
-import {Link} from '@inertiajs/inertia-vue3';
-import {useForm} from '@inertiajs/inertia-vue3'
+import {Link} from '@inertiajs/inertia-vue';
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
@@ -75,7 +73,7 @@ import JetConfirmationModal from '@/Jetstream/ConfirmationModal.vue'
 import NavLink from '../../../Jetstream/NavLink';
 import CryptoJS from 'crypto-js';
 
-export default defineComponent({
+export default {
     components: {
         NavLink,
         JetButton,
@@ -89,7 +87,7 @@ export default defineComponent({
     name: "UploadFile",
     data() {
         return {
-            form: useForm({
+            form: this.$inertia.form({
                 name: null,
                 file: null
             }),
@@ -126,5 +124,5 @@ export default defineComponent({
             }
         }
     }
-})
+}
 </script>

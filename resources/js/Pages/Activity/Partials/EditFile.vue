@@ -36,7 +36,6 @@
 
 <script>
 import Modal from '@/Jetstream/Modal';
-import {useForm} from '@inertiajs/inertia-vue3';
 import JetInput from '@/Jetstream/Input.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
@@ -63,7 +62,7 @@ export default {
     },
     data() {
         return {
-            form: useForm({
+            form: this.$inertia.form({
                 title: null,
                 caption: null,
                 _method: 'patch'

@@ -1,5 +1,6 @@
 <template>
-    <modal :closeable="true" :show="viewStravaSyncStatus" @close="viewStravaSyncStatus = false">
+    <div>
+        <modal :closeable="true" :show="viewStravaSyncStatus" @close="viewStravaSyncStatus = false">
 
             <div class="px-6 py-4">
                 <div class="text-lg">
@@ -42,9 +43,10 @@
                     </button>
                 </div>
             </div>
-    </modal>
+        </modal>
 
-    <a href="#" @click.prevent="viewStravaSyncStatus = true" class="text-sm text-gray-400">View sync status</a>
+        <a href="#" @click.prevent="viewStravaSyncStatus = true" class="text-sm text-gray-400">View sync status</a>
+    </div>
 </template>
 
 <script>

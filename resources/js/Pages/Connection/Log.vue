@@ -53,11 +53,10 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
 import moment from 'moment';
 import VAppLayout from '../../ui/layouts/VAppLayout';
 
-export default defineComponent({
+export default {
     name: "Log",
     components: {VAppLayout},
     props: {
@@ -75,7 +74,7 @@ export default defineComponent({
             return moment(value).format('DD/MM/YYYY HH:mm:ss');
         }
     }
-});
+}
 
 </script>
 

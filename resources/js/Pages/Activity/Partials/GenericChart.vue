@@ -1,13 +1,16 @@
 <template>
-    <div v-if="loadingChartData">
-        Loading chart data
-    </div>
-    <div v-else-if="!hasChartData">
-        Chart not available
-    </div>
-    <chart type="line" :options="chartOptions" :data="chartData" v-if="rawData.length > 0 && chartData.datasets.length > 0" :key="stats.integration">
+    <div>
+        <div v-if="loadingChartData">
+            Loading chart data
+        </div>
+        <div v-else-if="!hasChartData">
+            Chart not available
+        </div>
+        <chart v-if="rawData.length > 0 && chartData.datasets.length > 0" :key="stats.integration" :data="chartData"
+               :options="chartOptions" type="line">
 
-    </chart>
+        </chart>
+    </div>
 </template>
 
 <script>

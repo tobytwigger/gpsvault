@@ -17,13 +17,12 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
 
     import Integration from './Partials/Integration';
     import Sync from './Partials/Sync';
     import VAppLayout from '../../ui/layouts/VAppLayout';
 
-    export default defineComponent({
+    export default {
         components: {
             VAppLayout,
             Sync,
@@ -55,5 +54,5 @@
                 type: Number
             }
         }
-    })
+    }
 </script>

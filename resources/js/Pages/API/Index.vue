@@ -12,11 +12,10 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
     import ApiTokenManager from '@/Pages/API/Partials/ApiTokenManager.vue'
     import VAppLayout from '../../ui/layouts/VAppLayout';
 
-    export default defineComponent({
+    export default {
         props: [
             'tokens',
             'availablePermissions',
@@ -27,5 +26,5 @@
             VAppLayout,
             ApiTokenManager,
         },
-    })
+    }
 </script>

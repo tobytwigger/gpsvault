@@ -1,119 +1,31 @@
 <template>
-    <v-app-layout :title="activityName">
+<span
+    v-if="isLoadingPhotos"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading photos</span>
+<span
+    v-if="isLoadingDetails"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading details</span>
 
-        <confirmation-modal :show="confirmingActivityDeletion" @close="confirmingActivityDeletion = false">
-            <template #title>
-                Delete Activity
-            </template>
+<span
+    v-if="isLoadingComments"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading comments</span>
 
-            <template #content>
-                Are you sure you want to delete the activity? Once the activity is deleted, all of its resources and
-                data will be permanently deleted.
+<span
+    v-if="isLoadingKudos"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading kudos</span>
 
-                If you haven't done so, make sure you have a backup before continuing.
-            </template>
+<span
+    v-if="isLoadingAnalysis"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading analysis</span>
 
-            <template #footer>
-                <secondary-button @click.native="confirmingActivityDeletion = false">
-                    Nevermind
-                </secondary-button>
-
-                <danger-button class="ml-2" @click.native="deleteActivity">
-                    Delete Activity
-                </danger-button>
-            </template>
-        </confirmation-modal>
-
-        <modal :closeable="true" :show="uploadActivityFileModal" @close="uploadActivityFileModal = false">
-            <form @submit.prevent="uploadFile">
-
-                <div class="px-6 py-4">
-                    <div class="text-lg">
-                        Upload activity file
-                    </div>
-
-                    <div class="mt-4">
-                        <p>Upload the fit/tcx/gpx recording of your ride for a deeper analysis.</p>
-
-                        <div class="mt-4">
-                            <jet-label for="file" value="Activity File"/>
-                            <jet-input id="file" class="mt-1 block w-full" required
-                                       type="file" @input="form.file = $event.target.files[0]"/>
-                        </div>
-
-                        <div class="mt-4">
-
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="px-12 py-4 bg-gray-100 text-right">
-                    <div>
-                        <jet-button :disabled="form.processing" class="ml-4" type="submit">
-                            Upload
-                        </jet-button>
-                    </div>
-                </div>
-            </form>
-        </modal>
+<a :href="'https://www.strava.com/activities/' + stravaId"
+    v-if="activity.linked_to.indexOf('strava') !== -1"
+    class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">View on strava</a>
 
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="max-w-full mx-4 py-6 sm:mx-auto sm:px-6 lg:px-8">
-                        <div class="text-right">
-                            <span
-                                v-if="isLoadingPhotos"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading photos</span>
-                            <span
-                                v-if="isLoadingDetails"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading details</span>
+<select-data-source v-model="selectedDataSource" :data-sources="dataSources">
 
-                            <span
-                                v-if="isLoadingComments"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading comments</span>
-
-                            <span
-                                v-if="isLoadingKudos"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading kudos</span>
-
-                            <span
-                                v-if="isLoadingAnalysis"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">Loading analysis</span>
-
-                            <a :href="'https://www.strava.com/activities/' + stravaId"
-                                v-if="activity.linked_to.indexOf('strava') !== -1"
-                                class="inline-flex items-center justify-center px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">View on strava</a>
-
-
-                            <select-data-source v-model="selectedDataSource" :data-sources="dataSources">
-
-                            </select-data-source>
-
-                            <a :href="route('activity.download', this.activity.id)" class="px-1">
-                                <secondary-button>
-                                    Download activity
-                                </secondary-button>
-                            </a>
-
-                            <a v-if="activity.activity_file_id" :href="route('file.download', activity.activity_file_id)"
-                               class="px-1">
-                                <secondary-button>
-                                    Download activity file
-                                </secondary-button>
-                            </a>
-                            <secondary-button v-else :disabled="uploadActivityFileModal === true"
-                                              class="px-1" @click.native="uploadActivityFileModal = true">
-                                Upload activity file
-                            </secondary-button>
-
-                            <danger-button class="px-1" @click.native="confirmingActivityDeletion = true">
-                                Delete activity
-                            </danger-button>
-                        </div>
-                    </div>
+</select-data-source>
 
                     <page-tabs :menu-items="menuItems">
                         <template #summary>
@@ -125,6 +37,7 @@
                             <vue-map :stats="stats"></vue-map>
                             <generic-chart :stats="stats"></generic-chart>
                         </template>
+
                         <template #social>
                             <div>
                                 <div v-if="activity.strava_comments.length > 0">
@@ -149,21 +62,14 @@
                                 </span>
                             </div>
                         </template>
+
                         <template #files>
                             <file-manager :activity="activity"></file-manager>
                         </template>
                     </page-tabs>
-
-
-                </div>
-            </div>
-        </div>
-
-    </v-app-layout>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
 import moment from 'moment';
 import JetInput from '@/Jetstream/Input.vue'
 import ConfirmationModal from '@/Jetstream/ConfirmationModal.vue'
@@ -173,7 +79,7 @@ import JetLabel from '@/Jetstream/Label.vue'
 import Modal from '@/Jetstream/Modal.vue'
 import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 import JetButton from '@/Jetstream/Button.vue'
-import {Link, useForm} from '@inertiajs/inertia-vue3'
+import {Link} from '@inertiajs/inertia-vue'
 import FileManager from './Partials/FileManager';
 import SelectDataSource from './Partials/SelectDataSource';
 import Map from './Partials/Charts/Map';
@@ -182,7 +88,7 @@ import Stats from './Partials/Stats';
 import PageTabs from '../../Jetstream/PageTabs';
 import VAppLayout from '../../ui/layouts/VAppLayout';
 
-export default defineComponent({
+export default {
     components: {
         VAppLayout,
         PageTabs,
@@ -212,12 +118,6 @@ export default defineComponent({
                 {title: 'Social', id: 'social'},
                 {title: 'Files', id: 'files'}
             ],
-            form: useForm({
-                file: null,
-                _method: 'patch'
-            }),
-            confirmingActivityDeletion: false,
-            uploadActivityFileModal: false,
             selectedDataSource: 'php'
         }
     },
@@ -232,17 +132,6 @@ export default defineComponent({
         formatDateTime(datetime) {
             return moment(datetime).format('DD/MM/YYYY HH:mm:ss');
         },
-        deleteActivity() {
-            this.$inertia.delete(route('activity.destroy', this.activity.id));
-        },
-        uploadFile() {
-            this.form.post(route('activity.update', this.activity.id), {
-                onSuccess: () => {
-                    this.form.reset();
-                    this.uploadActivityFileModal = false;
-                }
-            });
-        }
     },
     computed: {
         activityName() {
@@ -294,5 +183,5 @@ export default defineComponent({
             return null;
         }
     }
-})
+}
 </script>
