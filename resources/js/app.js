@@ -3,7 +3,6 @@ import {createInertiaApp, Link} from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 import StravaFixSetup from './Integrations/StravaFixSetup';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
-import Units from './plugins/units';
 import vuetify from './plugins/vuetify';
 import UiKit from 'ui/install';
 import 'leaflet/dist/leaflet.css';
@@ -14,7 +13,6 @@ import Vue from 'vue';
 
 require('./bootstrap');
 
-Vue.use(Units);
 Vue.use(UiKit);
 Vue.use(VueEasyLightbox);
 Vue.component('task-strava-upload', StravaFixSetup);

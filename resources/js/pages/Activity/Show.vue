@@ -35,13 +35,33 @@
 
                         <v-tabs-items v-model="tab">
                             <v-tab-item value="tab-summary">
-                                Basic Stats
-                                Images being shown in a nicer slider
-                                <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
-                                <c-image-gallery :images="images"></c-image-gallery>
+                                <v-row>
+                                    <v-col>
+                                        Description
+                                    </v-col>
+                                    <v-col>
+                                        <c-activity-stats v-if="hasStats" :stats="stats" :limit="4"></c-activity-stats>
+                                        <div v-else>No stats available</div>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        Images being shown in a nicer slider
+                                        <c-image-gallery :images="images"></c-image-gallery>
+                                    </v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col>
+                                        <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
+                                    </v-col>
+                                </v-row>
                             </v-tab-item>
                             <v-tab-item value="tab-analysis">
-                                Raw stats
+                                <v-row>
+                                    <v-col>
+                                        <c-activity-stats v-if="hasStats" :stats="stats"></c-activity-stats>
+                                    </v-col>
+                                </v-row>
                                 Charts
                                 Able to change the data source
                             </v-tab-item>
@@ -99,10 +119,12 @@ import CMap from '../../ui/components/CMap';
 import CImageGallery from '../../ui/components/CImageGallery';
 import CFileManager from '../../ui/components/Activity/CFileManager';
 import CFileFormDialog from '../../ui/components/Activity/CFileFormDialog';
+import CActivityStats from '../../ui/components/Activity/CActivityStats';
 
 export default {
     name: "Show",
     components: {
+        CActivityStats,
         CFileFormDialog,
         CFileManager, CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton},
     props: {

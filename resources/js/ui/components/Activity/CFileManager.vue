@@ -15,46 +15,7 @@
                     md="4"
                     lg="3"
                 >
-                    <v-card>
-                        <v-img
-                            v-if="isImage(file)"
-                            :src="file.preview_url"
-                            class="white--text align-end"
-                            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                            height="200px"
-                        >
-                            <v-card-title v-text="file.title"></v-card-title>
-                            <v-card-subtitle v-text="file.caption" v-if="file.caption"></v-card-subtitle>
-                        </v-img>
-
-                        <v-card-text v-else>
-                            <v-card-title v-text="file.title"></v-card-title>
-                            <v-card-subtitle v-text="file.caption" v-if="file.caption"></v-card-subtitle>
-                        </v-card-text>
-
-                        <v-card-actions>
-                            <v-btn icon :href="route('file.download', file.id)">
-                                <v-icon>mdi-download</v-icon>
-                            </v-btn>
-
-                            <c-file-form-dialog :activity="activity" :old-file="file" text="Update information about the file" title="Update file">
-                                <template v-slot:activator="{trigger,showing}">
-                                    <v-btn
-                                        icon
-                                        @click.stop="trigger"
-                                        :disabled="showing"
-                                    >
-                                        <v-icon>mdi-pencil</v-icon>
-                                    </v-btn>
-                                </template>
-                            </c-file-form-dialog>
-
-                            <v-btn icon @click.prevent="deleteFile(file.id)">
-                                <v-icon>mdi-delete</v-icon>
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-<!--                    'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash'-->
+                    <c-file-manager-file-card :activity="activity" :file="file"></c-file-manager-file-card>
                 </v-col>
             </v-row>
         </template>
@@ -63,9 +24,10 @@
 
 <script>
 import CFileFormDialog from './CFileFormDialog';
+import CFileManagerFileCard from './CFileManagerFileCard';
 export default {
     name: "CFileManager",
-    components: {CFileFormDialog},
+    components: {CFileManagerFileCard, CFileFormDialog},
     props: {
         activity: {
             required: true,
@@ -74,14 +36,6 @@ export default {
         files: {
             required: true,
             type: Array
-        }
-    },
-    methods: {
-        isImage(file) {
-            return file.mimetype.startsWith('image/');
-        },
-        deleteFile(id) {
-            this.$inertia.delete(route('activity.file.destroy', [this.activity.id, id]));
         }
     }
 }

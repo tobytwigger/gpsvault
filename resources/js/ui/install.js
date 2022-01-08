@@ -1,4 +1,4 @@
-import GlobalMixin from 'ui/globalMixin';
+import GlobalMixin from 'ui/mixins/globalMixin';
 
 const requireComponent = require.context(
     // The relative path of the components folder
