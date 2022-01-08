@@ -33,6 +33,10 @@ export default {
     name: "CActivityStats",
     mixins: [activityStats, units],
     props: {
+        stats: {
+            required: true,
+            type: Object
+        },
         limit: {
             required: false,
             type: Number,

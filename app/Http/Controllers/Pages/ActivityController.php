@@ -91,7 +91,12 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, Activity $activity, FileUploader $fileUploader)
     {
         $importer = ActivityImporter::update($activity);
-
+        if($request->has('name')) {
+            $importer->withName($request->input('name'));
+        }
+        if($request->has('description')) {
+            $importer->withDescription($request->input('description'));
+        }
         $activity = $importer->save();
         return redirect()->route('activity.show', $activity);
     }

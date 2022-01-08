@@ -24,7 +24,8 @@ class UpdateActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'file',
+            'name' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|nullable|string|max:65535'
         ];
     }
 }

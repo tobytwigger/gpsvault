@@ -2,12 +2,6 @@ import units from './units';
 
 export default {
     mixins: [units],
-    props: {
-        stats: {
-            required: true,
-            type: Object
-        }
-    },
     computed: {
         maxSpeed() {
             return this.convert(this.stats.max_speed?.toString() || null, 'speed');
@@ -101,6 +95,12 @@ export default {
         },
         elevationSummary() {
             return this.summary(['elevationLoss', 'elevationGain', 'minAltitude', 'maxAltitude']);
+        },
+        humanStartedAt() {
+            return this.stats.human_started_at || null;
+        },
+        humanEndedAt() {
+            return this.stats.human_ended_at || null;
         }
     },
     methods: {
