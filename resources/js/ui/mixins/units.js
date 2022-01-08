@@ -15,7 +15,7 @@ export default {
                     return {value: val, unit: 'rpm'}
                 },
                 duration: (val) => {
-                    return moment.duration(val, 'seconds').humanize();
+                    return {value: moment.utc(val * 1000).format('HH:mm:ss'), unit: 'h'}
                 }
             }
         }
