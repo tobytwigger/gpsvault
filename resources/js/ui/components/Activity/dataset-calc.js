@@ -24,12 +24,11 @@ let availableDataSets = {
     calories: {label: 'Calories'}
 };
 
-export const createDatasets = (rawData) => {
+export const createDatasets = (rawData, charts) => {
     return new Promise((resolve, reject) => {
-        console.log('started');
         let availableData = ['elevation', 'cadence', 'temperature', 'heart_rate', 'speed', 'grade', 'battery', 'calories']
+            .filter(property => charts.indexOf(property) > -1)
             .filter((property) => rawData.filter(d => d.hasOwnProperty(property) && d[property] !== null).length > 0)
-console.log('ended avail data');
         resolve({
             datasets: availableData
                 .filter(property => availableDataSets.hasOwnProperty(property))

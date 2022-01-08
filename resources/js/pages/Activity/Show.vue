@@ -99,15 +99,46 @@
                                 </v-row>
                             </v-tab-item>
                             <v-tab-item value="tab-analysis">
-                                <v-row>
-                                    <v-col>
-                                        <c-activity-stats v-if="hasStats" :stats="stats"></c-activity-stats>
-                                    </v-col>
-                                </v-row>
-                                Charts
+                                <c-activity-analysis :activity="activity" :stats="stats">
+
+                                </c-activity-analysis>
                             </v-tab-item>
                             <v-tab-item value="tab-social">
-                                Show comments, kudos, segments
+                                <v-row>
+                                    <v-col v-if="hasKudos">
+                                        <v-list>
+                                            <v-subheader>Kudos
+                                                <v-badge :value="kudosCount" :content="kudosCount" inline></v-badge>
+                                            </v-subheader>
+
+                                            <v-list-item v-for="k in kudos">
+                                                <v-list-item-content>
+                                                    <v-list-item-title>{{ k.name }}</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-col>
+                                    <v-col>
+                                        <v-list two-line v-if="hasComments">
+                                            <v-subheader>Comments
+                                                <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
+                                            </v-subheader>
+
+                                            <template v-for="comment in comments">
+                                                <v-list-item
+                                                    :key="comment.id"
+                                                >
+                                                    <v-list-item-content>
+                                                        <v-list-item-title>{{ comment.name }}</v-list-item-title>
+                                                        <v-list-item-subtitle>
+                                                            <span class="text--primary">{{formatDateTime(comment.posted_at)}}</span>
+                                                            &mdash; {{comment.text}} </v-list-item-subtitle>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </template>
+                                        </v-list>
+                                    </v-col>
+                                </v-row>
                             </v-tab-item>
                             <v-tab-item value="tab-files">
                                 <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
@@ -133,14 +164,16 @@
                             <v-list-item>
                                 <c-delete-activity-button :activity="activity"></c-delete-activity-button>
                             </v-list-item>
-                            <v-list-item>
-                                <v-btn v-if="activity.activity_file_id" link :href="route('file.download', activity.activity_file_id)">
+                            <v-list-item v-if="!activity.activity_file_id">
+                                <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
+                            </v-list-item>
+                            <v-list-item v-if="activity.activity_file_id">
+                                <v-btn link :href="route('file.download', activity.activity_file_id)">
                                     Download activity file
                                 </v-btn>
-                                <c-upload-activity-file-button :activity="activity" v-else></c-upload-activity-file-button>
                             </v-list-item>
-                            <v-list-item>
-                                <v-btn v-if="activity.activity_file_id" link :href="route('activity.download', activity.id)">
+                            <v-list-item v-if="activity.activity_file_id">
+                                <v-btn link :href="route('activity.download', activity.id)">
                                     Download activity
                                 </v-btn>
                             </v-list-item>
@@ -165,6 +198,11 @@
                                     dense
                                 ></v-select>
                             </v-list-item>
+                            <v-list-item>
+                                <a :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
+                                   v-if="activity.linked_to.indexOf('strava') !== -1"
+                                   >View on strava</a>
+                            </v-list-item>
                         </v-list>
                     </v-sheet>
                 </v-col>
@@ -174,27 +212,33 @@
 </template>
 
 <script>
-import CAppWrapper from '../../ui/wrappers/CAppWrapper';
-import CDeleteActivityButton from '../../ui/components/Activity/CDeleteActivityButton';
-import CUploadActivityFileButton from '../../ui/components/Activity/CUploadActivityFileButton';
-import CMap from '../../ui/components/CMap';
-import CImageGallery from '../../ui/components/CImageGallery';
-import CFileManager from '../../ui/components/Activity/CFileManager';
-import CFileFormDialog from '../../ui/components/Activity/CFileFormDialog';
-import CActivityStats from '../../ui/components/Activity/CActivityStats';
-import activityStats from '../../ui/mixins/activityStats';
-import activityStatSelector from '../../ui/mixins/activityStatSelector';
-import CActivityForm from '../../ui/components/Activity/CActivityForm';
+import CAppWrapper from 'ui/wrappers/CAppWrapper';
+import CDeleteActivityButton from 'ui/components/Activity/CDeleteActivityButton';
+import CUploadActivityFileButton from 'ui/components/Activity/CUploadActivityFileButton';
+import CMap from 'ui/components/CMap';
+import CImageGallery from 'ui/components/CImageGallery';
+import CFileManager from 'ui/components/Activity/CFileManager';
+import CFileFormDialog from 'ui/components/Activity/CFileFormDialog';
+import CActivityStats from 'ui/components/Activity/CActivityStats';
+import activityStats from 'ui/mixins/activityStats';
+import activityStatSelector from 'ui/mixins/activityStatSelector';
+import CActivityForm from 'ui/components/Activity/CActivityForm';
+import CLineGraph from 'ui/components/CLineGraph';
+import CActivityAnalysis from 'ui/components/Activity/CActivityAnalysis';
+import strava from 'ui/mixins/strava';
+import moment from 'moment';
 
 export default {
     name: "Show",
     components: {
+        CActivityAnalysis,
+        CLineGraph,
         CActivityForm,
         CActivityStats,
         CFileFormDialog,
         CFileManager, CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
     },
-    mixins: [activityStats, activityStatSelector],
+    mixins: [activityStats, activityStatSelector, strava],
     props: {
         activity: {
             required: true,
@@ -203,7 +247,12 @@ export default {
     },
     data() {
         return {
-            tab: 'tab-summary',
+            tab: 'tab-summary'
+        }
+    },
+    methods: {
+        formatDateTime(dt) {
+            return moment(dt).format('DD/MM/YYYY HH:mm:ss');
         }
     },
     computed: {

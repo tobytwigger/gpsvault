@@ -36,6 +36,18 @@
                 </v-list-item-icon>
                 <v-list-item-title>Activities</v-list-item-title>
             </v-list-item>
+            <v-list-item link>
+                <v-list-item-icon>
+                    <v-icon>mdi-routes</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Routes</v-list-item-title>
+            </v-list-item>
+            <v-list-item link>
+                <v-list-item-icon>
+                    <v-icon>mdi-campfire</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Tours</v-list-item-title>
+            </v-list-item>
 
         </v-list>
 
@@ -45,12 +57,6 @@
             nav
             dense
         >
-            <v-list-item link @click="$inertia.visit(route('profile.show'))">
-                <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Profile</v-list-item-title>
-            </v-list-item>
             <v-list-group
                 :value="false"
                 no-action
@@ -89,6 +95,13 @@
             nav
             dense
         >
+            <v-list-item link @click="$inertia.visit(route('profile.show'))">
+                <v-list-item-icon>
+                    <v-icon>mdi-cog</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Settings</v-list-item-title>
+            </v-list-item>
+
             <v-list-item link @click="$inertia.post(route('logout'))">
                 <v-list-item-icon>
                     <v-icon>mdi-logout</v-icon>

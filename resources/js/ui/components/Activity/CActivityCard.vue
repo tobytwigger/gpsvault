@@ -20,24 +20,24 @@
 
         <v-card-text>
             <v-chip
+                outlined
                 class="ma-2"
                 color="indigo"
-                text-color="white"
             >
-                {{ toKilometers(activity.distance) }}km
-                <v-icon right>
+                <v-icon left>
                     mdi-ruler
                 </v-icon>
+                {{ toKilometers(activity.distance) }}km
             </v-chip>
 
             <v-chip
+                outlined
                 color="indigo"
-                text-color="white"
             >
-                {{ toDateTime(activity.started_at) }}
-                <v-icon right>
+                <v-icon left>
                     mdi-calendar-range
                 </v-icon>
+                {{ toDateTime(activity.started_at) }}
             </v-chip>
         </v-card-text>
 
