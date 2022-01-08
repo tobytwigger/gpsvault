@@ -37,7 +37,42 @@
                             <v-tab-item value="tab-summary">
                                 <v-row>
                                     <v-col>
-                                        Description
+                                        <v-row>
+                                            <v-col class="px-8 pt-8">
+                                                <div v-if="activity.description">
+                                                    {{ activity.description }}
+                                                </div>
+                                                <div v-else>
+                                                    No description
+                                                </div>
+                                            </v-col>
+                                        </v-row>
+                                        <v-row>
+                                            <v-col class="px-8">
+                                                <div v-if="hasStats && stats.human_started_at && stats.human_ended_at">
+                                                    <span v-if="stats.human_started_at === stats.human_ended_at">Loop starting from </span>
+                                                    <span v-else>Ride from</span>
+                                                    <v-chip
+                                                        class="ma-2"
+                                                        color="green"
+                                                        text-color="white"
+                                                    >
+                                                        <v-icon>mdi-map-marker</v-icon>
+                                                        {{stats.human_started_at}}
+                                                    </v-chip>
+                                                    <span v-if="stats.human_started_at !== stats.human_ended_at"> to
+                                                        <v-chip
+                                                            class="ma-2"
+                                                            color="green"
+                                                            text-color="white"
+                                                        >
+                                                            <v-icon>mdi-map-marker</v-icon>
+                                                            {{ stats.human_ended_at }}
+                                                        </v-chip>
+                                                    </span>
+                                                </div>
+                                            </v-col>
+                                        </v-row>
                                     </v-col>
                                     <v-col>
                                         <c-activity-stats v-if="hasStats" :stats="stats" :limit="4"></c-activity-stats>
@@ -46,12 +81,11 @@
                                 </v-row>
                                 <v-row>
                                     <v-col>
-                                        Images being shown in a nicer slider
-                                        <c-image-gallery :images="images"></c-image-gallery>
+                                        <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col>
+                                    <v-col class="pa-8">
                                         <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
                                     </v-col>
                                 </v-row>

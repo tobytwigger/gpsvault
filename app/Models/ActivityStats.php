@@ -6,10 +6,16 @@ use App\Traits\HasAdditionalData;
 use Database\Factories\ActivityStatsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class ActivityStats extends Model
 {
     use HasFactory, HasAdditionalData;
+
+    protected $appends = [
+        'human_started_at',
+        'human_ended_at',
+    ];
 
     protected $fillable = [
         'integration',
@@ -101,6 +107,39 @@ class ActivityStats extends Model
                 $activityStats->activity()->update(['started_at' => $activityStats->started_at]);
             }
         });
+    }
+
+    private function getResults($lat, $lon)
+    {
+        $result = app('nominatim')->find(
+            app('nominatim')->newReverse()->latlon($lat, $lon)
+        );
+        $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
+        return join(', ', array_slice($address, 0, 4));
+    }
+
+    public function getHumanStartedAtAttribute()
+    {
+        if(!$this->start_latitude || !$this->start_longitude) {
+            return null;
+        }
+        return cache()->remember(
+            static::class . '-findlatlong-' . $this->start_latitude . $this->start_longitude,
+            1000000,
+            fn() => $this->getResults($this->start_latitude, $this->start_longitude)
+        );
+    }
+
+    public function getHumanEndedAtAttribute()
+    {
+        if(!$this->end_latitude || !$this->end_longitude) {
+            return null;
+        }
+        return cache()->remember(
+            static::class . '-findlatlong-' . $this->end_latitude . $this->end_longitude,
+            1000000,
+            fn() => $this->getResults($this->end_latitude, $this->end_longitude)
+        );
     }
 
     public static function default()

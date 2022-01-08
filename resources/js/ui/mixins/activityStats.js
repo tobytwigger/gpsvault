@@ -34,16 +34,16 @@ export default {
             return this.convert(this.stats.distance?.toString() || null, 'distance');
         },
         startLatitude() {
-            return this.convert(this.stats.start_latitude.toString() || null, 'latitude');
+            return {value: this.stats.start_latitude.toString() || null, unit: 'lat'};
         },
         startLongitude() {
-            return this.convert(this.stats.start_longitude?.toString() || null, 'longitude');
+            return {value: this.stats.start_longitude.toString() || null, unit: 'long'};
         },
         endLatitude() {
-            return this.convert(this.stats.end_latitude?.toString() || null, 'latitude');
+            return {value: this.stats.end_latitude.toString() || null, unit: 'lat'};
         },
         endLongitude() {
-            return this.convert(this.stats.end_longitude?.toString() || null, 'longitude');
+            return {value: this.stats.end_longitude.toString() || null, unit: 'long'};
         },
         averageTemperature() {
             return this.convert(this.stats.average_temp?.toString() || null, 'temperature');

@@ -16,6 +16,9 @@ export default {
                 },
                 duration: (val) => {
                     return {value: moment.utc(val * 1000).format('HH:mm:ss'), unit: 'h'}
+                },
+                datetime: (val) => {
+                    return {value: moment(val).format('DD/MM/YYYY HH:mm:ss'), unit: ''}
                 }
             }
         }
@@ -30,7 +33,7 @@ export default {
                     power: 'W',
                     distance: 'm',
                     elevation: 'm',
-                    page: 's/m'
+                    pace: 's/m'
                 },
                 user: {
                     speed: 'km/h',

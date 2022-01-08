@@ -29,6 +29,7 @@
         "laravel/tinker": "^2.5",
         "league/flysystem-aws-s3-v3": "^1.0",
         "linkeys/signed-url": "^3.0",
+        "maxh/php-nominatim": "^2.3",
         "mjaschen/phpgeo": "^4.0",
         "nelexa/zip": "^4.0",
         "php-unit-conversion/php-unit-conversion": "^1.30",

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use maxh\Nominatim\Nominatim;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton('nominatim', fn() => new Nominatim('https://nominatim.openstreetmap.org/'));
     }
 
     /**
