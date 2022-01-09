@@ -84,11 +84,6 @@
 </template>
 
 <script>
-import Modal from '@/Jetstream/Modal';
-import JetButton from '@/Jetstream/Button.vue'
-import JetDangerButton from '@/Jetstream/Button.vue'
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
 import ClientRow from './Partials/ClientRow';
 import SharedClientRow from './Partials/SharedClientRow';
 import PublicClientRow from './Partials/PublicClientRow';
@@ -101,11 +96,6 @@ export default {
         PublicClientRow,
         SharedClientRow,
         ClientRow,
-        Modal,
-        JetButton,
-        JetInput,
-        JetLabel,
-        JetDangerButton,
     },
     props: {
         ownedClients: {

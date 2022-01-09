@@ -17,16 +17,9 @@
 </template>
 
 <script>
-import JetInput from '@/Jetstream/Input.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 
 export default {
     name: "StravaFixSetup",
-    components: {
-        JetInput,
-        JetLabel,
-    },
     props: {
         value: {
             required: false

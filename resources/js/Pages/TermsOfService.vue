@@ -19,14 +19,12 @@
 
 <script>
 import { Head } from '@inertiajs/inertia-vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
 
 export default {
     props: ['terms'],
 
     components: {
         Head,
-        JetAuthenticationCardLogo,
     },
 }
 </script>

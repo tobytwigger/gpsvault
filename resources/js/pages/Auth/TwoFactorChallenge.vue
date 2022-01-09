@@ -67,24 +67,12 @@
 
 <script>
     import { Head } from '@inertiajs/inertia-vue';
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
     import CAuthWrapper from 'ui/layouts/CAuthWrapper';
 
     export default {
         components: {
             CAuthWrapper,
-            Head,
-            JetAuthenticationCard,
-            JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetLabel,
-            JetValidationErrors,
+            Head
         },
 
         data() {

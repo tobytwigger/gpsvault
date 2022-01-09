@@ -42,12 +42,10 @@
 </template>
 
 <script>
-import JetButton from '@/Jetstream/Button.vue'
 
 export default {
     name: "ViewSingleTask",
     components: {
-        JetButton,
     },
     props: {
         task: {

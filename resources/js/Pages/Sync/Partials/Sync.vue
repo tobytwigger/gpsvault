@@ -64,9 +64,6 @@
 <script>
 import ViewSingleTask from './ViewSingleTask';
 
-import JetButton from '@/Jetstream/Button.vue'
-import JetDangerButton from '@/Jetstream/DangerButton.vue'
-import Modal from '@/Jetstream/Modal';
 import StartSync from './StartSync';
 import moment from 'moment';
 import SyncLayout from './SyncLayout';
@@ -78,11 +75,8 @@ export default {
     components: {
         SyncProgress,
         SyncLayout,
-        JetButton,
-        Modal,
         StartSync,
         ViewSingleTask,
-        JetDangerButton
     },
     props: {
         taskDetails: {

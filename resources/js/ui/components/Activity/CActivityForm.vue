@@ -41,11 +41,13 @@
                             truncate-length="30"
                             v-model="form.file"
                             id="file"
+                            :loading="checkingDuplicate"
                             name="file"
+                            @change="checkForDuplicateActivity"
                             label="Activity File"
                             hint="Upload the gpx/tcx/fit file recording of your ride."
                             :error="form.errors.hasOwnProperty('file')"
-                            :error-messages="form.errors.hasOwnProperty('file') ? [form.errors.file] : []"
+                            :error-messages="fileErrorMessages"
                         ></v-file-input>
                     </v-form>
 
@@ -74,8 +76,11 @@
 </template>
 
 <script>
+import duplicateActivityChecker from '../../mixins/duplicateActivityChecker';
+
 export default {
     name: "CActivityForm",
+    mixins: [duplicateActivityChecker],
     props: {
         oldActivity: {
             required: false,
@@ -105,6 +110,17 @@ export default {
     mounted() {
         this.updateFromOldActivity();
     },
+    computed: {
+        file() {
+            return this.form.file;
+        },
+        fileErrorMessages() {
+            if(this.duplicateMessage) {
+                return [this.duplicateMessage];
+            }
+            return this.form.errors.hasOwnProperty('file') ? [this.form.errors.file] : []
+        }
+    },
     methods: {
         updateFromOldActivity() {
             if(this.oldActivity) {
@@ -119,6 +135,7 @@ export default {
                     : route('activity.store'),
                 {
                     onSuccess: () => {
+                        this.duplicateActivity = null;
                         this.form.reset();
                         this.updateFromOldActivity();
                         this.showDialog = false;

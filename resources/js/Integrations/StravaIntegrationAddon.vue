@@ -50,14 +50,10 @@
 </template>
 
 <script>
-import Modal from '@/Jetstream/Modal.vue'
 import moment from 'moment';
 
 export default {
     name: "StravaIntegrationAddon",
-    components: {
-        Modal
-    },
     props: {
         activitiesLoadingKudos: Number,
         activitiesLoadingComments: Number,

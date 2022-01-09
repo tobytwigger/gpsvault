@@ -69,15 +69,11 @@
 </template>
 
 <script>
-import JetButton from '@/Jetstream/Button.vue'
-import Modal from '@/Jetstream/Modal';
 
 export default {
     name: "Task",
     inheritAttrs: false,
     components: {
-        JetButton,
-        Modal
     },
     props: {
         index: {

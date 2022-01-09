@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import JetButton from '@/Jetstream/Button.vue'
 import Task from './Task';
 import {cloneDeep} from 'lodash';
 
@@ -22,7 +21,6 @@ export default {
     name: "StartSync",
     components: {
         Task,
-        JetButton,
     },
     data() {
         return {
