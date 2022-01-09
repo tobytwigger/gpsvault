@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import CAuthWrapper from '../../ui/layouts/CAuthWrapper';
+import CAuthWrapper from 'ui/layouts/CAuthWrapper';
 
 export default {
     name: 'ForgotPassword',

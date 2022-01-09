@@ -2,13 +2,13 @@
 
     <v-navigation-drawer app clipped v-model="shouldShow" :permanent="!$vuetify.breakpoint.mobile">
         <v-list>
-            <v-list-item class="px-2">
-                <v-list-item-avatar>
-                    <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+            <v-list-item style="justify-content: center;">
+                <v-list-item-avatar color="primary" >
+                    {{ $page.props.user.name.split(' ').map(i => i.charAt(0).toUpperCase()).join('') }}
                 </v-list-item-avatar>
             </v-list-item>
 
-            <v-list-item link>
+            <v-list-item style="text-align: center;" link>
                 <v-list-item-content>
                     <v-list-item-title class="text-h6">
                         {{ $page.props.user.name }}
@@ -94,7 +94,7 @@
             nav
             dense
         >
-            <v-list-item :input-value="['profile.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('profile.show'))">
+            <v-list-item :input-value="['settings.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('settings.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-cog</v-icon>
                 </v-list-item-icon>

@@ -25,7 +25,7 @@ export default {
     },
     computed: {
         units() {
-            return {
+            let units = {
                 system: {
                     speed: 'm/s',
                     temperature: 'C',
@@ -34,8 +34,20 @@ export default {
                     distance: 'm',
                     elevation: 'm',
                     pace: 's/m'
-                },
-                user: {
+                }
+            };
+            if(this.unitSystem === 'imperial') {
+                units.user = {
+                    speed: 'm/h',
+                    temperature: 'C',
+                    energy: 'kJ',
+                    power: 'W',
+                    distance: 'mi',
+                    elevation: 'ft',
+                    pace: 'min/mi'
+                }
+            } else if(this.unitSystem === 'metric') {
+                units.user = {
                     speed: 'km/h',
                     temperature: 'C',
                     energy: 'kJ',
@@ -43,9 +55,15 @@ export default {
                     distance: 'km',
                     elevation: 'm',
                     pace: 'min/km'
-                }
+                };
+            } else {
+                units.user = units.system;
             }
+            return units;
         },
+        unitSystem() {
+            return this.$page.props.settings?.unit_system || 'metric';
+        }
     },
     methods: {
         convert(value, unit) {
@@ -69,13 +87,13 @@ export default {
             return Math.round((value + Number.EPSILON) * 100) / 100
         },
         hasSystemUnit(unit) {
-            return this.units.system.hasOwnProperty(unit);
+            return this.getSystemUnit(unit) !== null;
         },
         hasUserUnit(unit) {
-            return this.units.user.hasOwnProperty(unit);
+            return this.getUserUnit(unit) !== null;
         },
         getSystemUnit(unit) {
-            return this.units.system[unit];
+            return this.units.system.hasOwnProperty(unit) ? this.units.system[unit] : null;
         },
         getUserUnit(unit) {
             return this.units.user[unit];

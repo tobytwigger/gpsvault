@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import CAppWrapper from '../../ui/layouts/CAppWrapper';
-import CActivityCard from '../../ui/components/Activity/CActivityCard';
-import CActivityForm from '../../ui/components/Activity/CActivityForm';
-import CPaginationIterator from '../../ui/components/CPaginationIterator';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
+import CActivityCard from 'ui/components/Activity/CActivityCard';
+import CActivityForm from 'ui/components/Activity/CActivityForm';
+import CPaginationIterator from 'ui/components/CPaginationIterator';
 export default {
     name: "Index",
     components: {CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},

@@ -28,7 +28,7 @@
                 <v-icon left>
                     mdi-ruler
                 </v-icon>
-                {{ toKilometers(activity.distance) }}km
+                {{ convertDistance(activity.distance) }}
             </v-chip>
 
             <v-chip
@@ -83,9 +83,11 @@
 
 <script>
 import moment from 'moment';
+import units from '../../mixins/units';
 
 export default {
     name: "CActivityCard",
+    mixins: [units],
     props: {
         activity: {
             required: true,
@@ -98,8 +100,9 @@ export default {
         }
     },
     methods: {
-        toKilometers(value) {
-            return Math.round(value / 10) / 100;
+        convertDistance(value) {
+            let converted = this.convert(value, 'distance');
+            return converted.value + converted.unit;
         },
         toDateTime(value) {
             if (value === null) {

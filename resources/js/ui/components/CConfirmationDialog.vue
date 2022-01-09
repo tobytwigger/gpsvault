@@ -66,6 +66,15 @@ export default {
             showDialog: false
         }
     },
+    watch: {
+        showDialog(val) {
+            if(val) {
+                this.$emit('showing');
+            } else {
+                this.$emit('closed');
+            }
+        }
+    },
     methods: {
         triggerDialog() {
             this.showDialog = true;

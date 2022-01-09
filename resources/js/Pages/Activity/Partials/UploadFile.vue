@@ -107,7 +107,6 @@ export default {
             reader.addEventListener('load',function (event) {
                 self.checkingDuplicate = true;
                 let hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(event.target.result)).toString();
-                console.log(hash);
                 axios.post(route('activity.file.duplicate'), {hash: hash})
                     .then(response => self.duplicateActivity = response.data.activity)
                     .catch(error => self.duplicateActivity = null)

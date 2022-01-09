@@ -92,7 +92,7 @@ import JetLabel from '@/Jetstream/Label.vue'
 import ClientRow from './Partials/ClientRow';
 import SharedClientRow from './Partials/SharedClientRow';
 import PublicClientRow from './Partials/PublicClientRow';
-import VAppLayout from '../../../ui/layouts/VAppLayout';
+import VAppLayout from '../ui/layouts/VAppLayout';
 
 export default {
     name: "Index",

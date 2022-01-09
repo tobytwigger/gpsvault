@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Services\Sync\Task;
+use App\Settings\DarkMode;
+use App\Settings\StravaClient;
+use App\Settings\UnitSystem;
 use App\Tasks\CreateBackupTask;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use maxh\Nominatim\Nominatim;
+use Settings\Setting;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +39,9 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Task::registerTask(CreateBackupTask::class);
+
+        Setting::register(new UnitSystem());
+        Setting::register(new DarkMode());
+        Setting::register(new StravaClient());
     }
 }

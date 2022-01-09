@@ -16,7 +16,7 @@
 <script>
 
     import UploadFile from './Partials/UploadFile';
-    import VAppLayout from '../../ui/layouts/VAppLayout';
+    import VAppLayout from 'ui/layouts/VAppLayout';
 
     export default {
         components: {

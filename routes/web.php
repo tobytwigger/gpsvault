@@ -34,6 +34,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('backups', \App\Http\Controllers\Pages\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backups' => 'file']);
     Route::delete('backups/sync/{sync}/cancel', [\App\Http\Controllers\Pages\BackupController::class, 'cancelSync'])->name('backups.sync.cancel');
 
+    Route::resource('settings', \App\Http\Controllers\Pages\SettingsController::class)->only(['index', 'store']);
+
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);

@@ -54,7 +54,7 @@
 
 <script>
 import moment from 'moment';
-import VAppLayout from '../../ui/layouts/VAppLayout';
+import VAppLayout from 'ui/layouts/VAppLayout';
 
 export default {
     name: "Log",

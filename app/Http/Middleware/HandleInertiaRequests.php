@@ -2,7 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Settings\DarkMode;
+use App\Settings\StravaClient;
+use App\Settings\UnitSystem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -37,7 +41,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            //
+            'settings' => fn() => [
+                'unit_system' => UnitSystem::getValue(),
+                'dark_mode' => DarkMode::getValue(),
+                'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null)
+            ],
+            'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : []
         ]);
     }
 }

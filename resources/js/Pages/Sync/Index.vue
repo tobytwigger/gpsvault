@@ -20,7 +20,7 @@
 
     import Integration from './Partials/Integration';
     import Sync from './Partials/Sync';
-    import VAppLayout from '../../ui/layouts/VAppLayout';
+    import VAppLayout from 'ui/layouts/VAppLayout';
 
     export default {
         components: {

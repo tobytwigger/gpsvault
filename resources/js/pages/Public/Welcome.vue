@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CPublicWrapper from '../../ui/layouts/CPublicWrapper';
+import CPublicWrapper from 'ui/layouts/CPublicWrapper';
 export default {
     name: "Welcome",
     components: {CPublicWrapper}
