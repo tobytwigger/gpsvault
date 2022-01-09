@@ -36,6 +36,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::resource('settings', \App\Http\Controllers\Pages\SettingsController::class)->only(['index', 'store']);
 
+    Route::resource('route', \App\Http\Controllers\Pages\RouteController::class)->only(['index', 'store', 'update', 'destroy']);
+
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);

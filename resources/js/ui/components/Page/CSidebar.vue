@@ -35,7 +35,7 @@
                 </v-list-item-icon>
                 <v-list-item-title>Activities</v-list-item-title>
             </v-list-item>
-            <v-list-item link>
+            <v-list-item :input-value="['route.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('route.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-routes</v-icon>
                 </v-list-item-icon>
