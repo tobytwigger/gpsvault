@@ -25,6 +25,8 @@ class RunSyncTask implements ShouldQueue
 
     private SyncTask $task;
 
+    protected $maxExceptions = 3;
+
     /**
      * Create a new job instance.
      *
@@ -68,6 +70,7 @@ class RunSyncTask implements ShouldQueue
                 return;
             }
             $this->task->setStatusAsSucceeded();
+
         }
     }
 

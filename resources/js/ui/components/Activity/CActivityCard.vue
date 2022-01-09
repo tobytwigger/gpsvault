@@ -5,7 +5,8 @@
         outlined
     >
         <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            v-if="activity.cover_image"
+            :src="activity.cover_image"
             height="200px"
         ></v-img>
 

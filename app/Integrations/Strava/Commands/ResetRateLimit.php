@@ -31,9 +31,9 @@ class ResetRateLimit extends Command
     public function handle()
     {
         if($this->argument('limiter') === 'minute') {
-            StravaClient::update(['used_15_min_calls' => 0]);
+            StravaClient::query()->update(['used_15_min_calls' => 0]);
         } elseif($this->argument('limiter') === 'day') {
-            StravaClient::update(['used_daily_calls' => 0]);
+            StravaClient::query()->update(['used_daily_calls' => 0]);
         } else {
             $this->error('Argument must be one of minute or day');
             return Command::FAILURE;

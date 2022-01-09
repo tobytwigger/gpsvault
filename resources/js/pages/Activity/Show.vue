@@ -1,218 +1,209 @@
 <template>
-    <c-app-wrapper :title="activity.name">
-        <template #content>
-            <v-row>
-                <v-col cols="12" lg="8" xl="10">
-                    <v-sheet color="white" elevation="3" rounded width="100%">
-                        <v-tabs
-                            v-model="tab"
-                            centered
-                            grow
-                            icons-and-text
-                        >
-                            <v-tabs-slider></v-tabs-slider>
+    <c-app-wrapper :title="activity.name" :action-sidebar="true">
+        <v-tabs
+            v-model="tab"
+            centered
+            grow
+            icons-and-text
+        >
+            <v-tabs-slider></v-tabs-slider>
 
-                            <v-tab href="#tab-summary">
-                                Summary
-                                <v-icon>mdi-information</v-icon>
-                            </v-tab>
+            <v-tab href="#tab-summary">
+                Summary
+                <v-icon>mdi-information</v-icon>
+            </v-tab>
 
-                            <v-tab href="#tab-analysis">
-                                Analysis
-                                <v-icon>mdi-chart-areaspline-variant</v-icon>
-                            </v-tab>
+            <v-tab href="#tab-analysis">
+                Analysis
+                <v-icon>mdi-chart-areaspline-variant</v-icon>
+            </v-tab>
 
-                            <v-tab href="#tab-social">
-                                Social
-                                <v-icon>mdi-account-group</v-icon>
-                            </v-tab>
+            <v-tab href="#tab-social">
+                Social
+                <v-icon>mdi-account-group</v-icon>
+            </v-tab>
 
-                            <v-tab href="#tab-files">
-                                Files
-                                <v-icon>mdi-file-document-multiple</v-icon>
-                            </v-tab>
-                        </v-tabs>
+            <v-tab href="#tab-files">
+                Files
+                <v-icon>mdi-file-document-multiple</v-icon>
+            </v-tab>
+        </v-tabs>
 
-                        <v-tabs-items v-model="tab">
-                            <v-tab-item value="tab-summary">
-                                <v-row>
-                                    <v-col>
-                                        <v-row>
-                                            <v-col class="px-8 pt-8">
-                                                <div v-if="activity.description">
-                                                    {{ activity.description }}
-                                                </div>
-                                                <div v-else>
-                                                    No description
-                                                </div>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col>
-                                                <v-chip class="ma-2">
-                                                    <v-icon>mdi-map-marker</v-icon>
-                                                    {{ startedAt.value }}
-                                                </v-chip>
-                                            </v-col>
-                                        </v-row>
-                                        <v-row>
-                                            <v-col class="px-8">
-                                                <div v-if="hasStats && humanStartedAt && humanEndedAt">
-                                                    <span v-if="humanStartedAt === humanEndedAt">Loop starting from </span>
-                                                    <span v-else>Ride from</span>
-                                                    <v-chip
-                                                        class="ma-2"
-                                                        color="green"
-                                                        text-color="white"
-                                                    >
-                                                        <v-icon>mdi-map-marker</v-icon>
-                                                        {{humanStartedAt}}
-                                                    </v-chip>
-                                                    <span v-if="humanStartedAt !== humanEndedAt"> to
-                                                        <v-chip
-                                                            class="ma-2"
-                                                            color="green"
-                                                            text-color="white"
-                                                        >
-                                                            <v-icon>mdi-map-marker</v-icon>
-                                                            {{ humanEndedAt }}
-                                                        </v-chip>
-                                                    </span>
-                                                </div>
-                                            </v-col>
-                                        </v-row>
-                                    </v-col>
-                                    <v-col>
-                                        <c-activity-stats v-if="hasStats" :stats="stats"  :limit="4"></c-activity-stats>
-                                        <div v-else>No stats available</div>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col>
-                                        <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col class="pa-8">
-                                        <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
-                                    </v-col>
-                                </v-row>
-                            </v-tab-item>
-                            <v-tab-item value="tab-analysis">
-                                <c-activity-analysis :activity="activity" :stats="stats">
-
-                                </c-activity-analysis>
-                            </v-tab-item>
-                            <v-tab-item value="tab-social">
-                                <v-row>
-                                    <v-col v-if="hasKudos">
-                                        <v-list>
-                                            <v-subheader>Kudos
-                                                <v-badge :value="kudosCount" :content="kudosCount" inline></v-badge>
-                                            </v-subheader>
-
-                                            <v-list-item v-for="k in kudos">
-                                                <v-list-item-content>
-                                                    <v-list-item-title>{{ k.name }}</v-list-item-title>
-                                                </v-list-item-content>
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-col>
-                                    <v-col>
-                                        <v-list two-line v-if="hasComments">
-                                            <v-subheader>Comments
-                                                <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
-                                            </v-subheader>
-
-                                            <template v-for="comment in comments">
-                                                <v-list-item
-                                                    :key="comment.id"
-                                                >
-                                                    <v-list-item-content>
-                                                        <v-list-item-title>{{ comment.name }}</v-list-item-title>
-                                                        <v-list-item-subtitle>
-                                                            <span class="text--primary">{{formatDateTime(comment.posted_at)}}</span>
-                                                            &mdash; {{comment.text}} </v-list-item-subtitle>
-                                                    </v-list-item-content>
-                                                </v-list-item>
-                                            </template>
-                                        </v-list>
-                                    </v-col>
-                                </v-row>
-                            </v-tab-item>
-                            <v-tab-item value="tab-files">
-                                <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
-                                    <template v-slot:activator="{trigger,showing}">
-                                        <v-btn
-                                            color="secondary"
-                                            @click.stop="trigger"
-                                            :disabled="showing"
+        <v-tabs-items v-model="tab">
+            <v-tab-item value="tab-summary">
+                <v-row>
+                    <v-col>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
+                                <div v-if="activity.description">
+                                    {{ activity.description }}
+                                </div>
+                                <div v-else>
+                                    No description
+                                </div>
+                            </v-col>
+                        </v-row>
+                        <v-row v-if="startedAt">
+                            <v-col>
+                                <v-chip class="ma-2">
+                                    <v-icon>mdi-map-marker</v-icon>
+                                    {{ startedAt.value }}
+                                </v-chip>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="px-8">
+                                <div v-if="hasStats && humanStartedAt && humanEndedAt">
+                                    <span v-if="humanStartedAt === humanEndedAt">Loop starting from </span>
+                                    <span v-else>Ride from</span>
+                                    <v-chip
+                                        class="ma-2"
+                                        color="green"
+                                        text-color="white"
+                                    >
+                                        <v-icon>mdi-map-marker</v-icon>
+                                        {{humanStartedAt}}
+                                    </v-chip>
+                                    <span v-if="humanStartedAt !== humanEndedAt"> to
+                                        <v-chip
+                                            class="ma-2"
+                                            color="green"
+                                            text-color="white"
                                         >
-                                            <v-icon>mdi-upload</v-icon>
-                                            Upload file
-                                        </v-btn>
-                                    </template>
-                                </c-file-form-dialog>
-                                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>
-                            </v-tab-item>
-                        </v-tabs-items>
-                    </v-sheet>
-                </v-col>
-                <v-col cols="12" md="4" xl="2" class="d-flex justify-lg-center">
-                    <v-sheet color="white" elevation="3" rounded>
+                                            <v-icon>mdi-map-marker</v-icon>
+                                            {{ humanEndedAt }}
+                                        </v-chip>
+                                    </span>
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col>
+                        <c-activity-stats v-if="hasStats" :stats="stats"  :limit="4"></c-activity-stats>
+                        <div v-else>No stats available</div>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="pa-8">
+                        <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
+                    </v-col>
+                </v-row>
+            </v-tab-item>
+            <v-tab-item value="tab-analysis">
+                <c-activity-analysis :activity="activity" :stats="stats">
+
+                </c-activity-analysis>
+            </v-tab-item>
+            <v-tab-item value="tab-social">
+                <v-row>
+                    <v-col v-if="hasKudos">
                         <v-list>
-                            <v-list-item>
-                                <c-delete-activity-button :activity="activity"></c-delete-activity-button>
-                            </v-list-item>
-                            <v-list-item v-if="!activity.activity_file_id">
-                                <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
-                            </v-list-item>
-                            <v-list-item v-if="activity.activity_file_id">
-                                <v-btn link :href="route('file.download', activity.activity_file_id)">
-                                    Download activity file
-                                </v-btn>
-                            </v-list-item>
-                            <v-list-item v-if="activity.activity_file_id">
-                                <v-btn link :href="route('activity.download', activity.id)">
-                                    Download activity
-                                </v-btn>
-                            </v-list-item>
-                            <v-list-item>
-                                <c-activity-form :old-activity="activity">
-                                    <template v-slot:activator="{trigger,showing}">
-                                        <v-btn :disabled="showing" @click="trigger">
-                                            Edit Activity
-                                        </v-btn>
-                                    </template>
-                                </c-activity-form>
-                            </v-list-item>
-                            <v-list-item>
-                                <v-select
-                                    class="pt-2"
-                                    v-model="activeDataSource"
-                                    item-text="integration"
-                                    item-value="integration"
-                                    :items="allStats"
-                                    hint="Choose which data sets to show"
-                                    label="Data Source"
-                                    dense
-                                ></v-select>
-                            </v-list-item>
-                            <v-list-item>
-                                <a :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
-                                   v-if="activity.linked_to.indexOf('strava') !== -1"
-                                   >View on strava</a>
+                            <v-subheader>Kudos
+                                <v-badge :value="kudosCount" :content="kudosCount" inline></v-badge>
+                            </v-subheader>
+
+                            <v-list-item v-for="k in kudos" :key="k.id">
+                                <v-list-item-content>
+                                    <v-list-item-title>{{ k.name }}</v-list-item-title>
+                                </v-list-item-content>
                             </v-list-item>
                         </v-list>
-                    </v-sheet>
-                </v-col>
-            </v-row>
+                    </v-col>
+                    <v-col>
+                        <v-list two-line v-if="hasComments">
+                            <v-subheader>Comments
+                                <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
+                            </v-subheader>
+
+                            <template v-for="comment in comments">
+                                <v-list-item
+                                    :key="comment.id"
+                                >
+                                    <v-list-item-content>
+                                        <v-list-item-title>{{ comment.name }}</v-list-item-title>
+                                        <v-list-item-subtitle>
+                                            <span class="text--primary">{{formatDateTime(comment.posted_at)}}</span>
+                                            &mdash; {{comment.text}} </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template>
+                        </v-list>
+                    </v-col>
+                </v-row>
+            </v-tab-item>
+            <v-tab-item value="tab-files">
+                <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
+                    <template v-slot:activator="{trigger,showing}">
+                        <v-btn
+                            color="secondary"
+                            @click.stop="trigger"
+                            :disabled="showing"
+                        >
+                            <v-icon>mdi-upload</v-icon>
+                            Upload file
+                        </v-btn>
+                    </template>
+                </c-file-form-dialog>
+                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>
+            </v-tab-item>
+        </v-tabs-items>
+
+        <template #sidebar>
+            <v-list>
+                <v-list-item>
+                    <c-delete-activity-button :activity="activity"></c-delete-activity-button>
+                </v-list-item>
+                <v-list-item v-if="!activity.activity_file_id">
+                    <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
+                </v-list-item>
+                <v-list-item v-if="activity.activity_file_id">
+                    <v-btn link :href="route('file.download', activity.activity_file_id)">
+                        Download activity file
+                    </v-btn>
+                </v-list-item>
+                <v-list-item v-if="activity.activity_file_id">
+                    <v-btn link :href="route('activity.download', activity.id)">
+                        Download activity
+                    </v-btn>
+                </v-list-item>
+                <v-list-item>
+                    <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update">
+                        <template v-slot:activator="{trigger,showing}">
+                            <v-btn :disabled="showing" @click="trigger">
+                                Edit Activity
+                            </v-btn>
+                        </template>
+                    </c-activity-form>
+                </v-list-item>
+                <v-list-item>
+                    <v-select
+                        class="pt-2"
+                        v-model="activeDataSource"
+                        item-text="integration"
+                        item-value="integration"
+                        :items="allStats"
+                        hint="Choose which data sets to show"
+                        label="Data Source"
+                        dense
+                    ></v-select>
+                </v-list-item>
+                <v-list-item>
+                    <a :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
+                       v-if="activity.linked_to.indexOf('strava') !== -1"
+                    >View on strava</a>
+                </v-list-item>
+            </v-list>
         </template>
     </c-app-wrapper>
 </template>
 
 <script>
-import CAppWrapper from 'ui/wrappers/CAppWrapper';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CDeleteActivityButton from 'ui/components/Activity/CDeleteActivityButton';
 import CUploadActivityFileButton from 'ui/components/Activity/CUploadActivityFileButton';
 import CMap from 'ui/components/CMap';

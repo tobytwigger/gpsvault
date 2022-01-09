@@ -33,7 +33,7 @@ class ActivityController extends Controller
         return Inertia::render('Activity/Index', [
             'activities' => Auth::user()->activities()
                 ->orderBy('started_at', 'DESC')
-                ->paginate(15)
+                ->paginate(request()->input('perPage', 8))
         ]);
     }
 

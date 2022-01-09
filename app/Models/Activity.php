@@ -25,6 +25,10 @@ class Activity extends Model
         'stravaComments', 'stravaKudos'
     ];
 
+    protected $appends = [
+        'cover_image'
+    ];
+
     protected $casts = [
         'linked_to' => 'array',
         'user_id' => 'integer',
@@ -54,6 +58,15 @@ class Activity extends Model
                 AnalyseActivityFile::dispatch($activity);
             }
         });
+    }
+
+    public function getCoverImageAttribute()
+    {
+        $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
+        if($image) {
+            return route('file.preview', $image);
+        }
+        return null;
     }
 
     public function stravaComments()

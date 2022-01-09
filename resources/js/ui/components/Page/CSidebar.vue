@@ -13,7 +13,6 @@
                     <v-list-item-title class="text-h6">
                         {{ $page.props.user.name }}
                     </v-list-item-title>
-                    <!--                            <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>-->
                 </v-list-item-content>
             </v-list-item>
         </v-list>
@@ -24,13 +23,13 @@
             nav
             dense
         >
-            <v-list-item link @click="$inertia.visit(route('dashboard'))">
+            <v-list-item :input-value="['dashboard'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('dashboard'))">
                 <v-list-item-icon>
                     <v-icon>mdi-home</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
-            <v-list-item link @click="$inertia.visit(route('activity.index'))">
+            <v-list-item :input-value="['activity.index', 'activity.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('activity.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-bike</v-icon>
                 </v-list-item-icon>
@@ -68,20 +67,20 @@
                     </v-list-item-content>
                 </template>
 
-                <v-list-item link @click="$inertia.get(route('strava.client.index'))">
+                <v-list-item :input-value="['strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.get(route('strava.client.index'))">
                     <v-list-item-title>Strava</v-list-item-title>
                     <v-list-item-icon>
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-list-item-icon>
                 </v-list-item>
             </v-list-group>
-            <v-list-item link>
+            <v-list-item :input-value="['backups.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backups.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-safe</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Backups</v-list-item-title>
             </v-list-item>
-            <v-list-item link @click="$inertia.visit(route('documentation'))">
+            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('documentation'))">
                 <v-list-item-icon>
                     <v-icon>mdi-book-open-blank-variant</v-icon>
                 </v-list-item-icon>
@@ -95,7 +94,7 @@
             nav
             dense
         >
-            <v-list-item link @click="$inertia.visit(route('profile.show'))">
+            <v-list-item :input-value="['profile.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('profile.show'))">
                 <v-list-item-icon>
                     <v-icon>mdi-cog</v-icon>
                 </v-list-item-icon>

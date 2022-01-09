@@ -22,7 +22,7 @@
                         @click="showDialog = false"
                         :disabled="loading"
                     >
-                        Cancel
+                        {{ cancelButtonText }}
                     </v-btn>
                     <v-btn
                         color="primary"
@@ -54,6 +54,11 @@ export default {
             required: false,
             type: Boolean,
             default: false
+        },
+        cancelButtonText: {
+            required: false,
+            type: String,
+            default: 'Cancel'
         }
     },
     data() {

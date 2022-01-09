@@ -31,6 +31,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('stats.geojson');
     Route::post('/activity/file/duplicate', [\App\Http\Controllers\Api\DuplicateController::class, 'index'])->name('activity.file.duplicate');
 
+    Route::resource('backups', \App\Http\Controllers\Pages\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backups' => 'file']);
+    Route::delete('backups/sync/{sync}/cancel', [\App\Http\Controllers\Pages\BackupController::class, 'cancelSync'])->name('backups.sync.cancel');
+
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);

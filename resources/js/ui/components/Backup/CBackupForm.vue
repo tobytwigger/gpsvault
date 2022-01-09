@@ -16,37 +16,24 @@
                     <v-form @submit.prevent="submit">
                         <v-text-field
                             id="name"
-                            v-model="form.name"
+                            v-model="form.title"
                             label="Name"
-                            hint="A name for the activity"
+                            hint="A name for the backup"
                             name="name"
                             type="text"
-                            :error="form.errors.hasOwnProperty('name')"
-                            :error-messages="form.errors.hasOwnProperty('name') ? [form.errors.name] : []"
+                            :error="form.errors.hasOwnProperty('title')"
+                            :error-messages="form.errors.hasOwnProperty('title') ? [form.errors.title] : []"
                         ></v-text-field>
 
                         <v-textarea
                             id="description"
-                            v-model="form.description"
+                            v-model="form.caption"
                             label="Description"
-                            hint="A description for the activity"
+                            hint="A description for the backup"
                             name="description"
-                            :error="form.errors.hasOwnProperty('description')"
-                            :error-messages="form.errors.hasOwnProperty('description') ? [form.errors.description] : []"
+                            :error="form.errors.hasOwnProperty('caption')"
+                            :error-messages="form.errors.hasOwnProperty('caption') ? [form.errors.caption] : []"
                         ></v-textarea>
-
-                        <v-file-input
-                            v-if="oldActivity === null"
-                            show-size
-                            truncate-length="30"
-                            v-model="form.file"
-                            id="file"
-                            name="file"
-                            label="Activity File"
-                            hint="Upload the gpx/tcx/fit file recording of your ride."
-                            :error="form.errors.hasOwnProperty('file')"
-                            :error-messages="form.errors.hasOwnProperty('file') ? [form.errors.file] : []"
-                        ></v-file-input>
                     </v-form>
 
                 </v-card-text>
@@ -74,10 +61,12 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
-    name: "CActivityForm",
+    name: "CBackupForm",
     props: {
-        oldActivity: {
+        oldBackup: {
             required: false,
             type: Object,
             default: null
@@ -95,32 +84,34 @@ export default {
         return {
             showDialog: false,
             form: this.$inertia.form({
-                name: null,
-                description: null,
-                file: null,
-                _method: this.oldActivity ? 'patch' : 'post'
+                title: null,
+                caption: null,
+                _method: this.oldBackup ? 'patch' : 'post'
             })
         }
     },
     mounted() {
-        this.updateFromOldActivity();
+        this.updateFromOldBackup();
     },
     methods: {
-        updateFromOldActivity() {
-            if(this.oldActivity) {
-                this.form.name = this.oldActivity.name;
-                this.form.description = this.oldActivity.description;
+        updateFromOldBackup() {
+            if(this.oldBackup) {
+                this.form.title = this.oldBackup.title;
+                this.form.caption = this.oldBackup.caption;
+            } else {
+                this.form.title = 'Full backup ' + moment().format('DD/MM/YYYY')
+                this.form.caption = 'Backup taken at ' + moment().format('Mo MMM YYYY')
             }
         },
         submit() {
             this.form.post(
-                this.oldActivity
-                    ? route('activity.update', this.oldActivity.id)
-                    : route('activity.store'),
+                this.oldBackup
+                    ? route('backups.update', this.oldBackup.id)
+                    : route('backups.store'),
                 {
                     onSuccess: () => {
                         this.form.reset();
-                        this.updateFromOldActivity();
+                        this.updateFromOldBackup();
                         this.showDialog = false;
                     }
                 });

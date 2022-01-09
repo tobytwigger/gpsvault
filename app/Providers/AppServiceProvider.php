@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Sync\Task;
+use App\Tasks\CreateBackupTask;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use maxh\Nominatim\Nominatim;
@@ -31,5 +33,7 @@ class AppServiceProvider extends ServiceProvider
 
             return Storage::disk('s3');
         });
+
+        Task::registerTask(CreateBackupTask::class);
     }
 }

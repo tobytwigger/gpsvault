@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import CAppWrapper from '../../ui/wrappers/CAppWrapper';
+import CAppWrapper from '../../ui/layouts/CAppWrapper';
 export default {
     name: "Dashboard",
     components: {CAppWrapper}

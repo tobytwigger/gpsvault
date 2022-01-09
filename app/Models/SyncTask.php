@@ -170,7 +170,7 @@ class SyncTask extends Model
 
     public function createTaskObject(): Task
     {
-        return app('tasks.' . $this->taskId());
+        return app(sprintf('tasks.%s', $this->taskId()));
     }
 
     public function config(): array

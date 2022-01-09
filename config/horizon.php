@@ -170,7 +170,7 @@ return [
             'queue' => ['default', 'stats', 'indexing'],
             'balance' => 'auto',
             'maxProcesses' => 1,
-            'memory' => 512,
+            'memory' => 1024,
             'tries' => 1,
             'nice' => 0,
         ],
