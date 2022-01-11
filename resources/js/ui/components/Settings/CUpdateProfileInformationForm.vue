@@ -64,7 +64,7 @@
                     this.form.photo = this.$refs.photo.files[0]
                 }
 
-                this.form.post(ziggyRoute('user-profile-information.update'), {
+                this.form.post(this.ziggyRoute('user-profile-information.update'), {
                     errorBag: 'updateProfileInformation',
                     preserveScroll: true,
                     onSuccess: () => (this.clearPhotoFileInput()),
@@ -90,7 +90,7 @@
             },
 
             deletePhoto() {
-                this.$inertia.delete(ziggyRoute('current-user-photo.destroy'), {
+                this.$inertia.delete(this.ziggyRoute('current-user-photo.destroy'), {
                     preserveScroll: true,
                     onSuccess: () => {
                         this.photoPreview = null;

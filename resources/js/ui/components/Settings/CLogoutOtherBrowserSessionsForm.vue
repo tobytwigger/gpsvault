@@ -72,7 +72,7 @@
 
         methods: {
             logoutOtherBrowserSessions() {
-                this.form.delete(ziggyRoute('other-browser-sessions.destroy'), {
+                this.form.delete(this.ziggyRoute('other-browser-sessions.destroy'), {
                     preserveScroll: true,
                     onError: () => this.$refs.password.focus(),
                     onFinish: () => this.form.reset(),

@@ -25,6 +25,20 @@
                 {{ route }}
             </v-tab-item>
             <v-tab-item value="tab-files">
+                <c-route-file-form-dialog :route="route" title="Upload a file" text="Upload a new file">
+                    <template v-slot:activator="{trigger,showing}">
+                        <v-btn
+                            color="secondary"
+                            @click.stop="trigger"
+                            :disabled="showing"
+                        >
+                            <v-icon>mdi-upload</v-icon>
+                            Upload file
+                        </v-btn>
+                    </template>
+                </c-route-file-form-dialog>
+                {{route.files}}
+<!--                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>-->
             </v-tab-item>
         </v-tabs-items>
 
@@ -84,10 +98,11 @@
 <script>
 import moment from 'moment';
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
+import CRouteFileFormDialog from '../../ui/components/Route/CRouteFileFormDialog';
 
 export default {
     name: "Show",
-    components: {CAppWrapper},
+    components: {CRouteFileFormDialog, CAppWrapper},
     props: {
         route: {
             required: true,

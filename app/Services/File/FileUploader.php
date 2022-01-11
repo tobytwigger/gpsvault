@@ -26,6 +26,8 @@ class FileUploader
 
     const ROUTE_FILE = 'route_file';
 
+    const ROUTE_MEDIA = 'route_media';
+
     public function withContents(string $contents, string $filename, User $user, string $type): File
     {
         $path = sprintf('%s/%s', $type, $filename);

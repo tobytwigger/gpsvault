@@ -13,27 +13,45 @@
                     {{ title }}
                 </v-card-title>
                 <v-card-text>
+                    {{ text }}
+                </v-card-text>
+                <v-card-text>
                     <v-form @submit.prevent="submit">
                         <v-text-field
-                            id="name"
+                            id="title"
                             v-model="form.title"
-                            label="Name"
-                            hint="A name for the backup"
-                            name="name"
+                            label="Title"
+                            hint="A name for the file"
+                            name="title"
                             type="text"
                             :error="form.errors.hasOwnProperty('title')"
                             :error-messages="form.errors.hasOwnProperty('title') ? [form.errors.title] : []"
                         ></v-text-field>
 
                         <v-textarea
-                            id="description"
+                            id="caption"
                             v-model="form.caption"
-                            label="Description"
-                            hint="A description for the backup"
-                            name="description"
+                            label="Caption"
+                            hint="A caption/description for the file"
+                            name="caption"
                             :error="form.errors.hasOwnProperty('caption')"
                             :error-messages="form.errors.hasOwnProperty('caption') ? [form.errors.caption] : []"
                         ></v-textarea>
+
+                        <v-file-input
+                            v-if="oldFile === null"
+                            show-size
+                            counter
+                            multiple
+                            truncate-length="30"
+                            v-model="form.files"
+                            id="files"
+                            name="files"
+                            label="Files"
+                            hint="Upload any files to store with the route."
+                            :error="form.errors.hasOwnProperty('files')"
+                            :error-messages="form.errors.hasOwnProperty('files') ? [form.errors.files] : []"
+                        ></v-file-input>
                     </v-form>
 
                 </v-card-text>
@@ -52,7 +70,7 @@
                         :loading="form.processing"
                         :disabled="form.processing"
                     >
-                        {{ buttonText }}
+                        Upload
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -61,12 +79,14 @@
 </template>
 
 <script>
-import moment from 'moment';
-
 export default {
-    name: "CBackupForm",
+    name: "CRouteFileFormDialog",
     props: {
-        oldBackup: {
+        route: {
+            required: true,
+            type: Object
+        },
+        oldFile: {
             required: false,
             type: Object,
             default: null
@@ -75,7 +95,7 @@ export default {
             required: true,
             type: String
         },
-        buttonText: {
+        text: {
             required: true,
             type: String
         }
@@ -84,34 +104,29 @@ export default {
         return {
             showDialog: false,
             form: this.$inertia.form({
+                files: null,
                 title: null,
                 caption: null,
-                _method: this.oldBackup ? 'patch' : 'post'
+                _method: this.oldFile ? 'patch' : 'post'
             })
         }
     },
     mounted() {
-        this.updateFromOldBackup();
+        if(this.oldFile) {
+            this.form.title = this.oldFile.title;
+            this.form.caption = this.oldFile.caption;
+        }
     },
     methods: {
-        updateFromOldBackup() {
-            if(this.oldBackup) {
-                this.form.title = this.oldBackup.title;
-                this.form.caption = this.oldBackup.caption;
-            } else {
-                this.form.title = 'Full backup ' + moment().format('DD/MM/YYYY')
-                this.form.caption = 'Backup taken at ' + moment().format('Mo MMM YYYY')
-            }
-        },
         submit() {
+            this.showDialog = false;
             this.form.post(
-                this.oldBackup
-                    ? this.ziggyRoute('backups.update', this.oldBackup.id)
-                    : this.ziggyRoute('backups.store'),
+                this.oldFile
+                    ? this.ziggyRoute('route.file.update', [this.route.id, this.oldFile.id])
+                    : this.ziggyRoute('route.file.store', [this.route.id]),
                 {
                     onSuccess: () => {
                         this.form.reset();
-                        this.updateFromOldBackup();
                         this.showDialog = false;
                     }
                 });

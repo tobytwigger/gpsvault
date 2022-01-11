@@ -54,7 +54,7 @@ export default {
 
     methods: {
         submit() {
-            this.form.post(ziggyRoute('settings.store'), {
+            this.form.post(this.ziggyRoute('settings.store'), {
                 errorBag: 'updateUnitSetting',
                 preserveScroll: true
             });

@@ -56,12 +56,12 @@ class RouteController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Route  $route
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'route' => $route
+            'route' => $route->load(['files'])
         ]);
     }
 

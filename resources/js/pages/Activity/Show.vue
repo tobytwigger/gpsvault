@@ -149,7 +149,7 @@
                         </v-btn>
                     </template>
                 </c-file-form-dialog>
-                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>
+                <c-manage-activity-media :activity="activity"></c-manage-activity-media>
             </v-tab-item>
         </v-tabs-items>
 
@@ -208,7 +208,6 @@ import CDeleteActivityButton from 'ui/components/Activity/CDeleteActivityButton'
 import CUploadActivityFileButton from 'ui/components/Activity/CUploadActivityFileButton';
 import CMap from 'ui/components/CMap';
 import CImageGallery from 'ui/components/CImageGallery';
-import CFileManager from 'ui/components/Activity/CFileManager';
 import CFileFormDialog from 'ui/components/Activity/CFileFormDialog';
 import CActivityStats from 'ui/components/Activity/CActivityStats';
 import activityStats from 'ui/mixins/activityStats';
@@ -218,16 +217,18 @@ import CLineGraph from 'ui/components/CLineGraph';
 import CActivityAnalysis from 'ui/components/Activity/CActivityAnalysis';
 import strava from 'ui/mixins/strava';
 import moment from 'moment';
+import CManageActivityMedia from '../../ui/components/Activity/CManageActivityMedia';
 
 export default {
     name: "Show",
     components: {
+        CManageActivityMedia,
         CActivityAnalysis,
         CLineGraph,
         CActivityForm,
         CActivityStats,
         CFileFormDialog,
-        CFileManager, CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
+        CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
     },
     mixins: [activityStats, activityStatSelector, strava],
     props: {
@@ -252,7 +253,7 @@ export default {
                 .map(file => {
                     return {
                         alt: file.caption,
-                        src: ziggyRoute('file.preview', file.id)
+                        src: this.ziggyRoute('file.preview', file.id)
                     }
                 });
         }

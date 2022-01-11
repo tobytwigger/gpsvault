@@ -65,7 +65,7 @@ export default {
         deleteActivity() {
             this.showDialog = false;
             this.loading = true;
-            this.$inertia.delete(ziggyRoute('activity.destroy', this.activity.id), {
+            this.$inertia.delete(this.ziggyRoute('activity.destroy', this.activity.id), {
                 onFinish: () => this.loading = false
             });
         }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRouteFileTable extends Migration
+class CreateFileRouteTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRouteFileTable extends Migration
      */
     public function up()
     {
-        Schema::create('route_file', function (Blueprint $table) {
+        Schema::create('file_route', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('file_id');
             $table->unsignedBigInteger('route_id');
@@ -28,6 +28,6 @@ class CreateRouteFileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('route_file');
+        Schema::dropIfExists('file_route');
     }
 }

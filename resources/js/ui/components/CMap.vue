@@ -74,7 +74,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(ziggyRoute('stats.geojson', this.stats.id))
+        axios.get(this.ziggyRoute('stats.geojson', this.stats.id))
             .then(response => this.geojson = response.data)
             .then(() => this.loadingMap = false);
     },

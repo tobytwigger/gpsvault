@@ -37,14 +37,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('settings', \App\Http\Controllers\Pages\SettingsController::class)->only(['index', 'store']);
 
     Route::resource('route', \App\Http\Controllers\Pages\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
+    Route::prefix('route/{route}')->group(function() {
+        Route::get('download', [\App\Http\Controllers\Pages\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
+        Route::resource('file', \App\Http\Controllers\Pages\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
+    });
     Route::post('/route/file/duplicate', [\App\Http\Controllers\Api\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
 
     Route::prefix('activity/{activity}')->group(function() {
-        Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');
+        Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
     });
 
-    Route::post('/data/download', [\App\Http\Controllers\Pages\DownloadController::class, 'all'])->name('data.download');
+    Route::post('/data/download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'all'])->name('data.download');
 
     Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');

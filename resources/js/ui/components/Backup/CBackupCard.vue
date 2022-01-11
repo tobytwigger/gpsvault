@@ -130,7 +130,7 @@ export default {
     methods: {
         deleteBackup() {
             this.deleting = true;
-            this.$inertia.delete(ziggyRoute('backups.destroy', this.backup.id), {
+            this.$inertia.delete(this.ziggyRoute('backups.destroy', this.backup.id), {
                 onFinish: () => this.deleting = false
             })
         },

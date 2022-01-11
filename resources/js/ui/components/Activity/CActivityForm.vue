@@ -131,8 +131,8 @@ export default {
         submit() {
             this.form.post(
                 this.oldActivity
-                    ? ziggyRoute('activity.update', this.oldActivity.id)
-                    : ziggyRoute('activity.store'),
+                    ? this.ziggyRoute('activity.update', this.oldActivity.id)
+                    : this.ziggyRoute('activity.store'),
                 {
                     onSuccess: () => {
                         this.duplicateActivity = null;

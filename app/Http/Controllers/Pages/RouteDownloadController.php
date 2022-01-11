@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\DownloadAllData;
-use App\Models\Activity;
+use App\Models\Route;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use Illuminate\Support\Facades\Auth;
 
-class DownloadController extends Controller
+class RouteDownloadController extends Controller
 {
 
     public function all()
@@ -19,11 +19,11 @@ class DownloadController extends Controller
         return redirect()->route('profile.show');
     }
 
-    public function downloadActivity(Activity $activity)
+    public function downloadRoute(Route $route)
     {
-        $this->authorize('view', $activity);
+        $this->authorize('view', $route);
 
-        $file = ZipCreator::add($activity)->archive();
+        $file = ZipCreator::add($route)->archive();
 
         return redirect()->route('file.download', $file);
     }

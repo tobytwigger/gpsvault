@@ -51,7 +51,7 @@
 
         methods: {
             deleteUser() {
-                this.form.delete(ziggyRoute('current-user.destroy'), {
+                this.form.delete(this.ziggyRoute('current-user.destroy'), {
                     preserveScroll: true,
                     onSuccess: () => this.closeModal(),
                     onError: () => this.$refs.password.focus(),

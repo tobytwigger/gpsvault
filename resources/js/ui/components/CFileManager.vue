@@ -15,7 +15,13 @@
                     md="4"
                     lg="3"
                 >
-                    <c-file-manager-file-card :activity="activity" :file="file"></c-file-manager-file-card>
+                    <c-file-manager-file-card :file="file">
+                        <template #actions>
+                            <slot name="actions" v-bind:file="file">
+
+                            </slot>
+                        </template>
+                    </c-file-manager-file-card>
                 </v-col>
             </v-row>
         </template>
@@ -23,16 +29,12 @@
 </template>
 
 <script>
-import CFileFormDialog from './CFileFormDialog';
+import CFileFormDialog from './Activity/CFileFormDialog';
 import CFileManagerFileCard from './CFileManagerFileCard';
 export default {
     name: "CFileManager",
     components: {CFileManagerFileCard, CFileFormDialog},
     props: {
-        activity: {
-            required: true,
-            type: Object
-        },
         files: {
             required: true,
             type: Array
