@@ -122,7 +122,7 @@ export default {
     },
     methods: {
         addClient() {
-            this.newClientForm.post(route('strava.client.store'), {
+            this.newClientForm.post(ziggyRoute('strava.client.store'), {
                 onSuccess: () => {
                     this.newClientForm.reset();
                     this.isAddingClient = false;

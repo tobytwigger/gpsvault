@@ -131,8 +131,8 @@ export default {
         submit() {
             this.form.post(
                 this.oldRoute
-                    ? route('route.update', this.oldRoute.id)
-                    : route('route.store'),
+                    ? ziggyRoute('route.update', this.oldRoute.id)
+                    : ziggyRoute('route.store'),
                 {
                     onSuccess: () => {
                         this.duplicateRoute = null;

@@ -76,7 +76,7 @@ export default {
     methods: {
         uploadActivityFile() {
             this.showDialog = false;
-            this.form.post(route('activity.update', this.activity.id), {
+            this.form.post(ziggyRoute('activity.update', this.activity.id), {
                 onSuccess: () => {
                     this.form.reset();
 

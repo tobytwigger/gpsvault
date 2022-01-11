@@ -162,12 +162,12 @@
                     <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
                 </v-list-item>
                 <v-list-item v-if="activity.activity_file_id">
-                    <v-btn link :href="route('file.download', activity.activity_file_id)">
+                    <v-btn link :href="ziggyRoute('file.download', activity.activity_file_id)">
                         Download activity file
                     </v-btn>
                 </v-list-item>
                 <v-list-item v-if="activity.activity_file_id">
-                    <v-btn link :href="route('activity.download', activity.id)">
+                    <v-btn link :href="ziggyRoute('activity.download', activity.id)">
                         Download activity
                     </v-btn>
                 </v-list-item>
@@ -252,7 +252,7 @@ export default {
                 .map(file => {
                     return {
                         alt: file.caption,
-                        src: route('file.preview', file.id)
+                        src: ziggyRoute('file.preview', file.id)
                     }
                 });
         }

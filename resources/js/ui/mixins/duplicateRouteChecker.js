@@ -10,7 +10,7 @@ export default {
     computed: {
         duplicateMessage() {
             if(this.duplicateRoute !== null) {
-                return 'This route is a duplicate of ' + route('route.show', this.duplicateRoute.id) + '. You can still upload it if you would like.';
+                return 'This route is a duplicate of ' + ziggyRoute('route.show', this.duplicateRoute.id) + '. You can still upload it if you would like.';
             }
             return null;
         }
@@ -22,7 +22,7 @@ export default {
             reader.addEventListener('load',function (event) {
                 self.checkingDuplicate = true;
                 let hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(event.target.result)).toString();
-                axios.post(route('route.file.duplicate'), {hash: hash})
+                axios.post(ziggyRoute('route.file.duplicate'), {hash: hash})
                     .then(response => self.duplicateRoute = response.data.route)
                     .catch(error => self.duplicateRoute = null)
                     .then(() => self.checkingDuplicate = false);

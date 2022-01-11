@@ -49,7 +49,7 @@ export default {
     },
     methods: {
         submit() {
-            this.form.post(route('settings.store'), {
+            this.form.post(ziggyRoute('settings.store'), {
                 errorBag: 'updateDarkMode',
                 preserveScroll: true
             })

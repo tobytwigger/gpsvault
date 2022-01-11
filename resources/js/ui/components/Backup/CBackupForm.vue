@@ -106,8 +106,8 @@ export default {
         submit() {
             this.form.post(
                 this.oldBackup
-                    ? route('backups.update', this.oldBackup.id)
-                    : route('backups.store'),
+                    ? ziggyRoute('backups.update', this.oldBackup.id)
+                    : ziggyRoute('backups.store'),
                 {
                     onSuccess: () => {
                         this.form.reset();

@@ -55,7 +55,7 @@
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
                             icon
-                            :href="route('file.download', backup.id)"
+                            :href="ziggyRoute('file.download', backup.id)"
                             link
                             v-bind="attrs"
                             v-on="on"
@@ -130,7 +130,7 @@ export default {
     methods: {
         deleteBackup() {
             this.deleting = true;
-            this.$inertia.delete(route('backups.destroy', this.backup.id), {
+            this.$inertia.delete(ziggyRoute('backups.destroy', this.backup.id), {
                 onFinish: () => this.deleting = false
             })
         },

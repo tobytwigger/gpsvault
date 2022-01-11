@@ -17,14 +17,14 @@ class Route extends Model
 
     protected static function booted()
     {
-        static::creating(function(Activity $activity) {
-            if($activity->user_id === null) {
-                $activity->user_id = Auth::id();
+        static::creating(function(Route $route) {
+            if($route->user_id === null) {
+                $route->user_id = Auth::id();
             }
         });
-        static::deleting(function(Activity $activity) {
-            $activity->routeFile()->delete();
-            $activity->files()->delete();
+        static::deleting(function(Route $route) {
+            $route->routeFile()->delete();
+            $route->files()->delete();
         });
     }
 

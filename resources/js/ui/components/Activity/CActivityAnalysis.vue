@@ -124,7 +124,7 @@ export default {
         },
         loadRawChartData() {
             this.loadingChartData = true;
-            axios.get(route('stats.chart', this.stats.id))
+            axios.get(ziggyRoute('stats.chart', this.stats.id))
                 .then(response => {
                     this.loadingChartData = false;
                     this.rawChartData = response.data

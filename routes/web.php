@@ -29,14 +29,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::get('/stats/{stats}/chart', [\App\Http\Controllers\Api\StatsController::class, 'chart'])->name('stats.chart');
     Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('stats.geojson');
-    Route::post('/activity/file/duplicate', [\App\Http\Controllers\Api\DuplicateController::class, 'index'])->name('activity.file.duplicate');
+    Route::post('/activity/file/duplicate', [\App\Http\Controllers\Api\ActivityDuplicateController::class, 'index'])->name('activity.file.duplicate');
 
     Route::resource('backups', \App\Http\Controllers\Pages\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backups' => 'file']);
     Route::delete('backups/sync/{sync}/cancel', [\App\Http\Controllers\Pages\BackupController::class, 'cancelSync'])->name('backups.sync.cancel');
 
     Route::resource('settings', \App\Http\Controllers\Pages\SettingsController::class)->only(['index', 'store']);
 
-    Route::resource('route', \App\Http\Controllers\Pages\RouteController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('route', \App\Http\Controllers\Pages\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
+    Route::post('/route/file/duplicate', [\App\Http\Controllers\Api\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\DownloadController::class, 'downloadActivity'])->name('activity.download');

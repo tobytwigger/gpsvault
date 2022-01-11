@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         startConfirmingPassword() {
-            axios.get(route('password.confirmation')).then(response => {
+            axios.get(ziggyRoute('password.confirmation')).then(response => {
                 if (response.data.confirmed) {
                     this.$emit('confirmed');
                 } else {
@@ -67,7 +67,7 @@ export default {
         },
 
         confirmPassword() {
-            this.form.post(route('password.confirm'), {
+            this.form.post(ziggyRoute('password.confirm'), {
                 errorBag: 'confirmPassword',
                 onSuccess: () => this.$emit('confirmed'),
                 onError: () => this.$refs.password.focus()

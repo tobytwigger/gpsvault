@@ -54,7 +54,7 @@
                     </v-btn>
                 </v-card-actions>
                 <v-card-text>
-                    <v-btn block @click="$inertia.visit(route('login'))" text>Back to Login</v-btn>
+                    <v-btn block @click="$inertia.visit(ziggyRoute('login'))" text>Back to Login</v-btn>
                 </v-card-text>
             </v-card>
         </v-form>
@@ -88,7 +88,7 @@ export default {
 
     methods: {
         submit() {
-            this.form.post(this.route('password.update'), {
+            this.form.post(this.ziggyRoute('password.update'), {
                 onFinish: () => this.form.reset('password', 'password_confirmation'),
             })
         }

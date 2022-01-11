@@ -24,6 +24,8 @@ class FileUploader
 
     const ACTIVITY_FILE_POINT_JSON = 'activity_file_point_json';
 
+    const ROUTE_FILE = 'route_file';
+
     public function withContents(string $contents, string $filename, User $user, string $type): File
     {
         $path = sprintf('%s/%s', $type, $filename);

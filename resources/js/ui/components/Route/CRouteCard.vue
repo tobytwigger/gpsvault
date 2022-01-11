@@ -46,7 +46,7 @@
             <v-btn
                 color="deep-purple lighten-2"
                 text
-                @click="$inertia.get(route('route.show', route.id))"
+                @click="$inertia.get(ziggyRoute('route.show', route.id))"
             >
                 View
             </v-btn>

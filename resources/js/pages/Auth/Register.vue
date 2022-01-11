@@ -65,7 +65,7 @@
                     </v-btn>
                 </v-card-actions>
                 <v-card-text>
-                    <v-btn block @click="$inertia.visit(route('login'))" text>I already have an account</v-btn>
+                    <v-btn block @click="$inertia.visit(ziggyRoute('login'))" text>I already have an account</v-btn>
                 </v-card-text>
             </v-card>
         </v-form>
@@ -103,7 +103,7 @@ export default {
                     ...data,
                     remember: this.form.remember ? 'on' : ''
                 }))
-                .post(this.route('register'), {
+                .post(this.ziggyRoute('register'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),
                 })
         }

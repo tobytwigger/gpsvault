@@ -8,11 +8,11 @@
         <v-spacer></v-spacer>
 
         <div v-if="$page.props.user">
-            <Link :href="route('dashboard')">Dashboard</Link>
+            <Link :href="ziggyRoute('dashboard')">Dashboard</Link>
         </div>
         <div v-else>
-            <Link :href="route('login')">Login</Link>
-            <Link :href="route('register')">Register</Link>
+            <Link :href="ziggyRoute('login')">Login</Link>
+            <Link :href="ziggyRoute('register')">Register</Link>
         </div>
         <!-- -->
     </v-app-bar>

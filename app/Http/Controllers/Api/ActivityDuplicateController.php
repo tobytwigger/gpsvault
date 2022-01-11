@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class DuplicateController extends Controller
+class ActivityDuplicateController extends Controller
 {
 
     public function index(Request $request)

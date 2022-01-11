@@ -132,12 +132,12 @@ export default {
     methods: {
         startSync() {
             if(!this.isSyncing) {
-                this.$inertia.post(route('sync.store'), this.syncForm, {errorBag: 'startSync'});
+                this.$inertia.post(ziggyRoute('sync.store'), this.syncForm, {errorBag: 'startSync'});
             }
         },
         cancelSync() {
             if(this.isSyncing) {
-                this.$inertia.delete(route('sync.destroy', this.current.id));
+                this.$inertia.delete(ziggyRoute('sync.destroy', this.current.id));
             }
         },
         getAsDate(date) {
