@@ -1,6 +1,6 @@
 <template>
     <div>
-        <l-map style="height:50vh; z-index: 1000;" v-model:zoom="zoom" ref="map">
+        <l-map style="height: 50vh" v-model:zoom="zoom" ref="map">
             <l-control-fullscreen position="topleft"
                 :options="{ title: { 'false': 'Go big!', 'true': 'Be regular' } }" />
 
@@ -105,6 +105,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+ .vue2leaflet-map {
+     z-index: 1;
+ }
 </style>
