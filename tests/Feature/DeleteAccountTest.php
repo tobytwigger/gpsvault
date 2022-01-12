@@ -19,7 +19,7 @@ class DeleteAccountTest extends TestCase
 
         $this->actingAs($user = User::factory()->create());
 
-        $response = $this->delete('/user', [
+        $response = $this->delete(route('current-user.destroy'), [
             'password' => 'password',
         ]);
 

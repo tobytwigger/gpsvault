@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Activity;
 use App\Models\ActivityStats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,6 +31,8 @@ class ActivityStatsFactory extends Factory
             'elevation_gain' => $this->faker->randomFloat(2, 1, 100),
             'elevation_loss' => $this->faker->randomFloat(2, 1, 100),
             'moving_time' => $this->faker->randomFloat(2, 1, 100),
+            'activity_id' => fn() => Activity::factory()->create()->id,
+            'integration' => $this->faker->unique()->word,
         ];
     }
 }
