@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TourController extends Controller
@@ -11,32 +13,32 @@ class TourController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Tour/Index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('Tour/Index', [
+            'tours' => Tour::where('user_id', Auth::id())->paginate($request->input('perPage', 8))
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $tour = Tour::create([
+            'name' => $request->input('name')
+        ]);
+
+        return redirect()->route('tour.show', $tour);
     }
 
     /**
@@ -45,20 +47,11 @@ class TourController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Tour $tour)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return Inertia::render('Tour/Show', [
+            'tour' => $tour
+        ]);
     }
 
     /**
@@ -68,9 +61,16 @@ class TourController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tour $tour)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $tour->name = $request->input('name', $tour->name);
+        $tour->save();
+
+        return redirect()->route('tour.show', $tour);
     }
 
     /**
@@ -79,8 +79,10 @@ class TourController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Tour $tour)
     {
-        //
+        $tour->delete();
+
+        return redirect()->route('tour.index');
     }
 }

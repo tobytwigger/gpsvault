@@ -41,7 +41,7 @@
                 </v-list-item-icon>
                 <v-list-item-title>Routes</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['tour.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('tour.index'))">
+            <v-list-item :input-value="['tour.index', 'tour.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('tour.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-campfire</v-icon>
                 </v-list-item-icon>

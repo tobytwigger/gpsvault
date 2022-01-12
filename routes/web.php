@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::post('/route/file/duplicate', [\App\Http\Controllers\Api\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
     Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
 
-    Route::resource('tour', \App\Http\Controllers\Pages\TourController::class)->only(['index']);
+    Route::resource('tour', \App\Http\Controllers\Pages\TourController::class)->only(['index', 'store', 'show', 'destroy']);
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
