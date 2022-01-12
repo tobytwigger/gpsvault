@@ -2,7 +2,42 @@
     <div>
         <v-row v-if="hasStats">
             <v-col>
-                <c-activity-stats v-model="selectedCharts" :selectable="true" :stats="stats" :additional-chart-data="true"></c-activity-stats>
+                <c-stats v-model="selectedCharts" :selectable="true" :schema="statSchema">
+                    <template v-slot:append="{selected, toggleStatGroup}">
+                        <v-list-item>
+                            <v-list-item-icon>
+                                <v-tooltip left>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-icon
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            color="indigo">
+                                            chart-line
+                                        </v-icon>
+                                    </template>
+                                    <span>Chart data</span>
+                                </v-tooltip>
+                            </v-list-item-icon>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Grade</v-list-item-title>
+                                <v-list-item-subtitle>
+                                    <v-switch :value="selected.indexOf('grade') > -1" @change="toggleStatGroup('grade', $event)">
+                                        <v-icon color="grey lighten-1">mdi-chart-line</v-icon>
+                                    </v-switch>
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                            <v-list-item-content>
+                                <v-list-item-title>Battery</v-list-item-title>
+                                <v-list-item-subtitle>
+                                    <v-switch :value="selected.indexOf('battery') > -1" @change="toggleStatGroup('battery', $event)">
+                                        <v-icon color="grey lighten-1">mdi-chart-line</v-icon>
+                                    </v-switch>
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                </c-stats>
 
             </v-col>
             <v-col>
@@ -25,13 +60,13 @@
 <script>
 
 import activityStats from 'ui/mixins/activityStats';
-import CActivityStats from './CActivityStats';
 import CLineGraph from '../CLineGraph';
 import {createDatasets} from './dataset-calc';
+import CStats from '../CStats';
 
 export default {
     name: "CActivityAnalysis",
-    components: {CLineGraph, CActivityStats},
+    components: {CStats, CLineGraph},
     mixins: [activityStats],
     props: {
         activity: {
@@ -124,7 +159,7 @@ export default {
         },
         loadRawChartData() {
             this.loadingChartData = true;
-            axios.get(this.ziggyRoute('stats.chart', this.stats.id))
+            axios.get(route('activity.stats.chart', this.stats.id))
                 .then(response => {
                     this.loadingChartData = false;
                     this.rawChartData = response.data

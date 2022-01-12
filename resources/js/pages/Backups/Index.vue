@@ -127,14 +127,14 @@ export default {
     methods: {
         createBackup() {
             this.creatingBackup = true;
-            this.$inertia.post(ziggyRoute('backups.store'), {
+            this.$inertia.post(route('backups.store'), {
                 onSuccess: () => this.creatingBackup = false
             })
         },
         cancelBackup() {
             if(this.hasTask) {
                 this.canceling = true;
-                this.$inertia.delete(ziggyRoute('backups.sync.cancel', this.task.sync_id), {
+                this.$inertia.delete(route('backups.sync.cancel', this.task.sync_id), {
                     onFinish: () => this.canceling = false
                 })
             }

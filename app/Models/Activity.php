@@ -6,16 +6,18 @@ use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
 use App\Jobs\AnalyseActivityFile;
 use App\Traits\HasAdditionalData;
+use App\Traits\HasStats;
 use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class Activity extends Model
 {
-    use HasFactory, HasAdditionalData;
+    use HasFactory, HasAdditionalData, HasStats;
 
     protected $fillable = [
         'name', 'description', 'activity_file_id', 'linked_to', 'user_id', 'distance', 'started_at'
@@ -94,41 +96,14 @@ class Activity extends Model
         return $this->belongsToMany(File::class);
     }
 
-    public function getStatsAsArray(bool $withPoints = false)
+    public function statRelationship(): HasMany
     {
-        return $this->activityStats()->get()->mapWithKeys(function(ActivityStats $stats) use ($withPoints) {
-            if($withPoints) {
-                $stats->append('points');
-            }
-            return [$stats->integration => $stats->toArray()];
-        });
-    }
-
-    public function getStatsAttribute()
-    {
-        return $this->getStatsAsArray(false);
-    }
-
-    public function activityStatsFrom(string $integration)
-    {
-        return $this->activityStats()->whereIntegration($integration);
+        return $this->activityStats();
     }
 
     public function activityStats()
     {
         return $this->hasMany(ActivityStats::class);
-    }
-
-    public function defaultStats(bool $withPoints = false)
-    {
-        $stats = $this->getStatsAsArray($withPoints);
-        if(count($stats) === 0) {
-            throw new \Exception('There is no position information for this activity', 404);
-        }
-        if(array_key_exists($stats['php'])) {
-            return $stats['php'];
-        }
-        return Arr::first($stats);
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)

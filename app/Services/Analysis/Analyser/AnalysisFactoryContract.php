@@ -2,13 +2,12 @@
 
 namespace App\Services\Analysis\Analyser;
 
-use App\Models\Activity;
-use Illuminate\Support\Collection;
+use App\Models\File;
 
 interface AnalysisFactoryContract
 {
 
-    public function analyse(Activity $activity): Analysis;
+    public function analyse(File $file): Analysis;
 
     public function runAnalysis(Analysis $analysis): Analysis;
 

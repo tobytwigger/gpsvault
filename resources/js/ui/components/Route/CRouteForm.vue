@@ -17,6 +17,7 @@
                         <v-text-field
                             id="name"
                             v-model="form.name"
+                            required
                             label="Name"
                             hint="A name for the route"
                             name="name"
@@ -26,6 +27,7 @@
                         ></v-text-field>
 
                         <v-textarea
+                            v-if="oldRoute !== null"
                             id="description"
                             v-model="form.description"
                             label="Description"
@@ -33,6 +35,17 @@
                             name="description"
                             :error="form.errors.hasOwnProperty('description')"
                             :error-messages="form.errors.hasOwnProperty('description') ? [form.errors.description] : []"
+                        ></v-textarea>
+
+                        <v-textarea
+                            v-if="oldRoute !== null"
+                            id="notes"
+                            v-model="form.notes"
+                            label="Notes"
+                            hint="A notes for the route"
+                            name="notes"
+                            :error="form.errors.hasOwnProperty('notes')"
+                            :error-messages="form.errors.hasOwnProperty('notes') ? [form.errors.notes] : []"
                         ></v-textarea>
 
                         <v-file-input
@@ -102,6 +115,7 @@ export default {
             form: this.$inertia.form({
                 name: null,
                 description: null,
+                notes: null,
                 file: null,
                 _method: this.oldRoute ? 'patch' : 'post'
             })
@@ -126,13 +140,14 @@ export default {
             if(this.oldRoute) {
                 this.form.name = this.oldRoute.name;
                 this.form.description = this.oldRoute.description;
+                this.form.notes = this.oldRoute.notes;
             }
         },
         submit() {
             this.form.post(
                 this.oldRoute
-                    ? this.ziggyRoute('route.update', this.oldRoute.id)
-                    : this.ziggyRoute('route.store'),
+                    ? route('route.update', this.oldRoute.id)
+                    : route('route.store'),
                 {
                     onSuccess: () => {
                         this.duplicateRoute = null;

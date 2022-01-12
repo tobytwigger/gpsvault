@@ -2,7 +2,7 @@
 
 namespace App\Services\Analysis\Analyser;
 
-use App\Models\Activity;
+use App\Models\File;
 use App\Services\Analysis\Analyser\Analysers\AnalyserContract;
 use App\Services\Analysis\Analyser\Analysers\DummyAnalyser;
 use App\Services\Analysis\Analyser\Analysers\PointAnalyser;
@@ -15,9 +15,9 @@ class AnalysisFactory implements AnalysisFactoryContract
 
     private array $analysers = [];
 
-    public function analyse(Activity $activity): Analysis
+    public function analyse(File $file): Analysis
     {
-        return $this->runAnalysis(Parser::parse($activity));
+        return $this->runAnalysis(Parser::parse($file));
     }
 
     public function runAnalysis(Analysis $analysis): Analysis

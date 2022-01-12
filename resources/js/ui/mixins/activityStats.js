@@ -101,6 +101,92 @@ export default {
         },
         humanEndedAt() {
             return this.stats?.human_ended_at || null;
+        },
+        statSchema() {
+            let schema = [
+                {
+                    icon: 'mdi-ruler',
+                    title: 'Distance',
+                    label: 'distance',
+                    disabled: true,
+                    data: [
+                        {value: this.distance, label: 'total'},
+                    ]
+                },
+                {
+                    icon: 'mdi-clock',
+                    title: 'Time',
+                    label: 'time',
+                    disabled: true,
+                    data: [
+                        {value: this.movingTime, label: 'moving'},
+                        {value: this.duration, label: 'total'},
+                    ]
+                },
+                {
+                    icon: 'mdi-gauge',
+                    title: 'Speed',
+                    label: 'speed',
+                    data: [
+                        {value: this.maxSpeed, label: 'max'},
+                        {value: this.avgSpeed, label: 'avg'},
+                        {value: this.avgPace, label: 'avg'},
+                    ]
+                },
+                {
+                    icon: 'mdi-image-filter-hdr',
+                    title: 'Elevation',
+                    label: 'elevation',
+                    data: [
+                        {value: this.elevationGain, label: 'gain'},
+                        {value: this.minAltitude, label: 'min'},
+                        {value: this.maxAltitude, label: 'max'},
+                    ]
+                },
+                {
+                    icon: 'mdi-heart',
+                    title: 'Heartrate',
+                    label: 'heart_rate',
+                    data: [
+                        {value: this.maxHeartrate, label: 'max'},
+                        {value: this.avgHeartrate, label: 'avg'},
+                    ]
+                },
+                {
+                    icon: 'mdi-lightning-bolt',
+                    title: 'Power',
+                    label: 'calories',
+                    disabled: true,
+                    data: [
+                        {value: this.avgWatts, label: 'max'},
+                        {value: this.kilojoules, label: 'total'},
+                        {value: this.calories, label: 'total'},
+                    ]
+                },
+                {
+                    icon: 'mdi-reload',
+                    title: 'Cadence',
+                    label: 'cadence',
+                    data: [
+                        {value: this.avgCadence, label: 'avg'},
+                    ]
+                },
+                {
+                    icon: 'mdi-thermometer',
+                    title: 'Temperature',
+                    label: 'temperature',
+                    data: [
+                        {value: this.averageTemperature, label: 'avg'},
+                    ]
+                },
+            ].map(stat => {
+                stat.data = stat.data.filter(d => d.value !== null);
+                return stat;
+            }).filter(stat => stat.data.length > 0);
+            if(this.limit) {
+                schema.slice(0, this.limit);
+            }
+            return schema;
         }
     },
     methods: {

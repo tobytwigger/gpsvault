@@ -17,7 +17,7 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn icon :href="ziggyRoute('file.download', file.id)">
+            <v-btn icon :href="route('file.download', file.id)">
                 <v-icon>mdi-download</v-icon>
             </v-btn>
 

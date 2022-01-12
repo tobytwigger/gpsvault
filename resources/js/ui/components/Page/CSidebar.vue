@@ -23,19 +23,19 @@
             nav
             dense
         >
-            <v-list-item :input-value="['dashboard'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('dashboard'))">
+            <v-list-item :input-value="['dashboard'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('dashboard'))">
                 <v-list-item-icon>
                     <v-icon>mdi-home</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Dashboard</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['activity.index', 'activity.show'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('activity.index'))">
+            <v-list-item :input-value="['activity.index', 'activity.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('activity.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-bike</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Activities</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['route.index'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('route.index'))">
+            <v-list-item :input-value="['route.index', 'route.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('route.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-routes</v-icon>
                 </v-list-item-icon>
@@ -67,20 +67,20 @@
                     </v-list-item-content>
                 </template>
 
-                <v-list-item :input-value="['strava.client.index'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.get(ziggyRoute('strava.client.index'))">
+                <v-list-item :input-value="['strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.get(route('strava.client.index'))">
                     <v-list-item-title>Strava</v-list-item-title>
                     <v-list-item-icon>
                         <v-icon>mdi-arrow-right</v-icon>
                     </v-list-item-icon>
                 </v-list-item>
             </v-list-group>
-            <v-list-item :input-value="['backups.index'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('backups.index'))">
+            <v-list-item :input-value="['backups.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backups.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-safe</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Backups</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['documentation'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('documentation'))">
+            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('documentation'))">
                 <v-list-item-icon>
                     <v-icon>mdi-book-open-blank-variant</v-icon>
                 </v-list-item-icon>
@@ -94,14 +94,14 @@
             nav
             dense
         >
-            <v-list-item :input-value="['settings.index'].indexOf(ziggyRoute().current()) > -1" link @click="$inertia.visit(ziggyRoute('settings.index'))">
+            <v-list-item :input-value="['settings.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('settings.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-cog</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Settings</v-list-item-title>
             </v-list-item>
 
-            <v-list-item link @click="$inertia.post(ziggyRoute('logout'))">
+            <v-list-item link @click="$inertia.post(route('logout'))">
                 <v-list-item-icon>
                     <v-icon>mdi-logout</v-icon>
                 </v-list-item-icon>

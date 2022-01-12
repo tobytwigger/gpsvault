@@ -28,7 +28,7 @@
                         </svg>
                     </div>
                 </a>
-                <a :href="ziggyRoute('integration.logs', integration.id)" class="mt-3 flex items-center text-sm text-gray-500">
+                <a :href="route('integration.logs', integration.id)" class="mt-3 flex items-center text-sm text-gray-500">
                     <div>View connection logs</div>
 
                     <div class="ml-1 text-indigo-500">
@@ -36,7 +36,7 @@
                     </div>
                 </a>
             </div>
-            <a :href="ziggyRoute('integration.login', integration.id)" v-else>
+            <a :href="route('integration.login', integration.id)" v-else>
                 <div v-if="integration.login_image_url !== null">
                     <button type="button">
                         <img :src="integration.login_image_url" :alt="'Connect to ' + integration.name" />
@@ -75,7 +75,7 @@ export default {
     },
     methods: {
         deleteIntegration() {
-            this.$inertia.delete(ziggyRoute('integration.destroy', this.integration.id));
+            this.$inertia.delete(route('integration.destroy', this.integration.id));
         }
     }
 }

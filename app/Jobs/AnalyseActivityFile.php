@@ -18,6 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseActivityFile implements ShouldQueue
 {
@@ -45,7 +46,10 @@ class AnalyseActivityFile implements ShouldQueue
      */
     public function handle()
     {
-        $analysis = Analyser::analyse($this->activity);
+        if(!$this->activity->activityFile) {
+            throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it', $this->activity->id));
+        }
+        $analysis = Analyser::analyse($this->activity->activityFile);
 
         ActivityStats::updateOrCreate(
             ['integration' => 'php', 'activity_id' => $this->activity->id],
@@ -53,8 +57,6 @@ class AnalyseActivityFile implements ShouldQueue
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),
                 'average_pace' => $analysis->getAveragePace(),
-                'minAltitude' => $analysis->getMinAltitude(),
-                'maxAltitude' => $analysis->getMaxAltitude(),
                 'elevation_gain' => $analysis->getCumulativeElevationGain(),
                 'elevation_loss' => $analysis->getCumulativeElevationLoss(),
                 'startedAt' => $analysis->getStartedAt(),

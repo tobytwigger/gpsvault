@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use App\Traits\HasAdditionalData;
-use Database\Factories\ActivityStatsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
-class ActivityStats extends Model
+class RouteStats extends Model
 {
     use HasFactory, HasAdditionalData;
 
@@ -20,19 +19,9 @@ class ActivityStats extends Model
     protected $fillable = [
         'integration',
 
-        'activity_id',
+        'route_id',
         // Distance in metres
         'distance',
-        // Date and time the ride was started
-        'started_at',
-        // Date and time the ride was ended
-        'finished_at',
-        // The duration of the ride in seconds
-        'duration',
-        // The average speed of the ride in metres per second
-        'average_speed',
-        // The average pace of the ride in seconds per metre
-        'average_pace',
         // The minimum altitude in metres
         'min_altitude',
         // The maximum altitude in metres
@@ -41,18 +30,6 @@ class ActivityStats extends Model
         'elevation_gain',
         // The cumulative elevation lost in metres
         'elevation_loss',
-        // The moving time in seconds
-        'moving_time',
-        // The maximum speed in metres per second
-        'max_speed',
-        // The average cadence in rpm
-        'average_cadence',
-        // The average temperature in deg C
-        'average_temp',
-        // The average watts in W
-        'average_watts',
-        // The average energy output in kjoules
-        'kilojoules',
         // The start latitude
         'start_latitude',
         // The start longitude
@@ -61,50 +38,27 @@ class ActivityStats extends Model
         'end_latitude',
         // The end longitude
         'end_longitude',
-        // The average heartrate in bpm
-        'average_heartrate',
-        // The max heartrate in bpm
-        'max_heartrate',
-        // The number of calories burned
-        'calories',
         // A file that contains the points as json
         'json_points_file_id'
     ];
 
     protected $casts = [
         'distance' => 'float',
-        'started_at' => 'datetime',
-        'finished_at' => 'datetime',
-        'duration' => 'float',
-        'average_speed' => 'float',
-        'average_pace' => 'float',
         'min_altitude' => 'float',
         'max_altitude' => 'float',
         'elevation_gain' => 'float',
         'elevation_loss' => 'float',
-        'moving_time' => 'float',
-        'max_speed' => 'float',
-        'average_cadence' => 'float',
-        'average_temp' => 'float',
-        'average_watts' => 'float',
-        'kilojoules' => 'float',
         'start_latitude' => 'float',
         'start_longitude' => 'float',
         'end_latitude' => 'float',
         'end_longitude' => 'float',
-        'max_heartrate' => 'float',
-        'average_heartrate' => 'float',
-        'calories' => 'float'
     ];
 
     protected static function booted()
     {
-        static::created(function(ActivityStats $activityStats) {
-            if($activityStats->activity->distance === null && $activityStats->distance !== null) {
-                $activityStats->activity()->update(['distance' => $activityStats->distance]);
-            }
-            if($activityStats->activity->started_at === null && $activityStats->started_at !== null) {
-                $activityStats->activity()->update(['started_at' => $activityStats->started_at]);
+        static::created(function(RouteStats $routeStats) {
+            if($routeStats->route->distance === null && $routeStats->distance !== null) {
+                $routeStats->route()->update(['distance' => $routeStats->distance]);
             }
         });
     }
@@ -147,14 +101,9 @@ class ActivityStats extends Model
         return new static();
     }
 
-    protected static function newFactory()
+    public function route()
     {
-        return new ActivityStatsFactory();
-    }
-
-    public function activity()
-    {
-        return $this->belongsTo(Activity::class);
+        return $this->belongsTo(Route::class);
     }
 
     public function jsonPointsFile()

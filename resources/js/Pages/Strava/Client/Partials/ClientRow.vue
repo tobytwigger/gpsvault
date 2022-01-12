@@ -38,7 +38,7 @@
                     <span v-else>
                     N/A
                     </span>
-                    <Link :href="ziggyRoute('strava.client.invite', client.id)" method="post" as="button" type="button">
+                    <Link :href="route('strava.client.invite', client.id)" method="post" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Refresh</div>
 
@@ -53,7 +53,7 @@
                     <p>Client Secret: {{client.client_secret}}</p>
                 </td>
                 <td class="px-4 py-3 text-sm border">
-                    <Link :href="ziggyRoute('strava.client.destroy', client.id)" method="delete" as="button" type="button">
+                    <Link :href="route('strava.client.destroy', client.id)" method="delete" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Delete</div>
 
@@ -63,33 +63,33 @@
                         </div>
                     </Link>
                     <span v-if="client.is_connected === false">
-                        <a :href="ziggyRoute('strava.login', client.id)">Click to login</a>
+                        <a :href="route('strava.login', client.id)">Click to login</a>
                     </span>
                     <span v-else>
-                        <Link :href="ziggyRoute('integration.destroy', 'strava')" method="delete" as="button" type="button">
+                        <Link :href="route('integration.destroy', 'strava')" method="delete" as="button" type="button">
                             <div class="flex items-center text-sm font-semibold text-red-700">
                                 <div>Click to log out</div>
                             </div>
                         </Link>
                     </span>
 
-                    <Link v-if="client.enabled" :href="ziggyRoute('strava.client.disable', client.id)" method="post" as="button" type="button">
+                    <Link v-if="client.enabled" :href="route('strava.client.disable', client.id)" method="post" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Disable</div>
                         </div>
                     </Link>
-                    <Link v-else :href="ziggyRoute('strava.client.enable', client.id)" method="post" as="button" type="button">
+                    <Link v-else :href="route('strava.client.enable', client.id)" method="post" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Enable</div>
                         </div>
                     </Link>
 
-                    <Link v-if="client.public" :href="ziggyRoute('strava.client.private', client.id)" method="post" as="button" type="button">
+                    <Link v-if="client.public" :href="route('strava.client.private', client.id)" method="post" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Make Private</div>
                         </div>
                     </Link>
-                    <Link v-else :href="ziggyRoute('strava.client.public', client.id)" method="post" as="button" type="button">
+                    <Link v-else :href="route('strava.client.public', client.id)" method="post" as="button" type="button">
                         <div class="flex items-center text-sm font-semibold text-red-700">
                             <div>Make Public</div>
                         </div>

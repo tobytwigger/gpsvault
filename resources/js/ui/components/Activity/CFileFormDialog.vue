@@ -122,8 +122,8 @@ export default {
             this.showDialog = false;
             this.form.post(
                 this.oldFile
-                    ? this.ziggyRoute('activity.file.update', [this.activity.id, this.oldFile.id])
-                    : this.ziggyRoute('activity.file.store', [this.activity.id]),
+                    ? route('activity.file.update', [this.activity.id, this.oldFile.id])
+                    : route('activity.file.store', [this.activity.id]),
                 {
                     onSuccess: () => {
                         this.form.reset();

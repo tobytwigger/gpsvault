@@ -18,7 +18,7 @@ Vue.use(VueEasyLightbox);
 Vue.component('task-strava-upload', StravaFixSetup);
 Vue.component('strava-integration-addon', StravaIntegrationAddon);
 Vue.component('Link', Link);
-Vue.mixin({methods: { ziggyRoute: route }});
+Vue.mixin({methods: { route }});
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

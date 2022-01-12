@@ -13,25 +13,25 @@
                 :disabled="form.processing"
             >
                 <v-icon>mdi-upload</v-icon>
-                Upload activity file
+                Upload route file
             </v-btn>
         </template>
         <v-card>
             <v-card-title>
-                Upload activity file
+                Upload route file
             </v-card-title>
             <v-card-text>
-                Upload the fit/tcx/gpx recording of your ride for a deeper analysis.
+                Upload the gpx file for this route.
             </v-card-text>
             <v-card-text>
                 <v-file-input
                     show-size
                     truncate-length="30"
                     v-model="form.file"
-                    id="activity-file"
+                    id="route-file"
                     name="file"
-                    label="Activity file"
-                    hint="Upload the raw recording of this ride."
+                    label="Route file"
+                    hint="Upload the gpx file for this route."
                     :error="form.errors.hasOwnProperty('file')"
                     :error-messages="form.errors.hasOwnProperty('file') ? [form.errors.file] : []"
                 ></v-file-input>
@@ -46,7 +46,7 @@
                 </v-btn>
                 <v-btn
                     color="primary"
-                    @click="uploadActivityFile"
+                    @click="uploadRouteFile"
                 >
                     Upload
                 </v-btn>
@@ -57,9 +57,9 @@
 
 <script>
 export default {
-    name: "CUploadActivityFileButton",
+    name: "CUploadRouteFileButton",
     props: {
-        activity: {
+        routeModel: {
             required: true,
             type: Object
         }
@@ -74,9 +74,9 @@ export default {
         }
     },
     methods: {
-        uploadActivityFile() {
+        uploadRouteFile() {
             this.showDialog = false;
-            this.form.post(route('activity.update', this.activity.id), {
+            this.form.post(route('route.update', this.routeModel.id), {
                 onSuccess: () => {
                     this.form.reset();
 

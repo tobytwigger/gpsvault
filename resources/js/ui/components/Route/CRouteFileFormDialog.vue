@@ -82,7 +82,7 @@
 export default {
     name: "CRouteFileFormDialog",
     props: {
-        route: {
+        routeModel: {
             required: true,
             type: Object
         },
@@ -122,8 +122,8 @@ export default {
             this.showDialog = false;
             this.form.post(
                 this.oldFile
-                    ? this.ziggyRoute('route.file.update', [this.route.id, this.oldFile.id])
-                    : this.ziggyRoute('route.file.store', [this.route.id]),
+                    ? route('route.file.update', [this.routeModel.id, this.oldFile.id])
+                    : route('route.file.store', [this.routeModel.id]),
                 {
                     onSuccess: () => {
                         this.form.reset();

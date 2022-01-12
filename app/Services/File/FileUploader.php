@@ -24,6 +24,8 @@ class FileUploader
 
     const ACTIVITY_FILE_POINT_JSON = 'activity_file_point_json';
 
+    const ROUTE_FILE_POINT_JSON = 'route_file_point_json';
+
     const ROUTE_FILE = 'route_file';
 
     const ROUTE_MEDIA = 'route_media';
@@ -82,6 +84,18 @@ class FileUploader
 
         $filename = Str::random(40) . '.json.gz';
         return $this->withContents(gzcompress($json, 9), $filename, $user, FileUploader::ACTIVITY_FILE_POINT_JSON);
+    }
+
+    public function routePoints(array $points, User $user): File
+    {
+        $array = [];
+        foreach($points as $point) {
+            $array[] = $point->toArray();
+        }
+        $json = json_encode($array);
+
+        $filename = Str::random(40) . '.json.gz';
+        return $this->withContents(gzcompress($json, 9), $filename, $user, FileUploader::ROUTE_FILE_POINT_JSON);
     }
 
 }

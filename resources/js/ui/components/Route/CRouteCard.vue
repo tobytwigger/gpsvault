@@ -12,11 +12,11 @@
 
 
         <v-card-title>
-            {{route.name}}
+            {{routeModel.name}}
         </v-card-title>
 
-        <v-card-subtitle v-if="route.description">
-            {{ route.description }}
+        <v-card-subtitle v-if="routeModel.description">
+            {{ routeModel.description }}
         </v-card-subtitle>
 
 <!--        <v-card-text>-->
@@ -46,7 +46,7 @@
             <v-btn
                 color="deep-purple lighten-2"
                 text
-                @click="$inertia.get(ziggyRoute('route.show', route.id))"
+                @click="$inertia.get(route('route.show', routeModel.id))"
             >
                 View
             </v-btn>
@@ -66,7 +66,7 @@ export default {
     name: "CRouteCard",
     mixins: [units],
     props: {
-        route: {
+        routeModel: {
             required: true,
             type: Object
         }

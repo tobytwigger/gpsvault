@@ -41,12 +41,15 @@ class RouteController extends Controller
      */
     public function store(StoreRouteRequest $request)
     {
-        $file = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE);
+        $fileId = null;
+        if($request->has('file')) {
+            $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
+        }
 
         $route = Route::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'route_file_id' => $file->id
+            'route_file_id' => $fileId
         ]);
 
         return redirect()->route('route.show', $route);
@@ -61,19 +64,8 @@ class RouteController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'route' => $route->load(['files'])
+            'routeModel' => $route->load(['files'])->append('stats')
         ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Route  $route
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Route $route)
-    {
-        //
     }
 
     /**
@@ -81,11 +73,29 @@ class RouteController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Route  $route
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Route $route)
     {
-        //
+        $request->validate([
+            'name' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|nullable|string|max:65535',
+            'notes' => 'sometimes|nullable|string|max:65535',
+            'file' => 'sometimes|file'
+        ]);
+
+        $fileId = $route->route_file_id;
+        if($request->has('file')) {
+            $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
+        }
+
+        $route->name = $request->input('name', $route->name);
+        $route->description = $request->input('description', $route->description);
+        $route->notes = $request->input('notes', $route->notes);
+        $route->route_file_id = $fileId;
+
+        $route->save();
+        return redirect()->route('route.show', $route);
     }
 
     /**
@@ -96,6 +106,8 @@ class RouteController extends Controller
      */
     public function destroy(Route $route)
     {
-        //
+        $route->delete();
+
+        return redirect()->route('route.index');
     }
 }

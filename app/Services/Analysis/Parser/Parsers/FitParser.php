@@ -3,7 +3,7 @@
 namespace App\Services\Analysis\Parser\Parsers;
 
 use adriangibbons\phpFITFileAnalysis;
-use App\Models\Activity;
+use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
@@ -18,10 +18,10 @@ use PhpUnitConversion\Unit\Velocity\MeterPerSecond;
 class FitParser implements ParserContract
 {
 
-    public function read(Activity $activity): Analysis
+    public function read(File $file): Analysis
     {
         $fit = new phpFITFileAnalysis(
-            $activity->activityFile->getFileContents(),
+            $file->getFileContents(),
             [
                 'input_is_data' => true,
                 'fix_data' => ['all'],

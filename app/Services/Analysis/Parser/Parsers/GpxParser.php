@@ -2,7 +2,7 @@
 
 namespace App\Services\Analysis\Parser\Parsers;
 
-use App\Models\Activity;
+use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
@@ -14,10 +14,10 @@ use phpGPX\phpGPX;
 class GpxParser implements ParserContract
 {
 
-    public function read(Activity $activity): Analysis
+    public function read(File $file): Analysis
     {
         $gpx = new phpGPX();
-        $file = $gpx->load($activity->activityFile->fullPath());
+        $file = $gpx->load($file->fullPath());
         $points = collect();
 
         foreach ($file->tracks as $track) {

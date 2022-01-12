@@ -23,7 +23,7 @@
                 </div>
             </td>
             <td class="px-4 py-3 text-sm border">
-                <Link :href="ziggyRoute('strava.client.leave', client.id)" method="delete" as="button" type="button">
+                <Link :href="route('strava.client.leave', client.id)" method="delete" as="button" type="button">
                     <div class="flex items-center text-sm font-semibold text-red-700">
                         <div>Leave</div>
 
@@ -33,7 +33,7 @@
                     </div>
                 </Link>
                 <span v-if="client.is_connected === false">
-                <a :href="ziggyRoute('strava.login', client.id)">Click to login</a></span>
+                <a :href="route('strava.login', client.id)">Click to login</a></span>
                 <span v-else>Logged In</span>
             </td>
         </tr>

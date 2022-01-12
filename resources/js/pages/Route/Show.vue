@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="route.name" :action-sidebar="true">
+    <c-app-wrapper :title="routeModel.name" :action-sidebar="true">
         <v-tabs
             v-model="tab"
             centered
@@ -21,11 +21,41 @@
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-summary">
-                The description and notes, stats on the route - distance, elevation, time, cafe stops etc, and a map.
-                {{ route }}
+                <v-row>
+                    <v-col>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
+                                <div v-if="routeModel.description">
+                                    {{ routeModel.description }}
+                                </div>
+                                <div v-else>
+                                    No description
+                                </div>
+
+                                <div v-if="routeModel.notes">
+                                    {{ routeModel.notes }}
+                                </div>
+                                <div v-else>
+                                    No notes
+                                </div>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col>
+                        <c-stats v-if="this.stats" :schema="statSchema" :limit="4"></c-stats>
+<!--                        <c-route-stats v-if="hasStats" :stats="stats"  :limit="4"></c-route-stats>-->
+<!--                        <div v-else>No stats available</div>-->
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="pa-8">
+                        Map
+                        <c-route-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-route-map>
+                    </v-col>
+                </v-row>
             </v-tab-item>
             <v-tab-item value="tab-files">
-                <c-route-file-form-dialog :route="route" title="Upload a file" text="Upload a new file">
+                <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file">
                     <template v-slot:activator="{trigger,showing}">
                         <v-btn
                             color="secondary"
@@ -37,59 +67,49 @@
                         </v-btn>
                     </template>
                 </c-route-file-form-dialog>
-                {{route.files}}
-<!--                <c-file-manager :files="activity.files" :activity="activity"></c-file-manager>-->
+                <c-manage-route-media :route-model="routeModel"></c-manage-route-media>
             </v-tab-item>
         </v-tabs-items>
 
         <template #sidebar>
             <v-list>
-                Delete route
-                Upload route file
-                download route file
-                edit route - name, desc, notes
-<!--                <v-list-item>-->
-<!--                    <c-delete-route-button :route="route"></c-delete-route-button>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item v-if="!route.route_file_id">-->
-<!--                    <c-upload-route-file-button :route="route"></c-upload-route-file-button>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item v-if="route.route_file_id">-->
-<!--                    <v-btn link :href="ziggyRoute('file.download', route.route_file_id)">-->
-<!--                        Download route file-->
-<!--                    </v-btn>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item v-if="route.route_file_id">-->
-<!--                    <v-btn link :href="ziggyRoute('route.download', route.id)">-->
-<!--                        Download route-->
-<!--                    </v-btn>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item>-->
-<!--                    <c-route-form :old-route="route" title="Edit route" button-text="Update">-->
-<!--                        <template v-slot:activator="{trigger,showing}">-->
-<!--                            <v-btn :disabled="showing" @click="trigger">-->
-<!--                                Edit Route-->
-<!--                            </v-btn>-->
-<!--                        </template>-->
-<!--                    </c-route-form>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item>-->
-<!--                    <v-select-->
-<!--                        class="pt-2"-->
-<!--                        v-model="activeDataSource"-->
-<!--                        item-text="integration"-->
-<!--                        item-value="integration"-->
-<!--                        :items="allStats"-->
-<!--                        hint="Choose which data sets to show"-->
-<!--                        label="Data Source"-->
-<!--                        dense-->
-<!--                    ></v-select>-->
-<!--                </v-list-item>-->
-<!--                <v-list-item>-->
-<!--                    <a :href="'https://www.strava.com/activities/' + route.additional_data.strava_id"-->
-<!--                       v-if="route.linked_to.indexOf('strava') !== -1"-->
-<!--                    >View on strava</a>-->
-<!--                </v-list-item>-->
+                <v-list-item>
+                    <c-delete-route-button :route-model="routeModel"></c-delete-route-button>
+                </v-list-item>
+                <v-list-item v-if="!routeModel.route_file_id">
+                    <c-upload-route-file-button :route-model="routeModel"></c-upload-route-file-button>
+                </v-list-item>
+                <v-list-item v-if="routeModel.route_file_id">
+                    <v-btn link :href="route('file.download', routeModel.route_file_id)">
+                        Download route file
+                    </v-btn>
+                </v-list-item>
+                <v-list-item v-if="routeModel.route_file_id">
+                    <v-btn link :href="route('route.download', routeModel.id)">
+                        Download route
+                    </v-btn>
+                </v-list-item>
+                <v-list-item>
+                    <c-route-form :old-route="routeModel" title="Edit route" button-text="Update">
+                        <template v-slot:activator="{trigger,showing}">
+                            <v-btn :disabled="showing" @click="trigger">
+                                Edit Route
+                            </v-btn>
+                        </template>
+                    </c-route-form>
+                </v-list-item>
+                <v-list-item>
+                    <v-select
+                        class="pt-2"
+                        v-model="activeDataSource"
+                        item-text="integration"
+                        item-value="integration"
+                        :items="allStats"
+                        hint="Choose which data sets to show"
+                        label="Data Source"
+                        dense
+                    ></v-select>
+                </v-list-item>
             </v-list>
         </template>
     </c-app-wrapper>
@@ -99,16 +119,27 @@
 import moment from 'moment';
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRouteFileFormDialog from '../../ui/components/Route/CRouteFileFormDialog';
+import CManageRouteMedia from '../../ui/components/Route/CManageRouteMedia';
+import routeStats from '../../ui/mixins/routeStats';
+import routeStatSelector from '../../ui/mixins/routeStatSelector';
+import CStats from '../../ui/components/CStats';
+import CRouteMap from '../../ui/components/Route/CRouteMap';
+import CRouteForm from '../../ui/components/Route/CRouteForm';
+import CDeleteRouteButton from '../../ui/components/Route/CDeleteRouteButton';
+import CUploadRouteFileButton from '../../ui/components/Route/CUploadRouteFileButton';
 
 export default {
     name: "Show",
-    components: {CRouteFileFormDialog, CAppWrapper},
+    components: {
+        CUploadRouteFileButton,
+        CDeleteRouteButton, CRouteForm, CRouteMap, CStats, CManageRouteMedia, CRouteFileFormDialog, CAppWrapper},
     props: {
-        route: {
+        routeModel: {
             required: true,
             type: Object
         }
     },
+    mixins: [routeStats, routeStatSelector],
     data() {
         return {
             tab: 'tab-summary'

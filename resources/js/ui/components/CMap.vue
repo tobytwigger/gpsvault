@@ -1,14 +1,19 @@
 <template>
     <div>
-        <l-map style="height:50vh" v-model:zoom="zoom" ref="map" v-if="!loadingMap">
+        <l-map style="height:50vh; z-index: 1000;" v-model:zoom="zoom" ref="map">
             <l-control-fullscreen position="topleft"
                 :options="{ title: { 'false': 'Go big!', 'true': 'Be regular' } }" />
 
+            <l-control-layers position="topright"></l-control-layers>
+
             <l-tile-layer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                layer-type="base"
-                name="OpenStreetMap"
-            ></l-tile-layer>
+                v-for="tileProvider in tileProviders"
+                :key="tileProvider.name"
+                :name="tileProvider.name"
+                :visible="tileProvider.visible"
+                :url="tileProvider.url"
+                :attribution="tileProvider.attribution"
+                layer-type="base"/>
 
             <l-geo-json
                 ref="geojson"
@@ -21,7 +26,7 @@
 </template>
 
 <script>
-import { LMap, LGeoJson, LTileLayer } from "vue2-leaflet";
+import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers } from "vue2-leaflet";
 import LControlFullscreen from 'vue2-leaflet-fullscreen';
 import LRuler from "vue2-leaflet-ruler";
 
@@ -31,19 +36,35 @@ export default {
         LMap,
         LGeoJson,
         LTileLayer,
+        LControlLayers,
+        LControl,
         LControlFullscreen,
         LRuler
     },
     props: {
-        stats: {
+        geojson: {
             type: Object,
             required: true
         }
     },
     data() {
         return {
-            geojson: null,
-            loadingMap: true,
+            tileProviders: [
+                {
+                    name: 'OpenStreetMap',
+                    visible: true,
+                    attribution:
+                        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                },
+                {
+                    name: 'OpenTopoMap',
+                    visible: false,
+                    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+                    attribution:
+                        'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+                }
+            ],
             zoom: 9,
             rulerOptions: {
                 position: "topright", // Leaflet control position option
@@ -73,11 +94,7 @@ export default {
             }
         }
     },
-    mounted() {
-        axios.get(this.ziggyRoute('stats.geojson', this.stats.id))
-            .then(response => this.geojson = response.data)
-            .then(() => this.loadingMap = false);
-    },
+
     methods: {
         setMapBounds() {
             this.$refs.map.mapObject.fitBounds(

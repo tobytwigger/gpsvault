@@ -27,8 +27,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::redirect('/upload', route('activity.create'))->name('upload');
     Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away('https://tobytwigger.github.io/cycle-store/'))->name('documentation');
 
-    Route::get('/stats/{stats}/chart', [\App\Http\Controllers\Api\StatsController::class, 'chart'])->name('stats.chart');
-    Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('stats.geojson');
+    Route::get('/activity/stats/{stats}/chart', [\App\Http\Controllers\Api\StatsController::class, 'chart'])->name('activity.stats.chart');
+    Route::get('/activity/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('activity.stats.geojson');
     Route::post('/activity/file/duplicate', [\App\Http\Controllers\Api\ActivityDuplicateController::class, 'index'])->name('activity.file.duplicate');
 
     Route::resource('backups', \App\Http\Controllers\Pages\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backups' => 'file']);
@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
         Route::resource('file', \App\Http\Controllers\Pages\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
     });
     Route::post('/route/file/duplicate', [\App\Http\Controllers\Api\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
+    Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
 
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');

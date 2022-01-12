@@ -4,6 +4,7 @@ namespace App\Services\Archive;
 
 use App\Services\Archive\Parser\Parsers\ActivityParser;
 use App\Services\Archive\Parser\Parsers\ConnectionLogParser;
+use App\Services\Archive\Parser\Parsers\RouteParser;
 use App\Services\Archive\Parser\Parsers\SyncParser;
 use App\Services\Archive\Parser\Parsers\UserParser;
 use App\Services\Archive\Parser\ResourceParser;
@@ -24,6 +25,7 @@ class ArchiveServiceProvider extends ServiceProvider
         ResourceParser::withParser(SyncParser::class);
         ResourceParser::withParser(ConnectionLogParser::class);
         ResourceParser::withParser(UserParser::class);
+        ResourceParser::withParser(RouteParser::class);
     }
 
 }

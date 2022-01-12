@@ -13,15 +13,15 @@
                 :disabled="loading"
             >
                 <v-icon>mdi-delete</v-icon>
-                Delete Activity
+                Delete Route
             </v-btn>
         </template>
         <v-card>
             <v-card-title>
-                Deleting activity '{{activity.name}}'.
+                Deleting route '{{route.name}}'.
             </v-card-title>
             <v-card-text>
-                Are you sure you want to delete the activity '{{activity.name}}'? Once the activity is deleted, all of its resources and
+                Are you sure you want to delete the route '{{route.name}}'? Once the route is deleted, all of its resources and
                 data will be permanently deleted.
             </v-card-text>
             <v-card-text>
@@ -37,7 +37,7 @@
                 </v-btn>
                 <v-btn
                     color="error"
-                    @click="deleteActivity"
+                    @click="deleteRoute"
                 >
                     Delete
                 </v-btn>
@@ -48,9 +48,9 @@
 
 <script>
 export default {
-    name: "CDeleteActivityButton",
+    name: "CDeleteRouteButton",
     props: {
-        activity: {
+        routeModel: {
             required: true,
             type: Object
         }
@@ -62,10 +62,10 @@ export default {
         }
     },
     methods: {
-        deleteActivity() {
+        deleteRoute() {
             this.showDialog = false;
             this.loading = true;
-            this.$inertia.delete(route('activity.destroy', this.activity.id), {
+            this.$inertia.delete(route('route.destroy', this.routeModel.id), {
                 onFinish: () => this.loading = false
             });
         }

@@ -2,7 +2,7 @@
 
 namespace App\Services\Analysis\Parser;
 
-use App\Models\Activity;
+use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Parsers\FitParser;
 use App\Services\Analysis\Parser\Parsers\GpxParser;
@@ -16,12 +16,9 @@ class ParserFactory implements ParserFactoryContract
 
     private array $custom = [];
 
-    public function parse(Activity $activity): Analysis
+    public function parse(File $file): Analysis
     {
-        if($activity->activityFile) {
-            return $this->parser($activity->activityFile->extension)->read($activity);
-        }
-        throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it', $activity->id));
+        return $this->parser($file->extension)->read($file);
     }
 
     public function parser(string $type): ParserContract

@@ -79,7 +79,7 @@
                         </v-row>
                     </v-col>
                     <v-col>
-                        <c-activity-stats v-if="hasStats" :stats="stats"  :limit="4"></c-activity-stats>
+                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
                         <div v-else>No stats available</div>
                     </v-col>
                 </v-row>
@@ -90,14 +90,12 @@
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-map>
+                        <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
                     </v-col>
                 </v-row>
             </v-tab-item>
             <v-tab-item value="tab-analysis">
-                <c-activity-analysis :activity="activity" :stats="stats">
-
-                </c-activity-analysis>
+                <c-activity-analysis :activity="activity" :stats="stats"></c-activity-analysis>
             </v-tab-item>
             <v-tab-item value="tab-social">
                 <v-row>
@@ -162,12 +160,12 @@
                     <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
                 </v-list-item>
                 <v-list-item v-if="activity.activity_file_id">
-                    <v-btn link :href="ziggyRoute('file.download', activity.activity_file_id)">
+                    <v-btn link :href="route('file.download', activity.activity_file_id)">
                         Download activity file
                     </v-btn>
                 </v-list-item>
                 <v-list-item v-if="activity.activity_file_id">
-                    <v-btn link :href="ziggyRoute('activity.download', activity.id)">
+                    <v-btn link :href="route('activity.download', activity.id)">
                         Download activity
                     </v-btn>
                 </v-list-item>
@@ -206,10 +204,8 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CDeleteActivityButton from 'ui/components/Activity/CDeleteActivityButton';
 import CUploadActivityFileButton from 'ui/components/Activity/CUploadActivityFileButton';
-import CMap from 'ui/components/CMap';
 import CImageGallery from 'ui/components/CImageGallery';
 import CFileFormDialog from 'ui/components/Activity/CFileFormDialog';
-import CActivityStats from 'ui/components/Activity/CActivityStats';
 import activityStats from 'ui/mixins/activityStats';
 import activityStatSelector from 'ui/mixins/activityStatSelector';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
@@ -218,17 +214,20 @@ import CActivityAnalysis from 'ui/components/Activity/CActivityAnalysis';
 import strava from 'ui/mixins/strava';
 import moment from 'moment';
 import CManageActivityMedia from '../../ui/components/Activity/CManageActivityMedia';
+import CStats from '../../ui/components/CStats';
+import CActivityMap from '../../ui/components/Activity/CActivityMap';
 
 export default {
     name: "Show",
     components: {
+        CActivityMap,
+        CStats,
         CManageActivityMedia,
         CActivityAnalysis,
         CLineGraph,
         CActivityForm,
-        CActivityStats,
         CFileFormDialog,
-        CImageGallery, CMap, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
+        CImageGallery, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
     },
     mixins: [activityStats, activityStatSelector, strava],
     props: {
@@ -253,7 +252,7 @@ export default {
                 .map(file => {
                     return {
                         alt: file.caption,
-                        src: this.ziggyRoute('file.preview', file.id)
+                        src: route('file.preview', file.id)
                     }
                 });
         }

@@ -2,7 +2,7 @@
     <c-app-wrapper title="Your Routes" :header-action="true">
         <c-pagination-iterator :paginator="routes" item-key="id">
             <template v-slot:default="{item}">
-                <c-route-card :route="item"></c-route-card>
+                <c-route-card :route-model="item"></c-route-card>
             </template>
         </c-pagination-iterator>
 

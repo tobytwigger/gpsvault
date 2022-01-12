@@ -74,7 +74,7 @@ export default {
 
     methods: {
         updatePassword() {
-            this.form.put(this.ziggyRoute('user-password.update'), {
+            this.form.put(route('user-password.update'), {
                 errorBag: 'updatePassword',
                 preserveScroll: true,
                 onSuccess: () => this.form.reset(),

@@ -2,7 +2,7 @@
 
 namespace App\Services\Analysis\Parser\Parsers;
 
-use App\Models\Activity;
+use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
@@ -13,10 +13,10 @@ use Waddle\Parsers\TCXParser as BaseParser;
 class TcxParser implements ParserContract
 {
 
-    public function read(Activity $activity): Analysis
+    public function read(File $file): Analysis
     {
         $parser = new BaseParser();
-        $file = $parser->parse($activity->activityFile->fullPath());
+        $file = $parser->parse($file->fullPath());
         $points = collect();
 
         $averages = [
