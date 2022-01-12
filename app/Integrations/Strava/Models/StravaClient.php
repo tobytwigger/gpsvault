@@ -42,7 +42,8 @@ class StravaClient extends Model
         'used_daily_calls' => 'integer',
         'pending_calls' => 'integer',
         'invitation_link_expires_at' => 'datetime',
-        'enabled' => 'boolean'
+        'enabled' => 'boolean',
+        'public' => 'boolean'
     ];
 
     protected static function booted()
@@ -140,6 +141,16 @@ class StravaClient extends Model
     {
         $query->where('used_15_min_calls', '<', 100)
             ->where('used_daily_calls', '<', 1000);
+    }
+
+    public static function scopeAvailable(Builder $query)
+    {
+        $query->enabled()->withSpaces();
+    }
+
+    public static function scopePublic(Builder $query)
+    {
+        $query->where('public', true);
     }
 
     public function reserveSpace()
