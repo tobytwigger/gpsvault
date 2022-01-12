@@ -2,33 +2,28 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class InstallPermissions extends Command
+class GrantPermissions extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'permission:install';
+    protected $signature = 'permission:grant {user} {permission}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Install the permissions needed for this site.';
-
-    protected $permissions = [
-        'manage-global-settings',
-        'manage-strava-clients',
-        'use-public-strava-clients'
-    ];
+    protected $description = 'Give permissions to a user.';
 
     /**
      * Create a new command instance.
@@ -47,10 +42,10 @@ class InstallPermissions extends Command
      */
     public function handle()
     {
-        foreach($this->permissions as $permission) {
-            $this->createPermissionIfMissing($permission);
-        }
-        $this->info('All permissions up to date');
+        $user = User::findOrFail($this->argument('user'));
+        $permission = Permission::findByName($this->argument('permission'));
+        $user->givePermissionTo($permission);
+        $this->info('Granted user the permission');
         return 0;
     }
 
