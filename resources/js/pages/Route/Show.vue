@@ -43,13 +43,11 @@
                     </v-col>
                     <v-col>
                         <c-stats v-if="this.stats" :schema="statSchema" :limit="4"></c-stats>
-<!--                        <c-route-stats v-if="hasStats" :stats="stats"  :limit="4"></c-route-stats>-->
-<!--                        <div v-else>No stats available</div>-->
+                        <div v-else>No stats available</div>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        Map
                         <c-route-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-route-map>
                     </v-col>
                 </v-row>

@@ -8,15 +8,18 @@
         <v-toolbar-title>{{ title }}</v-toolbar-title>
 
         <v-spacer></v-spacer>
-        <!-- -->
+
+        <c-add-item></c-add-item>
     </v-app-bar>
 
 </template>
 
 <script>
 
+import CAddItem from './CAddItem';
 export default {
     name: "CAppNavBar",
+    components: {CAddItem},
     props: {
         drawer: {
             required: true,

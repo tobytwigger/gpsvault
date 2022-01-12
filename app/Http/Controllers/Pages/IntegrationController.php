@@ -7,9 +7,15 @@ use App\Integrations\Integration;
 use App\Integrations\Strava\Client\Log\ConnectionLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class IntegrationController extends Controller
 {
+
+    public function strava()
+    {
+        return Inertia::render('Integrations/Strava/Overview');
+    }
 
     public function destroy(Integration $integration)
     {

@@ -41,7 +41,7 @@
                 </v-list-item-icon>
                 <v-list-item-title>Routes</v-list-item-title>
             </v-list-item>
-            <v-list-item link>
+            <v-list-item :input-value="['tour.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('tour.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-campfire</v-icon>
                 </v-list-item-icon>
@@ -57,7 +57,7 @@
             dense
         >
             <v-list-group
-                :value="false"
+                :value="['integration.strava'].indexOf(route().current()) > -1"
                 no-action
                 prepend-icon="mdi-connection"
             >
@@ -67,7 +67,7 @@
                     </v-list-item-content>
                 </template>
 
-                <v-list-item :input-value="['strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.get(route('strava.client.index'))">
+                <v-list-item :input-value="['integration.strava'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))">
                     <v-list-item-title>Strava</v-list-item-title>
                     <v-list-item-icon>
                         <v-icon>mdi-arrow-right</v-icon>

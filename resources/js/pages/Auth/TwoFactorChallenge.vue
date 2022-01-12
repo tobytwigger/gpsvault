@@ -85,6 +85,10 @@
             }
         },
 
+        mounted() {
+            this.$refs.code.focus();
+        },
+
         watch: {
             recovery() {
                 this.$nextTick(() => {
@@ -96,6 +100,11 @@
                         this.form.recovery_code = ''
                     }
                 })
+            },
+            code(val) {
+                if(val && val.length === 6) {
+                    this.submit();
+                }
             }
         },
 
@@ -110,6 +119,9 @@
                     return 'Use a recovery code';
                 }
                 return 'Use an authentication code';
+            },
+            code() {
+                return this.form.code;
             }
         }
     }
