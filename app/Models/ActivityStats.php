@@ -147,11 +147,6 @@ class ActivityStats extends Model
         return new static();
     }
 
-    protected static function newFactory()
-    {
-        return new ActivityStatsFactory();
-    }
-
     public function activity()
     {
         return $this->belongsTo(Activity::class);

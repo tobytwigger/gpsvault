@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-class Stage extends Model
+class Stage extends Model implements Sortable
 {
     use HasFactory, SortableTrait;
 
     protected $fillable = [
-        'name', 'notes', 'date', 'is_rest_day', 'tour_id', 'route_id', 'activity_id'
+        'name', 'description', 'date', 'is_rest_day', 'tour_id', 'route_id', 'activity_id', 'stage_number'
     ];
 
     protected $sortable = [

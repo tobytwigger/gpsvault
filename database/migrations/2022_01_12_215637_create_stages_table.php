@@ -17,7 +17,7 @@ class CreateStagesTable extends Migration
             $table->id();
             $table->unsignedInteger('stage_number');
             $table->string('name')->nullable();
-            $table->text('notes')->nullable();
+            $table->text('description')->nullable();
             $table->date('date')->nullable();
             $table->boolean('is_rest_day')->default(false);
             $table->unsignedBigInteger('tour_id');

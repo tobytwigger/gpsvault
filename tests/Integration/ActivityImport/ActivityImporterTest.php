@@ -1,6 +1,6 @@
 <?php
 
-namespace Feature\Services\ActivityImport;
+namespace Integration\Services\ActivityImport;
 
 use App\Models\Activity;
 use App\Models\ActivityStats;
@@ -24,20 +24,17 @@ class ActivityImporterTest extends TestCase
     /** @test */
     public function it_sets_information_on_the_activity(){
         $user = User::factory()->create();
-        $stats = ActivityStats::factory()->create();
         $activity = ActivityImporter::for($user)
             ->withName('Test Name')
             ->withDescription('Test Description')
             ->linkTo('strava')
             ->linkTo('komoot')
-            ->withActivityStats($stats)
             ->import();
         $this->assertInstanceOf(Activity::class, $activity);
         $this->assertEquals($user->id, $activity->user_id);
         $this->assertEquals('Test Name', $activity->name);
         $this->assertEquals('Test Description', $activity->description);
         $this->assertEquals(['strava', 'komoot'], $activity->linked_to);
-        $this->assertEquals($stats->id, $activity->activity_stats_id);
     }
 
     /** @test */

@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Tour;
+use App\Models\ActivityStats;
+use App\Models\Route;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TourFactory extends Factory
+class RouteFactory extends Factory
 {
-
-    protected $model = Tour::class;
+    protected $model = Route::class;
 
     /**
      * Define the model's default state.
@@ -19,12 +19,12 @@ class TourFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fn() => User::factory(),
-            'name' => $this->faker->name,
+            'name' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'notes' => $this->faker->paragraph,
-            'marked_as_started_at' => null,
-            'marked_as_finished_at' => null
+            'route_file_id' => null,
+            'distance' => $this->faker->randomFloat(2, 1, 200000),
+            'user_id' => fn() => User::factory()
         ];
     }
 }

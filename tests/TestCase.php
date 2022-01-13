@@ -15,5 +15,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         Carbon::setTestNow(Carbon::now());
+        config()->set('inertia.testing.page_paths', array_merge(
+            config()->get('inertia.testing.page_paths', []),
+            [realpath(__DIR__ . '/../resources/js/pages')],
+        ));
     }
 }

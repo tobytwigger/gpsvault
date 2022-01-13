@@ -56,7 +56,14 @@
             </v-tab-item>
 
             <v-tab-item value="tab-stages">
-                Stages
+                <c-stage-form button-text="Add Stage" title="Add a new stage" :tour-id="tour.id">
+                    <template v-slot:activator="{trigger,showing}">
+                        <v-btn color="secondary" @click="trigger" :disabled="showing">
+                            Add a stage
+                        </v-btn>
+                    </template>
+                </c-stage-form>
+                <c-stage-table :stages="tour.stages"></c-stage-table>
             </v-tab-item>
         </v-tabs-items>
 
@@ -65,9 +72,11 @@
 
 <script>
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
+import CStageForm from '../../ui/components/Stage/CStageForm';
+import CStageTable from '../../ui/components/Stage/CStageTable';
 export default {
     name: "Index",
-    components: {CAppWrapper},
+    components: {CStageTable, CStageForm, CAppWrapper},
     props: {
         tour: {
             required: true,

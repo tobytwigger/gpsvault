@@ -45,12 +45,12 @@ class TourController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Tour $tour)
     {
         return Inertia::render('Tour/Show', [
-            'tour' => $tour
+            'tour' => $tour->load(['stages'])
         ]);
     }
 

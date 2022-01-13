@@ -121,8 +121,4 @@ class Activity extends Model
         return $this->activityFile()->exists();
     }
 
-    protected static function newFactory()
-    {
-        return new ActivityFactory();
-    }
 }

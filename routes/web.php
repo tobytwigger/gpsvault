@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     Route::resource('settings', \App\Http\Controllers\Pages\SettingsController::class)->only(['index', 'store']);
 
+    Route::get('/route/search', [\App\Http\Controllers\Api\RouteController::class, 'search'])->name('route.search');
     Route::resource('route', \App\Http\Controllers\Pages\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
     Route::prefix('route/{route}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
@@ -45,7 +46,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
 
     Route::resource('tour', \App\Http\Controllers\Pages\TourController::class)->only(['index', 'store', 'show', 'destroy']);
-
+    Route::post('stage/order', [\App\Http\Controllers\Pages\StageOrderController::class, 'reorder'])->name('stage.reorder');
+    Route::resource('stage', \App\Http\Controllers\Pages\StageController::class)->only(['store', 'update', 'destroy']);
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);

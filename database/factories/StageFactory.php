@@ -2,10 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\Activity;
+use App\Models\Route;
+use App\Models\Stage;
+use App\Models\Tour;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StageFactory extends Factory
 {
+    protected $model = Stage::class;
+
     /**
      * Define the model's default state.
      *
@@ -14,7 +20,13 @@ class StageFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->words(3),
+            'description' => $this->faker->paragraph,
+            'date' => null,
+            'is_rest_day' => false,
+            'tour_id' => fn() => Tour::factory(),
+            'route_id' => fn() => Route::factory(),
+            'activity_id' => fn() => Activity::factory(),
         ];
     }
 }

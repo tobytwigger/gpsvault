@@ -24,7 +24,6 @@ class CreateStravaClientsTable extends Migration
             $table->uuid('invitation_link_uuid')->nullable();
             $table->unsignedBigInteger('used_15_min_calls')->default(0);
             $table->unsignedBigInteger('used_daily_calls')->default(0);
-            $table->unsignedBigInteger('pending_calls')->default(0);
             $table->timestamps();
         });
     }

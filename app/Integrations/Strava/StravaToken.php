@@ -38,7 +38,7 @@ class StravaToken extends Model
             $builder->where('disabled', false);
         });
         static::addGlobalScope('not-expired', function (Builder $builder) {
-            $builder->whereRaw("expires_at > STR_TO_DATE(?, '%Y-%m-%d %H:%i:%s')" , Carbon::now()->addMinutes(2)->format('Y-m-d H:i:s'))
+            $builder->where('expires_at', '>', Carbon::now()->addMinutes(2))
                 ->orWhereNotNull('refresh_token');
         });
     }

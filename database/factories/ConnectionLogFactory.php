@@ -32,6 +32,7 @@ class ConnectionLogFactory extends Factory
             ]),
             'log' => $this->faker->sentence,
             'user_id' => fn () => User::factory(),
+            'integration' => $this->faker->word
         ];
     }
 }
