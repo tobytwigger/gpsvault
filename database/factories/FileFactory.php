@@ -21,7 +21,7 @@ class FileFactory extends Factory
     {
         return [
             'size' => $this->faker->numberBetween(20, 100000),
-            'title' => $this->faker->words(3),
+            'title' => $this->faker->words(3, true),
             'caption' => $this->faker->paragraph,
             'disk' => 'tests',
             'hash' => Str::random(32),

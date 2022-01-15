@@ -12,14 +12,10 @@ class StageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'sometimes|nullable|string|max:255',
-            'route_id' => 'sometimes|nullable|exists:routes,id',
             'tour_id' => 'required|exists:tours,id',
         ]);
 
         $stage = Stage::create([
-            'name' => $request->input('name'),
-            'route_id' => $request->input('route_id'),
             'tour_id' => $request->input('tour_id'),
         ]);
 
@@ -30,13 +26,21 @@ class StageController extends Controller
     {
         $request->validate([
             'name' => 'sometimes|nullable|string|max:255',
-            'route_id' => 'sometimes|nullable|exists:routes,id'
+            'description' => 'sometimes|nullable|string|max:65535',
+            'date' => 'sometimes|nullable|date',
+            'is_rest_day' => 'sometimes|boolean',
+            'route_id' => 'sometimes|nullable|exists:routes,id',
+            'activity_id' => 'sometimes|nullable|exists:activities,id',
+            'stage_number' => 'sometimes|integer'
         ]);
 
-
-        $stage->name = $request->input('name', $stage->name);
-        $stage->route_id = $request->input('route_id', $stage->route_id);
+        $stage->fill($request->only([
+            'name', 'description', 'date', 'is_rest_day', 'route_id', 'activity_id'
+        ]));
         $stage->save();
+        if($request->has('stage_number') && $request->input('stage_number')) {
+            $stage->setStageNumber((int) $request->input('stage_number'));
+        }
 
         return redirect()->route('tour.show', $stage->tour_id);
     }

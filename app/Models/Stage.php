@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
@@ -26,6 +27,21 @@ class Stage extends Model implements Sortable
         'is_rest_day' => 'boolean'
     ];
 
+    protected static function booted()
+    {
+        static::deleted(function(Stage $stage) {
+            static::setNewOrder(
+                $stage->newQuery()->ordered()->pluck($stage->getKeyName())
+            );
+        });
+
+        static::updated(function(Stage $stage) {
+            static::setNewOrder(
+                $stage->newQuery()->ordered()->pluck($stage->getKeyName())
+            );
+        });
+    }
+
     public function tour()
     {
         return $this->belongsTo(Tour::class);
@@ -44,6 +60,13 @@ class Stage extends Model implements Sortable
     public function buildSortQuery()
     {
         return static::query()->where('tour_id', $this->tour_id);
+    }
+
+    public function setStageNumber(int $stageNumber)
+    {
+        $baseOrder = $this->newQuery()->ordered()->where('id', '!=', $this->id)->pluck($this->getKeyName());
+        $baseOrder->splice($stageNumber - 1, 1, $this->id);
+        static::setNewOrder($baseOrder);
     }
 
 }

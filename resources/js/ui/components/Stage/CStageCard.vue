@@ -21,6 +21,7 @@
 
         <v-card-text>
             <v-chip
+                v-if="distance"
                 outlined
                 class="ma-2"
                 color="indigo"
@@ -28,17 +29,18 @@
                 <v-icon left>
                     mdi-ruler
                 </v-icon>
-                Distance
+                {{ distance.value }}{{distance.unit}}
             </v-chip>
 
             <v-chip
+                v-if="elevationGain"
                 outlined
                 color="indigo"
             >
                 <v-icon left>
-                    mdi-calendar-range
+                    mdi-image-filter-hdr
                 </v-icon>
-                Elevation
+                {{ elevationGain.value }}{{elevationGain.unit}}
             </v-chip>
         </v-card-text>
 
@@ -56,7 +58,16 @@
                 text
                 @click="$inertia.get(route('route.show', stage.route_id))"
             >
-                View
+                Route
+            </v-btn>
+
+            <v-btn
+                v-if="stage.activity_id"
+                color="deep-purple lighten-2"
+                text
+                @click="$inertia.get(route('activity.show', stage.activity_id))"
+            >
+                Activity
             </v-btn>
 
             <v-spacer></v-spacer>
@@ -115,11 +126,12 @@ import moment from 'moment';
 import units from '../../mixins/units';
 import CStageForm from './CStageForm';
 import CConfirmationDialog from '../CConfirmationDialog';
+import routeStats from '../../mixins/routeStats';
 
 export default {
     name: "CStageCard",
     components: {CConfirmationDialog, CStageForm},
-    mixins: [units],
+    mixins: [units, routeStats],
     props: {
         stage: {
             required: true,
@@ -148,6 +160,14 @@ export default {
             }
             return moment(value).format('DD/MM/YYYY');
         },
+    },
+    computed: {
+        hasStats() {
+            return this.stage.route && Object.keys(this.stage.route.stats).length > 0;
+        },
+        stats() {
+            return this.hasStats && this.stage.route.stats.hasOwnProperty('php') ? this.stage.route.stats.php : null
+        }
     }
 }
 </script>

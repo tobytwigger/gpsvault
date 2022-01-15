@@ -1,9 +1,9 @@
 <template>
     <v-autocomplete
-        :items="routes"
+        :items="activities"
         item-text="name"
         item-value="id"
-        v-model="selectedRoute"
+        v-model="selectedActivity"
         :id="id"
         clearable
         :name="id"
@@ -17,7 +17,7 @@
         <template v-slot:no-data>
             <v-list-item>
                 <v-list-item-title>
-                    Search for a <strong>route</strong>
+                    Search for an <strong>activity</strong>
                 </v-list-item-title>
             </v-list-item>
         </template>
@@ -28,7 +28,7 @@
 import _ from 'lodash';
 
 export default {
-    name: "CRouteSelect",
+    name: "CActivitySelect",
     props: {
         errorMessages: {
             required: false,
@@ -55,29 +55,29 @@ export default {
     },
     data() {
         return {
-            routes: [],
+            activities: [],
             isLoading: false,
             search: null
         }
     },
     mounted() {
-        this.loadRoutes(null);
+        this.loadActivities(null);
     },
     watch: {
         search(val) {
-            this.loadRoutes(val);
+            this.loadActivities(val);
         }
     },
     methods: {
-        loadRoutes: _.debounce(function(val) {
+        loadActivities: _.debounce(function(val) {
             this.isLoading = true;
-            axios.get(route('route.search', {query: val}))
-                .then(response => this.routes = response.data)
+            axios.get(route('activity.search', {query: val}))
+                .then(response => this.activities = response.data)
                 .then(() => this.isLoading = false);
         }, 400)
     },
     computed: {
-        selectedRoute: {
+        selectedActivity: {
             get() {
                 return this.value;
             },

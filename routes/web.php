@@ -19,6 +19,7 @@ Route::get('/', [\App\Http\Controllers\Pages\PublicController::class, 'welcome']
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/activity/search', [\App\Http\Controllers\Api\ActivityController::class, 'search'])->name('activity.search');
     Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class)->except(['edit']);
 
     Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
