@@ -56,14 +56,15 @@
             </v-tab-item>
 
             <v-tab-item value="tab-stages">
-                <c-stage-form button-text="Add Stage" title="Add a new stage" :tour-id="tour.id">
-                    <template v-slot:activator="{trigger,showing}">
-                        <v-btn color="secondary" @click="trigger" :disabled="showing">
-                            Add a stage
-                        </v-btn>
-                    </template>
-                </c-stage-form>
-                <c-stage-table :stages="tour.stages"></c-stage-table>
+                <v-btn color="secondary" :disabled="stageForm.processing" :loading="stageForm.processing" @click="createStage">
+                    Add a stage
+                </v-btn>
+                <v-row>
+                    <v-col v-for="stage in tour.stages" cols="12" xl="3" md="4" sm="6">
+                        <c-stage-card :stage="stage"></c-stage-card>
+                    </v-col>
+                </v-row>
+
             </v-tab-item>
         </v-tabs-items>
 
@@ -74,9 +75,11 @@
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CStageForm from '../../ui/components/Stage/CStageForm';
 import CStageTable from '../../ui/components/Stage/CStageTable';
+import CPaginationIterator from '../../ui/components/CPaginationIterator';
+import CStageCard from '../../ui/components/Stage/CStageCard';
 export default {
-    name: "Index",
-    components: {CStageTable, CStageForm, CAppWrapper},
+    name: "Show",
+    components: {CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
     props: {
         tour: {
             required: true,
@@ -85,9 +88,22 @@ export default {
     },
     data() {
         return {
-            tab: null
+            tab: null,
+            stageForm: this.$inertia.form({
+                stage_number: null,
+                tour_id: this.tour.id
+            })
         }
     },
+    methods: {
+        createStage() {
+            this.stageForm.post(route('stage.store'), {
+                onSuccess: () => {
+                    this.stageForm.reset();
+                }
+            });
+        }
+    }
 }
 </script>
 
