@@ -17,3 +17,4 @@ resources/functions/parse-activities/venv
 public/dist
 public/vendor
 public/mix-manifest.json
+storage/tests

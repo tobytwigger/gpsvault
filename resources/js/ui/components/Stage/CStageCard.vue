@@ -146,7 +146,7 @@ export default {
     methods: {
         deleteStage() {
             this.isDeleting = true;
-            this.$inertia.delete(route('stage.destroy', this.stage.id), {
+            this.$inertia.delete(route('tour.stage.destroy', [this.stage.tour_id, this.stage.id]), {
                 onFinish: () => this.isDeleting = false
             })
         },

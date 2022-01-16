@@ -171,8 +171,8 @@ export default {
         submit() {
             this.form.post(
                 this.oldStage
-                    ? route('stage.update', this.oldStage.id)
-                    : route('stage.store'),
+                    ? route('tour.stage.update', [this.tourId, this.oldStage.id])
+                    : route('tour.stage.store', this.tourId),
                 {
                     onSuccess: () => {
                         this.form.reset();

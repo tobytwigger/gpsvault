@@ -16,6 +16,11 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
+     * The URL that the documenttion can be found at
+     */
+    'docs' => env('DOCS_URL', 'https://tobytwigger.github.io/cycle-store/'),
+
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------

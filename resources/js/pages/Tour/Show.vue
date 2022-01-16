@@ -126,13 +126,12 @@ export default {
             tab: null,
             stageForm: this.$inertia.form({
                 stage_number: null,
-                tour_id: this.tour.id
             })
         }
     },
     methods: {
         createStage() {
-            this.stageForm.post(route('stage.store'), {
+            this.stageForm.post(route('tour.stage.store', this.tour.id), {
                 onSuccess: () => {
                     this.stageForm.reset();
                 }

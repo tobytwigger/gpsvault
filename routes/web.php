@@ -17,16 +17,26 @@ use Inertia\Inertia;
 
 Route::get('/', [\App\Http\Controllers\Pages\PublicController::class, 'welcome'])->name('home');
 
+/* Documentation */
+Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');
+
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+    /* Dashboard */
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
+
+    /* Tours */
+    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stages\StageController::class)->only(['store', 'update', 'destroy']);
+
+    /* Activities */
+    Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
+
+
     Route::get('/activity/search', [\App\Http\Controllers\Api\ActivityController::class, 'search'])->name('activity.search');
-    Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class)->except(['edit']);
 
     Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
     Route::get('file/{file}/download', [\App\Http\Controllers\Pages\FileController::class, 'download'])->name('file.download');
     Route::get('file/{file}/preview', [\App\Http\Controllers\Pages\FileController::class, 'preview'])->name('file.preview');
-    Route::redirect('/upload', route('activity.create'))->name('upload');
-    Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away('https://tobytwigger.github.io/cycle-store/'))->name('documentation');
+
 
     Route::get('/activity/stats/{stats}/chart', [\App\Http\Controllers\Api\StatsController::class, 'chart'])->name('activity.stats.chart');
     Route::get('/activity/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('activity.stats.geojson');
@@ -47,8 +57,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
 
     Route::resource('tour', \App\Http\Controllers\Pages\TourController::class)->only(['index', 'store', 'show', 'destroy']);
-    Route::post('stage/order', [\App\Http\Controllers\Pages\StageOrderController::class, 'reorder'])->name('stage.reorder');
-    Route::resource('stage', \App\Http\Controllers\Pages\StageController::class)->only(['store', 'update', 'destroy']);
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
