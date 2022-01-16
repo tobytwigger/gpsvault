@@ -20,7 +20,7 @@ class ActivityStatsFactory extends Factory
     public function definition()
     {
         return [
-            'distance' => $this->faker->randomNumber(100, 200000),
+            'distance' => $this->faker->numberBetween(100, 200000),
             'started_at' => $this->faker->dateTimeBetween('-1 year, -1 day'),
             'finished_at' => $this->faker->dateTimeBetween('now'),
             'duration' => $this->faker->randomFloat(2, 1, 100),

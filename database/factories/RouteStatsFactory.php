@@ -19,7 +19,7 @@ class RouteStatsFactory extends Factory
     public function definition()
     {
         return [
-            'distance' => $this->faker->randomNumber(100, 200000),
+            'distance' => $this->faker->numberBetween(100, 200000),
             'min_altitude' => $this->faker->randomFloat(2, 1, 100),
             'max_altitude' => $this->faker->randomFloat(2, 1, 100),
             'elevation_gain' => $this->faker->randomFloat(2, 1, 100),
