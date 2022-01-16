@@ -25,10 +25,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
 
     /* Tours */
-    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stages\StageController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
 
     /* Activities */
-    Route::resource('activity', \App\Http\Controllers\Pages\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
+    Route::resource('activity', \App\Http\Controllers\Pages\Activity\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
+    Route::prefix('activity/{activity}')->group(function() {
+        Route::get('download', [\App\Http\Controllers\Pages\Activity\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
+        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
+    });
 
 
     Route::get('/activity/search', [\App\Http\Controllers\Api\ActivityController::class, 'search'])->name('activity.search');
@@ -57,12 +61,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
 
     Route::resource('tour', \App\Http\Controllers\Pages\TourController::class)->only(['index', 'store', 'show', 'destroy']);
-    Route::prefix('activity/{activity}')->group(function() {
-        Route::get('download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
-        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
-    });
 
-    Route::post('/data/download', [\App\Http\Controllers\Pages\ActivityDownloadController::class, 'all'])->name('data.download');
 
     Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');

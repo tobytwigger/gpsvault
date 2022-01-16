@@ -34,6 +34,7 @@
         "mjaschen/phpgeo": "^4.0",
         "nelexa/zip": "^4.0",
         "php-unit-conversion/php-unit-conversion": "^1.30",
+        "phpspec/prophecy-phpunit": "^2.0",
         "predis/predis": "^1.1",
         "psr/log": "^1.0.0",
         "pusher/pusher-php-server": "^5.0",

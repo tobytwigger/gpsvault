@@ -37,6 +37,7 @@ class ActivityFileController extends Controller
     public function store(Request $request, Activity $activity)
     {
         $this->authorize('create', File::class);
+        $this->authorize('update', $activity);
 
         $request->validate([
             'files' => 'required|array|min:1',
@@ -63,6 +64,8 @@ class ActivityFileController extends Controller
     public function update(Request $request, Activity $activity, File $file)
     {
         $this->authorize('update', $file);
+        $this->authorize('update', $activity);
+        abort_if(!$activity->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the activity');
 
         $request->validate([
             'title' => 'sometimes|nullable|string|max:255',

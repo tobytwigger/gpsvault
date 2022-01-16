@@ -50,4 +50,15 @@ class FileFactory extends Factory
             'mimetype' => 'image/jpeg'
         ]);
     }
+
+    public function activityFile()
+    {
+        return $this->state(fn(array $attributes) => [
+            'path' => '/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false),
+            'filename' => $this->faker->word . '.gpx',
+            'extension' => 'gpx',
+            'type' => FileUploader::ROUTE_MEDIA,
+            'mimetype' => 'application/xml+gpx'
+        ]);
+    }
 }

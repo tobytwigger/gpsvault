@@ -1,23 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Activity;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\DownloadAllData;
 use App\Models\Activity;
-use App\Models\User;
 use App\Services\Archive\ZipCreator;
-use Illuminate\Support\Facades\Auth;
 
 class ActivityDownloadController extends Controller
 {
-
-    public function all()
-    {
-        DownloadAllData::dispatch(Auth::user());
-
-        return redirect()->route('profile.show');
-    }
 
     public function downloadActivity(Activity $activity)
     {
@@ -28,8 +18,4 @@ class ActivityDownloadController extends Controller
         return redirect()->route('file.download', $file);
     }
 
-    public function download()
-    {
-
-    }
 }

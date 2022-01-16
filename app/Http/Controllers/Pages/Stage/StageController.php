@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages\Stages;
+namespace App\Http\Controllers\Pages\Stage;
 
 use App\Http\Controllers\Controller;
 use App\Models\Route;

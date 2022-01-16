@@ -2,11 +2,14 @@
 
 namespace Tests;
 
+use App\Http\Kernel;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use MagicTest\MagicTest\Middleware\MagicTestMiddleware;
 
 abstract class DuskTestCase extends BaseTestCase
 {

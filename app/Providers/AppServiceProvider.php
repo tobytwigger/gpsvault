@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Kernel;
 use App\Services\Sync\Task;
 use App\Settings\DarkMode;
 use App\Settings\StravaClient;
@@ -9,6 +10,7 @@ use App\Settings\UnitSystem;
 use App\Tasks\CreateBackupTask;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use MagicTest\MagicTest\Middleware\MagicTestMiddleware;
 use maxh\Nominatim\Nominatim;
 use Settings\Setting;
 

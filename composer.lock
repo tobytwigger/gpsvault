@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ec45da9c6491a083c9de5f31fa740be",
+    "content-hash": "8563345b804a53a2ab0de4bacbd84b46",
     "packages": [
         {
             "name": "adriangibbons/php-fit-file-analysis",
@@ -12742,5 +12742,5 @@
         "ext-zlib": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }
