@@ -78,7 +78,10 @@ services:
         networks:
             - sail
     selenium:
-        image: 'selenium/standalone-chrome'
+        image: 'selenium/standalone-chrome:86.0-chromedriver-86.0'
+        ports:
+            - '${FORWARD_SELENIUM_PORT:-4444}:4444'
+            - '5900:5900'
         volumes:
             - '/dev/shm:/dev/shm'
         networks:
