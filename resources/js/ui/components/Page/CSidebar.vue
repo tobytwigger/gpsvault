@@ -80,7 +80,7 @@
                 </v-list-item-icon>
                 <v-list-item-title>Backups</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('documentation'))">
+            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link :href="route('documentation')">
                 <v-list-item-icon>
                     <v-icon>mdi-book-open-blank-variant</v-icon>
                 </v-list-item-icon>
