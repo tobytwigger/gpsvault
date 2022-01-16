@@ -15,7 +15,6 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [\App\Http\Controllers\Pages\PublicController::class, 'welcome'])->name('home');
 
 /* Documentation */
 Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');
@@ -31,9 +30,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('activity', \App\Http\Controllers\Pages\Activity\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\Activity\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
-        Route::resource('file', \App\Http\Controllers\Pages\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
+        Route::resource('file', \App\Http\Controllers\Pages\Activity\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
     });
 
+
+
+
+
+    // UNTESTED
 
     Route::get('/activity/search', [\App\Http\Controllers\Api\ActivityController::class, 'search'])->name('activity.search');
 
@@ -69,3 +73,5 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/integration/{integration}/logs', [\App\Http\Controllers\Pages\ConnectionLogController::class, 'index'])->name('integration.logs');
 
 });
+
+Route::get('/', [\App\Http\Controllers\Pages\PublicController::class, 'welcome'])->name('home');

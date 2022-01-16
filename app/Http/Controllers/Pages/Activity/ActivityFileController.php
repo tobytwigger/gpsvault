@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Activity;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
@@ -8,26 +8,18 @@ use App\Models\File;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ActivityFileController extends Controller
 {
 
     public function destroy(Activity $activity, File $file)
     {
-        $this->authorize('view', $file);
-
-        if(!(
-            $activity->activity_file_id === $file->id
-            || $activity->whereHas('files', fn(Builder $query) => $query->where('files.id', $file->id))->exists()
-        )) {
-            throw new NotFoundHttpException('The file is not attached to the activity');
-        }
+        $this->authorize('view', $activity);
+        $this->authorize('delete', $file);
+        abort_if(!$activity->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the activity');
 
         $file->delete();
 

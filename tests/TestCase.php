@@ -24,6 +24,9 @@ abstract class TestCase extends BaseTestCase
             config()->get('inertia.testing.page_paths', []),
             [realpath(__DIR__ . '/../resources/js/pages')],
         ));
+        config()->set('filesystems.disks.tests', [
+            'driver' => 'local', 'root' => storage_path('tests')
+        ]);
     }
 
     public function authenticated(array $parameters = [])
