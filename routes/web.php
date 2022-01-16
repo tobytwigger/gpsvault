@@ -21,7 +21,7 @@ Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away(
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     /* Dashboard */
-    Route::get('/dashboard', [\App\Http\Controllers\Pages\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'index'])->name('dashboard');
 
     /* Tours */
     Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
