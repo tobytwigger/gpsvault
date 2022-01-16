@@ -78,3 +78,8 @@ stderr_logfile_maxbytes=0
 autostart=true
 autorestart=true
 user=sail
+
+## Magic
+
+- Use VNC Viewer to connect to localhost:5900
+- Run `sail artisan magic`

@@ -19,7 +19,9 @@ class LoginTest extends DuskTestCase
 
         $this->browse(function(Browser $browser) {
             $browser->visit(route('login'))
-                ->magic();
+                    ->type('email', 'example@cycle.test')
+                    ->type('password', 'secret123')
+                    ->magic();
         });
     }
 
