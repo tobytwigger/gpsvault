@@ -2,6 +2,10 @@
 
 namespace Tests\Feature\Activity;
 
+use App\Models\Activity;
+use App\Models\File;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -11,18 +15,54 @@ class ActivityStoreTest extends TestCase
     /** @test */
     public function it_creates_an_activity_from_a_file(){
         $this->authenticated();
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
+        $response = $this->post(route('activity.store'), [
+            'file' => $file
+        ]);
+
+        $this->assertDatabaseCount('activities', 1);
+
+        $this->assertDatabaseHas('files', [
+            'filename' => 'filename.gpx',
+            'disk' => 'test-fake'
+        ]);
+        $file = File::where('filename', 'filename.gpx')->firstOrFail();
+        $this->assertDatabaseHas('activities', [
+            'activity_file_id' => $file->id
+        ]);
     }
 
     /** @test */
     public function it_redirects_to_show_the_new_activity(){
         $this->authenticated();
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
+        $response = $this->post(route('activity.store'), [
+            'file' => $file
+        ]);
+
+        $this->assertDatabaseCount('activities', 1);
+        $response->assertRedirect(route('activity.show', Activity::firstOrFail()));
     }
 
     /** @test */
     public function a_name_can_be_set(){
         $this->authenticated();
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+
+        $response = $this->post(route('activity.store'), [
+            'file' => $file,
+            'name' => 'This is the activity name'
+        ]);
+
+        $this->assertDatabaseCount('activities', 1);
+        $this->assertDatabaseHas('activities', [
+            'name' => 'This is the activity name'
+        ]);
 
     }
 
@@ -31,33 +71,40 @@ class ActivityStoreTest extends TestCase
      * @dataProvider validationDataProvider
      */
     public function it_validates($key, $value, $error){
-//        $this->authenticated();
-//        if(is_callable($value)) {
-//            $value = call_user_func($value, $this->user);
-//        }
-//        $tour = Tour::factory()->create(['user_id' => $this->user->id]);
-//        $stage = Stage::factory()->create(['tour_id' => $tour->id]);
-//
-//        $response = $this->put(route('tour.stage.update', [$stage->tour_id, $stage]), [$key => $value]);
-//        if(!$error) {
-//            $response->assertSessionHasNoErrors();
-//        } else {
-//            $response->assertSessionHasErrors([$key => $error]);
-//        }
+        $this->authenticated();
+
+        Storage::fake('test-fake');
+        $fakeFile = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+
+        $response = $this->post(route('activity.store'), array_merge([$key => $value], $key === 'file' ? [] : ['file' => $fakeFile]));
+        if(!$error) {
+            $response->assertSessionHasNoErrors();
+        } else {
+            $response->assertSessionHasErrors([$key => $error]);
+        }
     }
 
     public function validationDataProvider(): array
     {
         return [
             ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
-//            ['name', true, 'The name must be a string.'],
-//            ['file', 'route-id', 'The selected route id is invalid.'],
+            ['name', null, false],
+            ['name', 'This is a valid namne', false],
+            ['file', null, 'The file field is required.'],
+            ['file', 'This is not a file', 'The file must be a file.']
         ];
     }
 
     /** @test */
     public function you_must_be_authenticated(){
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
+        $response = $this->post(route('activity.store'), [
+            'file' => $file,
+            'name' => 'This is the activity name'
+        ]);
+        $response->assertRedirect(route('login'));
     }
 
 }

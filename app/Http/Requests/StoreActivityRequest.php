@@ -24,7 +24,7 @@ class StoreActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'file',
+            'file' => 'required|file',
             'name' => 'sometimes|nullable|max:255'
         ];
     }

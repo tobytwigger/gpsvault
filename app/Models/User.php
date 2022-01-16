@@ -84,7 +84,13 @@ class User extends Authenticatable
 
     public function disk()
     {
-        return App::isLocal() ? 'local' : 's3';
+        if(App::isLocal()) {
+            return 'local';
+        }
+        if(App::environment('testing')) {
+            return 'test-fake';
+        }
+        return 's3';
     }
 
     public function syncs()
