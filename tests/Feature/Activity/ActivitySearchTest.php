@@ -91,4 +91,11 @@ class ActivitySearchTest extends TestCase
         $response->assertJsonCount(6);
     }
 
+    /** @test */
+    public function you_must_be_authenticated(){
+        $activities = Activity::factory()->count(5)->create();
+
+        $this->getJson(route('activity.search', ['query' => null]))
+            ->assertStatus(401);
+    }
 }
