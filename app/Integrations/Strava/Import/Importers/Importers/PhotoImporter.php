@@ -96,7 +96,7 @@ class PhotoImporter extends Importer
             trim(file_get_contents($fullMemberPath)),
             $filename,
             $this->user,
-            FileUploader::UNMATCHED_MEDIA
+            FileUploader::ACTIVITY_MEDIA
         );
     }
 

@@ -20,8 +20,6 @@ class FileUploader
 
     const ARCHIVE = 'archive';
 
-    const UNMATCHED_MEDIA = 'unmatched_media';
-
     const ACTIVITY_FILE_POINT_JSON = 'activity_file_point_json';
 
     const ROUTE_FILE_POINT_JSON = 'route_file_point_json';
