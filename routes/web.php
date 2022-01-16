@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
 
     /* Activities */
+    Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
     Route::resource('activity', \App\Http\Controllers\Pages\Activity\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
     Route::prefix('activity/{activity}')->group(function() {
         Route::get('download', [\App\Http\Controllers\Pages\Activity\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
@@ -39,7 +40,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     // UNTESTED
 
-    Route::get('/activity/search', [\App\Http\Controllers\Api\ActivityController::class, 'search'])->name('activity.search');
 
     Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
     Route::get('file/{file}/download', [\App\Http\Controllers\Pages\FileController::class, 'download'])->name('file.download');
