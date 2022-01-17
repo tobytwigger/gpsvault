@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
+use App\Services\File\FileUploader;
 use App\Traits\HasAdditionalData;
-use Database\Factories\ActivityStatsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
-class ActivityStats extends Model
+class Stats extends Model
 {
     use HasFactory, HasAdditionalData;
 
@@ -20,7 +19,7 @@ class ActivityStats extends Model
     protected $fillable = [
         'integration',
 
-        'activity_id',
+        'file_id',
         // Distance in metres
         'distance',
         // Date and time the ride was started
@@ -99,25 +98,29 @@ class ActivityStats extends Model
 
     protected static function booted()
     {
-        static::created(function(ActivityStats $activityStats) {
-            if($activityStats->activity->distance === null && $activityStats->distance !== null) {
-                $activityStats->activity()->update(['distance' => $activityStats->distance]);
-            }
-            if($activityStats->activity->started_at === null && $activityStats->started_at !== null) {
-                $activityStats->activity()->update(['started_at' => $activityStats->started_at]);
+        static::created(function(Stats $stats) {
+            if($stats->file->type === FileUploader::ROUTE_FILE) {
+                Route::where('file_id', $stats->file->id)->first()?->notifyAboutNewStats($stats);
+            } elseif($stats->file->type === FileUploader::ACTIVITY_FILE) {
+                Activity::where('file_id', $stats->file->id)->first()?->notifyAboutNewStats($stats);
             }
         });
     }
 
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
+
     private function getResults($lat, $lon)
     {
-        $result = app('nominatim')->find(
-            app('nominatim')->newReverse()->latlon($lat, $lon)
-        );
-        if(array_key_exists('address', $result)) {
-            $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
-            return join(', ', array_slice($address, 0, 4));
-        }
+//        $result = app('nominatim')->find(
+//            app('nominatim')->newReverse()->latlon($lat, $lon)
+//        );
+//        if(array_key_exists('address', $result)) {
+//            $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
+//            return join(', ', array_slice($address, 0, 4));
+//        }
         return null;
     }
 
@@ -149,11 +152,6 @@ class ActivityStats extends Model
     public static function default()
     {
         return new static();
-    }
-
-    public function activity()
-    {
-        return $this->belongsTo(Activity::class);
     }
 
     public function jsonPointsFile()

@@ -17,8 +17,8 @@ class RouteUpdateTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
         Storage::fake('test-fake');
 
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes', 'route_file_id' => null]);
-        $this->assertNull($route->route_file_id);
+        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes', 'file_id' => null]);
+        $this->assertNull($route->file_id);
 
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => $file]);
 
@@ -26,7 +26,7 @@ class RouteUpdateTest extends TestCase
             'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes'
         ]);
 
-        $this->assertNotNull($route->refresh()->route_file_id);
+        $this->assertNotNull($route->refresh()->file_id);
     }
 
     /** @test */

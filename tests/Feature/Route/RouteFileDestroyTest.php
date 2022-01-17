@@ -68,7 +68,7 @@ class RouteFileDestroyTest extends TestCase
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
-        $route->route_file_id = $file->id;
+        $route->file_id = $file->id;
         Model::withoutEvents(fn() => $route->save());
 
         $response = $this->delete(route('route.file.destroy', [$route, $file]), []);

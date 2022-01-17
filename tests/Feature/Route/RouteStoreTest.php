@@ -30,7 +30,7 @@ class RouteStoreTest extends TestCase
         ]);
         $file = File::where('filename', 'filename.gpx')->firstOrFail();
         $this->assertDatabaseHas('routes', [
-            'route_file_id' => $file->id
+            'file_id' => $file->id
         ]);
     }
 

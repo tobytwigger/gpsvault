@@ -25,7 +25,7 @@ class RouteFileController extends Controller
         abort_if(!$route->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the route');
 
         if(!(
-            $route->route_file_id === $file->id
+            $route->file_id === $file->id
             || $route->whereHas('files', fn(Builder $query) => $query->where('files.id', $file->id))->exists()
         )) {
             throw new NotFoundHttpException('The file is not attached to the route');

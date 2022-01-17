@@ -23,7 +23,7 @@ class ActivityDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->activityFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $activity = Activity::factory()->create(['user_id' => $this->user->id, 'activity_file_id' => $file->id]);
+        $activity = Activity::factory()->create(['user_id' => $this->user->id, 'file_id' => $file->id]);
         $response = $this->postJson(route('activity.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => true]);
@@ -34,7 +34,7 @@ class ActivityDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->activityFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $activity = Activity::factory()->create(['user_id' => $this->user->id, 'activity_file_id' => $file->id]);
+        $activity = Activity::factory()->create(['user_id' => $this->user->id, 'file_id' => $file->id]);
         $response = $this->postJson(route('activity.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => true]);
@@ -48,7 +48,7 @@ class ActivityDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->activityFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $activity = Activity::factory()->create(['activity_file_id' => $file->id]);
+        $activity = Activity::factory()->create(['file_id' => $file->id]);
         $response = $this->postJson(route('activity.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => false]);

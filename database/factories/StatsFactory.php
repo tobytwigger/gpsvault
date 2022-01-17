@@ -4,13 +4,15 @@ namespace Database\Factories;
 
 use App\Models\Activity;
 use App\Models\ActivityStats;
+use App\Models\File;
+use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ActivityStatsFactory extends Factory
+class StatsFactory extends Factory
 {
 
-    protected $model = ActivityStats::class;
+    protected $model = Stats::class;
 
     /**
      * Define the model's default state.
@@ -22,6 +24,7 @@ class ActivityStatsFactory extends Factory
         return [
             'distance' => $this->faker->numberBetween(100, 200000),
             'started_at' => $this->faker->dateTimeBetween('-1 year, -1 day'),
+            'file_id' => fn() => File::factory()->activityFile(),
             'finished_at' => $this->faker->dateTimeBetween('now'),
             'duration' => $this->faker->randomFloat(2, 1, 100),
             'average_speed' => $this->faker->randomFloat(2, 1, 100),
@@ -43,7 +46,6 @@ class ActivityStatsFactory extends Factory
             'average_heartrate' => $this->faker->randomFloat(2, 1, 100),
             'calories' => $this->faker->randomFloat(2, 1, 100),
             'moving_time' => $this->faker->randomFloat(2, 1, 100),
-            'activity_id' => fn() => Activity::factory(),
             'integration' => $this->faker->unique()->word,
             'json_points_file_id' => null
         ];

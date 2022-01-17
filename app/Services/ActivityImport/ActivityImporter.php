@@ -144,7 +144,7 @@ class ActivityImporter
 
     public function save(): Activity
     {
-        if($this->activityDetails->getActivityFile() !== null && $this->existingActivity->activity_file_id !== $this->activityDetails->getActivityFile()->id) {
+        if($this->activityDetails->getActivityFile() !== null && $this->existingActivity->file_id !== $this->activityDetails->getActivityFile()->id) {
             $this->checkForDuplication();
         }
         return $this->saveActivityModel($this->existingActivity);
@@ -156,7 +156,7 @@ class ActivityImporter
             'name' => $this->activityDetails->getName(),
             'description' => $this->activityDetails->getDescription(),
             'linked_to' => $this->activityDetails->getLinkedTo(),
-            'activity_file_id' => $this->activityDetails->getActivityFile()?->id,
+            'file_id' => $this->activityDetails->getActivityFile()?->id,
             'user_id' => $this->user?->id ?? Auth::id() ?? throw new \Exception('A user could not be found to run the import against')
         ]);
         $activity->save();

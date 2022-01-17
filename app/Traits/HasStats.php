@@ -2,12 +2,18 @@
 
 namespace App\Traits;
 
-use App\Models\ActivityStats;
+use App\Models\File;
+use App\Models\Stats;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Arr;
 
 trait HasStats
 {
+
+
+
+
 
     public function getStatsAsArray(bool $withPoints = false)
     {
@@ -41,6 +47,48 @@ trait HasStats
         return Arr::first($stats);
     }
 
-    abstract public function statRelationship(): HasMany;
+
+
+
+    /**
+     * A relationship to all the linked stats
+     * @return HasManyThrough
+     */
+    public function stats(): HasManyThrough
+    {
+        return $this->hasManyThrough(Stats::class, File::class);
+    }
+
+    /**
+     * Notify the model that new stats have been added
+     *
+     * @param Stats $stats
+     */
+    public function notifyAboutNewStats(Stats $stats){
+        if($this->defaultStatsId() === null) {
+            $this->setDefaultStatsId($stats->id);
+        }
+    }
+
+    /**
+     * The ID of the default stats
+     *
+     * @return int|null
+     */
+    public function defaultStatsId(): ?int
+    {
+        return $this->default_stats_id;
+    }
+
+    /**
+     * The ID of the default stats
+     *
+     * @return int|null
+     */
+    public function setDefaultStatsId(?int $id): void
+    {
+        $this->default_stats_id = $id;
+        $this->save();
+    }
 
 }

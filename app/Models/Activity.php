@@ -20,7 +20,7 @@ class Activity extends Model
     use HasFactory, HasAdditionalData, HasStats;
 
     protected $fillable = [
-        'name', 'description', 'activity_file_id', 'linked_to', 'user_id', 'distance', 'started_at'
+        'name', 'description', 'file_id', 'linked_to', 'user_id', 'distance', 'started_at', 'default_stats_id'
     ];
 
     protected $with = [
@@ -49,13 +49,13 @@ class Activity extends Model
         static::deleting(function(Activity $activity) {
             $activity->activityFile()->delete();
             $activity->files()->delete();
-            $activity->activityStats()->delete();
+            $activity->stats()->delete();
             $activity->stravaComments()->delete();
             $activity->stravaKudos()->delete();
         });
 
         static::saved(function(Activity $activity) {
-            if ($activity->isDirty('activity_file_id') && $activity->hasActivityFile()) {
+            if ($activity->isDirty('file_id') && $activity->hasActivityFile()) {
                 $activity->refresh();
                 AnalyseActivityFile::dispatch($activity);
             }
@@ -88,22 +88,12 @@ class Activity extends Model
 
     public function activityFile()
     {
-        return $this->belongsTo(File::class, 'activity_file_id');
+        return $this->belongsTo(File::class, 'file_id');
     }
 
     public function files()
     {
         return $this->belongsToMany(File::class);
-    }
-
-    public function statRelationship(): HasMany
-    {
-        return $this->activityStats();
-    }
-
-    public function activityStats()
-    {
-        return $this->hasMany(ActivityStats::class);
     }
 
     public function scopeLinkedTo(Builder $query, string $linkedTo)

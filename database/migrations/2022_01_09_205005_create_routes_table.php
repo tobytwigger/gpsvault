@@ -19,7 +19,8 @@ class CreateRoutesTable extends Migration
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
             $table->float('distance')->nullable();
-            $table->unsignedBigInteger('route_file_id')->nullable();
+            $table->unsignedBigInteger('default_stats_id')->nullable();
+            $table->unsignedBigInteger('file_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });

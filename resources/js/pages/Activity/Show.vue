@@ -156,15 +156,15 @@
                 <v-list-item>
                     <c-delete-activity-button :activity="activity"></c-delete-activity-button>
                 </v-list-item>
-                <v-list-item v-if="!activity.activity_file_id">
+                <v-list-item v-if="!activity.file_id">
                     <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
                 </v-list-item>
-                <v-list-item v-if="activity.activity_file_id">
-                    <v-btn link :href="route('file.download', activity.activity_file_id)">
+                <v-list-item v-if="activity.file_id">
+                    <v-btn link :href="route('file.download', activity.file_id)">
                         Download activity file
                     </v-btn>
                 </v-list-item>
-                <v-list-item v-if="activity.activity_file_id">
+                <v-list-item v-if="activity.file_id">
                     <v-btn link :href="route('activity.download', activity.id)">
                         Download activity
                     </v-btn>

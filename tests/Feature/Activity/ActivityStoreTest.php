@@ -32,8 +32,22 @@ class ActivityStoreTest extends TestCase
         ]);
         $file = File::where('filename', 'filename.gpx')->firstOrFail();
         $this->assertDatabaseHas('activities', [
-            'activity_file_id' => $file->id
+            'file_id' => $file->id
         ]);
+    }
+
+    /** @test */
+    public function it_fires_an_analysis_job(){
+        Bus::fake(AnalyseFile::class);
+        $this->authenticated();
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+
+        $response = $this->post(route('activity.store'), [
+            'file' => $file
+        ]);
+
+        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->file->filename === 'filename.gpx');
     }
 
     /** @test */

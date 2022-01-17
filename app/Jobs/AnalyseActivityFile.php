@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Activity;
-use App\Models\ActivityStats;
+use App\Models\Stats;
 use App\Models\File;
 use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
@@ -51,8 +51,8 @@ class AnalyseActivityFile implements ShouldQueue
         }
         $analysis = Analyser::analyse($this->activity->activityFile);
 
-        ActivityStats::updateOrCreate(
-            ['integration' => 'php', 'activity_id' => $this->activity->id],
+        Stats::updateOrCreate(
+            ['integration' => 'php', 'file_id' => $this->activity->file_id],
             [
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),

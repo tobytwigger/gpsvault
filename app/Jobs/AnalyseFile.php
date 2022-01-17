@@ -2,29 +2,23 @@
 
 namespace App\Jobs;
 
-use App\Models\Activity;
 use App\Models\ActivityStats;
 use App\Models\File;
-use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
-use App\Services\Analysis\Parser\Point;
-use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AnalyseActivityFile implements ShouldQueue
+class AnalyseFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Activity $activity;
+    public File $file;
 
     public $tries = 3;
 
@@ -33,10 +27,10 @@ class AnalyseActivityFile implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Activity $activity)
+    public function __construct(File $file)
     {
         $this->queue = 'stats';
-        $this->activity = $activity;
+        $this->file = $file;
     }
 
     /**
@@ -46,13 +40,13 @@ class AnalyseActivityFile implements ShouldQueue
      */
     public function handle()
     {
-        if(!$this->activity->activityFile) {
-            throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it', $this->activity->id));
+        if(!$this->file->fileFile) {
+            throw new NotFoundHttpException(sprintf('File %u does not have a file associated with it', $this->file->id));
         }
-        $analysis = Analyser::analyse($this->activity->activityFile);
+        $analysis = Analyser::analyse($this->file->fileFile);
 
         ActivityStats::updateOrCreate(
-            ['integration' => 'php', 'activity_id' => $this->activity->id],
+            ['integration' => 'php', 'activity_id' => $this->file->id],
             [
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),
@@ -79,7 +73,7 @@ class AnalyseActivityFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'json_points_file_id' => Upload::activityPoints($analysis->getPoints(), $this->activity->user)->id
+                'json_points_file_id' => Upload::filePoints($analysis->getPoints(), $this->file->user)->id
             ]
         );
     }

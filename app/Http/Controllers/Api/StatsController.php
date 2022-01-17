@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityStats;
+use App\Models\Stats;
 use App\Models\RouteStats;
 use Location\Coordinate;
 use Location\Formatter\Polyline\GeoJSON;
@@ -12,7 +12,7 @@ use Location\Polyline;
 class StatsController extends Controller
 {
 
-    public function chart(ActivityStats $stats)
+    public function chart(Stats $stats)
     {
         $this->authorize('view', $stats->activity);
 

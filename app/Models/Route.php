@@ -18,7 +18,7 @@ class Route extends Model
     ];
 
     protected $fillable = [
-        'name', 'description', 'notes', 'route_file_id'
+        'name', 'description', 'notes', 'file_id'
     ];
 
     protected static function booted()
@@ -35,7 +35,7 @@ class Route extends Model
         });
 
         static::saved(function(Route $route) {
-            if ($route->isDirty('route_file_id') && $route->hasRouteFile()) {
+            if ($route->isDirty('file_id') && $route->hasRouteFile()) {
                 $route->refresh();
                 AnalyseRouteFile::dispatch($route);
             }
@@ -49,7 +49,7 @@ class Route extends Model
 
     public function routeFile()
     {
-        return $this->belongsTo(File::class, 'route_file_id');
+        return $this->belongsTo(File::class, 'file_id');
     }
 
     public function files()

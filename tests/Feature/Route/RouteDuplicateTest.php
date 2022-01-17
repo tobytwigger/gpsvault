@@ -23,7 +23,7 @@ class RouteDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->routeFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'route_file_id' => $file->id]);
+        $route = Route::factory()->create(['user_id' => $this->user->id, 'file_id' => $file->id]);
         $response = $this->postJson(route('route.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => true]);
@@ -34,7 +34,7 @@ class RouteDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->routeFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'route_file_id' => $file->id]);
+        $route = Route::factory()->create(['user_id' => $this->user->id, 'file_id' => $file->id]);
         $response = $this->postJson(route('route.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => true]);
@@ -48,7 +48,7 @@ class RouteDuplicateTest extends TestCase
         $this->authenticated();
 
         $file = File::factory()->routeFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
-        $route = Route::factory()->create(['route_file_id' => $file->id]);
+        $route = Route::factory()->create(['file_id' => $file->id]);
         $response = $this->postJson(route('route.file.duplicate'), ['hash' => 'duplicatedhash']);
 
         $response->assertJsonFragment(['is_duplicate' => false]);

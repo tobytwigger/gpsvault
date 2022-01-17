@@ -8,7 +8,7 @@ use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
 use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
 use App\Models\Activity;
-use App\Models\ActivityStats;
+use App\Models\Stats;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use Carbon\Carbon;

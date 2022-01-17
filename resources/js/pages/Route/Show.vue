@@ -74,15 +74,15 @@
                 <v-list-item>
                     <c-delete-route-button :route-model="routeModel"></c-delete-route-button>
                 </v-list-item>
-                <v-list-item v-if="!routeModel.route_file_id">
+                <v-list-item v-if="!routeModel.file_id">
                     <c-upload-route-file-button :route-model="routeModel"></c-upload-route-file-button>
                 </v-list-item>
-                <v-list-item v-if="routeModel.route_file_id">
-                    <v-btn link :href="route('file.download', routeModel.route_file_id)">
+                <v-list-item v-if="routeModel.file_id">
+                    <v-btn link :href="route('file.download', routeModel.file_id)">
                         Download route file
                     </v-btn>
                 </v-list-item>
-                <v-list-item v-if="routeModel.route_file_id">
+                <v-list-item v-if="routeModel.file_id">
                     <v-btn link :href="route('route.download', routeModel.id)">
                         Download route
                     </v-btn>

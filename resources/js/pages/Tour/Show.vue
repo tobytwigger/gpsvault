@@ -74,7 +74,7 @@
                     Delete route
 <!--                    <c-delete-route-button :route-model="routeModel"></c-delete-route-button>-->
                 </v-list-item>
-                <v-list-item v-if="!routeModel.route_file_id">
+                <v-list-item v-if="!routeModel.file_id">
                     Upload/download tour stuff
 <!--                    <c-upload-route-file-button :route-model="routeModel"></c-upload-route-file-button>-->
                 </v-list-item>

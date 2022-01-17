@@ -49,7 +49,7 @@ class RouteController extends Controller
         $route = Route::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'route_file_id' => $fileId
+            'file_id' => $fileId
         ]);
 
         return redirect()->route('route.show', $route);
@@ -84,7 +84,7 @@ class RouteController extends Controller
             'file' => 'sometimes|nullable|file'
         ]);
 
-        $fileId = $route->route_file_id;
+        $fileId = $route->file_id;
         if($request->has('file') && $request->file('file') !== null) {
             $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
@@ -92,7 +92,7 @@ class RouteController extends Controller
         $route->name = $request->input('name', $route->name);
         $route->description = $request->input('description', $route->description);
         $route->notes = $request->input('notes', $route->notes);
-        $route->route_file_id = $fileId;
+        $route->file_id = $fileId;
 
         $route->save();
         return redirect()->route('route.show', $route);
