@@ -32,7 +32,7 @@ class FileFactory extends Factory
     public function routeMedia()
     {
         return $this->state(fn(array $attributes) => [
-            'path' => '/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false),
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::ROUTE_MEDIA,
@@ -43,10 +43,10 @@ class FileFactory extends Factory
     public function activityMedia()
     {
         return $this->state(fn(array $attributes) => [
-            'path' => '/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false),
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
-            'type' => FileUploader::ROUTE_MEDIA,
+            'type' => FileUploader::ACTIVITY_MEDIA,
             'mimetype' => 'image/jpeg'
         ]);
     }
@@ -54,11 +54,33 @@ class FileFactory extends Factory
     public function activityFile()
     {
         return $this->state(fn(array $attributes) => [
-            'path' => '/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false),
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
-            'type' => FileUploader::ROUTE_MEDIA,
+            'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'application/xml+gpx'
+        ]);
+    }
+
+    public function routeFile()
+    {
+        return $this->state(fn(array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
+            'filename' => $this->faker->word . '.gpx',
+            'extension' => 'gpx',
+            'type' => FileUploader::ROUTE_FILE,
+            'mimetype' => 'application/xml+gpx'
+        ]);
+    }
+
+    public function archive()
+    {
+        return $this->state(fn(array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/zip'), storage_path('tests'), false), 'tests/'),
+            'filename' => $this->faker->word . '.zip',
+            'extension' => 'zip',
+            'type' => FileUploader::ARCHIVE,
+            'mimetype' => 'application/zip'
         ]);
     }
 }

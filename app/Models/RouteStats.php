@@ -68,8 +68,11 @@ class RouteStats extends Model
         $result = app('nominatim')->find(
             app('nominatim')->newReverse()->latlon($lat, $lon)
         );
-        $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
-        return join(', ', array_slice($address, 0, 4));
+        if(array_key_exists('address', $result)) {
+            $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
+            return join(', ', array_slice($address, 0, 4));
+        }
+        return null;
     }
 
     public function getHumanStartedAtAttribute()

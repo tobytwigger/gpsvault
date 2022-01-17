@@ -31,7 +31,7 @@ class Route extends Model
         static::deleting(function(Route $route) {
             $route->routeFile()->delete();
             $route->files()->delete();
-            $route->routeStats()->delete();
+            $route->statRelationship()->delete();
         });
 
         static::saved(function(Route $route) {

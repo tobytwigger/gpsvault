@@ -23,7 +23,7 @@ class RunSyncTask implements ShouldQueue
 
     const DEPENDENCIES_NOT_READY_MESSAGE = 'Waiting on previous tasks to finish';
 
-    private SyncTask $task;
+    public SyncTask $task;
 
     protected $maxExceptions = 3;
 

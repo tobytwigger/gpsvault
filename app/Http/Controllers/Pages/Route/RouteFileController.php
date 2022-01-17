@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Route;
 
 use App\Http\Controllers\Controller;
 use App\Models\Route;
@@ -20,7 +20,9 @@ class RouteFileController extends Controller
 
     public function destroy(Route $route, File $file)
     {
-        $this->authorize('view', $file);
+        $this->authorize('view', $route);
+        $this->authorize('delete', $file);
+        abort_if(!$route->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the route');
 
         if(!(
             $route->route_file_id === $file->id
@@ -37,6 +39,7 @@ class RouteFileController extends Controller
     public function store(Request $request, Route $route)
     {
         $this->authorize('create', File::class);
+        $this->authorize('update', $route);
 
         $request->validate([
             'files' => 'required|array|min:1',
@@ -61,6 +64,8 @@ class RouteFileController extends Controller
     public function update(Request $request, Route $route, File $file)
     {
         $this->authorize('update', $file);
+        $this->authorize('update', $route);
+        abort_if(!$route->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the route');
 
         $request->validate([
             'title' => 'sometimes|nullable|string|max:255',

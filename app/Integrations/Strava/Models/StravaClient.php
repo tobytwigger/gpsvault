@@ -5,6 +5,7 @@ namespace App\Integrations\Strava\Models;
 use App\Integrations\Strava\StravaToken;
 use App\Models\ConnectionLog;
 use App\Models\User;
+use Database\Factories\StravaClientFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -157,5 +158,10 @@ class StravaClient extends Model
     {
         $this->pending_calls = $this->pending_calls + 1;
         $this->save();
+    }
+
+    protected static function newFactory()
+    {
+        return new StravaClientFactory();
     }
 }

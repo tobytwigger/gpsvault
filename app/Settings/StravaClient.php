@@ -34,7 +34,7 @@ class StravaClient extends GlobalSetting
 
     public function rules(): array|string
     {
-        return 'nullable|integer|exists:strava_clients';
+        return 'nullable|integer|exists:strava_clients,id';
     }
 
     protected function groups(): array

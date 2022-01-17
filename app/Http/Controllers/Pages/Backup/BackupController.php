@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Backup;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\File;
 use App\Models\Sync;
 use App\Services\File\FileUploader;
@@ -30,6 +29,7 @@ class BackupController extends Controller
     {
         return Inertia::render('Backups/Index', [
             'backups' => File::where('type', FileUploader::ARCHIVE)
+                ->where('user_id', Auth::id())
                 ->orderBy('created_at', 'DESC')
                 ->paginate(request()->input('perPage', 8)),
             'task' => Auth::user()->syncs()
@@ -56,15 +56,16 @@ class BackupController extends Controller
         $sync->withTask(app(CreateBackupTask::class), []);
         $sync->refresh()->dispatch();
 
-        return redirect()->route('backups.index');
+        return redirect()->route('backup.index');
     }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, File $file)
     {
@@ -78,26 +79,20 @@ class BackupController extends Controller
 
         $file->save();
 
-        return redirect()->route('backups.index');
+        return redirect()->route('backup.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(File $file)
     {
         $file->delete();
 
-        return redirect()->route('backups.index');
+        return redirect()->route('backup.index');
     }
 
-    public function cancelSync(Sync $sync)
-    {
-        $sync->cancel();
-
-        return redirect()->route('backups.index');
-    }
 }

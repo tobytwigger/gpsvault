@@ -74,7 +74,7 @@
                     </v-list-item-icon>
                 </v-list-item>
             </v-list-group>
-            <v-list-item :input-value="['backups.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backups.index'))">
+            <v-list-item :input-value="['backup.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backup.index'))">
                 <v-list-item-icon>
                     <v-icon>mdi-safe</v-icon>
                 </v-list-item-icon>

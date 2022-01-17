@@ -24,7 +24,7 @@ class StoreRouteRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'file',
+            'file' => 'sometimes|nullable|file',
             'name' => 'sometimes|nullable|max:255',
             'description' => 'sometimes|nullable|max:65535'
         ];

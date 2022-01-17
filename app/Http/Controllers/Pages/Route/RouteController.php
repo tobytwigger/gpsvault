@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Route;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRouteRequest;
@@ -28,7 +28,7 @@ class RouteController extends Controller
     {
         return Inertia::render('Route/Index', [
             'routes' => Auth::user()->routes()
-                ->orderBy('created_at', 'DESC')
+                ->orderBy('updated_at', 'DESC')
                 ->paginate(request()->input('perPage', 8))
         ]);
     }
@@ -81,11 +81,11 @@ class RouteController extends Controller
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
             'notes' => 'sometimes|nullable|string|max:65535',
-            'file' => 'sometimes|file'
+            'file' => 'sometimes|nullable|file'
         ]);
 
         $fileId = $route->route_file_id;
-        if($request->has('file')) {
+        if($request->has('file') && $request->file('file') !== null) {
             $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
 

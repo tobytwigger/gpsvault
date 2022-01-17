@@ -106,8 +106,8 @@ export default {
         submit() {
             this.form.post(
                 this.oldBackup
-                    ? route('backups.update', this.oldBackup.id)
-                    : route('backups.store'),
+                    ? route('backup.update', this.oldBackup.id)
+                    : route('backup.store'),
                 {
                     onSuccess: () => {
                         this.form.reset();

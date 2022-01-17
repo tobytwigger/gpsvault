@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Settings\DarkMode;

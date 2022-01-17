@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pages;
+namespace App\Http\Controllers\Pages\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour;
@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class TourController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Tour::class, 'tour');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +23,9 @@ class TourController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Tour/Index', [
-            'tours' => Tour::where('user_id', Auth::id())->paginate($request->input('perPage', 8))
+            'tours' => Tour::where('user_id', Auth::id())
+                ->orderBy('created_at', 'DESC')
+                ->paginate($request->input('perPage', 8))
         ]);
     }
 
@@ -63,11 +70,13 @@ class TourController extends Controller
      */
     public function update(Request $request, Tour $tour)
     {
-        $request->validate([
-            'name' => 'required|string|max:255'
+        $validated = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'sometimes|nullable|string|max:65535',
+            'notes' => 'sometimes|nullable|string|max:65535',
         ]);
 
-        $tour->name = $request->input('name', $tour->name);
+        $tour->fill($validated);
         $tour->save();
 
         return redirect()->route('tour.show', $tour);
