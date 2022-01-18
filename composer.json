@@ -13,6 +13,7 @@
         "ext-zlib": "*",
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "alchemy/zippy": "^1.0",
+        "barryvdh/laravel-debugbar": "^3.6",
         "beyondcode/laravel-websockets": "^1.12",
         "deployer/deployer": "^7.0",
         "doctrine/dbal": "^3.2",

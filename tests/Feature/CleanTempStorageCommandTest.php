@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Permission;
+namespace Tests\Feature;
 
 use App\Console\Commands\CleanTempStorage;
 use Illuminate\Support\Facades\Storage;

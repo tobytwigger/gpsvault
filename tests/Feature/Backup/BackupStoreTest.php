@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Activity;
+namespace Tests\Feature\Backup;
 
 use App\Jobs\RunSyncTask;
 use App\Models\Activity;
