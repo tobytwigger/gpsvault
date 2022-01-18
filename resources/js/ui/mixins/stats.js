@@ -1,8 +1,44 @@
 import units from './units';
 
+// Must define an `allStats` property on your Vue component
+
 export default {
     mixins: [units],
+    data() {
+        return {
+            dataSource: null
+        }
+    },
     computed: {
+        hasStats() {
+            return this.stats !== null;
+        },
+        dataSources() {
+            return this.allStats.map(s => s.integration);
+        },
+        activeDataSource: {
+            get() {
+                if (this.allStats.length === 0) {
+                    return null;
+                }
+                if (this.dataSource && this.dataSources.indexOf(this.dataSource) > -1) {
+                    return this.dataSource;
+                }
+                if (Object.keys(this.allStats).length > 0) {
+                    return this.allStats[0].integration;
+                }
+                return null;
+            },
+            set(val) {
+                this.dataSource = val;
+            }
+        },
+        stats() {
+            if (this.activeDataSource !== null) {
+                return this.allStats.find(s => s.integration === this.activeDataSource) || null
+            }
+            return null;
+        },
         maxSpeed() {
             return this.convert(this.stats?.max_speed?.toString() || null, 'speed');
         },

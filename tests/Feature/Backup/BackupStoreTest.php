@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Backup;
 
-use App\Jobs\RunSyncTask;
 use App\Models\Activity;
 use App\Models\File;
+use App\Services\Sync\RunSyncTask;
 use App\Services\Sync\Sync;
 use App\Services\Sync\SyncTask;
 use App\Tasks\CreateBackupTask;

@@ -59,7 +59,7 @@
 
 <script>
 
-import activityStats from 'ui/mixins/activityStats';
+import stats from 'ui/mixins/stats';
 import CLineGraph from '../CLineGraph';
 import {createDatasets} from './dataset-calc';
 import CStats from '../CStats';
@@ -67,16 +67,11 @@ import CStats from '../CStats';
 export default {
     name: "CActivityAnalysis",
     components: {CStats, CLineGraph},
-    mixins: [activityStats],
+    mixins: [stats],
     props: {
         activity: {
             required: true,
             type: Object
-        },
-        stats: {
-            required: false,
-            type: Object,
-            default: null
         }
     },
     data() {
@@ -115,12 +110,9 @@ export default {
         this.loadRawChartData();
     },
     computed: {
-        hasStats() {
-            return this.stats !== null;
+        allStats() {
+            return this.activity.stats;
         },
-        hasChartData() {
-            return this.chartData.datasets.length > 0;
-        }
     },
     watch: {
         parsingChartData(val) {

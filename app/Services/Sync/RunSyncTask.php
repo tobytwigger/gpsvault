@@ -1,27 +1,18 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Services\Sync;
 
 use App\Exceptions\TaskCancelled;
 use App\Exceptions\TaskSucceeded;
-use App\Services\Sync\Sync;
-use App\Services\Sync\SyncTask;
-use App\Models\User;
-use App\Services\Sync\Task;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 
 class RunSyncTask implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
-    const DEPENDENCIES_NOT_READY_MESSAGE = 'Waiting on previous tasks to finish';
 
     public SyncTask $task;
 
@@ -44,17 +35,6 @@ class RunSyncTask implements ShouldQueue
      */
     public function handle()
     {
-        if($this->dependenciesNotReady()) {
-            if(Arr::last($this->task->messages) !== static::DEPENDENCIES_NOT_READY_MESSAGE) {
-                $this->task->addMessage(static::DEPENDENCIES_NOT_READY_MESSAGE);
-            }
-            RunSyncTask::dispatch($this->task)->delay(2);
-            return;
-        } else {
-            if(Arr::last($this->task->messages) === static::DEPENDENCIES_NOT_READY_MESSAGE) {
-                $this->task->addMessage('Task running');
-            }
-        }
         if($this->task->status === 'queued') {
             $this->task->setStatusAsProcessing();
             try {
@@ -70,7 +50,6 @@ class RunSyncTask implements ShouldQueue
                 return;
             }
             $this->task->setStatusAsSucceeded();
-
         }
     }
 
@@ -103,11 +82,4 @@ class RunSyncTask implements ShouldQueue
         return now()->addMinutes(360);
     }
 
-    private function dependenciesNotReady(): bool
-    {
-        return collect($this->task->createTaskObject()->runsAfter())
-            // Check if the dependency is a task that hasn't yet finished
-            ->filter(fn(string $id) => $this->task->sync->pendingTasks()->where('task_id', $id)->count() > 0)
-            ->count() > 0;
-    }
 }

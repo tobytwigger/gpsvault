@@ -95,7 +95,7 @@
                 </v-row>
             </v-tab-item>
             <v-tab-item value="tab-analysis">
-                <c-activity-analysis :activity="activity" :stats="stats"></c-activity-analysis>
+                <c-activity-analysis :activity="activity"></c-activity-analysis>
             </v-tab-item>
             <v-tab-item value="tab-social">
                 <v-row>
@@ -206,8 +206,7 @@ import CDeleteActivityButton from 'ui/components/Activity/CDeleteActivityButton'
 import CUploadActivityFileButton from 'ui/components/Activity/CUploadActivityFileButton';
 import CImageGallery from 'ui/components/CImageGallery';
 import CFileFormDialog from 'ui/components/Activity/CFileFormDialog';
-import activityStats from 'ui/mixins/activityStats';
-import activityStatSelector from 'ui/mixins/activityStatSelector';
+import stats from 'ui/mixins/stats';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
 import CLineGraph from 'ui/components/CLineGraph';
 import CActivityAnalysis from 'ui/components/Activity/CActivityAnalysis';
@@ -229,7 +228,7 @@ export default {
         CFileFormDialog,
         CImageGallery, CUploadActivityFileButton, CAppWrapper,CDeleteActivityButton
     },
-    mixins: [activityStats, activityStatSelector, strava],
+    mixins: [stats, strava],
     props: {
         activity: {
             required: true,
@@ -247,6 +246,9 @@ export default {
         }
     },
     computed: {
+        allStats() {
+            return this.activity.stats;
+        },
         images() {
             return this.activity.files.filter(file => file.mimetype.startsWith('image/'))
                 .map(file => {

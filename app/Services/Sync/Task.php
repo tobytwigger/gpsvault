@@ -29,20 +29,11 @@ abstract class Task implements Jsonable, Arrayable
         app()->tag([$alias], 'tasks');
     }
 
-    abstract public function description(): string;
-
-    abstract public function name(): string;
-
     abstract public function run();
 
     public function user(): User
     {
         return $this->user;
-    }
-
-    public function setupComponent(): ?string
-    {
-        return null;
     }
 
     public static function id(): string
@@ -62,11 +53,6 @@ abstract class Task implements Jsonable, Arrayable
         return [];
     }
 
-    public function requiredConfig(): array
-    {
-        return [];
-    }
-
     public function fail(string $message)
     {
         throw new \Exception($message);
@@ -78,31 +64,11 @@ abstract class Task implements Jsonable, Arrayable
         throw new TaskSucceeded($message);
     }
 
-    public function isChecked(User $user): bool
-    {
-        return $this->disabled($user) === false;
-    }
-
-    public function disableBecause(User $user): ?string
-    {
-        return null;
-    }
-
-    final public function disabled(User $user): bool
-    {
-        return $this->disableBecause($user) !== null;
-    }
-
     public function offerBail(string $message = null)
     {
         if($this->task->status === 'cancelled') {
             throw new TaskCancelled($message);
         }
-    }
-
-    public function runsAfter(): array
-    {
-        return [];
     }
 
     public function line(string $text)
@@ -115,35 +81,19 @@ abstract class Task implements Jsonable, Arrayable
         $this->task->setPercentage($percentage);
     }
 
-    public function toArray()
-    {
-        return array_merge(
-            [
-                'id' => static::id(),
-                'name' => $this->name(),
-                'description' => $this->description(),
-                'setup_component' => $this->setupComponent(),
-                'required_config' => $this->requiredConfig()
-            ],
-            Auth::check() ? [
-                'checked' => $this->isChecked(Auth::user()),
-                'disable_because' => $this->disableBecause(Auth::user()),
-                'disabled' => $this->disabled(Auth::user())
-            ] : []
-        );
-    }
-
-    public function processConfig(array $config): array
-    {
-        return $config;
-    }
-
     protected function config(string $key, $default = null)
     {
         return data_get($this->task->config(), $key, $default);
     }
 
-    public function toJson($options = 0)
+    public function toArray(): array
+    {
+        return [
+            'id' => static::id()
+        ];
+    }
+
+    public function toJson($options = 0): string
     {
         return json_encode($this->toArray(), $options);
     }

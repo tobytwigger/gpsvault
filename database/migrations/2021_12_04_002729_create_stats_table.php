@@ -42,7 +42,7 @@ class CreateStatsTable extends Migration
             $table->float('calories')->nullable();
             $table->string('json_points_file_id')->nullable();
             $table->unsignedBigInteger('stats_id');
-            $table->unsignedBigInteger('stats_type');
+            $table->string('stats_type');
             $table->timestamps();
 
             $table->unique(['integration', 'stats_id', 'stats_type']);

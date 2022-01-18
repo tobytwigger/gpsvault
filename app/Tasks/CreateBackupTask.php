@@ -15,19 +15,9 @@ use Carbon\Carbon;
 class CreateBackupTask extends Task
 {
 
-    public function description(): string
-    {
-        return 'Generate a new backup of the site';
-    }
-
     public static function id(): string
     {
         return 'backup-all-tasks';
-    }
-
-    public function name(): string
-    {
-        return 'Create a backup';
     }
 
     public function run()

@@ -2,11 +2,7 @@
 
 namespace App\Services\Sync;
 
-use App\Events\SyncFinished;
-use App\Events\SyncUpdated;
 use App\Events\TaskUpdated;
-use App\Jobs\RunSyncTask;
-use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Database\Factories\SyncTaskFactory;
 use Illuminate\Database\Eloquent\Builder;

@@ -20,6 +20,7 @@ class Stats extends Model
         'integration',
 
         'stats_id',
+
         'stats_type',
         // Distance in metres
         'distance',
