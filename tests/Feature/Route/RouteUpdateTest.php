@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Route;
 
+use App\Jobs\AnalyseFile;
+use App\Models\File;
 use App\Models\Route;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -92,5 +95,47 @@ class RouteUpdateTest extends TestCase
 
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description'])
             ->assertStatus(403);
+    }
+
+    /** @test */
+    public function it_fires_an_analysis_job_if_a_file_is_given(){
+        Bus::fake(AnalyseFile::class);
+        $this->authenticated();
+        Storage::fake('test-fake');
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+
+        $route = Route::factory()->create(['user_id' => $this->user->id]);
+        $response = $this->put(route('route.update', $route), [
+            'file' => $file
+        ]);
+
+        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+    }
+
+    /** @test */
+    public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given(){
+        Bus::fake(AnalyseFile::class);
+        $this->authenticated();
+
+        $route = Route::factory()->create(['user_id' => $this->user->id]);
+        $response = $this->put(route('route.update', $route));
+
+        Bus::assertNotDispatched(AnalyseFile::class);
+    }
+
+    /** @test */
+    public function it_fires_an_analysis_job_even_when_a_route_file_already_exists(){
+        Bus::fake(AnalyseFile::class);
+        $this->authenticated();
+        Storage::fake('test-fake');
+        $oldFile = File::factory()->activityFile()->create(['filename' => 'old.gpx']);
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+
+        $route = Route::factory()->create(['user_id' => $this->user->id, 'file_id' => $oldFile->id]);
+        $response = $this->put(route('route.update', $route), [
+            'file' => $file
+        ]);
+
+        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
     }
 }
