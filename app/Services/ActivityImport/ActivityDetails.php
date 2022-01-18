@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class ActivityDetails
 {
 
-    protected ?File $activityFile = null;
+    protected ?File $file = null;
 
     protected string $name;
 
@@ -51,16 +51,16 @@ class ActivityDetails
      */
     public function getActivityFile(): ?File
     {
-        return $this->activityFile;
+        return $this->file;
     }
 
     /**
-     * @param File|null $activityFile
+     * @param File|null $file
      * @return ActivityDetails
      */
-    public function setActivityFile(?File $activityFile): ActivityDetails
+    public function setActivityFile(?File $file): ActivityDetails
     {
-        $this->activityFile = $activityFile;
+        $this->file = $file;
         return $this;
     }
 

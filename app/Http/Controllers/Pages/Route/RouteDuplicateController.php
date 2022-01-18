@@ -20,13 +20,13 @@ class RouteDuplicateController extends Controller
         $request->validate([
             'hash' => 'required|string'
         ]);
-        $route = Route::where('user_id', Auth::id())->whereHas('routeFile',
+        $route = Route::where('user_id', Auth::id())->whereHas('file',
             fn(Builder $query) => $query->where('hash', $request->input('hash'))->where('type', FileUploader::ROUTE_FILE)
         )->first();
 
         return [
             'is_duplicate' => $route !== null,
-            'file' => $route?->routeFile,
+            'file' => $route?->file,
             'route' => $route
         ];
     }

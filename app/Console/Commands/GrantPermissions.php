@@ -42,18 +42,15 @@ class GrantPermissions extends Command
      */
     public function handle()
     {
+        /** @var User $user */
         $user = User::findOrFail($this->argument('user'));
         $permission = Permission::findByName($this->argument('permission'));
-        $user->givePermissionTo($permission);
-        $this->info('Granted user the permission');
-        return 0;
-    }
-
-    protected function createPermissionIfMissing(string $name): void
-    {
-        if(!Permission::where(['name' => $name])->exists()) {
-            Permission::create(['name' => $name]);
-            $this->line('Created permission ' . $name);
+        if($user->hasPermissionTo($permission)) {
+            $this->error('User already has the permission.');
+            return Command::FAILURE;
         }
+        $user->givePermissionTo($permission);
+        $this->info('Granted user the permission.');
+        return Command::SUCCESS;
     }
 }

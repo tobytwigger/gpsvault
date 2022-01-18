@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stats;
-use App\Models\RouteStats;
 use Location\Coordinate;
 use Location\Formatter\Polyline\GeoJSON;
 use Location\Polyline;
@@ -19,7 +18,7 @@ class StatsController extends Controller
         return $stats->points();
     }
 
-    public function geojson(ActivityStats $stats)
+    public function geojson(Stats $stats)
     {
         $this->authorize('view', $stats->activity);
 
@@ -33,7 +32,7 @@ class StatsController extends Controller
         return $polyline->format(new GeoJSON());
     }
 
-    public function geojsonRoute(RouteStats $stats)
+    public function geojsonRoute(Stats $stats)
     {
         $this->authorize('view', $stats->route);
 

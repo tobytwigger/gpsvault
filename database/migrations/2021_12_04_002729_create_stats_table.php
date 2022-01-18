@@ -17,7 +17,6 @@ class CreateStatsTable extends Migration
         Schema::create('stats', function (Blueprint $table) {
             $table->id();
             $table->string('integration');
-            $table->string('file_id');
             $table->float('distance')->nullable();
             $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
@@ -42,9 +41,11 @@ class CreateStatsTable extends Migration
             $table->float('average_heartrate')->nullable();
             $table->float('calories')->nullable();
             $table->string('json_points_file_id')->nullable();
+            $table->unsignedBigInteger('stats_id');
+            $table->unsignedBigInteger('stats_type');
             $table->timestamps();
 
-            $table->unique(['integration', 'file_id']);
+            $table->unique(['integration', 'stats_id', 'stats_type']);
         });
 
     }

@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Models\ActivityStats;
-use App\Models\File;
+use App\Models\Activity;
+use App\Models\Route;
+use App\Models\Stats;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\File\Upload;
 use Illuminate\Bus\Queueable;
@@ -18,7 +19,7 @@ class AnalyseFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public File $file;
+    public Activity|Route $model;
 
     public $tries = 3;
 
@@ -27,10 +28,17 @@ class AnalyseFile implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(File $file)
+    public function __construct(Activity|Route $model)
     {
         $this->queue = 'stats';
-        $this->file = $file;
+        $this->model = $model;
+    }
+
+    private function getModelName()
+    {
+        return $this->model instanceof Activity
+            ? 'Activity'
+            : 'Route';
     }
 
     /**
@@ -40,13 +48,13 @@ class AnalyseFile implements ShouldQueue
      */
     public function handle()
     {
-        if(!$this->file->fileFile) {
-            throw new NotFoundHttpException(sprintf('File %u does not have a file associated with it', $this->file->id));
+        if(!$this->model->hasFile()) {
+            throw new NotFoundHttpException(sprintf('%s %u does not have a model associated with it.', $this->getModelName(), $this->model->id));
         }
-        $analysis = Analyser::analyse($this->file->fileFile);
+        $analysis = Analyser::analyse($this->model->file);
 
-        ActivityStats::updateOrCreate(
-            ['integration' => 'php', 'activity_id' => $this->file->id],
+        Stats::updateOrCreate(
+            ['integration' => 'php', 'stats_id' => $this->model->id, 'stats_type' => get_class($this->model)],
             [
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),
@@ -73,9 +81,25 @@ class AnalyseFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'json_points_file_id' => Upload::filePoints($analysis->getPoints(), $this->file->user)->id
+                'json_points_model_id' => $this->getPointsFileId($analysis->getPoints())
             ]
         );
+    }
+
+    private function getPointsFileId(array $points)
+    {
+        if($this->model instanceof Activity) {
+            return Upload::activityPoints(
+                $points,
+                $this->model->user
+            )->id;
+        } else {
+            return Upload::routePoints(
+                $points,
+                $this->model->user
+            )->id;
+        }
+
     }
 
     public function middleware()

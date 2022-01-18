@@ -44,8 +44,12 @@ class RevokePermissions extends Command
     {
         $user = User::findOrFail($this->argument('user'));
         $permission = Permission::findByName($this->argument('permission'));
+        if(!$user->hasPermissionTo($permission)) {
+            $this->error('User does not have the permission.');
+            return Command::FAILURE;
+        }
         $user->revokePermissionTo($permission);
-        $this->info('Revoked the permission from the user');
+        $this->info('Revoked permission ' . $permission->name . ' from the user.');
         return 0;
     }
 

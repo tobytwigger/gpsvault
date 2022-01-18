@@ -26,9 +26,9 @@ class RouteParser implements Parser
     public function parse($item): ParseResult
     {
         $this->addMetaData('route', $item->toArray());
-        $routeFile = $item->routeFile()->first();
-        if($routeFile) {
-            $this->addFile($this->parseRouteFile($item->id, $routeFile));
+        $file = $item->file()->first();
+        if($file) {
+            $this->addFile($this->parseRouteFile($item->id, $file));
         }
         foreach($item->files()->get() as $file) {
             $this->addFile($this->parseRouteMediaFile($item->id, $file));
@@ -36,10 +36,10 @@ class RouteParser implements Parser
         return $this->result();
     }
 
-    private function parseRouteFile(int $routeId, File $routeFile): FileResource
+    private function parseRouteFile(int $routeId, File $file): FileResource
     {
-        return FileResource::new($routeFile)
-            ->setNewName(sprintf('Route_%u_Route_File_%u.%s', $routeId, $routeFile->id, $routeFile->extension));
+        return FileResource::new($file)
+            ->setNewName(sprintf('Route_%u_Route_File_%u.%s', $routeId, $file->id, $file->extension));
     }
 
     private function parseRouteMediaFile(int $routeId, File $mediaFile): FileResource

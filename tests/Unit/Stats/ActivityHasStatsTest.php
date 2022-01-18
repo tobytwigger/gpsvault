@@ -2,9 +2,12 @@
 
 namespace Tests\Unit\Stats;
 
+use App\Jobs\AnalyseFile;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class ActivityHasStatsTest extends TestCase
@@ -13,23 +16,69 @@ class ActivityHasStatsTest extends TestCase
     /** @test */
     public function stats_can_be_attached_to_an_activity(){
         $file = File::factory()->activityFile()->create();
-        $activity = Activity::factory()->create(['default_stats_id' => null]);
-        $stat1 = Stats::factory()->create(['file_id' => $file->id]);
-        $stat2 = Stats::factory()->create(['file_id' => $file->id]);
+        $activity = Activity::factory()->create();
+        $stat = Stats::factory()->activity($activity)->create();
 
-        $this->assertCount(1, $activity->stats);
-        $this->assertTrue($stat->is($activity->stats[0]));
+        $this->assertCount(1, $activity->stats()->get());
+        $this->assertTrue($stat->is($activity->stats()->first()));
     }
 
     /** @test */
-    public function creating_a_stat_with_an_activity_file_changes_the_default_stat_id(){
-        $activity = Activity::factory()->create(['default_stats_id' => null]);
+    public function the_file_can_be_retrieved(){
         $file = File::factory()->activityFile()->create();
+        $activity = Activity::factory()->create();
 
-        $stats = Stats::factory()->create([
-            'file_id' => $file->id,
-        ]);
+        $this->assertFalse($activity->hasFile());
 
-        $this->assertEquals($stats->id, $activity->refresh()->default_stats_id);
+        $activity->file_id = $file->id;
+        $activity->save();
+
+        $this->assertInstanceOf(File::class, $activity->file);
+        $this->assertTrue($file->is($activity->file));
+
+        $this->assertTrue($activity->hasFile());
     }
+
+    /** @test */
+    public function we_can_scope_to_only_activities_missing_a_file(){
+        Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
+        Activity::factory()->count(5)->create(['file_id' => null]);
+
+        $results = Activity::withoutFile()->get();
+        $this->assertCount(5, $results);
+    }
+
+    /** @test */
+    public function the_analyse_file_job_can_be_dispatched(){
+        Bus::fake(AnalyseFile::class);
+
+        $activity = Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
+        $activity->analyse();
+
+        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $activity->is($job->model));
+    }
+
+    /** @test */
+    public function it_can_scope_stats_from_an_integration(){
+        $file = File::factory()->activityFile()->create();
+        $activity = Activity::factory()->create();
+        $stravaStats = Stats::factory()->activity($activity)->create(['integration' => 'strava']);
+        $ownStats = Stats::factory()->activity($activity)->create(['integration' => 'php']);
+
+        $this->assertInstanceOf(Stats::class, $activity->statsFrom('php')->first());
+        $this->assertTrue($ownStats->is($activity->statsFrom('php')->first()));
+        $this->assertInstanceOf(Stats::class, $activity->statsFrom('strava')->first());
+        $this->assertTrue($stravaStats->is($activity->statsFrom('strava')->first()));
+    }
+
+    /** @test */
+    public function it_deletes_stats_when_the_activity_is_deleted(){
+        $activity = Activity::factory()->create();
+        $stats = Stats::factory()->activity($activity)->count(2)->create();
+
+        $this->assertDatabaseCount('stats', 2);
+        $activity->delete();
+        $this->assertDatabaseCount('stats', 0);
+    }
+
 }

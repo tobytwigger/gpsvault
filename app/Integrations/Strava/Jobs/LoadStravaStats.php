@@ -45,7 +45,7 @@ class LoadStravaStats extends StravaActivityBaseJob
             $points[] = $point;
         }
 
-        if($stats = $this->activity->activityStatsFrom('strava')->first()) {
+        if($stats = $this->activity->statsFrom('strava')->first()) {
             $stats->json_points_file_id = Upload::activityPoints($points, $this->activity->user)->id;
             $stats->save();
         }

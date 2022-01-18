@@ -38,8 +38,8 @@ class ActivityImporter
         if($activity->description) {
             $instance->withDescription($activity->description);
         }
-        if($activity->activityFile) {
-            $instance->withActivityFile($activity->activityFile);
+        if($activity->file) {
+            $instance->withActivityFile($activity->file);
         }
         if($activity->additionalData()->exists()) {
             $instance->activityDetails()->setAdditionalArrayData($activity->getAllArrayAdditionalData()->toArray());
@@ -213,7 +213,7 @@ class ActivityImporter
     {
         if($this->checkForDuplicates === true) {
             $hash = md5($this->activityDetails->getActivityFile()->getFileContents());
-            $duplicatedActivity = Activity::whereHas('activityFile',
+            $duplicatedActivity = Activity::whereHas('file',
                 fn(Builder $query) => $query->where('hash', $hash)->where('type', FileUploader::ACTIVITY_FILE)
             )->first();
             if($duplicatedActivity !== null) {

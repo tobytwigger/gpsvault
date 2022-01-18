@@ -84,7 +84,7 @@ class StravaIntegration extends Integration
             'activitiesLoadingStats' => Activity::whereAdditionalData('strava_is_loading_stats', true)->count(),
             'activitiesLoadingPhotos' => Activity::whereAdditionalData('strava_is_loading_photos', true)->count(),
             'activitiesLoadingBasicData' => Activity::whereAdditionalData('strava_is_loading_details', true)->count(),
-            'activitiesWithoutFiles' => Activity::linkedTo('strava')->whereDoesntHave('activityFile')->count(),
+            'activitiesWithoutFiles' => Activity::linkedTo('strava')->whereDoesntHave('file')->count(),
             'activitiesWithoutPhotos' => Activity::linkedTo('strava')
                 ->whereHasAdditionalData('strava_photo_ids')
                 ->withCount('files')

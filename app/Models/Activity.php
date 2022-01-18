@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
-use App\Jobs\AnalyseActivityFile;
 use App\Traits\HasAdditionalData;
 use App\Traits\HasStats;
 use Database\Factories\ActivityFactory;
@@ -47,19 +46,13 @@ class Activity extends Model
             }
         });
         static::deleting(function(Activity $activity) {
-            $activity->activityFile()->delete();
+            $activity->file()->delete();
             $activity->files()->delete();
             $activity->stats()->delete();
             $activity->stravaComments()->delete();
             $activity->stravaKudos()->delete();
         });
 
-        static::saved(function(Activity $activity) {
-            if ($activity->isDirty('file_id') && $activity->hasActivityFile()) {
-                $activity->refresh();
-                AnalyseActivityFile::dispatch($activity);
-            }
-        });
     }
 
     public function getCoverImageAttribute()
@@ -86,11 +79,6 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function activityFile()
-    {
-        return $this->belongsTo(File::class, 'file_id');
-    }
-
     public function files()
     {
         return $this->belongsToMany(File::class);
@@ -99,16 +87,6 @@ class Activity extends Model
     public function scopeLinkedTo(Builder $query, string $linkedTo)
     {
         $query->where('linked_to', 'LIKE', sprintf('%%%s%%', $linkedTo));
-    }
-
-    public function scopeWithoutFile(Builder $query)
-    {
-        return $query->whereDoesntHave('activityFile');
-    }
-
-    public function hasActivityFile(): bool
-    {
-        return $this->activityFile()->exists();
     }
 
 }

@@ -47,7 +47,7 @@ class ActivityStoreTest extends TestCase
             'file' => $file
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */

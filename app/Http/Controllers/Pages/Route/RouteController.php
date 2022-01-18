@@ -52,6 +52,10 @@ class RouteController extends Controller
             'file_id' => $fileId
         ]);
 
+        if($request->has('file') && $request->file('file') !== null) {
+            $route->analyse();
+        }
+
         return redirect()->route('route.show', $route);
     }
 
@@ -64,7 +68,7 @@ class RouteController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'routeModel' => $route->load(['files'])->append('stats')
+            'routeModel' => $route->load(['files', 'stats'])
         ]);
     }
 
@@ -93,8 +97,12 @@ class RouteController extends Controller
         $route->description = $request->input('description', $route->description);
         $route->notes = $request->input('notes', $route->notes);
         $route->file_id = $fileId;
-
         $route->save();
+
+        if($request->has('file') && $request->file('file') !== null) {
+            $route->analyse();
+        }
+
         return redirect()->route('route.show', $route);
     }
 

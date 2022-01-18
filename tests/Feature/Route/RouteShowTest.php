@@ -3,8 +3,8 @@
 namespace Tests\Feature\Route;
 
 use App\Models\Route;
-use App\Models\RouteStats;
 use App\Models\File;
+use App\Models\Stats;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
@@ -15,8 +15,8 @@ class RouteShowTest extends TestCase
     public function it_shows_the_route(){
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $stat1 = RouteStats::factory()->create(['route_id' => $route->id, 'integration' => 'int1']);
-        $stat2 = RouteStats::factory()->create(['route_id' => $route->id, 'integration' => 'int2']);
+        $stat1 = Stats::factory()->route($route)->create(['integration' => 'int1']);
+        $stat2 = Stats::factory()->route($route)->create(['integration' => 'int2']);
         $files = File::factory()->routeMedia()->count(5)->create();
         $route->files()->sync($files);
 
@@ -27,12 +27,12 @@ class RouteShowTest extends TestCase
                     ->where('id', $route->id)
                     ->has('files', 5)
                     ->has('stats', 2)
-                    ->has('stats.int1', fn(Assert $page) => $page
+                    ->has('stats.0', fn(Assert $page) => $page
                         ->where('id', $stat1->id)
                         ->where('integration', 'int1')
                         ->etc()
                     )
-                    ->has('stats.int2', fn(Assert $page) => $page
+                    ->has('stats.1', fn(Assert $page) => $page
                         ->where('id', $stat2->id)
                         ->where('integration', 'int2')
                         ->etc()

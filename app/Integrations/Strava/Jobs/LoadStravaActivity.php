@@ -3,7 +3,8 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
-use App\Models\ActivityStats;
+use App\Models\Activity;
+use App\Models\Stats;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 
@@ -26,15 +27,16 @@ class LoadStravaActivity extends StravaActivityBaseJob
             $this->activity->description = PHP_EOL . PHP_EOL . 'Imported from Strava: ' . PHP_EOL . $stravaActivity['description'];
         }
 
-        if($stats = $this->activity->activityStatsFrom('strava')->first()) {
+        if($stats = $this->activity->statsFrom('strava')->first()) {
             $stats->average_heartrate = $stravaActivity['average_heartrate'] ?? null;
             $stats->max_heartrate = $stravaActivity['max_heartrate'] ?? null;
             $stats->calories = $stravaActivity['calories'] ?? null;
             $stats->save();
         } else {
-            ActivityStats::create([
+            Stats::create([
                 'integration' => 'strava',
-                'activity_id' => $this->activity->id,
+                'stats_id' => $this->activity->id,
+                'stats_type' => Activity::class,
                 'average_heartrate' => $stravaActivity['average_heartrate'] ?? null,
                 'max_heartrate' => $stravaActivity['max_heartrate'] ?? null,
                 'calories' => $stravaActivity['calories'] ?? null,

@@ -3,8 +3,8 @@
 namespace Tests\Feature\Activity;
 
 use App\Models\Activity;
-use App\Models\ActivityStats;
 use App\Models\File;
+use App\Models\Stats;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
@@ -15,8 +15,8 @@ class ActivityShowTest extends TestCase
     public function it_shows_the_activity(){
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
-        $stat1 = ActivityStats::factory()->create(['activity_id' => $activity->id, 'integration' => 'int1']);
-        $stat2 = ActivityStats::factory()->create(['activity_id' => $activity->id, 'integration' => 'int2']);
+        $stat1 = Stats::factory()->activity($activity)->create(['integration' => 'int1']);
+        $stat2 = Stats::factory()->activity($activity)->create(['integration' => 'int2']);
         $files = File::factory()->activityMedia()->count(5)->create();
         $activity->files()->sync($files);
 
@@ -27,12 +27,12 @@ class ActivityShowTest extends TestCase
                     ->where('id', $activity->id)
                     ->has('files', 5)
                     ->has('stats', 2)
-                    ->has('stats.int1', fn(Assert $page) => $page
+                    ->has('stats.0', fn(Assert $page) => $page
                         ->where('id', $stat1->id)
                         ->where('integration', 'int1')
                         ->etc()
                     )
-                    ->has('stats.int2', fn(Assert $page) => $page
+                    ->has('stats.1', fn(Assert $page) => $page
                         ->where('id', $stat2->id)
                         ->where('integration', 'int2')
                         ->etc()

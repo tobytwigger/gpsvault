@@ -30,9 +30,9 @@ class ActivityImporter extends Importer
             ->values();
     }
 
-    private function existingActivityUsingFile(MemberInterface $activityFile): ?Activity
+    private function existingActivityUsingFile(MemberInterface $file): ?Activity
     {
-        $uploadId = intval((string) Str::of(Str::substr($activityFile->getLocation(), 11))->before('.'));
+        $uploadId = intval((string) Str::of(Str::substr($file->getLocation(), 11))->before('.'));
         return Activity::linkedTo('strava')->whereAdditionalData('strava_upload_id', $uploadId)->first();
     }
 
@@ -41,24 +41,24 @@ class ActivityImporter extends Importer
         return 'activities';
     }
 
-    private function processActivityFile(MemberInterface $activityFile)
+    private function processActivityFile(MemberInterface $file)
     {
         try {
-            $activity = $this->existingActivityUsingFile($activityFile);
+            $activity = $this->existingActivityUsingFile($file);
             if($activity === null) {
                 $this->failed('unmatched', [
-                    'file_location' => $activityFile->getLocation(),
+                    'file_location' => $file->getLocation(),
                 ]);
                 return;
             }
-            if($activity->activityFile()->exists()) {
+            if($activity->file()->exists()) {
                 $this->failed('duplicate', [
                     'duplicate_id' => $activity->id,
                 ]);
                 return;
             }
 
-            $file = $this->convertMemberToFile($activityFile);
+            $file = $this->convertMemberToFile($file);
 
             try {
                 $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)

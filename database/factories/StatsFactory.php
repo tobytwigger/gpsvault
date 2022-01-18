@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Activity;
 use App\Models\ActivityStats;
 use App\Models\File;
+use App\Models\Route;
 use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,7 +25,6 @@ class StatsFactory extends Factory
         return [
             'distance' => $this->faker->numberBetween(100, 200000),
             'started_at' => $this->faker->dateTimeBetween('-1 year, -1 day'),
-            'file_id' => fn() => File::factory()->activityFile(),
             'finished_at' => $this->faker->dateTimeBetween('now'),
             'duration' => $this->faker->randomFloat(2, 1, 100),
             'average_speed' => $this->faker->randomFloat(2, 1, 100),
@@ -49,5 +49,21 @@ class StatsFactory extends Factory
             'integration' => $this->faker->unique()->word,
             'json_points_file_id' => null
         ];
+    }
+
+    public function activity(Activity $activity)
+    {
+        return $this->state(fn(array $attributes) => [
+            'stats_id' => $activity->id,
+            'stats_type' => Activity::class
+        ]);
+    }
+
+    public function route(Route $route)
+    {
+        return $this->state(fn(array $attributes) => [
+            'stats_id' => $route->id,
+            'stats_type' => Route::class
+        ]);
     }
 }

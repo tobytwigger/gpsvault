@@ -158,4 +158,10 @@ return [
 
         'store' => 'default',
     ],
+
+    'seed' => [
+        'manage-global-settings',
+        'manage-strava-clients',
+        'use-public-strava-clients'
+    ]
 ];

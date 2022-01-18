@@ -50,6 +50,8 @@ class ActivityController extends Controller
             ->withoutDuplicateChecking()
             ->import();
 
+        $activity->analyse();
+
         return redirect()->route('activity.show', $activity);
     }
 
@@ -62,7 +64,7 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         return Inertia::render('Activity/Show', [
-            'activity' => $activity->load(['files'])->append('stats')
+            'activity' => $activity->load(['files', 'stats'])
         ]);
     }
 

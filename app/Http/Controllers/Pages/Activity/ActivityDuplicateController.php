@@ -20,13 +20,13 @@ class ActivityDuplicateController extends Controller
         $request->validate([
             'hash' => 'required|string'
         ]);
-        $activity = Activity::where('user_id', Auth::id())->whereHas('activityFile',
+        $activity = Activity::where('user_id', Auth::id())->whereHas('file',
             fn(Builder $query) => $query->where('hash', $request->input('hash'))->where('type', FileUploader::ACTIVITY_FILE)
         )->first();
 
         return [
             'is_duplicate' => $activity !== null,
-            'file' => $activity?->activityFile,
+            'file' => $activity?->file,
             'activity' => $activity
         ];
     }

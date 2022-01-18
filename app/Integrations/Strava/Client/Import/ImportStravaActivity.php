@@ -128,7 +128,7 @@ class ImportStravaActivity
             ->setAdditionalData('strava_achievement_count', $this->getIntegerData('achievement_count'))
             ->import();
 
-        $stats = $this->fillStats(new ActivityStats(['activity_id' => $activity->id]))->save();
+        $stats = $this->fillStats(new Stats(['stats_id' => $activity->id, 'stats_type' => get_class($activity)]))->save();
 
         StravaActivityUpdated::dispatch($activity);
 
@@ -174,7 +174,7 @@ class ImportStravaActivity
             $updated[] = $this->getIntegerData('kudos_count') > 0 ? 'details' : null;
         }
 
-        $this->fillStats($existingActivity->activityStatsFrom('strava')->first() ?? new ActivityStats(['activity_id' => $existingActivity->id]))
+        $this->fillStats($existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]))
             ->save();
 
         $existingActivity = $importer->save();
@@ -216,7 +216,7 @@ class ImportStravaActivity
             ->setAdditionalData('strava_achievement_count', $this->getIntegerData('achievement_count'))
             ->import();
 
-        $stats = $this->fillStats($activity->activityStatsFrom('strava')->first() ?? new ActivityStats(['activity_id' => $activity->id]))->save();
+        $stats = $this->fillStats($activity->statsFrom('strava')->first() ?? new Stats(['activity_id' => $activity->id]))->save();
 
         StravaActivityUpdated::dispatch($activity);
 
@@ -233,7 +233,7 @@ class ImportStravaActivity
         return $activity;
     }
 
-    private function fillStats(ActivityStats $stats): ActivityStats
+    private function fillStats(Stats $stats): Stats
     {
         $stats->fill([
             'integration' => 'strava',

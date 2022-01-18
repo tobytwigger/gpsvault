@@ -33,7 +33,7 @@ class CleanTempStorage extends Command
         $files = collect(Storage::disk('temp')->allFiles())
             ->filter(fn(string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()));
 
-        $this->line(sprintf('Removing %u files from temp', $files->count()));
+        $this->line(sprintf('Removing %u files from temp.', $files->count()));
 
         Storage::disk('temp')->delete($files->all());
 

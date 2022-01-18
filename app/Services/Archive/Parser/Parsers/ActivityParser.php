@@ -26,9 +26,9 @@ class ActivityParser implements Parser
     public function parse($item): ParseResult
     {
         $this->addMetaData('activity', $item->toArray());
-        $activityFile = $item->activityFile()->first();
-        if($activityFile) {
-            $this->addFile($this->parseActivityFile($item->id, $activityFile));
+        $file = $item->file()->first();
+        if($file) {
+            $this->addFile($this->parseActivityFile($item->id, $file));
         }
         foreach($item->files()->get() as $file) {
             $this->addFile($this->parseActivityMediaFile($item->id, $file));
@@ -36,10 +36,10 @@ class ActivityParser implements Parser
         return $this->result();
     }
 
-    private function parseActivityFile(int $activityId, File $activityFile): FileResource
+    private function parseActivityFile(int $activityId, File $file): FileResource
     {
-        return FileResource::new($activityFile)
-            ->setNewName(sprintf('Activity_%u_Activity_File_%u.%s', $activityId, $activityFile->id, $activityFile->extension));
+        return FileResource::new($file)
+            ->setNewName(sprintf('Activity_%u_Activity_File_%u.%s', $activityId, $file->id, $file->extension));
     }
 
     private function parseActivityMediaFile(int $activityId, File $mediaFile): FileResource

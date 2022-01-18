@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Config\Repository;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
@@ -24,12 +25,6 @@ class InstallPermissions extends Command
      */
     protected $description = 'Install the permissions needed for this site.';
 
-    protected $permissions = [
-        'manage-global-settings',
-        'manage-strava-clients',
-        'use-public-strava-clients'
-    ];
-
     /**
      * Create a new command instance.
      *
@@ -45,10 +40,14 @@ class InstallPermissions extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(Repository $config)
     {
-        foreach($this->permissions as $permission) {
+        foreach($config->get('permission.seed', []) as $permission) {
             $this->createPermissionIfMissing($permission);
+        }
+        foreach(Permission::whereNotIn('name', $config->get('permission.seed', []))->get() as $permission) {
+            $permission->delete();
+            $this->line('Removed permission ' . $permission->name);
         }
         $this->info('All permissions up to date');
         return 0;
@@ -60,5 +59,6 @@ class InstallPermissions extends Command
             Permission::create(['name' => $name]);
             $this->line('Created permission ' . $name);
         }
+
     }
 }
