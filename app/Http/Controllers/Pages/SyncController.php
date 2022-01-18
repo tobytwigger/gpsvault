@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Pages;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SyncRequest;
 use App\Integrations\Strava\Client\Strava;
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use App\Services\Sync\Task;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;

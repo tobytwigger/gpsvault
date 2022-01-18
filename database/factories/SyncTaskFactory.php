@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Sync;
-use App\Models\SyncTask;
 use App\Models\User;
+use App\Services\Sync\Sync;
+use App\Services\Sync\SyncTask;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Pages\Backup;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use App\Services\File\FileUploader;
 use App\Tasks\CreateBackupTask;
 use Illuminate\Database\Eloquent\Builder;

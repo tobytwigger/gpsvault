@@ -3,8 +3,8 @@
 namespace Tests\Feature\Backup;
 
 use App\Models\File;
-use App\Models\Sync;
-use App\Models\SyncTask;
+use App\Services\Sync\Sync;
+use App\Services\Sync\SyncTask;
 use App\Tasks\CreateBackupTask;
 use Illuminate\Support\Str;
 use Tests\TestCase;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Pages\Backup;
 
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use Illuminate\Support\Facades\Auth;
 
 class CancelBackupController

@@ -6,7 +6,7 @@ use App\Integrations\Strava\Client\Import\ImportStravaActivity;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
 use App\Models\ConnectionLog;
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use App\Services\Sync\Task;

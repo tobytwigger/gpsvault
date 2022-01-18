@@ -2,7 +2,7 @@
 
 namespace App\Services\Archive\Parser\Parsers;
 
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use App\Models\File;
 use App\Services\Archive\ParseResult;
 use App\Services\Archive\Parser\FileResource;

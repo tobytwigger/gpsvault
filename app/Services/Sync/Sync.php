@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Services\Sync;
 
 use App\Events\SyncFinished;
 use App\Events\SyncUpdated;
 use App\Jobs\RunSyncTask;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
+use Database\Factories\SyncFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -98,6 +99,11 @@ class Sync extends Model
     public function dispatch()
     {
         $this->tasks->each(fn(SyncTask $task) => $task->dispatch());
+    }
+
+    protected static function newFactory()
+    {
+        return new SyncFactory();
     }
 
 }

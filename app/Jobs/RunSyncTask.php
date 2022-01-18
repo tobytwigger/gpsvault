@@ -4,8 +4,8 @@ namespace App\Jobs;
 
 use App\Exceptions\TaskCancelled;
 use App\Exceptions\TaskSucceeded;
-use App\Models\Sync;
-use App\Models\SyncTask;
+use App\Services\Sync\Sync;
+use App\Services\Sync\SyncTask;
 use App\Models\User;
 use App\Services\Sync\Task;
 use Illuminate\Bus\Queueable;

@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Sync;
 use App\Models\User;
+use App\Services\Sync\Sync;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SyncFactory extends Factory

@@ -6,7 +6,7 @@ use App\Integrations\Strava\Import\Importers\ImportingZip;
 use App\Integrations\Strava\Import\Importers\ImportResults;
 use App\Integrations\Strava\Import\Models\Import;
 use App\Integrations\Strava\Import\Models\ImportResult;
-use App\Models\SyncTask;
+use App\Services\Sync\SyncTask;
 use App\Models\User;
 
 class StravaImporter

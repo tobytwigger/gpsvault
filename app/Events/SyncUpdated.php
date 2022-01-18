@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\Sync;
+use App\Services\Sync\Sync;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;

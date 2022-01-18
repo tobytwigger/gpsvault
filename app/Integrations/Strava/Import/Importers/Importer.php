@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Import\Importers;
 
 use App\Models\File;
-use App\Models\SyncTask;
+use App\Services\Sync\SyncTask;
 use App\Models\User;
 
 abstract class Importer
