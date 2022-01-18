@@ -5,11 +5,13 @@ namespace App\Services\Analysis\Analyser\Analysers;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 
-class Pace extends AnalyserContract
+class MovingTime extends AnalyserContract
 {
 
     public function canRun(Analysis $analysis): bool
     {
+        return false;
+
         return $analysis->getDuration() !== null
             && $analysis->getDistance() !== null
             && $analysis->getAverageSpeed() === null;
