@@ -126,12 +126,12 @@ import moment from 'moment';
 import units from '../../mixins/units';
 import CStageForm from './CStageForm';
 import CConfirmationDialog from '../CConfirmationDialog';
-import routeStats from '../../mixins/routeStats';
+import stats from '../../mixins/stats';
 
 export default {
     name: "CStageCard",
     components: {CConfirmationDialog, CStageForm},
-    mixins: [units, routeStats],
+    mixins: [units, stats],
     props: {
         stage: {
             required: true,
@@ -162,11 +162,8 @@ export default {
         },
     },
     computed: {
-        hasStats() {
-            return this.stage.route && Object.keys(this.stage.route.stats).length > 0;
-        },
-        stats() {
-            return this.hasStats && this.stage.route.stats.hasOwnProperty('php') ? this.stage.route.stats.php : null
+        allStats() {
+            return this.stage.route.stats;
         }
     }
 }

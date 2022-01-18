@@ -4,11 +4,11 @@
         max-width="344"
         outlined
     >
-<!--        <v-img-->
-<!--            v-if="route.cover_image"-->
-<!--            :src="route.cover_image"-->
-<!--            height="200px"-->
-<!--        ></v-img>-->
+        <v-img
+            v-if="routeModel.cover_image"
+            :src="routeModel.cover_image"
+            height="200px"
+        ></v-img>
 
 
         <v-card-title>

@@ -15,6 +15,19 @@ class Route extends Model
         'name', 'description', 'notes', 'file_id', 'stats_type', 'stats_id'
     ];
 
+    protected $appends = [
+        'cover_image'
+    ];
+
+    public function getCoverImageAttribute()
+    {
+        $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
+        if($image) {
+            return route('file.preview', $image);
+        }
+        return null;
+    }
+
     protected static function booted()
     {
         static::creating(function(Route $route) {

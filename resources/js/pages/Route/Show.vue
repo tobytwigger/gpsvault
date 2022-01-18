@@ -118,8 +118,7 @@ import moment from 'moment';
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRouteFileFormDialog from '../../ui/components/Route/CRouteFileFormDialog';
 import CManageRouteMedia from '../../ui/components/Route/CManageRouteMedia';
-import routeStats from '../../ui/mixins/routeStats';
-import routeStatSelector from '../../ui/mixins/routeStatSelector';
+import stats from '../../ui/mixins/stats';
 import CStats from '../../ui/components/CStats';
 import CRouteMap from '../../ui/components/Route/CRouteMap';
 import CRouteForm from '../../ui/components/Route/CRouteForm';
@@ -137,7 +136,7 @@ export default {
             type: Object
         }
     },
-    mixins: [routeStats, routeStatSelector],
+    mixins: [stats],
     data() {
         return {
             tab: 'tab-summary'
@@ -149,6 +148,9 @@ export default {
         }
     },
     computed: {
+        allStats() {
+            return this.routeModel.stats;
+        }
     }
 }
 </script>

@@ -22,10 +22,6 @@ class File extends Model
         'user_id' => 'integer'
     ];
 
-    protected $appends = [
-        'preview_url'
-    ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -61,11 +57,6 @@ class File extends Model
     public function getFileContents()
     {
         return Storage::disk($this->disk)->get($this->path);
-    }
-
-    public function getPreviewUrlAttribute()
-    {
-        return Storage::disk($this->disk)->url($this->path);
     }
 
     public function returnDownloadResponse(): StreamedResponse

@@ -254,7 +254,7 @@ export default {
                 .map(file => {
                     return {
                         alt: file.caption,
-                        src: file.preview_url
+                        src: route('file.preview', file.id)
                     }
                 });
         }

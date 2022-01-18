@@ -2,7 +2,7 @@
     <v-card>
         <v-img
             v-if="isImage"
-            :src="file.preview_url"
+            :src="route('file.preview', file.id)"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
             height="200px"
