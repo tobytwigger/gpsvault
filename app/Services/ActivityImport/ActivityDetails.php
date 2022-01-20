@@ -177,7 +177,7 @@ class ActivityDetails
         $this->additionalData[$key] = $value;
     }
 
-    public function appendAdditionalDataKey(string $key, mixed $value): void
+    public function pushToAdditionalDataArrayKey(string $key, mixed $value): void
     {
         if(!isset($this->additionalArrayData[$key])) {
             $this->additionalArrayData[$key] = [];

@@ -3,6 +3,7 @@
 namespace App\Services\Sync;
 
 use App\Events\SyncFinished;
+use App\Models\User;
 use Carbon\Carbon;
 use Database\Factories\SyncFactory;
 use Illuminate\Database\Eloquent\Builder;

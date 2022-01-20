@@ -24,14 +24,11 @@ has_children: true
 
 Extend `App\Services\Sync\Task`.
 
-- description. A description as to what the task does.
-- Name. A name for the task.
 - run: The function that actually does the task running
   - $this->user() gets the current user
 - validationRules: An array of rules that validate config
-- requiredConfig: config that is needed for it to work
 - fail: Call with a message to fail the task
-- Succeed: stop the task and mark it as succeeded with a message
+- succeed: stop the task and mark it as succeeded with a message
 - offerBail: Call this as often as possible with a message. If a user cancels the task, it will cancel at this point
 - line: Add a message
 - percentage: Update the percentage through the task we are

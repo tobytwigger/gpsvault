@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Http\Kernel;
 use App\Services\Sync\Task;
 use App\Settings\DarkMode;
+use App\Settings\StatsOrder;
 use App\Settings\StravaClient;
 use App\Settings\UnitSystem;
 use App\Tasks\CreateBackupTask;
@@ -45,5 +46,6 @@ class AppServiceProvider extends ServiceProvider
         Setting::register(new UnitSystem());
         Setting::register(new DarkMode());
         Setting::register(new StravaClient());
+        Setting::register(new StatsOrder());
     }
 }

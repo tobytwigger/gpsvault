@@ -15,12 +15,20 @@ class ActivityHasStatsTest extends TestCase
 
     /** @test */
     public function stats_can_be_attached_to_an_activity(){
-        $file = File::factory()->activityFile()->create();
         $activity = Activity::factory()->create();
         $stat = Stats::factory()->activity($activity)->create();
 
         $this->assertCount(1, $activity->stats()->get());
         $this->assertTrue($stat->is($activity->stats()->first()));
+    }
+
+    /** @test */
+    public function an_activity_can_be_retrieved_from_the_stats(){
+        $activity = Activity::factory()->create();
+        $stat = Stats::factory()->activity($activity)->create();
+
+        $this->assertTrue($stat->model()->exists());
+        $this->assertTrue($activity->is($stat->model));
     }
 
     /** @test */

@@ -39,7 +39,7 @@ trait HasAdditionalData
         );
     }
 
-    public function appendAdditionalData(string $key, mixed $value)
+    public function pushToAdditionalDataArray(string $key, mixed $value)
     {
         $this->additionalData()->create(
             ['key' => $key, 'value' => $value]
@@ -87,6 +87,10 @@ trait HasAdditionalData
             });
     }
 
+    /**
+     * @deprecated
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
+     */
     public function getAllNonArrayAdditionalData()
     {
         return $this->additionalData()
@@ -96,6 +100,10 @@ trait HasAdditionalData
             ->mapWithKeys(fn(Collection $additionalData, string $key) => [$key => $additionalData->first()->value]);
     }
 
+    /**
+     * @deprecated
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
+     */
     public function getAllArrayAdditionalData()
     {
         return $this->additionalData()

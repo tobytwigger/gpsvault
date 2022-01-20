@@ -57,6 +57,11 @@
                         </c-dark-mode>
                     </v-col>
                 </v-row>
+                <v-row>
+                    <v-col>
+                        <c-stats-order-setting :initial-value="$page.props.settings.stats_order_preference"></c-stats-order-setting>
+                    </v-col>
+                </v-row>
             </v-tab-item>
             <v-tab-item value="tab-security">
                 <v-row>
@@ -101,9 +106,11 @@ import CTwoFactorAuthenticationForm from 'ui/components/Settings/CTwoFactorAuthe
 import CUnitSetting from 'ui/components/Settings/CUnitSetting';
 import CDarkMode from 'ui/components/Settings/CDarkMode';
 import CSystemStravaClient from 'ui/components/Settings/CSystemStravaClient';
+import CStatsOrderSetting from '../../ui/components/Settings/CStatsOrderSetting';
 export default {
     name: "Index",
     components: {
+        CStatsOrderSetting,
         CSystemStravaClient,
         CDarkMode,
         CUnitSetting,

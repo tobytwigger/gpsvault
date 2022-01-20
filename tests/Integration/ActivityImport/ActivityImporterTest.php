@@ -50,10 +50,10 @@ class ActivityImporterTest extends TestCase
     /** @test */
     public function it_sets_an_array_value_for_additional_data(){
         $activity = ActivityImporter::for(User::factory()->create())
-            ->appendAdditionalData('test', 'one')
-            ->appendAdditionalData('test', 'two')
-            ->appendAdditionalData('test-two', 'three')
-            ->appendAdditionalData('test-two', 'four')
+            ->pushToAdditionalDataArray('test', 'one')
+            ->pushToAdditionalDataArray('test', 'two')
+            ->pushToAdditionalDataArray('test-two', 'three')
+            ->pushToAdditionalDataArray('test-two', 'four')
             ->import();
         $this->assertInstanceOf(Activity::class, $activity);
         $this->assertEquals(
@@ -68,10 +68,10 @@ class ActivityImporterTest extends TestCase
         $activity = Activity::factory()->create();
         $activity->setAdditionalData('test-single', 'hello');
         $activity->setAdditionalData('test-single-two', 'hello-two');
-        $activity->appendAdditionalData('test', 'one');
-        $activity->appendAdditionalData('test', 'two');
-        $activity->appendAdditionalData('test-two', 'three');
-        $activity->appendAdditionalData('test-two', 'four');
+        $activity->pushToAdditionalDataArray('test', 'one');
+        $activity->pushToAdditionalDataArray('test', 'two');
+        $activity->pushToAdditionalDataArray('test-two', 'three');
+        $activity->pushToAdditionalDataArray('test-two', 'four');
 
         $this->assertEquals([
             'test-single' => 'hello',
@@ -82,8 +82,8 @@ class ActivityImporterTest extends TestCase
 
         $activity = ActivityImporter::update($activity)
             ->setAdditionalData('test-single-two', 'hello-three')
-            ->appendAdditionalData('test-two', 'five')
-            ->appendAdditionalData('test-two', 'six')
+            ->pushToAdditionalDataArray('test-two', 'five')
+            ->pushToAdditionalDataArray('test-two', 'six')
             ->import();
         $this->assertEquals([
                 'test-single' => 'hello',
@@ -101,10 +101,10 @@ class ActivityImporterTest extends TestCase
         $activity = Activity::factory()->create();
         $activity->setAdditionalData('test-single', 'hello');
         $activity->setAdditionalData('test-single-two', 'hello-two');
-        $activity->appendAdditionalData('test', 'one');
-        $activity->appendAdditionalData('test', 'two');
-        $activity->appendAdditionalData('test-two', 'three');
-        $activity->appendAdditionalData('test-two', 'four');
+        $activity->pushToAdditionalDataArray('test', 'one');
+        $activity->pushToAdditionalDataArray('test', 'two');
+        $activity->pushToAdditionalDataArray('test-two', 'three');
+        $activity->pushToAdditionalDataArray('test-two', 'four');
 
         $this->assertEquals([
             'test-single' => 'hello',

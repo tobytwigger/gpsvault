@@ -47,7 +47,7 @@ class RunSyncTask implements ShouldQueue
                 return;
             } catch (\Throwable $e) {
                 $this->failTask($e->getMessage());
-                return;
+                throw $e;
             }
             $this->task->setStatusAsSucceeded();
         }

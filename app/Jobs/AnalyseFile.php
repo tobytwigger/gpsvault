@@ -81,7 +81,7 @@ class AnalyseFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'json_points_model_id' => $this->getPointsFileId($analysis->getPoints())
+                'json_points_file_id' => $this->getPointsFileId($analysis->getPoints())
             ]
         );
     }

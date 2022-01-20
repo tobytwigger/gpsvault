@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Settings\DarkMode;
+use App\Settings\StatsOrder;
 use App\Settings\StravaClient;
 use App\Settings\UnitSystem;
 use Illuminate\Http\Request;
@@ -28,7 +29,9 @@ class SettingsController extends Controller
         $request->validate([
             'unit_system' => 'sometimes|' . Setting::getSettingByKey(UnitSystem::class)->rules(),
             'dark_mode' => 'sometimes|' . Setting::getSettingByKey(DarkMode::class)->rules(),
-            'strava_client_id' => 'sometimes|' . Setting::getSettingByKey(StravaClient::class)->rules()
+            'strava_client_id' => 'sometimes|' . Setting::getSettingByKey(StravaClient::class)->rules(),
+            'stats_order' => 'sometimes|' . Setting::getSettingByKey(StatsOrder::class)->rules(),
+            'stats_order.*' => 'string|in:php,strava'
         ]);
 
         if($request->has('unit_system')) {
@@ -41,6 +44,10 @@ class SettingsController extends Controller
 
         if($request->has('strava_client_id') && Auth::user()->can('manage-global-settings')) {
             StravaClient::setValue($request->input('strava_client_id'));
+        }
+
+        if($request->has('stats_order')) {
+            StatsOrder::setValue($request->input('stats_order'));
         }
 
         return redirect()->route('settings.index');

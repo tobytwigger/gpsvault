@@ -54,6 +54,17 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
+    public function stats_order_can_be_updated(){
+        $this->authenticated();
+
+        UnitSystem::setValue('metric', $this->user->id);
+
+        $response = $this->post(route('settings.store'), ['unit_system' => 'imperial']);
+
+        $this->assertFalse(DarkMode::getValue($this->user->id));
+    }
+
+    /** @test */
     public function strava_client_id_cannot_be_updated_without_the_right_permission(){
         $this->authenticated();
 

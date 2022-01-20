@@ -151,7 +151,7 @@ export default {
         },
         loadRawChartData() {
             this.loadingChartData = true;
-            axios.get(route('activity.stats.chart', this.stats.id))
+            axios.get(route('stats.points', this.stats.id))
                 .then(response => {
                     this.loadingChartData = false;
                     this.rawChartData = response.data

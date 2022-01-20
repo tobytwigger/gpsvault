@@ -27,7 +27,7 @@ class LoadStravaPhotos extends StravaActivityBaseJob
         $existingPhotoIds = collect(Arr::wrap($this->activity->getAdditionalData('strava_photo_ids')));
         foreach($photos as $photo) {
             if(isset($photo['unique_id']) && !$existingPhotoIds->contains($photo['unique_id'])) {
-                $this->activity->appendAdditionalData('strava_photo_ids', $photo['unique_id']);
+                $this->activity->pushToAdditionalDataArray('strava_photo_ids', $photo['unique_id']);
             }
         }
         $this->activity->setAdditionalData('strava_is_loading_photos', false);

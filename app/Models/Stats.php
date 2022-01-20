@@ -111,7 +111,7 @@ class Stats extends Model
 
     public function model(): \Illuminate\Database\Eloquent\Relations\MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo('stats');
     }
 
     public function file()

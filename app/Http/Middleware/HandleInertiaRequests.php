@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Settings\DarkMode;
+use App\Settings\StatsOrder;
 use App\Settings\StravaClient;
 use App\Settings\UnitSystem;
 use Illuminate\Http\Request;
@@ -44,7 +45,8 @@ class HandleInertiaRequests extends Middleware
             'settings' => fn() => [
                 'unit_system' => UnitSystem::getValue(),
                 'dark_mode' => DarkMode::getValue(),
-                'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null)
+                'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null),
+                'stats_order_preference' => StatsOrder::getValue()
             ],
             'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : []
         ]);

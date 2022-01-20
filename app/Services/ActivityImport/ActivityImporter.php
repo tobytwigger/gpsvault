@@ -106,9 +106,9 @@ class ActivityImporter
         return $this;
     }
 
-    public function appendAdditionalData(string $key, mixed $value): ActivityImporter
+    public function pushToAdditionalDataArray(string $key, mixed $value): ActivityImporter
     {
-        $this->activityDetails->appendAdditionalDataKey($key, $value);
+        $this->activityDetails->pushToAdditionalDataArrayKey($key, $value);
         return $this;
     }
 

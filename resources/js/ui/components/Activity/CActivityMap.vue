@@ -24,7 +24,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(route('activity.stats.geojson', this.stats.id))
+        axios.get(route('stats.geojson', this.stats.id))
             .then(response => this.geojson = response.data)
             .then(() => this.loading = false);
     },
