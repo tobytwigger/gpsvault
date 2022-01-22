@@ -14,7 +14,8 @@ export default {
             return this.stats !== null;
         },
         dataSources() {
-            return this.allStats.map(s => s.integration);
+            let sortingArr = this.$page.props.settings.stats_order_preference;
+            return this.allStats.map(s => s.integration).sort((a, b) => sortingArr.indexOf(a) - sortingArr.indexOf(b));
         },
         activeDataSource: {
             get() {
@@ -24,8 +25,8 @@ export default {
                 if (this.dataSource && this.dataSources.indexOf(this.dataSource) > -1) {
                     return this.dataSource;
                 }
-                if (Object.keys(this.allStats).length > 0) {
-                    return this.allStats[0].integration;
+                if (this.dataSources.length > 0) {
+                    return this.dataSources[0];
                 }
                 return null;
             },

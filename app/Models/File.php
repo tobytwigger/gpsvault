@@ -22,11 +22,6 @@ class File extends Model
         'user_id' => 'integer'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     protected static function booted()
     {
         static::creating(function(File $file) {
@@ -42,6 +37,11 @@ class File extends Model
         static::deleting(function(File $file) {
             Storage::disk($file->disk)->delete($file->path);
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function getDownloadUrl(): string

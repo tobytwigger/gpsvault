@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Services\File\FileUploader;
+use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -169,6 +171,22 @@ class Stats extends Model
     public function getPointsAttribute()
     {
         return $this->points();
+    }
+
+    public static function scopeOrderByPreference(Builder $query)
+    {
+        $order = collect(StatsOrder::getValue())
+            ->map(fn(string $integration) => sprintf('"%s"', $integration))
+            ->join(', ');
+
+        return $query->orderByRaw(
+            sprintf('FIELD(stats.integration, %s) ASC', $order)
+        );
+    }
+
+    public static function scopePreferred(Builder $query)
+    {
+        $query->orderByPreference();
     }
 
     public function points()

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
+use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
 use App\Traits\HasStats;
 use Database\Factories\ActivityFactory;
@@ -11,15 +12,18 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Activity extends Model
 {
     use HasFactory, HasAdditionalData, HasStats;
 
     protected $fillable = [
-        'name', 'description', 'file_id', 'linked_to', 'user_id', 'distance', 'started_at', 'default_stats_id'
+        'name', 'description', 'file_id', 'linked_to', 'user_id'
     ];
 
     protected $with = [
@@ -27,25 +31,23 @@ class Activity extends Model
     ];
 
     protected $appends = [
-        'cover_image'
+        'cover_image', 'distance', 'started_at'
     ];
 
     protected $casts = [
         'linked_to' => 'array',
         'user_id' => 'integer',
-        'distance' => 'float',
-        'started_at' => 'datetime'
     ];
 
 
     protected static function booted()
     {
-        static::creating(function(Activity $activity) {
-            if($activity->user_id === null) {
+        static::creating(function (Activity $activity) {
+            if ($activity->user_id === null) {
                 $activity->user_id = Auth::id();
             }
         });
-        static::deleting(function(Activity $activity) {
+        static::deleting(function (Activity $activity) {
             $activity->file()->delete();
             $activity->files()->delete();
             $activity->stats()->delete();
@@ -58,7 +60,7 @@ class Activity extends Model
     public function getCoverImageAttribute()
     {
         $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
-        if($image) {
+        if ($image) {
             return route('file.preview', $image);
         }
         return null;

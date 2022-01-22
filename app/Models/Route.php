@@ -12,7 +12,7 @@ class Route extends Model
     use HasFactory, HasStats;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'file_id', 'stats_type', 'stats_id'
+        'name', 'description', 'notes', 'file_id'
     ];
 
     protected $appends = [

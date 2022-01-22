@@ -83,4 +83,9 @@ class FileFactory extends Factory
             'mimetype' => 'application/zip'
         ]);
     }
+
+    public function points()
+    {
+
+    }
 }

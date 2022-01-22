@@ -23,9 +23,6 @@ class ActivityFactory extends Factory
             'name' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'file_id' => null,
-            'default_stats_id' => null,
-            'distance' => $this->faker->randomFloat(2, 1, 200000),
-            'started_at' => $this->faker->dateTimeBetween('-1 year', '-2 hours'),
             'linked_to' => [],
             'user_id' => fn() => User::factory()
         ];

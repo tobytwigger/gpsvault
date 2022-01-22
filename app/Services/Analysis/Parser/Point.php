@@ -279,7 +279,7 @@ class Point implements Arrayable, Jsonable
             'latitude' => $this->getLatitude(),
             'longitude' => $this->getLongitude(),
             'elevation' => $this->getElevation(),
-            'time' => $this->getTime()->unix(),
+            'time' => $this->getTime()?->unix(),
             'cadence' => $this->getCadence(),
             'temperature' => $this->getTemperature(),
             'heart_rate' => $this->getHeartRate(),
