@@ -19,28 +19,28 @@
             {{ routeModel.description }}
         </v-card-subtitle>
 
-<!--        <v-card-text>-->
-<!--            <v-chip-->
-<!--                outlined-->
-<!--                class="ma-2"-->
-<!--                color="indigo"-->
-<!--            >-->
-<!--                <v-icon left>-->
-<!--                    mdi-ruler-->
-<!--                </v-icon>-->
-<!--                {{ convertDistance(route.distance) }}-->
-<!--            </v-chip>-->
+        <v-card-text>
+            <v-chip
+                outlined
+                class="ma-2"
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-ruler
+                </v-icon>
+                {{ convertDistance(route.distance) }}
+            </v-chip>
 
-<!--            <v-chip-->
-<!--                outlined-->
-<!--                color="indigo"-->
-<!--            >-->
-<!--                <v-icon left>-->
-<!--                    mdi-calendar-range-->
-<!--                </v-icon>-->
-<!--                {{ toDateTime(route.started_at) }}-->
-<!--            </v-chip>-->
-<!--        </v-card-text>-->
+            <v-chip
+                outlined
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-calendar-range
+                </v-icon>
+                {{ toDateTime(route.started_at) }}
+            </v-chip>
+        </v-card-text>
 
         <v-card-actions>
             <v-btn

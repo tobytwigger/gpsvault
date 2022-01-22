@@ -42,6 +42,10 @@ class RouteIndexTest extends TestCase
     public function index_paginates_routes(){
         $this->authenticated();
         $routes = Route::factory()->count(20)->create(['user_id' => $this->user->id, 'updated_at' => null]);
+        foreach($routes as $index => $route) {
+            $route->updated_at = Carbon::now()->subDays($index);
+            $route->save();
+        }
 
         $this->get(route('route.index', ['page' => 2, 'perPage' => 4]))
             ->assertStatus(200)

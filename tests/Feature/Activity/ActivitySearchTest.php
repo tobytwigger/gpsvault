@@ -37,18 +37,18 @@ class ActivitySearchTest extends TestCase
         $this->authenticated();
 
         $activities = Activity::factory()->count(20)->create(['user_id' => $this->user->id]);
+        foreach($activities as $index => $activity) {
+            $activity->updated_at = Carbon::now()->subDays($index);
+            $activity->save();
+        }
+
         $response = $this->getJson(route('activity.search', ['query' => null]));
         $response->assertJsonCount(15);
-        $response->assertJsonFragment(['id' => $activities[0]->id]);
-        $response->assertJsonFragment(['id' => $activities[5]->id]);
-        $response->assertJsonFragment(['id' => $activities[9]->id]);
-        $response->assertJsonFragment(['id' => $activities[13]->id]);
-        $response->assertJsonFragment(['id' => $activities[14]->id]);
-        $response->assertJsonMissing(['id' => $activities[15]->id]);
-        $response->assertJsonMissing(['id' => $activities[16]->id]);
-        $response->assertJsonMissing(['id' => $activities[17]->id]);
-        $response->assertJsonMissing(['id' => $activities[18]->id]);
-        $response->assertJsonMissing(['id' => $activities[19]->id]);
+        $json = $response->decodeResponseJson();
+
+        foreach($activities->take(15) as $index => $activity) {
+            $this->assertEquals($activity->id, $json[$index]['id']);
+        }
     }
 
     /** @test */

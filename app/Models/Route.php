@@ -16,7 +16,7 @@ class Route extends Model
     ];
 
     protected $appends = [
-        'cover_image'
+        'cover_image', 'distance'
     ];
 
     public function getCoverImageAttribute()

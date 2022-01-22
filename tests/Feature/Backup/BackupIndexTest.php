@@ -43,6 +43,10 @@ class BackupIndexTest extends TestCase
     public function index_paginates_backups(){
         $this->authenticated();
         $backups = File::factory()->archive()->count(20)->create(['user_id' => $this->user->id, 'created_at' => null]);
+        foreach($backups as $index => $backup) {
+            $backup->created_at = Carbon::now()->subDays($index);
+            $backup->save();
+        }
 
         $this->get(route('backup.index', ['page' => 2, 'perPage' => 4]))
             ->assertStatus(200)

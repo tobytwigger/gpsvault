@@ -27,7 +27,7 @@ trait HasStats
 
     public function getPreferredStatValue(string $stat)
     {
-        return $this->stats()->orderByPreferred()->first()?->{$stat};
+        return $this->stats()->orderByPreference()->first()?->{$stat};
     }
 
     public static function bootHasStats()

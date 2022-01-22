@@ -42,6 +42,10 @@ class TourIndexTest extends TestCase
     public function index_paginates_tours(){
         $this->authenticated();
         $tours = Tour::factory()->count(20)->create(['user_id' => $this->user->id, 'created_at' => null]);
+        foreach($tours as $index => $tour) {
+            $tour->created_at = Carbon::now()->subDays($index);
+            $tour->save();
+        }
 
         $this->get(route('tour.index', ['page' => 2, 'perPage' => 4]))
             ->assertStatus(200)

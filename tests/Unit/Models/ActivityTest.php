@@ -209,13 +209,22 @@ class ActivityTest extends TestCase
     /** @test */
     public function it_appends_the_preferred_started_at(){
         $activity3 = Activity::factory()->create();
-        Stats::factory()->activity($activity3)->create(['integration' => 'php', 'started_at' => Carbon::now()]);
-        Stats::factory()->activity($activity3)->create(['integration' => 'strava', 'started_at' => Carbon::now()->subDay()]);
+        $now = Carbon::now();
+        $subDay = Carbon::now()->subDay();
+        Stats::factory()->activity($activity3)->create(['integration' => 'php', 'started_at' => $now]);
+        Stats::factory()->activity($activity3)->create(['integration' => 'strava', 'started_at' => $subDay]);
 
         StatsOrder::setDefaultValue(['php', 'strava']);
-        $this->assertEquals(Carbon::now(), $activity3->started_at);
+        $this->assertEquals($now->toIso8601String(), $activity3->started_at->toIso8601String());
 
         StatsOrder::setDefaultValue(['strava', 'php']);
-        $this->assertEquals(Carbon::now(), $activity3->started_at);
+        $this->assertEquals($subDay->toIso8601String(), $activity3->refresh()->started_at->toIso8601String());
+    }
+
+    /** @test */
+    public function started_at_attribute_is_null_if_no_stats_available(){
+        $activity3 = Activity::factory()->create();
+
+        $this->assertNull($activity3->started_at);
     }
 }

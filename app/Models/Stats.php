@@ -8,6 +8,7 @@ use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Stats extends Model
 {
@@ -180,7 +181,7 @@ class Stats extends Model
             ->join(', ');
 
         return $query->orderByRaw(
-            sprintf('FIELD(stats.integration, %s) ASC', $order)
+            sprintf('FIELD(%sstats.integration, %s) ASC', DB::getTablePrefix() ?? '', $order)
         );
     }
 

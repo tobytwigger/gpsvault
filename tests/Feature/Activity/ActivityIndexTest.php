@@ -62,7 +62,7 @@ class ActivityIndexTest extends TestCase
     public function index_only_returns_your_activities(){
         $this->authenticated();
         $activities = Activity::factory()->count(3)->create(['user_id' => $this->user->id]);
-        Activity::factory()->count(2)->create(['started_at' => null]);
+        Activity::factory()->count(2)->create();
 
         $this->get(route('activity.index'))
             ->assertStatus(200)

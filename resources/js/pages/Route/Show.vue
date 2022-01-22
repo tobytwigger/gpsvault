@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="routeModel.name" :action-sidebar="true">
+    <c-app-wrapper :title="pageTitle" :action-sidebar="true">
         <v-tabs
             v-model="tab"
             centered
@@ -150,6 +150,9 @@ export default {
     computed: {
         allStats() {
             return this.routeModel.stats;
+        },
+        pageTitle() {
+            return this.routeModel.name ?? 'New Route';
         }
     }
 }

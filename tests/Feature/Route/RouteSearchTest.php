@@ -2,6 +2,7 @@
 
 namespace Feature\Route;
 
+use App\Models\Activity;
 use App\Models\Route;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -37,18 +38,18 @@ class RouteSearchTest extends TestCase
         $this->authenticated();
 
         $routes = Route::factory()->count(20)->create(['user_id' => $this->user->id]);
+        foreach($routes as $index => $route) {
+            $route->updated_at = Carbon::now()->subDays($index);
+            $route->save();
+        }
+
         $response = $this->getJson(route('route.search', ['query' => null]));
         $response->assertJsonCount(15);
-        $response->assertJsonFragment(['id' => $routes[0]->id]);
-        $response->assertJsonFragment(['id' => $routes[5]->id]);
-        $response->assertJsonFragment(['id' => $routes[9]->id]);
-        $response->assertJsonFragment(['id' => $routes[13]->id]);
-        $response->assertJsonFragment(['id' => $routes[14]->id]);
-        $response->assertJsonMissing(['id' => $routes[15]->id]);
-        $response->assertJsonMissing(['id' => $routes[16]->id]);
-        $response->assertJsonMissing(['id' => $routes[17]->id]);
-        $response->assertJsonMissing(['id' => $routes[18]->id]);
-        $response->assertJsonMissing(['id' => $routes[19]->id]);
+        $json = $response->decodeResponseJson();
+
+        foreach($routes->take(15) as $index => $route) {
+            $this->assertEquals($route->id, $json[$index]['id']);
+        }
     }
 
     /** @test */

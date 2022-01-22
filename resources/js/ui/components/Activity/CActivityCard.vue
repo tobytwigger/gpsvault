@@ -21,25 +21,25 @@
 
         <v-card-text>
             <v-chip
-<!--                outlined-->
-<!--                class="ma-2"-->
-<!--                color="indigo"-->
-<!--            >-->
-<!--                <v-icon left>-->
-<!--                    mdi-ruler-->
-<!--                </v-icon>-->
-<!--                {{ convertDistance(activity.distance) }}-->
-<!--            </v-chip>-->
-
-<!--            <v-chip-->
-<!--                outlined-->
-<!--                color="indigo"-->
-<!--            >-->
-<!--                <v-icon left>-->
-<!--                    mdi-calendar-range-->
-<!--                </v-icon>-->
-<!--                {{ toDateTime(activity.started_at) }}-->
-<!--            </v-chip>-->
+                outlined
+                class="ma-2"
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-ruler
+                </v-icon>
+                {{ convertDistance(activity.distance) }}
+            </v-chip>
+<!---->
+            <v-chip
+                outlined
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-calendar-range
+                </v-icon>
+                {{ toDateTime(activity.started_at) }}
+            </v-chip>
         </v-card-text>
 
 <!--            <v-list-item-avatar-->
