@@ -104,13 +104,6 @@ class Stats extends Model
 
     protected static function booted()
     {
-        static::created(function(Stats $stats) {
-//            if($stats->file->type === FileUploader::ROUTE_FILE) {
-//                Route::where('file_id', $stats->file->id)->first()?->notifyAboutNewStats($stats);
-//            } elseif($stats->file->type === FileUploader::ACTIVITY_FILE) {
-//                Activity::where('file_id', $stats->file->id)->first()?->notifyAboutNewStats($stats);
-//            }
-        });
     }
 
     public function model(): \Illuminate\Database\Eloquent\Relations\MorphTo

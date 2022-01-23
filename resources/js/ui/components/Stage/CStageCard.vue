@@ -163,7 +163,7 @@ export default {
     },
     computed: {
         allStats() {
-            return this.stage.route.stats;
+            return this.stage.route?.stats ?? [];
         }
     }
 }

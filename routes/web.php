@@ -28,6 +28,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     /* Tours */
     Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
     Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
+    Route::get('/tour/{tour}/points', [\App\Http\Controllers\Pages\Tour\TourPointsController::class, 'show'])->name('tour.points');
+    Route::get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
 
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
@@ -59,8 +61,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('settings', \App\Http\Controllers\Pages\Settings\SettingsController::class)->only(['index', 'store']);
 
     /* Stats */
-    Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\StatsPointsController::class, 'index'])->name('stats.points');
-    Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Pages\Stats\GeoJsonController::class, 'index'])->name('stats.geojson');
+    Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\TourPointsController::class, 'show'])->name('stats.points');
+    Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Pages\Stats\GeoJsonController::class, 'show'])->name('stats.geojson');
 
 
 

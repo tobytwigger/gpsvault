@@ -84,8 +84,14 @@ class FileFactory extends Factory
         ]);
     }
 
-    public function points()
+    public function activityPoints()
     {
-
+        return $this->state(fn(array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/points'), storage_path('tests'), false), 'tests/'),
+            'filename' => $this->faker->word . '.tar.gz',
+            'extension' => 'tar.gz',
+            'type' => FileUploader::ACTIVITY_FILE_POINT_JSON,
+            'mimetype' => 'application/gzip'
+        ]);
     }
 }

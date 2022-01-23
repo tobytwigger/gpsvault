@@ -28,17 +28,7 @@
                 <v-icon left>
                     mdi-ruler
                 </v-icon>
-                {{ convertDistance(route.distance) }}
-            </v-chip>
-
-            <v-chip
-                outlined
-                color="indigo"
-            >
-                <v-icon left>
-                    mdi-calendar-range
-                </v-icon>
-                {{ toDateTime(route.started_at) }}
+                {{ convertDistance(routeModel.distance) }}
             </v-chip>
         </v-card-text>
 
