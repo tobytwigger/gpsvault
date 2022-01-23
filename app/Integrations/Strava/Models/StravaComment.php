@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Models;
 
 use App\Models\Activity;
+use Database\Factories\StravaCommentsFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,5 +30,10 @@ class StravaComment extends Model
     public function activity()
     {
         return $this->belongsTo(Activity::class);
+    }
+
+    protected static function newFactory()
+    {
+        return new StravaCommentsFactory();
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Activity;
+use App\Models\File;
 use App\Models\Route;
 use App\Models\Stats;
+use App\Models\User;
 use App\Settings\StatsOrder;
 use Tests\TestCase;
 
@@ -13,27 +14,47 @@ class RouteTest extends TestCase
 
     /** @test */
     public function the_user_id_is_automatically_set_on_creation_if_null(){
+        $this->authenticated();
+        $route = Route::factory()->make(['user_id' => null]);
+        $route->save();
 
+        $this->assertEquals($this->user->id, $route->refresh()->user_id);
     }
 
     /** @test */
     public function cover_image_returns_the_preview_for_the_file(){
+        $route = Route::factory()->create();
+        $file = File::factory()->routeMedia()->create();
+        $route->files()->attach($file);
 
+        $this->assertEquals(route('file.preview', $file), $route->cover_image);
     }
 
     /** @test */
     public function cover_image_returns_null_if_file_not_set(){
-
+        $route = Route::factory()->create();
+        $this->assertNull($route->cover_image);
     }
 
     /** @test */
     public function it_has_a_relationship_with_user(){
+        $user = User::factory()->create();
+        $route = Route::factory()->create(['user_id' => $user]);
 
+        $this->assertInstanceOf(User::class, $route->user);
+        $this->assertTrue($user->is($route->user));
     }
 
     /** @test */
     public function it_has_a_relationship_with_files(){
+        $route = Route::factory()->create();
+        $files = File::factory()->routeMedia()->count(5)->create();
+        $route->files()->attach($files);
 
+        $this->assertContainsOnlyInstancesOf(File::class, $route->files);
+        foreach($route->files as $file) {
+            $this->assertTrue($files->shift()->is($file));
+        }
     }
 
     /** @test */

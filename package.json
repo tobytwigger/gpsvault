@@ -33,6 +33,7 @@
         "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
+        "intro.js": "^4.3.0",
         "leaflet": "^1.7.1",
         "vue-easy-lightbox": "^0.16.2",
         "vue2-leaflet": "^2.7.1",

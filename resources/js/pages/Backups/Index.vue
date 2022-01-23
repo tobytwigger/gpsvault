@@ -77,6 +77,8 @@
             <v-list>
                 <v-list-item>
                     <v-btn
+                        data-intro="You can add a new backup by clicking here"
+                        data-hint="This is your hint?"
                         :disabled="creatingBackup"
                         color="primary"
                         link

@@ -118,11 +118,6 @@ class Stats extends Model
         return $this->morphTo('stats');
     }
 
-    public function file()
-    {
-        return $this->belongsTo(File::class);
-    }
-
     public function getHumanStartedAtAttribute()
     {
         if(!$this->start_latitude || !$this->start_longitude) {

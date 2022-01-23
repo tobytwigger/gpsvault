@@ -12,6 +12,7 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
+                                data-intro="You can add a new activity here"
                                 icon
                                 v-bind="attrs"
                                 v-on="on"
@@ -43,7 +44,7 @@ export default {
             required: true,
             type: Object
         },
-    },
+    }
 }
 </script>
 

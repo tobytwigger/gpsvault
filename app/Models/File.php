@@ -44,11 +44,6 @@ class File extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getDownloadUrl(): string
-    {
-        return url()->route('file.download', $this->id);
-    }
-
     public function fullPath()
     {
         return Storage::disk($this->disk)->path($this->path);

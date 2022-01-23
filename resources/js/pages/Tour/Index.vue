@@ -31,6 +31,7 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
+                                data-intro="You can add a new tour by clicking here"
                                 icon
                                 v-bind="attrs"
                                 v-on="on"

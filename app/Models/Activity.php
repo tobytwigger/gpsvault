@@ -91,4 +91,10 @@ class Activity extends Model
         $query->where('linked_to', 'LIKE', sprintf('%%%s%%', $linkedTo));
     }
 
+    public function linkTo(string $integration)
+    {
+        $this->linked_to = array_unique(array_merge($this->linked_to, [$integration]));
+        $this->save();
+    }
+
 }

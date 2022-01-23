@@ -65,7 +65,7 @@ class Stage extends Model implements Sortable
     public function setStageNumber(int $stageNumber)
     {
         $baseOrder = $this->newQuery()->ordered()->where('id', '!=', $this->id)->pluck($this->getKeyName());
-        $baseOrder->splice($stageNumber - 1, 1, $this->id);
+        $baseOrder->splice($stageNumber - 1, 0, $this->id);
         static::setNewOrder($baseOrder);
     }
 

@@ -63,6 +63,7 @@ class AnalyseFileTest extends TestCase
 
     /** @test */
     public function it_maps_stats_across_to_the_model_correctly(){
+        $this->markTestIncomplete();
         // Mock analyser, give prophecy results and check stats is same in DB as we said it should be
     }
 

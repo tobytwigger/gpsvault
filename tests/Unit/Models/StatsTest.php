@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Activity;
+use App\Models\File;
 use App\Models\Stats;
 use App\Settings\StatsOrder;
 use Carbon\Carbon;
@@ -13,31 +14,32 @@ class StatsTest extends TestCase
 
     /** @test */
     public function it_has_a_relationship_to_a_model(){
+        $activity = Activity::factory()->create();
+        $stats = Stats::factory()->activity($activity)->create();
 
-    }
-
-    /** @test */
-    public function it_has_a_relationship_to_a_file(){
-
+        $this->assertTrue($activity->is($stats->model));
     }
 
     /** @test */
     public function get_human_started_at_gets_the_human_name_for_the_started_at_location(){
-
+        $this->markTestIncomplete();
     }
 
     /** @test */
     public function get_human_ended_at_gets_the_human_name_for_the_ended_at_location(){
+        $this->markTestIncomplete();
 
     }
 
     /** @test */
     public function it_has_a_relationship_to_the_json_points_file(){
+        $this->markTestIncomplete();
 
     }
 
     /** @test */
     public function points_returns_the_contents_of_the_points_file_as_an_array(){
+        $this->markTestIncomplete();
 
     }
 
