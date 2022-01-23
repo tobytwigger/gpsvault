@@ -25,7 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('nominatim', fn() => new Nominatim('https://nominatim.openstreetmap.org/'));
     }
 
     /**

@@ -194,7 +194,8 @@ return [
         \App\Services\Analysis\AnalysisServiceProvider::class,
         \App\Integrations\Strava\StravaServiceProvider::class,
         \App\Services\Archive\ArchiveServiceProvider::class,
-        \App\Integrations\Dropbox\DropboxServiceProvider::class
+        \App\Integrations\Dropbox\DropboxServiceProvider::class,
+        \App\Services\Geocoding\GeocodingServiceProvider::class
 
     ],
 

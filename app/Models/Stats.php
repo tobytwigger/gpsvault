@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Services\File\FileUploader;
+use App\Services\Geocoding\Geocoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
@@ -122,29 +123,12 @@ class Stats extends Model
         return $this->belongsTo(File::class);
     }
 
-    private function getResults($lat, $lon)
-    {
-//        $result = app('nominatim')->find(
-//            app('nominatim')->newReverse()->latlon($lat, $lon)
-//        );
-//        if(array_key_exists('address', $result)) {
-//            $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
-//            return join(', ', array_slice($address, 0, 4));
-//        }
-        return null;
-    }
-
     public function getHumanStartedAtAttribute()
     {
         if(!$this->start_latitude || !$this->start_longitude) {
             return null;
         }
-
-        return cache()->remember(
-            'findlatlong-' . $this->start_latitude . $this->start_longitude,
-            1000000,
-            fn() => $this->getResults($this->start_latitude, $this->start_longitude)
-        );
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_latitude, $this->start_longitude);
     }
 
     public function getHumanEndedAtAttribute()
@@ -152,11 +136,7 @@ class Stats extends Model
         if(!$this->end_latitude || !$this->end_longitude) {
             return null;
         }
-        return cache()->remember(
-            'findlatlong-' . $this->end_latitude . $this->end_longitude,
-            1000000,
-            fn() => $this->getResults($this->end_latitude, $this->end_longitude)
-        );
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_latitude, $this->end_longitude);
     }
 
     public static function default()
