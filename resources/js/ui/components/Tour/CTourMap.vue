@@ -9,10 +9,10 @@
 <script>
 import CMap from '../CMap';
 export default {
-    name: "CRouteMap",
+    name: "CTourMap",
     components: {CMap},
     props: {
-        stats: {
+        tour: {
             required: true,
             type: Object
         }
@@ -24,7 +24,7 @@ export default {
         }
     },
     mounted() {
-        axios.get(route('stats.geojson', this.stats.id))
+        axios.get(route('tour.geojson', this.tour.id))
             .then(response => this.geojson = response.data)
             .then(() => this.loading = false);
     },

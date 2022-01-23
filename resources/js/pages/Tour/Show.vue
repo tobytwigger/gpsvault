@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper title="Tours">
+    <c-app-wrapper :title="tour.name ? tour.name : 'New Tour'">
         <v-tabs
             v-model="tab"
             centered
@@ -49,8 +49,7 @@
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        Map
-<!--                        <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>-->
+                        <c-tour-map :tour="tour"></c-tour-map>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -111,10 +110,11 @@ import CStageForm from '../../ui/components/Stage/CStageForm';
 import CStageTable from '../../ui/components/Stage/CStageTable';
 import CPaginationIterator from '../../ui/components/CPaginationIterator';
 import CStageCard from '../../ui/components/Stage/CStageCard';
+import CTourMap from '../../ui/components/Tour/CTourMap';
 
 export default {
     name: "Show",
-    components: {CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
+    components: {CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
     props: {
         tour: {
             required: true,

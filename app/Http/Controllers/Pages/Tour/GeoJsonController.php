@@ -16,12 +16,16 @@ class GeoJsonController extends Controller
     {
         $this->authorize('view', $tour);
 
-        $points = collect($stats->points())
-            ->filter(fn(array $point) => ($point['latitude'] ?? null) !== null && ($point['longitude'] ?? null) !== null)
-            ->map(fn(array $point) => new Coordinate($point['latitude'], $point['longitude']));
-
         $polyline = new Polyline();
-        $polyline->addPoints($points->all());
+        foreach($tour->stages as $stage) {
+            if($stage->route_id) {
+                $points = collect($stage->route->stats()->orderByPreference()->whereNotNull('json_points_file_id')->first()
+                    ?->points())
+                    ?->filter(fn(array $point) => ($point['latitude'] ?? null) !== null && ($point['longitude'] ?? null) !== null)
+                    ?->map(fn(array $point) => new Coordinate($point['latitude'], $point['longitude']));
+                $polyline->addPoints($points->all());
+            }
+        }
 
         return $polyline->format(new GeoJSON());
     }

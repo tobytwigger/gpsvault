@@ -12,9 +12,14 @@ class TourPointsController extends Controller
     {
         $this->authorize('view', $tour);
 
+        $points = collect();
+        foreach($tour->stages as $stage) {
+            if($stage->route_id) {
+                $points = $points->merge($stage->route->stats()->orderByPreference()->whereNotNull('json_points_file_id')->first()?->points());
+            }
+        }
 
-
-        return $stats->points();
+        return $points;
     }
 
 }

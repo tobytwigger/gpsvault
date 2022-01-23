@@ -95,7 +95,7 @@ class PointsTest extends TestCase
 
         $response = $this->getJson(route('tour.points', $tour));
         $json = $response->decodeResponseJson();
-        $this->assertEquals([], $json);
+        $json->assertExact([]);
     }
 
     /** @test */

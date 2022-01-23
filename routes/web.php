@@ -61,7 +61,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::resource('settings', \App\Http\Controllers\Pages\Settings\SettingsController::class)->only(['index', 'store']);
 
     /* Stats */
-    Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\TourPointsController::class, 'show'])->name('stats.points');
+    Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\StatsPointsController::class, 'show'])->name('stats.points');
     Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Pages\Stats\GeoJsonController::class, 'show'])->name('stats.geojson');
 
 
@@ -69,11 +69,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     // UNTESTED
 
     Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
-
-//    Route::get('/activity/stats/{stats}/chart', [\App\Http\Controllers\Api\StatsController::class, 'chart'])->name('activity.stats.chart');
-//    Route::get('/activity/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojson'])->name('activity.stats.geojson');
-//    Route::get('/route/stats/{stats}/geojson', [\App\Http\Controllers\Api\StatsController::class, 'geojsonRoute'])->name('route.stats.geojson');
-
 
     Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');
