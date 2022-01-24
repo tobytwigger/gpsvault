@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Stats\Addition\StatAdder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,10 @@ class Tour extends Model
         'marked_as_finished_at' => 'datetime'
     ];
 
+    protected $appends = [
+        'distance', 'elevation_gain'
+    ];
+
     protected static function booted()
     {
         static::creating(function(Tour $tour) {
@@ -31,6 +36,32 @@ class Tour extends Model
     public function stages()
     {
         return $this->hasMany(Stage::class)->ordered();
+    }
+
+    private function getStatAdder(): StatAdder
+    {
+        $adder = new StatAdder();
+        foreach($this->stages as $stage) {
+            if($stat = $stage->route->stats()->orderByPreference()->first()) {
+                $adder->push($stat);
+            }
+        }
+        return $adder;
+    }
+
+    public function getStatsAttribute()
+    {
+        return $this->getStatAdder()->toArray();
+    }
+
+    public function getDistanceAttribute()
+    {
+        return $this->getStatAdder()->distance();
+    }
+
+    public function getElevationGainAttribute()
+    {
+        return $this->getStatAdder()->elevationGain();
     }
 
 }

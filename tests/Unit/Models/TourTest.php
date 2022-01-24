@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Models;
 
+use App\Models\Route;
 use App\Models\Stage;
+use App\Models\Stats;
 use App\Models\Tour;
 use Tests\TestCase;
 
@@ -44,6 +46,51 @@ class TourTest extends TestCase
         $tour->save();
 
         $this->assertEquals($this->user->id, $tour->refresh()->user_id);
+    }
+
+    /** @test */
+    public function it_appends_the_distance(){
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000]);
+        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333]);
+
+        $this->assertEquals(129333, $tour->distance);
+    }
+
+    /** @test */
+    public function it_appends_the_elevation_gain(){
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['elevation_gain' => 1000]);
+        $stat2 = Stats::factory()->route($route2)->create(['elevation_gain' => 500]);
+
+        $this->assertEquals(1500, $tour->elevation_gain);
+    }
+
+    /** @test */
+    public function the_stats_can_be_loaded(){
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000, 'elevation_gain' => 1000]);
+        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333, 'elevation_gain' => 500]);
+
+        $this->assertEquals([
+            'distance' => 129333,
+            'elevation_gain' => 1500
+        ], $tour->stats);
     }
 
 }

@@ -19,28 +19,38 @@
             {{ tour.description }}
         </v-card-subtitle>
 
-<!--        <v-card-text>-->
-<!--            <v-chip-->
-<!--                outlined-->
-<!--                class="ma-2"-->
-<!--                color="indigo"-->
-<!--            >-->
-<!--                <v-icon left>-->
-<!--                    mdi-ruler-->
-<!--                </v-icon>-->
-<!--                {{ convertDistance(tour.distance) }}-->
-<!--            </v-chip>-->
+        <v-card-text>
+            <v-chip
+                outlined
+                class="ma-2"
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-ruler
+                </v-icon>
+                {{ convertDistance(tour.distance) }}
+            </v-chip>
+
+            <v-chip
+                outlined
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-calendar-today
+                </v-icon>
+                {{ tour.stages.length }} day ride
+            </v-chip>
 
 <!--            <v-chip-->
 <!--                outlined-->
 <!--                color="indigo"-->
 <!--            >-->
 <!--                <v-icon left>-->
-<!--                    mdi-calendar-range-->
+<!--                    mdi-image-filter-hdr-->
 <!--                </v-icon>-->
-<!--                {{ toDateTime(tour.started_at) }}-->
+<!--                {{ convertElevation(tour.elevation_gain) }}-->
 <!--            </v-chip>-->
-<!--        </v-card-text>-->
+        </v-card-text>
 
         <v-card-actions>
             <v-btn
@@ -74,6 +84,10 @@ export default {
     methods: {
         convertDistance(value) {
             let converted = this.convert(value, 'distance');
+            return converted.value + converted.unit;
+        },
+        convertElevation(value) {
+            let converted = this.convert(value, 'elevation');
             return converted.value + converted.unit;
         },
         toDateTime(value) {

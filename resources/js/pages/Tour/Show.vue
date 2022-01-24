@@ -42,7 +42,7 @@
                         </v-row>
                     </v-col>
                     <v-col>
-                        Total distance, total elevation etc.
+                        <c-stats :schema="statSchema"></c-stats>
 <!--                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>-->
 <!--                        <div v-else>No stats available</div>-->
                     </v-col>
@@ -96,10 +96,14 @@ import CStageCard from 'ui/components/Stage/CStageCard';
 import CTourMap from 'ui/components/Tour/CTourMap';
 import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
 import CTourForm from '../../ui/components/Tour/CTourForm';
+import CStats from '../../ui/components/CStats';
+import stats from '../../ui/mixins/stats';
 
 export default {
     name: "Show",
+    mixins: [stats],
     components: {
+        CStats,
         CTourForm,
         CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
     props: {
@@ -123,6 +127,13 @@ export default {
                     this.stageForm.reset();
                 }
             });
+        }
+    },
+    computed: {
+        allStats() {
+            return [
+                this.tour.stats
+            ]
         }
     }
 }

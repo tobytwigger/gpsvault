@@ -51,16 +51,19 @@ class StatsFactory extends Factory
         ];
     }
 
-    public function activity(Activity $activity)
+    public function activity(Activity $activity = null)
     {
+        $activity = $activity ?? Activity::factory()->create();
         return $this->state(fn(array $attributes) => [
             'stats_id' => $activity->id,
             'stats_type' => Activity::class
         ]);
     }
 
-    public function route(Route $route)
+    public function route(Route $route = null)
     {
+        $route = $route ?? Route::factory()->create();
+
         return $this->state(fn(array $attributes) => [
             'stats_id' => $route->id,
             'stats_type' => Route::class
