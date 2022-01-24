@@ -125,7 +125,6 @@ export default {
                     : route('tour.store'),
                 {
                     onSuccess: () => {
-                        this.duplicateTour = null;
                         this.form.reset();
                         this.updateFromOldTour();
                         this.showDialog = false;

@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import CAppWrapper from '../../../ui/layouts/CAppWrapper';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
 export default {
     name: "Index",
     components: {CAppWrapper}

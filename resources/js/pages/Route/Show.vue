@@ -115,15 +115,15 @@
 
 <script>
 import moment from 'moment';
-import CAppWrapper from '../../ui/layouts/CAppWrapper';
-import CRouteFileFormDialog from '../../ui/components/Route/CRouteFileFormDialog';
-import CManageRouteMedia from '../../ui/components/Route/CManageRouteMedia';
-import stats from '../../ui/mixins/stats';
-import CStats from '../../ui/components/CStats';
-import CRouteMap from '../../ui/components/Route/CRouteMap';
-import CRouteForm from '../../ui/components/Route/CRouteForm';
-import CDeleteRouteButton from '../../ui/components/Route/CDeleteRouteButton';
-import CUploadRouteFileButton from '../../ui/components/Route/CUploadRouteFileButton';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
+import CRouteFileFormDialog from 'ui/components/Route/CRouteFileFormDialog';
+import CManageRouteMedia from 'ui/components/Route/CManageRouteMedia';
+import stats from 'ui/mixins/stats';
+import CStats from 'ui/components/CStats';
+import CRouteMap from 'ui/components/Route/CRouteMap';
+import CRouteForm from 'ui/components/Route/CRouteForm';
+import CDeleteRouteButton from 'ui/components/Route/CDeleteRouteButton';
+import CUploadRouteFileButton from 'ui/components/Route/CUploadRouteFileButton';
 
 export default {
     name: "Show",

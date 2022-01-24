@@ -212,9 +212,9 @@ import CLineGraph from 'ui/components/CLineGraph';
 import CActivityAnalysis from 'ui/components/Activity/CActivityAnalysis';
 import strava from 'ui/mixins/strava';
 import moment from 'moment';
-import CManageActivityMedia from '../../ui/components/Activity/CManageActivityMedia';
-import CStats from '../../ui/components/CStats';
-import CActivityMap from '../../ui/components/Activity/CActivityMap';
+import CManageActivityMedia from 'ui/components/Activity/CManageActivityMedia';
+import CStats from 'ui/components/CStats';
+import CActivityMap from 'ui/components/Activity/CActivityMap';
 
 export default {
     name: "Show",

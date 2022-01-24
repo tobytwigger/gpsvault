@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import CAppWrapper from '../../ui/layouts/CAppWrapper';
-import CPaginationIterator from '../../ui/components/CPaginationIterator';
-import CRouteCard from '../../ui/components/Route/CRouteCard';
-import CRouteForm from '../../ui/components/Route/CRouteForm';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
+import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CRouteCard from 'ui/components/Route/CRouteCard';
+import CRouteForm from 'ui/components/Route/CRouteForm';
 export default {
     name: "Index",
     components: {CRouteForm, CRouteCard, CPaginationIterator, CAppWrapper},

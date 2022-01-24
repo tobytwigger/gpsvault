@@ -106,7 +106,7 @@ import CTwoFactorAuthenticationForm from 'ui/components/Settings/CTwoFactorAuthe
 import CUnitSetting from 'ui/components/Settings/CUnitSetting';
 import CDarkMode from 'ui/components/Settings/CDarkMode';
 import CSystemStravaClient from 'ui/components/Settings/CSystemStravaClient';
-import CStatsOrderSetting from '../../ui/components/Settings/CStatsOrderSetting';
+import CStatsOrderSetting from 'ui/components/Settings/CStatsOrderSetting';
 export default {
     name: "Index",
     components: {

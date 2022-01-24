@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="tour.name ? tour.name : 'New Tour'">
+    <c-app-wrapper :title="tour.name ? tour.name : 'New Tour'" :action-sidebar="true">
         <v-tabs
             v-model="tab"
             centered
@@ -70,33 +70,16 @@
         <template #sidebar>
             <v-list>
                 <v-list-item>
-                    Delete route
-<!--                    <c-delete-route-button :route-model="routeModel"></c-delete-route-button>-->
-                </v-list-item>
-                <v-list-item v-if="!routeModel.file_id">
-                    Upload/download tour stuff
-<!--                    <c-upload-route-file-button :route-model="routeModel"></c-upload-route-file-button>-->
+                    <c-delete-tour-button :tour="tour"></c-delete-tour-button>
                 </v-list-item>
                 <v-list-item>
-<!--                    <c-route-form :old-route="routeModel" title="Edit route" button-text="Update">-->
-<!--                        <template v-slot:activator="{trigger,showing}">-->
+                    <c-tour-form :old-tour="tour" title="Edit tour" button-text="Update">
+                        <template v-slot:activator="{trigger,showing}">
                             <v-btn :disabled="showing" @click="trigger">
                                 Edit Tour
                             </v-btn>
-<!--                        </template>-->
-<!--                    </c-route-form>-->
-                </v-list-item>
-                <v-list-item>
-                    <v-select
-                        class="pt-2"
-                        v-model="activeDataSource"
-                        item-text="integration"
-                        item-value="integration"
-                        :items="allStats"
-                        hint="Choose which data sets to show"
-                        label="Data Source"
-                        dense
-                    ></v-select>
+                        </template>
+                    </c-tour-form>
                 </v-list-item>
             </v-list>
         </template>
@@ -105,16 +88,20 @@
 </template>
 
 <script>
-import CAppWrapper from '../../ui/layouts/CAppWrapper';
-import CStageForm from '../../ui/components/Stage/CStageForm';
-import CStageTable from '../../ui/components/Stage/CStageTable';
-import CPaginationIterator from '../../ui/components/CPaginationIterator';
-import CStageCard from '../../ui/components/Stage/CStageCard';
-import CTourMap from '../../ui/components/Tour/CTourMap';
+import CAppWrapper from 'ui/layouts/CAppWrapper';
+import CStageForm from 'ui/components/Stage/CStageForm';
+import CStageTable from 'ui/components/Stage/CStageTable';
+import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CStageCard from 'ui/components/Stage/CStageCard';
+import CTourMap from 'ui/components/Tour/CTourMap';
+import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
+import CTourForm from '../../ui/components/Tour/CTourForm';
 
 export default {
     name: "Show",
-    components: {CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
+    components: {
+        CTourForm,
+        CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
     props: {
         tour: {
             required: true,
