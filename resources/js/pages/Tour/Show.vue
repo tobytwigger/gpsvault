@@ -23,13 +23,21 @@
                                 <div v-else>
                                     No description
                                 </div>
-
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
                                 <div v-if="tour.notes">
                                     {{ tour.notes }}
                                 </div>
                                 <div v-else>
                                     No notes
                                 </div>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
+                                <c-activity-location-summary :started-at="tour.human_started_at" :ended-at="tour.human_ended_at"></c-activity-location-summary>
                             </v-col>
                         </v-row>
                         <v-row v-if="tour.marked_as_started_at">
@@ -98,11 +106,13 @@ import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
 import CTourForm from '../../ui/components/Tour/CTourForm';
 import CStats from '../../ui/components/CStats';
 import stats from '../../ui/mixins/stats';
+import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 
 export default {
     name: "Show",
     mixins: [stats],
     components: {
+        CActivityLocationSummary,
         CStats,
         CTourForm,
         CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},

@@ -32,7 +32,8 @@ class GeocoderRateLimiting implements Geocoder
 
     private function markAttempt()
     {
-        $this->cache->increment(static::CACHE_KEY);
+        $usage = $this->getUsage() + 1;
+        $this->cache->put(static::CACHE_KEY, $usage, 1);
     }
 
     public function getPlaceSummaryFromPosition(float $latitude, float $longitude): ?string

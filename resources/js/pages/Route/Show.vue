@@ -31,13 +31,21 @@
                                 <div v-else>
                                     No description
                                 </div>
-
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
                                 <div v-if="routeModel.notes">
                                     {{ routeModel.notes }}
                                 </div>
                                 <div v-else>
                                     No notes
                                 </div>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="px-8 pt-8">
+                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -124,10 +132,12 @@ import CRouteMap from 'ui/components/Route/CRouteMap';
 import CRouteForm from 'ui/components/Route/CRouteForm';
 import CDeleteRouteButton from 'ui/components/Route/CDeleteRouteButton';
 import CUploadRouteFileButton from 'ui/components/Route/CUploadRouteFileButton';
+import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 
 export default {
     name: "Show",
     components: {
+        CActivityLocationSummary,
         CUploadRouteFileButton,
         CDeleteRouteButton, CRouteForm, CRouteMap, CStats, CManageRouteMedia, CRouteFileFormDialog, CAppWrapper},
     props: {

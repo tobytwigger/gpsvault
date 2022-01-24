@@ -44,6 +44,54 @@ class StatsTest extends TestCase
     }
 
     /** @test */
+    public function get_human_started_at_returns_null_until_the_start_lat_and_long_are_set(){
+        $stats = Stats::factory()->activity(Activity::factory()->create())->create(['start_latitude' => null, 'start_longitude' => null]);
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('StartSummary');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $this->assertNull($stats->human_started_at);
+
+        $stats->start_latitude = 1;
+        $stats->save();
+        $this->assertNull($stats->human_started_at);
+
+        $stats->start_latitude = null;
+        $stats->start_longitude = 51;
+        $stats->save();
+        $this->assertNull($stats->human_started_at);
+
+        $stats->start_latitude = 1;
+        $stats->save();
+        $this->assertEquals('StartSummary', $stats->human_started_at);
+    }
+
+    /** @test */
+    public function get_human_ended_at_returns_null_until_the_end_lat_and_long_are_set(){
+        $stats = Stats::factory()->activity(Activity::factory()->create())->create(['end_latitude' => null, 'end_longitude' => null]);
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('EndSummary');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $this->assertNull($stats->human_ended_at);
+
+        $stats->end_latitude = 1;
+        $stats->save();
+        $this->assertNull($stats->human_ended_at);
+
+        $stats->end_latitude = null;
+        $stats->end_longitude = 51;
+        $stats->save();
+        $this->assertNull($stats->human_ended_at);
+
+        $stats->end_latitude = 1;
+        $stats->save();
+        $this->assertEquals('EndSummary', $stats->human_ended_at);
+    }
+
+
+
+    /** @test */
     public function it_has_a_relationship_to_the_json_points_file(){
         $jsonFile = File::factory()->activityPoints()->create();
 

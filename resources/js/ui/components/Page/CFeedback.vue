@@ -2,6 +2,7 @@
     <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
             <v-btn
+                v-if="$page.props.settings.bruit_api_key"
                 fab
                 small
                 v-bind="attrs"

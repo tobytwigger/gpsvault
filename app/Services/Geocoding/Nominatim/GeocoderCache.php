@@ -19,10 +19,15 @@ class GeocoderCache implements Geocoder
 
     public function getPlaceSummaryFromPosition(float $latitude, float $longitude): ?string
     {
-        return $this->cache->rememberForever(
-            sprintf('getPlaceSummaryFromPosition@%s:%s', $latitude, $longitude),
-            fn() => $this->geocoder->getPlaceSummaryFromPosition($latitude, $longitude)
-        );
+        $key = sprintf('getPlaceSummaryFromPosition@%s:%s', $latitude, $longitude);
+        if($this->cache->has($key)) {
+            return $this->cache->get($key);
+        }
+        $result = $this->geocoder->getPlaceSummaryFromPosition($latitude, $longitude);
+        if($result !== null) {
+            $this->cache->forever($key, $result);
+        }
+        return $result;
     }
 
 }

@@ -57,7 +57,7 @@ class TourController extends Controller
     public function show(Tour $tour)
     {
         return Inertia::render('Tour/Show', [
-            'tour' => $tour->load(['stages', 'stages.route'])->append('stats')
+            'tour' => $tour->load(['stages', 'stages.route'])->append(['stats', 'human_started_at', 'human_ended_at'])
         ]);
     }
 

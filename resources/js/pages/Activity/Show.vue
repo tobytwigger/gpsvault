@@ -53,28 +53,7 @@
                         </v-row>
                         <v-row>
                             <v-col class="px-8">
-                                <div v-if="hasStats && humanStartedAt && humanEndedAt">
-                                    <span v-if="humanStartedAt === humanEndedAt">Loop starting from </span>
-                                    <span v-else>Ride from</span>
-                                    <v-chip
-                                        class="ma-2"
-                                        color="green"
-                                        text-color="white"
-                                    >
-                                        <v-icon>mdi-map-marker</v-icon>
-                                        {{humanStartedAt}}
-                                    </v-chip>
-                                    <span v-if="humanStartedAt !== humanEndedAt"> to
-                                        <v-chip
-                                            class="ma-2"
-                                            color="green"
-                                            text-color="white"
-                                        >
-                                            <v-icon>mdi-map-marker</v-icon>
-                                            {{ humanEndedAt }}
-                                        </v-chip>
-                                    </span>
-                                </div>
+                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -215,10 +194,12 @@ import moment from 'moment';
 import CManageActivityMedia from 'ui/components/Activity/CManageActivityMedia';
 import CStats from 'ui/components/CStats';
 import CActivityMap from 'ui/components/Activity/CActivityMap';
+import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 
 export default {
     name: "Show",
     components: {
+        CActivityLocationSummary,
         CActivityMap,
         CStats,
         CManageActivityMedia,
