@@ -9,18 +9,26 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn
-            fab
-            small
-            @click="startTour"
-            class="px-2"
-        >
-            <v-icon>mdi-help</v-icon>
-        </v-btn>
+        <c-feedback class="mx-2"></c-feedback>
 
-        <c-add-item
-            class="px-2"
-        ></c-add-item>
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                    fab
+                    small
+                    @click="startTour"
+                    class="mx-2"
+                    v-bind="attrs"
+                    v-on="on"
+                >
+                    <v-icon>mdi-help</v-icon>
+                </v-btn>
+            </template>
+            <span>Help</span>
+        </v-tooltip>
+
+        <c-add-item class="mx-2"></c-add-item>
+
     </v-app-bar>
 
 </template>
@@ -28,9 +36,10 @@
 <script>
 
 import CAddItem from './CAddItem';
+import CFeedback from './CFeedback';
 export default {
     name: "CAppNavBar",
-    components: {CAddItem},
+    components: {CFeedback, CAddItem},
     props: {
         drawer: {
             required: true,

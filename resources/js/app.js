@@ -6,6 +6,13 @@ import Vue from 'vue';
 
 require('./bootstrap');
 
+import { applyPolyfills, defineCustomElements } from '@bruit/component/loader';
+Vue.config.ignoredElements = [/bruit-\w*/];
+
+applyPolyfills().then(() => {
+    defineCustomElements(window);
+});
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => require(`./pages/${name}.vue`),

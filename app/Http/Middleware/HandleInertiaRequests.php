@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Settings\BruitAPIKey;
 use App\Settings\DarkMode;
 use App\Settings\StatsOrder;
 use App\Settings\StravaClient;
@@ -46,7 +47,8 @@ class HandleInertiaRequests extends Middleware
                 'unit_system' => UnitSystem::getValue(),
                 'dark_mode' => DarkMode::getValue(),
                 'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null),
-                'stats_order_preference' => StatsOrder::getValue()
+                'stats_order_preference' => StatsOrder::getValue(),
+                'bruit_api_key' => BruitAPIKey::getValue()
             ],
             'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : []
         ]);

@@ -2,14 +2,19 @@
     <div>
         <v-menu offset-y :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                    fab
-                    small
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-icon>mdi-plus</v-icon>
-                </v-btn>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on: onTooltip, attrs: attrsTooltip }">
+                        <v-btn
+                            fab
+                            small
+                            v-bind="{...attrs, ...attrsTooltip}"
+                            v-on="{...on, ...onTooltip}"
+                        >
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Create</span>
+                </v-tooltip>
             </template>
             <v-list>
                 <c-activity-form title="Add new activity" button-text="Create">

@@ -64,8 +64,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\StatsPointsController::class, 'show'])->name('stats.points');
     Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Pages\Stats\GeoJsonController::class, 'show'])->name('stats.geojson');
 
-
-
     // UNTESTED
 
     Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
