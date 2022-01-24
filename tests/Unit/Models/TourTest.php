@@ -93,4 +93,19 @@ class TourTest extends TestCase
         ], $tour->stats);
     }
 
+    /** @test */
+    public function it_appends_the_distance_and_ignores_any_stages_without_a_route(){
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => null]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000]);
+        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333]);
+
+        $this->assertEquals(129333, $tour->distance);
+    }
+
 }

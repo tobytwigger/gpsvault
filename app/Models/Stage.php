@@ -31,13 +31,19 @@ class Stage extends Model implements Sortable
     {
         static::deleted(function(Stage $stage) {
             static::setNewOrder(
-                $stage->newQuery()->ordered()->pluck($stage->getKeyName())
+                $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
             );
         });
 
         static::updated(function(Stage $stage) {
             static::setNewOrder(
-                $stage->newQuery()->ordered()->pluck($stage->getKeyName())
+                $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
+            );
+        });
+
+        static::saved(function(Stage $stage) {
+            static::setNewOrder(
+                $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
             );
         });
     }
@@ -64,7 +70,7 @@ class Stage extends Model implements Sortable
 
     public function setStageNumber(int $stageNumber)
     {
-        $baseOrder = $this->newQuery()->ordered()->where('id', '!=', $this->id)->pluck($this->getKeyName());
+        $baseOrder = $this->buildSortQuery()->ordered()->where('id', '!=', $this->id)->pluck($this->getKeyName());
         $baseOrder->splice($stageNumber - 1, 0, $this->id);
         static::setNewOrder($baseOrder);
     }

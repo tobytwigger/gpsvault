@@ -47,6 +47,31 @@ class StageTest extends TestCase
     }
 
     /** @test */
+    public function it_sets_the_stage_number_relative_to_a_tour(){
+        $tour1 = Tour::factory()->create();
+        Stage::factory()->count(5)->create(['tour_id' => $tour1->id]);
+
+        $tour = Tour::factory()->create();
+        $stage1 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
+        $stage2 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
+        $stage3 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
+        $stage4 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
+
+        $this->assertEquals(1, $stage1->refresh()->stage_number);
+        $this->assertEquals(2, $stage2->refresh()->stage_number);
+        $this->assertEquals(3, $stage3->refresh()->stage_number);
+        $this->assertEquals(4, $stage4->refresh()->stage_number);
+
+        $stage2->setStageNumber(4);
+
+        $this->assertEquals(1, $stage1->refresh()->stage_number);
+        $this->assertEquals(2, $stage3->refresh()->stage_number);
+        $this->assertEquals(3, $stage4->refresh()->stage_number);
+        $this->assertEquals(4, $stage2->refresh()->stage_number);
+
+    }
+
+    /** @test */
     public function setStageNumber_sets_the_stage_number_and_reorders_stages(){
         $tour = Tour::factory()->create();
         $stage1 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
