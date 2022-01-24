@@ -2,15 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\ActivityStats;
-use App\Models\ConnectionLog;
+use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 class DropboxTokensFactory extends Factory
 {
-    protected $model = ConnectionLog::class;
+    protected $model = DropboxToken::class;
 
     /**
      * Define the model's default state.

@@ -21,7 +21,6 @@ class UserTest extends TestCase
 
         $user->activities()->delete();
         $user->files()->delete();
-        $user->connectionLogs()->delete();
 
         $syncs = Sync::factory()->count(5)->create(['user_id' => $user->id]);
         $activities = Activity::factory()->count(5)->create(['user_id' => $user->id]);

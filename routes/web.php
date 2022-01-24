@@ -71,7 +71,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
     Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');
     Route::get('/integration/strava', [\App\Http\Controllers\Pages\IntegrationController::class, 'strava'])->name('integration.strava');
-    Route::get('/integration/{integration}/logs', [\App\Http\Controllers\Pages\ConnectionLogController::class, 'index'])->name('integration.logs');
 
 });
 

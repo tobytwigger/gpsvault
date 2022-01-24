@@ -5,7 +5,6 @@ namespace App\Integrations\Dropbox\Tasks;
 use App\Integrations\Dropbox\Client\Dropbox;
 use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Models\Activity;
-use App\Models\ConnectionLog;
 use App\Services\Sync\Sync;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
@@ -46,9 +45,6 @@ class ExportFullBackup extends Task
         }
         foreach(Sync::where('user_id', $this->user()->id)->get() as $sync) {
             $zipCreator->add($sync);
-        }
-        foreach(ConnectionLog::where('user_id', $this->user()->id)->get() as $connectionLog) {
-            $zipCreator->add($connectionLog);
         }
         $file = $zipCreator->archive();
 

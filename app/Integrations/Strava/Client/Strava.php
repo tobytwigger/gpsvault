@@ -2,30 +2,13 @@
 
 namespace App\Integrations\Strava\Client;
 
-use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\StravaClient;
 use App\Integrations\Strava\Models\StravaClient as StravaClientModel;
-use App\Integrations\Strava\Client\Log\ConnectionLog;
-use Carbon\Carbon;
-use GuzzleHttp\Client;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Ramsey\Uuid\Uuid;
 
 class Strava
 {
-
-    protected string $clientUuid;
-
-    protected ClientFactory $clientFactory;
-
-    private ?int $userId = null;
-
-    public function __construct(ClientFactory $clientFactory, ?int $userId = null)
-    {
-        $this->clientFactory = $clientFactory;
-        $this->userId = $userId;
-        $this->setUserId($this->userId ?? Auth::id());
-    }
 
     public function redirectUrl(
         string $state,
@@ -44,18 +27,14 @@ class Strava
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
     }
 
-    public function setUserId(?int $userId = null): Strava
+    public function client(?User $user = null): StravaClient
     {
-        $this->userId = $userId;
-        return $this;
-    }
-
-    public function client(StravaClientModel $stravaClientModel): StravaClient
-    {
-        if(!$this->userId) {
-            throw new \Exception('No user ID has been given to the Strava client');
-        }
-        return $this->clientFactory->create($this->userId, $stravaClientModel);
+        $user = $user ?? (
+            Auth::check()
+                ? Auth::user()
+                : throw new \Exception('No user has been given to the Strava client')
+            );
+        return new StravaClient($user);
     }
 
 }

@@ -28,17 +28,21 @@ trait UsesStrava
         return $this->hasMany(StravaToken::class);
     }
 
-    public function availableClient(): StravaClient
+    public function availableClient(array $excluding = []): StravaClient
     {
         if($this->can('manage-strava-clients')) {
-            $client = $this->ownedClients()->available()->first()
-                ?? $this->sharedClients()->available()->first();
+            $client = $this
+                ->ownedClients()
+                ->available()
+                ->excluding($excluding)
+                ->first()
+                ?? $this->sharedClients()->available()->excluding($excluding)->first();
             if($client) {
                 return $client;
             }
         }
         if($this->can('use-public-strava-clients')) {
-            $client = StravaClient::public()->available()->first();
+            $client = StravaClient::public()->available()->excluding($excluding)->first();
             if($client) {
                 return $client;
             }

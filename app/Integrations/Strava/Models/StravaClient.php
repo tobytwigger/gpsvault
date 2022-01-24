@@ -3,7 +3,6 @@
 namespace App\Integrations\Strava\Models;
 
 use App\Integrations\Strava\StravaToken;
-use App\Models\ConnectionLog;
 use App\Models\User;
 use Database\Factories\StravaClientFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -74,6 +73,13 @@ class StravaClient extends Model
         return $this->getInvitationLink()?->expired();
     }
 
+    public static function scopeExcluding(Builder $query, array $excluding)
+    {
+        $query->when(!empty($excluding),
+            fn(Builder $query) => $query->whereNotIn('id', $excluding)
+        );
+    }
+
     public function getInvitationLink(): ?Link
     {
         if($this->invitation_link_uuid !== null) {
@@ -98,11 +104,6 @@ class StravaClient extends Model
     public static function scopeEnabled(Builder $query)
     {
         $query->where('enabled', true);
-    }
-
-    public function connectionLogs(): Collection
-    {
-        return ConnectionLog::whereAdditionalData('strava_client_id', $this->id)->get();
     }
 
     public function redirectUrl(): string

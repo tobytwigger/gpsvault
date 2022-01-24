@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Integration;
-use App\Integrations\Strava\Client\Log\ConnectionLog;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -26,8 +24,6 @@ class IntegrationController extends Controller
         );
 
         $integration->disconnect(Auth::user());
-
-        app(ConnectionLog::class)->setIntegration($integration->id())->setUserId(Auth::id())->success('Unlinked account from Strava');
 
         return redirect()->route('sync.index');
     }

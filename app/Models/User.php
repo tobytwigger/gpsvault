@@ -69,13 +69,7 @@ class User extends Authenticatable
             $user->dropboxTokens()->delete();
             $user->activities()->delete();
             $user->files()->delete();
-            $user->connectionLogs()->delete();
         });
-    }
-
-    public function connectionLogs()
-    {
-        return $this->hasMany(ConnectionLog::class);
     }
 
     public function dropboxTokens()

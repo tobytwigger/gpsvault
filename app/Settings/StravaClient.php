@@ -2,6 +2,7 @@
 
 namespace App\Settings;
 
+use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use FormSchema\Schema\Field;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Settings\Types\GlobalSetting;
@@ -27,7 +28,7 @@ class StravaClient extends GlobalSetting
     {
         $clientId = static::getValue($id);
         if($clientId === null) {
-            throw new ModelNotFoundException('No system client has been set');
+            throw new ClientNotAvailable('No system client has been set');
         }
         return \App\Integrations\Strava\Models\StravaClient::findOrFail($clientId);
     }

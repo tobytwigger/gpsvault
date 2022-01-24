@@ -5,7 +5,6 @@ namespace App\Tasks;
 use App\Integrations\Strava\Client\Import\ImportStravaActivity;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
-use App\Models\ConnectionLog;
 use App\Services\Sync\Sync;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
@@ -40,13 +39,6 @@ class CreateBackupTask extends Task
             $syncCount++;
         }
         $this->line(sprintf('Added %u syncs.', $syncCount));
-
-        $connectionLogCount = 0;
-        foreach(ConnectionLog::where('user_id', $this->user()->id)->get() as $connectionLog) {
-            $zipCreator->add($connectionLog);
-            $connectionLogCount++;
-        }
-        $this->line(sprintf('Added %u connection logs.', $connectionLogCount));
 
         $this->offerBail('Cancelled without generating an archive.');
 
