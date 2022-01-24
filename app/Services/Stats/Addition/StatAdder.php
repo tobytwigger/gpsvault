@@ -28,7 +28,11 @@ class StatAdder
     {
         return [
             'distance' => $this->distance(),
-            'elevation_gain' => $this->elevationGain()
+            'elevation_gain' => $this->elevationGain(),
+            'start_latitude' => $this->startLatitude(),
+            'start_longitude' => $this->startLongitude(),
+            'end_latitude' => $this->endLatitude(),
+            'end_longitude' => $this->endLongitude(),
         ];
     }
 
@@ -48,6 +52,34 @@ class StatAdder
     {
         return $this->propertyHasContent('elevation_gain')
             ? $this->stats->reduce(fn($cumulative, Stats $stat) => $cumulative += $stat->elevation_gain ?? 0, 0)
+            : null;
+    }
+
+    public function startLongitude(): ?float
+    {
+        return $this->propertyHasContent('start_longitude')
+            ? $this->stats->first(fn(Stats $stat) => $stat->start_longitude !== null)?->start_longitude
+            : null;
+    }
+
+    public function startLatitude(): ?float
+    {
+        return $this->propertyHasContent('start_latitude')
+            ? $this->stats->first(fn(Stats $stat) => $stat->start_latitude !== null)?->start_latitude
+            : null;
+    }
+
+    public function endLongitude(): ?float
+    {
+        return $this->propertyHasContent('end_longitude')
+            ? $this->stats->last(fn(Stats $stat) => $stat->end_longitude !== null)?->end_longitude
+            : null;
+    }
+
+    public function endLatitude(): ?float
+    {
+        return $this->propertyHasContent('end_latitude')
+            ? $this->stats->last(fn(Stats $stat) => $stat->end_latitude !== null)->end_latitude
             : null;
     }
 

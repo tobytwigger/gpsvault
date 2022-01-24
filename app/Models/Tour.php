@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\Geocoding\Geocoder;
 use App\Services\Stats\Addition\StatAdder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,9 @@ class Tour extends Model
     ];
 
     protected $appends = [
-        'distance', 'elevation_gain'
+        'distance', 'elevation_gain',
+        'human_started_at',
+        'human_ended_at'
     ];
 
     protected static function booted()
@@ -62,6 +65,27 @@ class Tour extends Model
     public function getElevationGainAttribute()
     {
         return $this->getStatAdder()->elevationGain();
+    }
+
+    public function getHumanStartedAtAttribute()
+    {
+        $latitude = $this->getStatAdder()->startLatitude();
+        $longitude = $this->getStatAdder()->startLongitude();
+        if($latitude === null || $longitude === null) {
+            return null;
+        }
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
+    }
+
+    public function getHumanEndedAtAttribute()
+    {
+        $latitude = $this->getStatAdder()->endLatitude();
+        $longitude = $this->getStatAdder()->endLongitude();
+
+        if($latitude === null || $longitude === null) {
+            return null;
+        }
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
     }
 
 }

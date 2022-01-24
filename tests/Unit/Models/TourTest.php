@@ -6,6 +6,7 @@ use App\Models\Route;
 use App\Models\Stage;
 use App\Models\Stats;
 use App\Models\Tour;
+use App\Services\Geocoding\Geocoder;
 use Tests\TestCase;
 
 class TourTest extends TestCase
@@ -84,12 +85,16 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000, 'elevation_gain' => 1000]);
-        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333, 'elevation_gain' => 500]);
+        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000, 'elevation_gain' => 1000, 'start_latitude' => 1, 'start_longitude' => 2]);
+        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333, 'elevation_gain' => 500, 'end_latitude' => 3, 'end_longitude' => 4]);
 
         $this->assertEquals([
             'distance' => 129333,
-            'elevation_gain' => 1500
+            'elevation_gain' => 1500,
+            'start_latitude' => 1,
+            'start_longitude' => 2,
+            'end_latitude' => 3,
+            'end_longitude' => 4,
         ], $tour->stats);
     }
 
@@ -108,4 +113,97 @@ class TourTest extends TestCase
         $this->assertEquals(129333, $tour->distance);
     }
 
+    /** @test */
+    public function human_started_at_returns_the_started_at_attribute_from_geocoder(){
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => 1, 'start_longitude' => 51]);
+        $stat1 = Stats::factory()->route($route2)->create(['end_latitude' => 2, 'end_longitude' => 54]);
+
+        $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
+    }
+
+    /** @test */
+    public function human_started_at_returns_null_if_stats_have_start_latitude_or_longitude_as_null(){
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => null, 'start_longitude' => null]);
+
+        $this->assertNull($tour->human_started_at);
+
+        $stat1->start_latitude = 1;
+        $stat1->save();
+        $this->assertNull($tour->refresh()->human_started_at);
+
+        $stat1->start_longitude = 51;
+        $stat1->start_latitude = null;
+        $stat1->save();
+        $this->assertNull($tour->refresh()->human_started_at);
+
+        $stat1->start_latitude = 1;
+        $stat1->save();
+
+        $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
+    }
+
+    /** @test */
+    public function human_ended_at_returns_the_ended_at_attribute_from_geocoder(){
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(2, 54)->willReturn('Oxford, UK');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => 1, 'start_longitude' => 51]);
+        $stat1 = Stats::factory()->route($route2)->create(['end_latitude' => 2, 'end_longitude' => 54]);
+
+        $this->assertEquals('Oxford, UK', $tour->human_ended_at);
+    }
+
+    /** @test */
+    public function human_ended_at_returns_null_if_stats_have_end_latitude_or_longitude_as_null(){
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+
+        $stat1 = Stats::factory()->route($route1)->create(['end_latitude' => null, 'end_longitude' => null]);
+
+        $this->assertNull($tour->human_ended_at);
+
+        $stat1->end_latitude = 1;
+        $stat1->save();
+        $this->assertNull($tour->refresh()->human_ended_at);
+
+        $stat1->end_longitude = 51;
+        $stat1->end_latitude = null;
+        $stat1->save();
+        $this->assertNull($tour->refresh()->human_ended_at);
+
+        $stat1->end_latitude = 1;
+        $stat1->save();
+
+        $this->assertEquals('Milton Keynes, UK', $tour->human_ended_at);
+    }
 }
