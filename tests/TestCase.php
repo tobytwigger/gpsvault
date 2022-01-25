@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Console\Commands\InstallPermissions;
 use App\Models\User;
+use App\Services\Geocoding\Geocoder;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -24,6 +25,9 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $geocoder = $this->prophesize(Geocoder::class);
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
         Artisan::call(InstallPermissions::class);
         Carbon::setTestNow(Carbon::now());
         config()->set('inertia.testing.page_paths', array_merge(

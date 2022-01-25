@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\StravaRateLimited;
 use App\Models\Activity;
 use Carbon\Carbon;

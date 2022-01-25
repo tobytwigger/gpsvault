@@ -3,38 +3,21 @@
 namespace App\Integrations\Strava\Client;
 
 use App\Integrations\Strava\Client\Client\StravaClient;
-use App\Integrations\Strava\Models\StravaClient as StravaClientModel;
+use App\Integrations\Strava\Client\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Facade;
 
-class Strava
+/**
+ * @method static StravaClient client(?User $user = null) Get a strava client for the given or authenticated user.
+ */
+class Strava extends Facade
 {
 
-    public function redirectUrl(
-        string $state,
-        StravaClientModel $client
-    ): string
+    protected static function getFacadeAccessor()
     {
-        $params = [
-            'client_id' => $client->client_id,
-            'redirect_uri' => $client->redirectUrl(),
-            'response_type' => 'code',
-            'approval_prompt' => 'auto',
-            'scope' => 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write',
-            'state' => $state
-        ];
-
-        return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
+        return StravaClientFactory::class;
     }
 
-    public function client(?User $user = null): StravaClient
-    {
-        $user = $user ?? (
-            Auth::check()
-                ? Auth::user()
-                : throw new \Exception('No user has been given to the Strava client')
-            );
-        return new StravaClient($user);
-    }
 
 }

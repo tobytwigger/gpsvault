@@ -37,6 +37,10 @@ class StravaClient
         return $this->createHandler(Webhook::class);
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 
 
 }

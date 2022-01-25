@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -26,7 +26,9 @@ class StravaClientFactory extends Factory
             'webhook_verify_token' => Str::random(20),
             'invitation_link_uuid' => null,
             'used_15_min_calls' => 0,
-            'used_daily_calls' => 0
+            'used_daily_calls' => 0,
+            'limit_15_min' => 100,
+            'limit_daily' => 1000
         ];
     }
 }

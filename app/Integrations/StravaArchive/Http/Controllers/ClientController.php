@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -2,15 +2,10 @@
 
 namespace Tests\Feature\Settings;
 
-use App\Console\Commands\InstallPermissions;
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Settings\DarkMode;
 use App\Settings\UnitSystem;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Validation\ValidationException;
-use Inertia\Testing\Assert;
 use Tests\TestCase;
-use function Deployer\artisan;
 
 class SettingStoreTest extends TestCase
 {

@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Integrations\Strava\Models;
+namespace App\Integrations\Strava;
 
 
-use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
 trait UsesStrava

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Integrations\Dropbox\Models\DropboxToken;
-use App\Integrations\Strava\Models\UsesStrava;
+use App\Integrations\Strava\UsesStrava;
 use App\Services\Sync\Sync;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

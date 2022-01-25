@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Models;
+namespace App\Integrations\Strava\Client\Models;
 
 use App\Integrations\Strava\StravaToken;
 use App\Models\User;
@@ -40,6 +40,8 @@ class StravaClient extends Model
         'webhook_verify_token' => 'encrypted',
         'used_15_min_calls' => 'integer',
         'used_daily_calls' => 'integer',
+        'limit_15_min' => 'integer',
+        'limit_daily' => 'integer',
         'pending_calls' => 'integer',
         'invitation_link_expires_at' => 'datetime',
         'enabled' => 'boolean',
@@ -58,21 +60,6 @@ class StravaClient extends Model
         });
     }
 
-    public function getInvitationLinkAttribute(): ?string
-    {
-        return $this->getInvitationLink()?->getFullUrl();
-    }
-
-    public function getInvitationLinkExpiresAtAttribute(): ?\DateTimeInterface
-    {
-        return $this->getInvitationLink()?->expiry;
-    }
-
-    public function getInvitationLinkExpiredAttribute(): ?bool
-    {
-        return $this->getInvitationLink()?->expired();
-    }
-
     public static function scopeExcluding(Builder $query, array $excluding)
     {
         $query->when(!empty($excluding),
@@ -80,35 +67,14 @@ class StravaClient extends Model
         );
     }
 
-    public function getInvitationLink(): ?Link
-    {
-        if($this->invitation_link_uuid !== null) {
-            return app(LinkRepository::class)->findByUuid($this->invitation_link_uuid);
-        }
-        return null;
-    }
-
-    public function getIsConnectedAttribute(): bool
-    {
-        if(Auth::check()) {
-            return $this->tokens()->forUser(Auth::id())->count() > 0;
-        }
-        return false;
-    }
-
-    public function tokens()
-    {
-        return $this->hasMany(StravaToken::class);
-    }
-
     public static function scopeEnabled(Builder $query)
     {
         $query->where('enabled', true);
     }
 
-    public function redirectUrl(): string
+    public function tokens()
     {
-        return route('strava.callback', ['client' => $this->id]);
+        return $this->hasMany(StravaToken::class);
     }
 
     public static function scopeForUser(Builder $query, int $userId)
@@ -136,18 +102,13 @@ class StravaClient extends Model
      */
     public function hasSpaces(): bool
     {
-        return $this->used_15_min_calls < 100 && $this->used_daily_calls < 1000;
+        return $this->used_15_min_calls < $this->limit_15_min && $this->used_daily_calls < $this->limit_daily;
     }
 
     public static function scopeWithSpaces(Builder $query)
     {
-        $query->where('used_15_min_calls', '<', 100)
-            ->where('used_daily_calls', '<', 1000);
-    }
-
-    public static function scopeAvailable(Builder $query)
-    {
-        $query->enabled()->withSpaces();
+        $query->whereRaw('used_15_min_calls < limit_15_min')
+            ->whereRaw('used_daily_calls < limit_daily');
     }
 
     public static function scopePublic(Builder $query)
@@ -155,10 +116,35 @@ class StravaClient extends Model
         $query->where('public', true);
     }
 
-    public function reserveSpace()
+    public function getIsConnectedAttribute(): bool
     {
-        $this->pending_calls = $this->pending_calls + 1;
-        $this->save();
+        if(Auth::check()) {
+            return $this->tokens()->enabled()->active()->forUser(Auth::id())->count() > 0;
+        }
+        return false;
+    }
+
+    public function getInvitationLinkAttribute(): ?string
+    {
+        return $this->getInvitationLink()?->getFullUrl();
+    }
+
+    public function getInvitationLinkExpiresAtAttribute(): ?\DateTimeInterface
+    {
+        return $this->getInvitationLink()?->expiry;
+    }
+
+    public function getInvitationLinkExpiredAttribute(): ?bool
+    {
+        return $this->getInvitationLink()?->expired();
+    }
+
+    public function getInvitationLink(): ?Link
+    {
+        if($this->invitation_link_uuid !== null) {
+            return app(LinkRepository::class)->findByUuid($this->invitation_link_uuid);
+        }
+        return null;
     }
 
     protected static function newFactory()

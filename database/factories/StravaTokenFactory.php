@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\StravaToken;
 use App\Models\Team;
 use App\Models\User;

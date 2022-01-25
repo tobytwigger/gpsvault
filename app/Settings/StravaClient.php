@@ -24,13 +24,13 @@ class StravaClient extends GlobalSetting
      * @param int|null $id The ID of the model to query against
      * @throws ModelNotFoundException
      */
-    public static function getClientModelOrFail(int $id = null): \App\Integrations\Strava\Models\StravaClient
+    public static function getClientModelOrFail(int $id = null): \App\Integrations\Strava\Client\Models\StravaClient
     {
         $clientId = static::getValue($id);
         if($clientId === null) {
             throw new ClientNotAvailable('No system client has been set');
         }
-        return \App\Integrations\Strava\Models\StravaClient::findOrFail($clientId);
+        return \App\Integrations\Strava\Client\Models\StravaClient::findOrFail($clientId);
     }
 
     public function rules(): array|string

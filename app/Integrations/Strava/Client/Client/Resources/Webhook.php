@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Client\Client\Resources;
 
 use App\Integrations\Strava\Client\Client\Resource;
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 
 class Webhook extends Resource
 {

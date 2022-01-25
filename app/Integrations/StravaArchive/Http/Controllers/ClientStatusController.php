@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Support\Facades\Auth;
 
 class ClientStatusController extends Controller

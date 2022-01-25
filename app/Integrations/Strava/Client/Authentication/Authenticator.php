@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava\Client\Authentication;
 
-use App\Integrations\Strava\Models\StravaClient as StravaClientModel;
+use App\Integrations\Strava\Client\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 use Carbon\Carbon;
 use GuzzleHttp\Client;

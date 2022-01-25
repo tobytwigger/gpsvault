@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava\Commands;
 
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\RateLimiter;
 

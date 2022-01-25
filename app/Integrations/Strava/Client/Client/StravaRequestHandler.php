@@ -41,7 +41,7 @@ class StravaRequestHandler
         }
     }
 
-    private function handleRequest(\App\Integrations\Strava\Models\StravaClient $client, string $method, string $uri, array $options = [], bool $authenticated = true): \Psr\Http\Message\ResponseInterface
+    private function handleRequest(\App\Integrations\Strava\Client\Models\StravaClient $client, string $method, string $uri, array $options = [], bool $authenticated = true): \Psr\Http\Message\ResponseInterface
     {
         try {
             $response = $this->guzzleClient->request($method, $uri, array_merge([
@@ -60,13 +60,13 @@ class StravaRequestHandler
         }
     }
 
-    private function markClientAsLimited(\App\Integrations\Strava\Models\StravaClient $client)
+    private function markClientAsLimited(\App\Integrations\Strava\Client\Models\StravaClient $client)
     {
         $client->used_15_min_calls = 100;
         $client->save();
     }
 
-    private function updateRateLimits(\Psr\Http\Message\ResponseInterface $response, \App\Integrations\Strava\Models\StravaClient $client)
+    private function updateRateLimits(\Psr\Http\Message\ResponseInterface $response, \App\Integrations\Strava\Client\Models\StravaClient $client)
     {
         // Get the rate limit usage from the header
         if($response->hasHeader('X-RateLimit-Usage')) {

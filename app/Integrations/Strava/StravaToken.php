@@ -2,9 +2,10 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Strava\Models\StravaClient;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Factories\StravaTokenFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,22 +27,6 @@ class StravaToken extends Model
     ];
 
     protected $fillable = [];
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope('enabled', function (Builder $builder) {
-            $builder->where('disabled', false);
-        });
-        static::addGlobalScope('not-expired', function (Builder $builder) {
-            $builder->where('expires_at', '>', Carbon::now()->addMinutes(2))
-                ->orWhereNotNull('refresh_token');
-        });
-    }
 
     public function stravaClient()
     {
@@ -80,9 +65,24 @@ class StravaToken extends Model
         $query->where('user_id', $userId);
     }
 
+    public static function scopeEnabled(Builder $query)
+    {
+        return $query->where('disabled', false);
+    }
+
+    public static function scopeActive(Builder $query)
+    {
+        $query->where('expires_at', '>', Carbon::now()->addMinutes(2));
+    }
+
     public function expired()
     {
         return $this->expires_at->subMinutes(2)->isPast();
+    }
+
+    protected static function newFactory()
+    {
+        return new StravaTokenFactory();
     }
 
 }
