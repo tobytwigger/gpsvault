@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Authentication\Authenticator;
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedExceptionTest;
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
 use App\Models\User;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Arr;
@@ -17,11 +17,9 @@ class StravaRequestHandler
 
     private User $user;
 
-    public function __construct(Authenticator $authenticator, User $user)
+    public function __construct(Authenticator $authenticator, User $user, GuzzleClient $guzzleClient)
     {
-        $this->guzzleClient = new GuzzleClient([
-            'base_uri' => 'https://www.strava.com/api/v3/',
-        ]);
+        $this->guzzleClient = $guzzleClient;
         $this->authenticator = $authenticator;
         $this->user = $user;
     }
@@ -35,7 +33,7 @@ class StravaRequestHandler
 
             try {
                 return $this->handleRequest($client, $method, $uri, $options, $authenticated);
-            } catch (StravaRateLimitedExceptionTest $e) {
+            } catch (StravaRateLimitedException $e) {
                 continue;
             }
         }
@@ -54,7 +52,7 @@ class StravaRequestHandler
         } catch (\Exception $e) {
             if ($e->getCode() === 429) {
                 $this->markClientAsLimited($client);
-                throw new StravaRateLimitedExceptionTest();
+                throw new StravaRateLimitedException();
             }
             throw $e;
         }
@@ -86,6 +84,11 @@ class StravaRequestHandler
             $response->getBody()->getContents(),
             true
         );
+    }
+
+    public function getGuzzleClient(): GuzzleClient
+    {
+        return $this->guzzleClient;
     }
 
 

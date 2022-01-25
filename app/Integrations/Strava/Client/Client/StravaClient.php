@@ -13,10 +13,10 @@ class StravaClient
 
     private StravaRequestHandler $requestHandler;
 
-    public function __construct(User $user)
+    public function __construct(User $user, StravaRequestHandler $requestHandler)
     {
         $this->user = $user;
-        $this->requestHandler = app(StravaRequestHandler::class, ['user' => $user]);
+        $this->requestHandler = $requestHandler;
     }
 
     private function createHandler(string $class)
@@ -40,6 +40,11 @@ class StravaClient
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    public function getRequestHandler(): StravaRequestHandler
+    {
+        return $this->requestHandler;
     }
 
 

@@ -32,5 +32,9 @@ return [
 
     'bruit' => [
         'key' => env('BRUIT_API_KEY')
+    ],
+
+    'strava' => [
+        'base_url' => 'https://www.strava.com/api/v3/'
     ]
 ];
