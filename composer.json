@@ -54,6 +54,7 @@
         "magic-test/magic-test-laravel": "^0.14.0",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
+        "nunomaduro/phpinsights": "^2.1",
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
@@ -93,7 +94,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "minimum-stability": "dev",
