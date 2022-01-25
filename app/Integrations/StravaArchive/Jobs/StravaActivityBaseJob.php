@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava\Jobs;
 
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedExceptionTest;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\StravaRateLimited;
 use App\Models\Activity;
@@ -44,7 +44,7 @@ class StravaActivityBaseJob implements ShouldQueue
 
     public function failed(\Throwable $e)
     {
-        if($e instanceof StravaRateLimitedException) {
+        if($e instanceof StravaRateLimitedExceptionTest) {
             $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
                 ->seconds(0);
 

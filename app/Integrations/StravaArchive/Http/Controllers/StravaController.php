@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
-use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Strava;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

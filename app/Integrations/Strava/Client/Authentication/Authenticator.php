@@ -31,7 +31,7 @@ class Authenticator
         return $token->access_token;
     }
 
-    public function refreshToken(\App\Integrations\Strava\StravaToken $token, StravaClientModel $client): \App\Integrations\Strava\StravaToken
+    public function refreshToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token, StravaClientModel $client): \App\Integrations\Strava\StravaToken
     {
         $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
             'query' => [
@@ -47,7 +47,7 @@ class Authenticator
             true
         );
 
-        $stravaToken = StravaToken::create(
+        $stravaToken = StravaTokenResponse::create(
             new Carbon((int) $credentials['expires_at']),
             (int)$credentials['expires_in'],
             (string)$credentials['refresh_token'],

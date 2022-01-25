@@ -2,116 +2,87 @@
 
 namespace App\Integrations\Strava\Client\Authentication;
 
-class StravaToken
+use App\Integrations\Strava\Client\Models\StravaClient;
+use App\Models\User;
+use Carbon\Carbon;
+use Database\Factories\StravaTokenFactory;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+
+class StravaToken extends Model
 {
+    use HasFactory;
 
-    private \DateTime $expiresAt;
+    protected $casts = [
+        'expires_at' => 'datetime',
+        'access_token' => 'encrypted',
+        'refresh_token' => 'encrypted'
+    ];
 
-    private int $expiresIn;
+    protected $hidden = [
+        'access_token',
+        'refresh_token'
+    ];
 
-    private string $refreshToken;
+    protected $fillable = [];
 
-    private string $accessToken;
-
-    private int $athleteId;
-
-    /**
-     * @return \DateTime
-     */
-    public function getExpiresAt(): \DateTime
+    public static function makeFromStravaTokenResponse(\App\Integrations\Strava\Client\Authentication\StravaTokenResponse $token, int $clientId)
     {
-        return $this->expiresAt;
-    }
+        $instance = new StravaToken();
 
-    /**
-     * @param \DateTime $expiresAt
-     */
-    public function setExpiresAt(\DateTime $expiresAt): void
-    {
-        $this->expiresAt = $expiresAt;
-    }
+        $instance->access_token = $token->getAccessToken();
+        $instance->refresh_token = $token->getRefreshToken();
+        $instance->expires_at = $token->getExpiresAt();
+        $instance->user_id = Auth::id();
+        $instance->disabled = false;
+        $instance->strava_client_id = $clientId;
 
-    /**
-     * @return int
-     */
-    public function getExpiresIn(): int
-    {
-        return $this->expiresIn;
-    }
-
-    /**
-     * @param int $expiresIn
-     */
-    public function setExpiresIn(int $expiresIn): void
-    {
-        $this->expiresIn = $expiresIn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRefreshToken(): string
-    {
-        return $this->refreshToken;
-    }
-
-    /**
-     * @param string $refreshToken
-     */
-    public function setRefreshToken(string $refreshToken): void
-    {
-        $this->refreshToken = $refreshToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken(): string
-    {
-        return $this->accessToken;
-    }
-
-    /**
-     * @param string $accessToken
-     */
-    public function setAccessToken(string $accessToken): void
-    {
-        $this->accessToken = $accessToken;
-    }
-
-    /**
-     * @return int
-     */
-    public function getAthleteId(): int
-    {
-        return $this->athleteId;
-    }
-
-    /**
-     * @param int $athleteId
-     * @return StravaToken
-     */
-    public function setAthleteId(int $athleteId): StravaToken
-    {
-        $this->athleteId = $athleteId;
-        return $this;
-    }
-
-    public static function create(
-        \DateTime $expiresAt,
-        int $expiresIn,
-        string $refreshToken,
-        string $accessToken,
-        int $athleteId
-    ): static
-    {
-        $instance = new static();
-        $instance->setExpiresAt($expiresAt);
-        $instance->setExpiresIn($expiresIn);
-        $instance->setRefreshToken($refreshToken);
-        $instance->setAccessToken($accessToken);
-        $instance->setAthleteId($athleteId);
         return $instance;
+    }
+
+    public function updateFromStravaTokenResponse(\App\Integrations\Strava\Client\Authentication\StravaTokenResponse $token)
+    {
+        $this->access_token = $token->getAccessToken() ?? $this->access_token;
+        $this->refresh_token = $token->getRefreshToken() ?? $this->refresh_token;
+        $this->expires_at = $token->getExpiresAt() ?? $this->expires_at;
+        $this->save();
+    }
+
+    public function stravaClient()
+    {
+        return $this->belongsTo(StravaClient::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public static function scopeForUser(Builder $query, int $userId)
+    {
+        $query->where('user_id', $userId);
+    }
+
+    public static function scopeEnabled(Builder $query)
+    {
+        return $query->where('disabled', false);
+    }
+
+    public static function scopeActive(Builder $query)
+    {
+        $query->where('expires_at', '>', Carbon::now()->addMinutes(2));
+    }
+
+    public function expired()
+    {
+        return $this->expires_at->subMinutes(2)->isPast();
+    }
+
+    protected static function newFactory()
+    {
+        return new StravaTokenFactory();
     }
 
 }

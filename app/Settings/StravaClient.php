@@ -28,7 +28,7 @@ class StravaClient extends GlobalSetting
     {
         $clientId = static::getValue($id);
         if($clientId === null) {
-            throw new ClientNotAvailable('No system client has been set');
+            throw new ClientNotAvailable('No system client has been set.');
         }
         return \App\Integrations\Strava\Client\Models\StravaClient::findOrFail($clientId);
     }

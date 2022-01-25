@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Authentication\Authenticator;
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedExceptionTest;
 use App\Models\User;
 use GuzzleHttp\Client as GuzzleClient;
 use Illuminate\Support\Arr;
@@ -35,7 +35,7 @@ class StravaRequestHandler
 
             try {
                 return $this->handleRequest($client, $method, $uri, $options, $authenticated);
-            } catch (StravaRateLimitedException $e) {
+            } catch (StravaRateLimitedExceptionTest $e) {
                 continue;
             }
         }
@@ -54,7 +54,7 @@ class StravaRequestHandler
         } catch (\Exception $e) {
             if ($e->getCode() === 429) {
                 $this->markClientAsLimited($client);
-                throw new StravaRateLimitedException();
+                throw new StravaRateLimitedExceptionTest();
             }
             throw $e;
         }

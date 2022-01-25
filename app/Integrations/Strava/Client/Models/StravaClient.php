@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava\Client\Models;
 
-use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Models\User;
 use Database\Factories\StravaClientFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Linkeys\UrlSigner\Models\Link;
 use Linkeys\UrlSigner\Support\LinkRepository\LinkRepository;
@@ -63,7 +64,7 @@ class StravaClient extends Model
     public static function scopeExcluding(Builder $query, array $excluding)
     {
         $query->when(!empty($excluding),
-            fn(Builder $query) => $query->whereNotIn('id', $excluding)
+            fn(Builder $query) => $query->whereNotIn('strava_clients.id', $excluding)
         );
     }
 
@@ -107,8 +108,8 @@ class StravaClient extends Model
 
     public static function scopeWithSpaces(Builder $query)
     {
-        $query->whereRaw('used_15_min_calls < limit_15_min')
-            ->whereRaw('used_daily_calls < limit_daily');
+        $query->whereColumn('used_15_min_calls', '<', 'limit_15_min')
+            ->whereColumn('used_daily_calls', '<', 'limit_daily');
     }
 
     public static function scopePublic(Builder $query)

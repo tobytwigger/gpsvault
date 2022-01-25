@@ -3,7 +3,7 @@
 namespace Unit\Integrations\Strava\Client\Models;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
-use App\Integrations\Strava\StravaToken;
+use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Models\User;
 use Carbon\Carbon;
 use Linkeys\UrlSigner\Models\Link;
