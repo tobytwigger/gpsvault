@@ -24,7 +24,7 @@
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
-        "pusher-js": "^7.0.3",
+        "pusher-js": "^4.3",
         "sass": "~1.32",
         "sass-loader": "^12.4.0",
         "uuid": "^3.4.0",

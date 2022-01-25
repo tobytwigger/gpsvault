@@ -37,7 +37,7 @@ return [
             'secret' => 'cycle-store-secret',
             'options' => [
                 'host' => env('PUSHER_DOMAIN', '127.0.0.1'),
-                'port' => 6001,
+                'port' => env('PUSHER_PORT', 6001),
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'curl_options' => [
                     CURLOPT_SSL_VERIFYHOST => 0,

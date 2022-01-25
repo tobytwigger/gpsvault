@@ -2,8 +2,13 @@
 
 export default {
     computed: {
-        overriddenTask() {
-            return this.taskToOverrideWith ?? this.task;
+        overriddenTask: {
+            get() {
+                return this.taskToOverrideWith ?? this.task;
+            },
+            set(val) {
+                this.taskToOverrideWith = val;
+            }
         },
         hasTask() {
             return this.overriddenTask !== null
@@ -25,7 +30,9 @@ export default {
         }
     },
     mounted() {
-        this.listenToTask();
+        if(this.taskId !== null) {
+            this.listenToTask(this.taskId);
+        }
     },
     data() {
         return {
