@@ -31,4 +31,11 @@ class StravaClientFactory extends Factory
             'limit_daily' => 1000
         ];
     }
+
+    public function full()
+    {
+        return $this->state(fn($attributes) => [
+            'used_15_min_calls' => 100
+        ]);
+    }
 }

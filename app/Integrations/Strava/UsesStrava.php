@@ -45,22 +45,23 @@ trait UsesStrava
             $client = $this
                 ->ownedClients()
                 ->enabled()->withSpaces()
+                ->connected($this->id)
                 ->excluding($excluding)
                 ->first()
-                ?? $this->sharedClients()->enabled()->withSpaces()->excluding($excluding)->first();
+                ?? $this->sharedClients()->enabled()->withSpaces()->connected($this->id)->excluding($excluding)->first();
             if($client) {
                 return $client;
             }
         }
         if($this->can('use-public-strava-clients')) {
-            $client = StravaClient::public()->enabled()->withSpaces()->excluding($excluding)->first();
+            $client = StravaClient::public()->enabled()->withSpaces()->connected($this->id)->excluding($excluding)->first();
             if($client) {
                 return $client;
             }
         }
 
         $client = \App\Settings\StravaClient::getClientModelOrFail();
-        if(!$client->hasSpaces()) {
+        if(!$client->isConnected($this->id) || !$client->hasSpaces()) {
             throw new ClientNotAvailable('No available clients found.');
         }
         return $client;

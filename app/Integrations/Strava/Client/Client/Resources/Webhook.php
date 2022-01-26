@@ -10,12 +10,12 @@ class Webhook extends Resource
 
     public function webhookExists(StravaClient $clientModel): bool
     {
-        $response = $this->request->request('GET', 'push_subscriptions', [
+        $response = $this->request->unauthenticatedRequest('GET', 'push_subscriptions', [
             'json' => [
                 'client_id' => $clientModel->client_id,
                 'client_secret' => $clientModel->client_secret,
             ]
-        ], false);
+        ]);
 
 
         $content = $this->request->decodeResponse($response);
@@ -30,14 +30,14 @@ class Webhook extends Resource
 
     public function createWebhook(StravaClient $clientModel)
     {
-        $response = $this->request->request('POST', 'push_subscriptions', [
+        $response = $this->request->unauthenticatedRequest('POST', 'push_subscriptions', [
             'json' => [
                 'client_id' => $clientModel->client_id,
                 'client_secret' => $clientModel->client_secret,
                 'callback_url' => route('strava.webhook.verify', ['client' => $clientModel]),
                 'verify_token' => $clientModel->webhook_verify_token
             ]
-        ], false);
+        ]);
 
         return $this->request->decodeResponse($response);
     }

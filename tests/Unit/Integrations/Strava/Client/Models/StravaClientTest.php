@@ -218,6 +218,30 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
+    public function connected_returns_true_if_tokens_are_connected_and_valid_for_the_given_user(){
+        $user = User::factory()->create();
+
+        $client = StravaClient::factory()->create();
+        $this->assertFalse($client->isConnected($user->id));
+
+        $token = StravaToken::factory()->create(['strava_client_id' => $client->id, 'user_id' => $user->id, 'expires_at' => Carbon::now()->addDay()]);
+        $this->assertTrue($client->isConnected($user->id));
+    }
+
+    /** @test */
+    public function connected_returns_false_if_no_available_tokens(){
+        $user = User::factory()->create();
+
+        $client = StravaClient::factory()->create();
+
+        StravaToken::factory()->create(['strava_client_id' => $client->id]);
+        StravaToken::factory()->create(['strava_client_id' => $client->id, 'user_id' => $user->id, 'disabled' => true]);
+        StravaToken::factory()->create(['strava_client_id' => $client->id, 'user_id' => $user->id, 'expires_at' => Carbon::now()->subHours(5)]);
+
+        $this->assertFalse($client->isConnected($user->id));
+    }
+
+    /** @test */
     public function is_connected_returns_true_if_tokens_are_connected_and_valid_for_the_logged_in_user(){
         $user = User::factory()->create();
         $this->be($user);
@@ -315,6 +339,21 @@ class StravaClientTest extends TestCase
         $client->save();
 
         $this->assertEquals($link->expiry->toIso8601String(), $client->invitation_link_expires_at->toIso8601String());
+    }
+
+    /** @test */
+    public function connected_only_returns_connected_clients(){
+        $user = User::factory()->create();
+
+        $client1 = StravaClient::factory()->create();
+        $client2 = StravaClient::factory()->create();
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        $client3 = StravaClient::factory()->create();
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+
+        $this->assertCount(2, StravaClient::connected($user->id)->get());
+        $this->assertTrue($client2->is(StravaClient::connected($user->id)->get()[0]));
+        $this->assertTrue($client3->is(StravaClient::connected($user->id)->get()[1]));
     }
 
 

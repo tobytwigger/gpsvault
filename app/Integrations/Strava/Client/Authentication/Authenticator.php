@@ -12,6 +12,7 @@ class Authenticator
 {
 
     private User $user;
+
     private Client $guzzleClient;
 
     public function __construct(User $user, Client $guzzleClient)
@@ -22,8 +23,8 @@ class Authenticator
 
     public function getAuthToken(StravaClientModel $client): string
     {
-        $token = $this->user->stravaTokens()->where('strava_client_id', $client->id)->orderBy('created_at', 'desc')->first()
-            ?? throw new UnauthorizedException('Your account is not connected to Strava');
+        $token = $this->user->stravaTokens()->enabled()->where('strava_client_id', $client->id)->orderBy('created_at', 'desc')->first()
+            ?? throw new UnauthorizedException('Your account is not connected to Strava.');
 
         if($token->expired()) {
             $token = $this->refreshToken($token, $client);
@@ -31,7 +32,7 @@ class Authenticator
         return $token->access_token;
     }
 
-    public function refreshToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token, StravaClientModel $client): \App\Integrations\Strava\StravaToken
+    public function refreshToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token, StravaClientModel $client): StravaToken
     {
         $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
             'query' => [
@@ -52,37 +53,12 @@ class Authenticator
             (int)$credentials['expires_in'],
             (string)$credentials['refresh_token'],
             (string)$credentials['access_token'],
-            $this->user->getAdditionalData('strava_athlete_id') ?? throw new \Exception('Athlete ID not set for user ' . $this->user->id)
+            $this->user->getAdditionalData('strava_athlete_id') ?? throw new \Exception(sprintf('Athlete ID not set for user %u.', $this->user->id))
         );
 
-        $token->updateFromStravaToken($stravaToken);
+        $token->updateFromStravaTokenResponse($stravaToken);
 
         return $token;
     }
-
-//    public function exchangeCode(string $code, StravaClientModel $stravaClient): StravaToken
-//    {
-//        $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
-//            'query' => [
-//                'client_id' => $stravaClient->client_id,
-//                'client_secret' => $stravaClient->client_secret,
-//                'code' => $code,
-//                'grant_type' => 'authorization_code'
-//            ]
-//        ]);
-//
-//        $credentials = json_decode(
-//            $response->getBody()->getContents(),
-//            true
-//        );
-//
-//        return StravaToken::create(
-//            new Carbon((int) $credentials['expires_at']),
-//            (int)$credentials['expires_in'],
-//            (string)$credentials['refresh_token'],
-//            (string)$credentials['access_token'],
-//            (int)$credentials['athlete']['id']
-//        );
-//    }
 
 }

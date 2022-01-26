@@ -26,7 +26,7 @@ class StravaToken extends Model
         'refresh_token'
     ];
 
-    protected $fillable = [];
+    protected $fillable = ['user_id', 'strava_client_id', 'access_token', 'refresh_token', 'expires_at', 'disabled'];
 
     public static function makeFromStravaTokenResponse(\App\Integrations\Strava\Client\Authentication\StravaTokenResponse $token, int $clientId)
     {

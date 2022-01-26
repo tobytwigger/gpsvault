@@ -78,6 +78,11 @@ class StravaClient extends Model
         return $this->hasMany(StravaToken::class);
     }
 
+    public static function scopeConnected(Builder $query, int $userId)
+    {
+        $query->whereHas('tokens', fn(Builder $subquery) => $subquery->forUser($userId)->active()->enabled());
+    }
+
     public static function scopeForUser(Builder $query, int $userId)
     {
         $query->where('user_id', $userId)
@@ -120,9 +125,14 @@ class StravaClient extends Model
     public function getIsConnectedAttribute(): bool
     {
         if(Auth::check()) {
-            return $this->tokens()->enabled()->active()->forUser(Auth::id())->count() > 0;
+            return $this->isConnected(Auth::id());
         }
         return false;
+    }
+
+    public function isConnected(int $userId): bool
+    {
+        return $this->tokens()->enabled()->active()->forUser($userId)->count() > 0;
     }
 
     public function getInvitationLinkAttribute(): ?string

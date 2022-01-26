@@ -8,7 +8,7 @@ use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Tests\TestCase;
 
-class UseStravaTest extends TestCase
+class UsesStravaTest extends TestCase
 {
 
     /** @test */
@@ -87,6 +87,10 @@ class UseStravaTest extends TestCase
         $client3 = StravaClient::factory()->create();
         $client3->sharedUsers()->attach($user);
         $client4 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -105,6 +109,10 @@ class UseStravaTest extends TestCase
         $client3 = StravaClient::factory()->create();
         $client3->sharedUsers()->attach($user);
         $client4 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -123,6 +131,9 @@ class UseStravaTest extends TestCase
         $client4 = StravaClient::factory()->create();
         $client4->sharedUsers()->attach($user);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -141,6 +152,9 @@ class UseStravaTest extends TestCase
         $client4 = StravaClient::factory()->create();
         $client4->sharedUsers()->attach($user);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -160,6 +174,11 @@ class UseStravaTest extends TestCase
         $client3->sharedUsers()->attach($user);
         $client4 = StravaClient::factory()->create(['public' => true]);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -179,6 +198,11 @@ class UseStravaTest extends TestCase
         $client3->sharedUsers()->attach($user);
         $client4 = StravaClient::factory()->create(['public' => true]);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -199,6 +223,11 @@ class UseStravaTest extends TestCase
         $client3->sharedUsers()->attach($user);
         $client4 = StravaClient::factory()->create(['public' => true, 'limit_daily' => 5, 'used_daily_calls' => 100]);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client4->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
 
         StravaClient::factory()->count(5)->create(['public' => false]);
 
@@ -215,8 +244,12 @@ class UseStravaTest extends TestCase
         $client3 = StravaClient::factory()->create();
         $client3->sharedUsers()->attach($user);
         $client5 = StravaClient::factory()->create(['public' => true]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client1->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
         $systemClient = StravaClient::factory()->create();
         \App\Settings\StravaClient::setValue($systemClient->id);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $systemClient->id]);
 
         $client = $user->availableClient();
         $this->assertInstanceOf(StravaClient::class, $client);
@@ -228,9 +261,11 @@ class UseStravaTest extends TestCase
         $user = User::factory()->create();
         $user->givePermissionTo('use-public-strava-clients');
 
-        $client5 = StravaClient::factory()->create(['public' => true, 'limit_daily' => 5, 'used_daily_calls' => 100]);
+        $client5 = StravaClient::factory()->full()->create(['public' => true]);
         $systemClient = StravaClient::factory()->create();
         \App\Settings\StravaClient::setValue($systemClient->id);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client5->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $systemClient->id]);
 
         $client = $user->availableClient();
         $this->assertInstanceOf(StravaClient::class, $client);
@@ -257,9 +292,23 @@ class UseStravaTest extends TestCase
         $user = User::factory()->create();
 
         $systemClient = StravaClient::factory()->create(['limit_daily' => 5, 'used_daily_calls' => 100]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $systemClient->id]);
+
         \App\Settings\StravaClient::setValue($systemClient->id);
 
         $user->availableClient();
+    }
+
+    /** @test */
+    public function it_ignores_clients_that_are_not_connected(){
+        $this->expectException(ClientNotAvailable::class);
+        $this->expectExceptionMessage('No available clients found.');
+
+        $user = User::factory()->create();
+        $systemClient = StravaClient::factory()->create();
+        \App\Settings\StravaClient::setValue($systemClient->id);
+
+        $client = $user->availableClient();
     }
 
 }
