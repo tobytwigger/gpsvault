@@ -6,14 +6,12 @@ use App\Integrations\Strava\Client\Authentication\Authenticator;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\StravaRequestHandler;
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Prophecy\Argument;
 use Tests\TestCase;
 
 class StravaRequestHandlerTest extends TestCase

@@ -66,7 +66,23 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     /* Strava */
     Route::get('/integration/strava', [\App\Integrations\Strava\Http\Controllers\StravaOverviewController::class, 'index'])->name('integration.strava');
-    Route::middleware('can:manage-strava-clients')->resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'index', 'update', 'destroy']);
+    Route::middleware('can:manage-strava-clients')->group(function() {
+        Route::resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'index', 'update', 'destroy']);
+
+        /* Client invitations **/
+        Route::middleware('link')->get('/client/{client}/accept', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'accept'])->name('strava.client.accept');
+        Route::post('/client/{client}/invite', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'invite'])->name('strava.client.invite');
+        Route::delete('/client/{client}/leave', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'leave'])->name('strava.client.leave');
+        Route::delete('/client/{client}/remove', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'remove'])->name('strava.client.leave');
+
+        /* Client status */
+        Route::post('/client/{client}/enable', [\App\Integrations\Strava\Http\Controllers\Client\ClientEnabledController::class, 'enable'])->name('strava.client.enable');
+        Route::post('/client/{client}/disable', [\App\Integrations\Strava\Http\Controllers\Client\ClientEnabledController::class, 'disable'])->name('strava.client.disable');
+        Route::post('/client/{client}/public', [\App\Integrations\Strava\Http\Controllers\Client\ClientVisibilityController::class, 'makePublic'])->name('strava.client.public');
+        Route::post('/client/{client}/private', [\App\Integrations\Strava\Http\Controllers\Client\ClientVisibilityController::class, 'makePrivate'])->name('strava.client.private');
+//            Route::get('client/{client}/login', [StravaController::class, 'login'])->name('strava.login');
+//            Route::get('client/{client}/callback', [StravaController::class, 'callback'])->name('strava.callback');
+    });
 
 });
 

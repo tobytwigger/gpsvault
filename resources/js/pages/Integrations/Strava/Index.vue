@@ -52,8 +52,6 @@
 <!--            <td class="px-4 py-3 border">-->
 <!--                <div class="flex items-center text-sm">-->
 <!--                    <div>-->
-<!--                        <p class="text-black">{{ client.used_15_min_calls }}/100 used until {{ next15Mins }}</p>-->
-<!--                        <p class="text-black">{{ client.used_daily_calls }}/1000 used until {{ nextDay }}</p>-->
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </td>-->
@@ -80,10 +78,11 @@
 <!--                    </div>-->
 <!--                </Link>-->
 <!--            </td>-->
-<!--            <td class="px-4 py-3 border">-->
-<!--                <p>Client ID: {{client.client_id}}</p>-->
-<!--                <p>Client Secret: {{client.client_secret}}</p>-->
-<!--            </td>-->
+
+
+
+
+
 <!--            <td class="px-4 py-3 text-sm border">-->
 <!--                <Link :href="route('strava.client.destroy', client.id)" method="delete" as="button" type="button">-->
 <!--                    <div class="flex items-center text-sm font-semibold text-red-700">-->

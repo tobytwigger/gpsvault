@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Linkeys\UrlSigner\Models\Link;
 
 class ClientInvitationController extends Controller
@@ -32,6 +33,19 @@ class ClientInvitationController extends Controller
         abort_if(!$client->sharedUsers()->where('user_id', Auth::id())->exists(), 403, 'You are not a part of this client.');
 
         $client->sharedUsers()->detach(Auth::id());
+
+        return redirect()->route('strava.client.index');
+    }
+
+    public function remove(Request $request, StravaClient $client)
+    {
+        $request->validate([
+            'user_id' => ['required', 'integer', Rule::exists('users', 'id')->whereIn('id', $client->sharedUsers()->pluck('id')->toArray())]
+        ]);
+
+        abort_if(!$client->user_id !== Auth::id(), 403, 'You do not own this client.');
+
+        $client->sharedUsers()->detach($request->input('user_id'));
 
         return redirect()->route('strava.client.index');
     }
