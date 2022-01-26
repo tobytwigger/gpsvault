@@ -1,13 +1,34 @@
 <template>
-    <c-app-wrapper title="Strava">
-        <v-alert
-            outlined
-            type="warning"
-            prominent
-            border="left"
+    <c-app-wrapper title="Strava" :action-sidebar="true">
+        <v-tabs
+            v-model="tab"
+            centered
+            grow
+            icons-and-text
         >
-            The Strava integration manager is still in development and will be available soon.
-        </v-alert>
+            <v-tabs-slider></v-tabs-slider>
+            <v-tab href="#tab-connection">Connection Health<v-icon>mdi-heart-pulse</v-icon></v-tab>
+            <v-tab href="#tab-import">Imports<v-icon>mdi-import</v-icon></v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+            <v-tab-item value="tab-connection">
+                Connection
+            </v-tab-item>
+
+            <v-tab-item value="tab-import">
+                Imports
+            </v-tab-item>
+        </v-tabs-items>
+        <template #sidebar>
+            <v-list>
+                <v-list-item v-if="$page.props.permissions.indexOf('manage-strava-clients') > -1">
+                    <v-btn @click="$inertia.get(route('strava.client.index'))">
+                        Manage Clients
+                    </v-btn>
+                </v-list-item>
+            </v-list>
+        </template>
     </c-app-wrapper>
 
 <!--    <table class="w-full">-->
@@ -215,7 +236,15 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 export default {
     name: "Index",
-    components: {CAppWrapper}
+    components: {CAppWrapper},
+    props: {
+
+    },
+    data() {
+        return {
+            tab: null
+        }
+    }
 }
 </script>
 

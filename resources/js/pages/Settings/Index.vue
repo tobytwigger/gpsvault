@@ -80,7 +80,7 @@
                     </v-col>
                 </v-row>
             </v-tab-item>
-            <v-tab-item value="tab-earth">
+            <v-tab-item value="tab-earth" v-if="$page.props.permissions.indexOf('manage-global-settings') > -1">
                 <v-row>
                     <v-col>
                         <c-system-strava-client

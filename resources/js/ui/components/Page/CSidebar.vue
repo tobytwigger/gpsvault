@@ -57,7 +57,7 @@
             dense
         >
             <v-list-group
-                :value="['integration.strava'].indexOf(route().current()) > -1"
+                :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"
                 no-action
                 prepend-icon="mdi-connection"
             >
@@ -67,7 +67,7 @@
                     </v-list-item-content>
                 </template>
 
-                <v-list-item :input-value="['integration.strava'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))">
+                <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))">
                     <v-list-item-title>Strava</v-list-item-title>
                     <v-list-item-icon>
                         <v-icon>mdi-arrow-right</v-icon>

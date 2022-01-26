@@ -21,7 +21,9 @@ class StravaClient extends Model
 
     protected $fillable = [
         'client_id',
-        'client_secret'
+        'client_secret',
+        'name',
+        'description'
     ];
 
     protected $hidden = [

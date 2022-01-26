@@ -16,6 +16,8 @@ class CreateStravaClientsTable extends Migration
         Schema::create('strava_clients', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
             $table->text('client_id');
             $table->text('client_secret');
             $table->boolean('enabled')->default(true);

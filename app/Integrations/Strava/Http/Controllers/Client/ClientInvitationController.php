@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Http\Controllers;
+namespace App\Integrations\Strava\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;

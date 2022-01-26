@@ -64,13 +64,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\StatsPointsController::class, 'show'])->name('stats.points');
     Route::get('/stats/{stats}/geojson', [\App\Http\Controllers\Pages\Stats\GeoJsonController::class, 'show'])->name('stats.geojson');
 
-    // UNTESTED
-
-    Route::resource('sync', \App\Http\Controllers\Pages\SyncController::class)->only(['index', 'store', 'destroy']);
-
-    Route::get('/integration/{integration}/login', [\App\Http\Controllers\Pages\IntegrationLoginController::class, 'login'])->name('integration.login');
-    Route::delete('/integration/{integration}', [\App\Http\Controllers\Pages\IntegrationController::class, 'destroy'])->name('integration.destroy');
-    Route::get('/integration/strava', [\App\Http\Controllers\Pages\IntegrationController::class, 'strava'])->name('integration.strava');
+    /* Strava */
+    Route::get('/integration/strava', [\App\Integrations\Strava\Http\Controllers\StravaOverviewController::class, 'index'])->name('integration.strava');
+    Route::middleware('can:manage-strava-clients')->resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'index', 'update', 'destroy']);
 
 });
 
