@@ -74,15 +74,18 @@ class ClientController extends Controller
         return redirect()->route('strava.client.index');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, StravaClient $client)
     {
+        abort_if($client->user_id !== Auth::id(), 403, 'You can only update a client you own.');
+
         $request->validate([
-            'client_secret' => 'required|string',
+            'client_secret' => 'sometimes|string',
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
         ]);
 
-        StravaClient::create($request->only(['client_secret', 'name', 'description']));
+        $client->fill($request->only(['client_secret', 'name', 'description']));
+        $client->save();
 
         return redirect()->route('strava.client.index');
     }
