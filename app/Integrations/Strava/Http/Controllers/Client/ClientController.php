@@ -38,6 +38,7 @@ class ClientController extends Controller
             $client = [
                 'id' => $client->id,
                 'name' => $client->name,
+                'client_id' => $client->client_id,
                 'description' => $client->description,
                 'user' => $client->owner->name,
                 'enabled' => $client->enabled,
@@ -57,7 +58,7 @@ class ClientController extends Controller
         foreach ($publicClients->items() as $index => $client) {
             $client =[
                 'id' => $client->id,
-                'name' => $client->name,
+                'client_id' => $client->client_id,
                 'description' => $client->description,
                 'used_15_min_calls' => $client->used_15_min_calls,
                 'used_daily_calls' => $client->used_daily_calls,
