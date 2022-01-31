@@ -14,45 +14,23 @@
         </v-card-subtitle>
 
         <v-card-text>
-            <p>Client secret: {{client.client_secret}}</p>
-        </v-card-text>
 
-        <v-card-text>
-
-            <p class="text-black">{{ client.used_15_min_calls }}/100 used until {{ next15Mins }}</p>
             <v-progress-linear
                 :value="Math.ceil((client.used_15_min_calls / client.limit_15_min) * 100)"
                 height="25"
             >
-                15 minute usage
+                {{ client.used_15_min_calls }}/{{client.limit_15_min }}
             </v-progress-linear>
+            <p class="text-black">Rate limit reset at {{ next15Mins }}</p>
 
-            <p class="text-black">{{ client.used_daily_calls }}/1000 used until {{ nextDay }}</p>
             <v-progress-linear
                 :value="Math.ceil((client.used_daily_calls / client.limit_daily) * 100)"
                 height="25"
             >
-                Daily usage
+                {{ client.used_daily_calls }}/{{client.limit_daily }}
             </v-progress-linear>
+            <p class="text-black">Daily limit resets in {{ nextDayIn }}</p>
 
-        </v-card-text>
-
-        <v-card-text>
-            <span v-if="client.invitation_link_uuid">
-                <Link :href="client.invitation_link">{{client.invitation_link}}</Link>
-                <span v-if="client.invitation_link_expired">
-                    Link Expired
-                </span>
-                <span v-else>
-                Valid until {{ toDateTime(client.invitation_link_expires_at) }}
-                </span>
-            </span>
-            <span v-else>
-                No invitation link
-            </span>
-            <v-btn @click="$inertia.post(route('strava.client.invite', client.id))">
-                Refresh
-            </v-btn>
         </v-card-text>
 
         <v-card-text>
@@ -62,32 +40,12 @@
             </v-btn>
         </v-card-text>
 
-        <v-card-actions>
+        <v-card-actions v-if="type === 'owned'">
 
             <v-spacer></v-spacer>
 
-<!--            <c-stage-form :tour-id="stage.tour_id" :old-stage="stage" title="Edit stage" button-text="Update">-->
-<!--                <template v-slot:activator="{trigger, showing}">-->
-<!--                    <v-tooltip bottom>-->
-<!--                        <template v-slot:activator="{ on, attrs }">-->
-<!--                            <v-btn-->
-<!--                                icon-->
-<!--                                link-->
-<!--                                @click="trigger"-->
-<!--                                :disabled="showing"-->
-<!--                                v-bind="attrs"-->
-<!--                                v-on="on"-->
-<!--                            >-->
-<!--                                <v-icon>mdi-pencil</v-icon>-->
-<!--                            </v-btn>-->
-<!--                        </template>-->
-<!--                        Edit-->
-<!--                    </v-tooltip>-->
-<!--                </template>-->
-<!--            </c-stage-form>-->
-
-            <c-confirmation-dialog title="Delete client?" button-text="Delete" :loading="isDeleting" cancel-button-text="Nevermind" @confirm="deleteClient">
-                <template v-slot:activator="{trigger,showing}">
+            <c-strava-client-form :old-client="client" title="Edit client" button-text="Update">
+                <template v-slot:activator="{trigger, showing}">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -95,23 +53,19 @@
                                 link
                                 @click="trigger"
                                 :disabled="showing"
-                                :loading="showing"
                                 v-bind="attrs"
                                 v-on="on"
                             >
-                                <v-icon>mdi-delete</v-icon>
+                                <v-icon>mdi-pencil</v-icon>
                             </v-btn>
                         </template>
-                        Delete
+                        Edit
                     </v-tooltip>
                 </template>
-                <p>Are you sure you want to delete this client?</p>
-
-                <p>Anyone using the client will no longer be able to use it. If you later decide to use this client again, you can add it as a new client.</p>
-            </c-confirmation-dialog>
+            </c-strava-client-form>
 
             <div>
-                <c-confirmation-dialog v-if="client.enabled" title="Disable client?" button-text="Disable" :loading="isDisabling" cancel-button-text="Nevermind" @confirm="disableClient">
+                <c-confirmation-dialog key="disableClient" v-if="client.enabled" title="Disable client?" button-text="Disable" :loading="isDisabling" cancel-button-text="Nevermind" @confirm="disableClient" ref="disableClientDialog">
                     <template v-slot:activator="{trigger,showing}">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on, attrs }">
@@ -135,7 +89,7 @@
                     <p>You and anyone with access to this client will not be able to use it until it is enabled.</p>
                 </c-confirmation-dialog>
 
-                <c-confirmation-dialog v-else title="Enable client?" button-text="Enable" :loading="isEnabling" cancel-button-text="Nevermind" @confirm="enableClient">
+                <c-confirmation-dialog key="enableClient" v-else title="Enable client?" button-text="Enable" :loading="isEnabling" cancel-button-text="Nevermind" @confirm="enableClient" ref="enableClientDialog">
                     <template v-slot:activator="{trigger,showing}">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on, attrs }">
@@ -162,7 +116,7 @@
             </div>
 
             <div>
-                <c-confirmation-dialog v-if="client.public" title="Make client private?" button-text="Make private" :loading="isMakingPrivate" cancel-button-text="Nevermind" @confirm="makeClientPrivate">
+                <c-confirmation-dialog key="makeClientPrivate" v-if="client.public" title="Make client private?" button-text="Make private" :loading="isMakingPrivate" cancel-button-text="Nevermind" @confirm="makeClientPrivate" ref="makeClientPrivateDialog">
                     <template v-slot:activator="{trigger,showing}">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on, attrs }">
@@ -186,7 +140,7 @@
                     <p>Only you will have access to it. If you make it public again, anyone with access to it currently will have access again.</p>
                 </c-confirmation-dialog>
 
-                <c-confirmation-dialog v-else title="Make client public?" button-text="Make public" :loading="isMakingPublic" cancel-button-text="Nevermind" @confirm="makeClientPublic">
+                <c-confirmation-dialog key="makeClientPublic" v-else title="Make client public?" button-text="Make public" :loading="isMakingPublic" cancel-button-text="Nevermind" @confirm="makeClientPublic" ref="makeClientPublicDialog">
                     <template v-slot:activator="{trigger,showing}">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on, attrs }">
@@ -211,6 +165,82 @@
                 </c-confirmation-dialog>
 
             </div>
+
+            <c-strava-client-invitations :client="client">
+                <template v-slot:activator="{trigger,showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                icon
+                                link
+                                @click="trigger"
+                                :disabled="showing"
+                                :loading="showing"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-account-group</v-icon>
+                            </v-btn>
+                        </template>
+                        Share
+                    </v-tooltip>
+                </template>
+            </c-strava-client-invitations>
+
+            <c-confirmation-dialog key="deleteClient" title="Delete client?" button-text="Delete" :loading="isDeleting" cancel-button-text="Nevermind" @confirm="deleteClient" ref="deleteClientDialog">
+                <template v-slot:activator="{trigger,showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                icon
+                                link
+                                @click="trigger"
+                                :disabled="showing"
+                                :loading="showing"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </template>
+                        Delete
+                    </v-tooltip>
+                </template>
+                <p>Are you sure you want to delete this client?</p>
+
+                <p>Anyone using the client will no longer be able to use it. If you later decide to use this client again, you can add it as a new client.</p>
+            </c-confirmation-dialog>
+
+        </v-card-actions>
+
+
+        <v-card-actions v-if="type === 'shared'">
+            <v-spacer></v-spacer>
+
+            <c-confirmation-dialog key="sharedClient" title="Leave client?" button-text="Leave" :loading="isLeaving" cancel-button-text="Nevermind" @confirm="leaveClient" ref="leavingClientDialog">
+                <template v-slot:activator="{trigger,showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                icon
+                                link
+                                @click="trigger"
+                                :disabled="showing"
+                                :loading="showing"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </template>
+                        Leave
+                    </v-tooltip>
+                </template>
+                <p>Are you sure you want to leave this client?</p>
+
+                <p>You will no longer be able to use it, and will need a new link if you want to use it in the future.</p>
+            </c-confirmation-dialog>
+
         </v-card-actions>
 
     </v-card>
@@ -218,17 +248,23 @@
 
 <script>
 import strava from '../../mixins/strava';
-import moment from 'moment';
 import CConfirmationDialog from '../CConfirmationDialog';
+import CStravaClientForm from './CStravaClientForm';
+import CStravaClientInvitations from './CStravaClientInvitations';
 
 export default {
     name: "CStravaClientCard",
-    components: {CConfirmationDialog},
+    components: {CStravaClientInvitations, CStravaClientForm, CConfirmationDialog},
     mixins: [strava],
     props: {
         client: {
             required: true,
             type: Object
+        },
+        type: {
+            required: true,
+            type: String,
+            validator: (val) => val === 'owned' || val === 'shared' || val === 'public'
         }
     },
     data() {
@@ -237,7 +273,8 @@ export default {
             isEnabling: false,
             isDisabling: false,
             isMakingPublic: false,
-            isMakingPrivate: false
+            isMakingPrivate: false,
+            isLeaving: false,
         }
     },
     computed: {
@@ -263,40 +300,65 @@ export default {
         }
     },
     methods: {
-        toDateTime(value) {
-            if (value === null) {
-                return 'No Date';
-            }
-            return moment(value).format('DD/MM/YYYY HH:mm');
-        },
         deleteClient() {
+            let ref = this.$refs.deleteClientDialog;
             this.isDeleting = true;
+            console.log(ref);
             this.$inertia.delete(route('strava.client.destroy', this.client.id), {
-                onFinish: () => this.isDeleting = false
+                onSuccess: () => {
+                    this.isDeleting = false;
+                    ref.close();
+                }
             })
         },
         makeClientPublic() {
+            let ref = this.$refs.makeClientPublicDialog;
             this.isMakingPublic = true;
             this.$inertia.post(route('strava.client.public', this.client.id), {
-                onFinish: () => this.isMakingPublic = false
+                onSuccess: () => {
+                    this.isMakingPublic = false;
+                    ref.close();
+                }
             })
         },
         makeClientPrivate() {
+            let ref = this.$refs.makeClientPrivateDialog;
             this.isMakingPrivate = true;
             this.$inertia.post(route('strava.client.private', this.client.id), {
-                onFinish: () => this.isMakingPrivate = false
+                onSuccess: () => {
+                    this.isMakingPrivate = false;
+                    ref.close();
+                }
             })
         },
         enableClient() {
+            let ref = this.$refs.enableClientDialog;
             this.isEnabling = true;
             this.$inertia.post(route('strava.client.enable', this.client.id), {
-                onFinish: () => this.isEnabling = false
+                onSuccess: () => {
+                    this.isEnabling = false;
+                    ref.close();
+                }
+            })
+        },
+        leaveClient() {
+            let ref = this.$refs.leavingClientDialog;
+            this.isLeaving = true;
+            this.$inertia.delete(route('strava.client.leave', this.client.id), {
+                onSuccess: () => {
+                    this.isLeaving = false;
+                    ref.close();
+                }
             })
         },
         disableClient() {
+            let ref = this.$refs.disableClientDialog;
             this.isDisabling = true;
             this.$inertia.post(route('strava.client.disable', this.client.id), {
-                onFinish: () => this.isDisabling = false
+                onSuccess: () => {
+                    this.isDisabling = false;
+                    ref.close();
+                }
             })
         }
 

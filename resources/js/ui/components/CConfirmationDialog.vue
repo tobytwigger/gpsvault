@@ -78,6 +78,9 @@ export default {
     methods: {
         triggerDialog() {
             this.showDialog = true;
+        },
+        close() {
+            this.showDialog = false;
         }
     }
 }

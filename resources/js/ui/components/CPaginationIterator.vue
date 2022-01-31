@@ -120,7 +120,17 @@ export default {
             required: false,
             type: Boolean,
             default: false
-        }
+        },
+        pageAttributeName: {
+            required: false,
+            type: String,
+            default: 'page'
+        },
+        perPageAttributeName: {
+            required: false,
+            type: String,
+            default: 'perPage'
+        },
     },
     data() {
         return {
@@ -153,8 +163,8 @@ export default {
     methods: {
         getPageUrl(page, perPage) {
             let url = new URL(this.paginator.path);
-            url.searchParams.set('page', page);
-            url.searchParams.set('perPage', perPage);
+            url.searchParams.set(this.pageAttributeName, page);
+            url.searchParams.set(this.perPageAttributeName, perPage);
             return url.toString();
         }
     }

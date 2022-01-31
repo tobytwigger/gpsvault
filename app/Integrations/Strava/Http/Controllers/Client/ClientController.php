@@ -14,7 +14,7 @@ class ClientController extends Controller
 
     public function index()
     {
-        $ownedClients = Auth::user()->ownedClients()->paginate(
+        $ownedClients = Auth::user()->ownedClients()->with('sharedUsers')->paginate(
             perPage: request()->input('owned_per_page', 8),
             columns: ['*'],
             pageName: 'owned_page',
@@ -25,6 +25,9 @@ class ClientController extends Controller
                 'client_secret' => $client->client_secret,
                 'created_at' => $client->created_at->toIso8601String(),
                 'updated_at' => $client->updated_at->toIso8601String(),
+                'shared_users' => $client->sharedUsers->map(fn(User $user) => [
+                    'id' => $user->id, 'name' => $user->name, 'email' => $user->email
+                ])
             ]);
             $ownedClients->offsetSet($index, $client);
         }
@@ -44,6 +47,8 @@ class ClientController extends Controller
                 'enabled' => $client->enabled,
                 'used_15_min_calls' => $client->used_15_min_calls,
                 'used_daily_calls' => $client->used_daily_calls,
+                'limit_15_min' => $client->limit_15_min,
+                'limit_daily' => $client->limit_daily,
                 'pending_calls' => $client->pending_calls,
                 'is_connected' => $client->is_connected,
             ];
@@ -63,6 +68,8 @@ class ClientController extends Controller
                 'description' => $client->description,
                 'used_15_min_calls' => $client->used_15_min_calls,
                 'used_daily_calls' => $client->used_daily_calls,
+                'limit_15_min' => $client->limit_15_min,
+                'limit_daily' => $client->limit_daily,
                 'pending_calls' => $client->pending_calls,
                 'is_connected' => $client->is_connected,
             ];

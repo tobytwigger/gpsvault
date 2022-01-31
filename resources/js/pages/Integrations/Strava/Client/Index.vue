@@ -7,32 +7,53 @@
             icons-and-text
         >
             <v-tabs-slider></v-tabs-slider>
-            <v-tab href="#tab-own">Your clients<v-icon>mdi-heart-pulse</v-icon></v-tab>
-            <v-tab href="#tab-shared">Shared with you<v-icon>mdi-heart-pulse</v-icon></v-tab>
-            <v-tab href="#tab-public">Public<v-icon>mdi-heart-pulse</v-icon></v-tab>
+            <v-tab href="#tab-own">
+                <v-badge
+                    :color="tab === 'tab-own' ? 'primary' : 'secondary'"
+                    :content="ownedClients.total ? ownedClients.total : '0'"
+                >
+                    Your clients
+                </v-badge>
+            </v-tab>
+            <v-tab href="#tab-shared">
+                <v-badge
+                    :color="tab === 'tab-shared' ? 'primary' : 'secondary'"
+                    :content="sharedClients.total ? sharedClients.total : '0'"
+                >
+                    Shared with you
+                </v-badge>
+            </v-tab>
+            <v-tab href="#tab-public">
+                <v-badge
+                    :color="tab === 'tab-public' ? 'primary' : 'secondary'"
+                    :content="publicClients.total ? publicClients.total : '0'"
+                >
+                    Public
+                </v-badge>
+            </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-own">
-                <c-pagination-iterator :paginator="ownedClients" item-key="id">
+                <c-pagination-iterator :paginator="ownedClients" item-key="id" page-attribute-name="owned_page" per-page-attribute-name="owned_per_page">
                     <template v-slot:default="{item}">
-                        <c-strava-client-card :client="item"></c-strava-client-card>
+                        <c-strava-client-card :client="item" type="owned"></c-strava-client-card>
                     </template>
                 </c-pagination-iterator>
             </v-tab-item>
 
             <v-tab-item value="tab-shared">
-                <c-pagination-iterator :paginator="sharedClients" item-key="id">
+                <c-pagination-iterator :paginator="sharedClients" item-key="id" page-attribute-name="shared_page" per-page-attribute-name="shared_per_page">
                     <template v-slot:default="{item}">
-                        <c-strava-client-card :client="item"></c-strava-client-card>
+                        <c-strava-client-card :client="item" type="shared"></c-strava-client-card>
                     </template>
                 </c-pagination-iterator>
             </v-tab-item>
 
             <v-tab-item value="tab-public">
-                <c-pagination-iterator :paginator="publicClients" item-key="id">
+                <c-pagination-iterator :paginator="publicClients" item-key="id" page-attribute-name="public_page" per-page-attribute-name="public_per_page">
                     <template v-slot:default="{item}">
-                        <c-strava-client-card :client="item"></c-strava-client-card>
+                        <c-strava-client-card :client="item" type="public"></c-strava-client-card>
                     </template>
                 </c-pagination-iterator>
             </v-tab-item>
@@ -65,7 +86,7 @@ import CStravaClientCard from 'ui/components/Strava/CStravaClientCard';
 import CAppWrapper from '../../../../ui/layouts/CAppWrapper';
 import CStravaClientForm from '../../../../ui/components/Strava/CStravaClientForm';
 export default {
-    name: "Index.vue",
+    name: "Index",
     components: {CStravaClientForm, CAppWrapper, CStravaClientCard, CPaginationIterator},
     props: {
         ownedClients: {

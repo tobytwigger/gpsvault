@@ -141,7 +141,11 @@ class IndexClientTest extends TestCase
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
 
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+
         $ownedClient = StravaClient::factory()->create(['user_id' => $this->user->id]);
+        $ownedClient->sharedUsers()->attach([$user1->id, $user2->id]);
         $sharedClient = StravaClient::factory()->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create();
         $publicClient = StravaClient::factory()
@@ -178,6 +182,17 @@ class IndexClientTest extends TestCase
                     ->where('invitation_link_expires_at', $ownedClient->invitation_link_expires_at)
                     ->where('client_id', $ownedClient->client_id)
                     ->where('client_secret', $ownedClient->client_secret)
+                    ->has('shared_users', 2)
+                    ->has('shared_users.0', fn(Assert $page) => $page
+                        ->where('id', $user1->id)
+                        ->where('name', $user1->name)
+                        ->where('email', $user1->email)
+                    )
+                    ->has('shared_users.1', fn(Assert $page) => $page
+                        ->where('id', $user2->id)
+                        ->where('name', $user2->name)
+                        ->where('email', $user2->email)
+                    )
                 )
                 ->etc()
             )
@@ -191,6 +206,8 @@ class IndexClientTest extends TestCase
                     ->where('enabled', $sharedClient->enabled)
                     ->where('used_15_min_calls', $sharedClient->used_15_min_calls)
                     ->where('used_daily_calls', $sharedClient->used_daily_calls)
+                    ->where('limit_15_min', $sharedClient->limit_15_min)
+                    ->where('limit_daily', $sharedClient->limit_daily)
                     ->where('client_id', $sharedClient->client_id)
                     ->where('pending_calls', $sharedClient->pending_calls)
                     ->where('is_connected', $sharedClient->is_connected)
@@ -205,6 +222,8 @@ class IndexClientTest extends TestCase
                     ->where('description', $publicClient->description)
                     ->where('used_15_min_calls', $publicClient->used_15_min_calls)
                     ->where('used_daily_calls', $publicClient->used_daily_calls)
+                    ->where('limit_15_min', $publicClient->limit_15_min)
+                    ->where('limit_daily', $publicClient->limit_daily)
                     ->where('client_id', $publicClient->client_id)
                     ->where('pending_calls', $publicClient->pending_calls)
                     ->where('is_connected', $publicClient->is_connected)

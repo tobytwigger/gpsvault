@@ -7,7 +7,7 @@ export default {
             return now
                 .add(15 - (now.minute() % 15), "minutes")
                 .seconds(0)
-                .format("HH:mm:ss");
+                .format("HH:mm");
         },
         nextDay() {
             return moment()
@@ -16,6 +16,16 @@ export default {
                 .minutes(0)
                 .hours(0)
                 .format('DD/MM/YYYY');
+        },
+        nextDayIn() {
+            return moment.duration(
+                moment()
+                    .add(1, 'days')
+                    .seconds(0)
+                    .minutes(0)
+                    .hours(0)
+                    .diff(moment())
+            ).humanize();
         },
         isLoadingPhotos() {
             if(this.activity) {

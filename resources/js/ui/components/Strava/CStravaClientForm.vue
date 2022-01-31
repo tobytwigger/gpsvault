@@ -17,7 +17,6 @@
                         <v-text-field
                             id="name"
                             v-model="form.name"
-                            v-if="!oldClient"
                             label="Name"
                             hint="A name for the client, to help you identify it later"
                             name="name"
@@ -121,8 +120,8 @@ export default {
     methods: {
         updateFromOldClient() {
             if(this.oldClient) {
-                this.form.client_id = this.oldClient.name;
-                this.form.client_secret = this.oldClient.description;
+                this.form.client_id = this.oldClient.client_id;
+                this.form.client_secret = this.oldClient.client_secret;
                 this.form.name = this.oldClient.name;
                 this.form.description = this.oldClient.description;
             }
