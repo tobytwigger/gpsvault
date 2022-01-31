@@ -57,7 +57,9 @@
 
         <v-card-text>
             <v-btn @click="$inertia.post(route('strava.client.logout', client.id))" v-if="client.is_connected">Logout</v-btn>
-            <v-btn :href="stravaLoginUrl" v-else>Login</v-btn>
+            <v-btn :href="stravaLoginUrl" v-else>
+                <v-img src="dist/images/strava_logo.svg" alt="Connect to Strava" />
+            </v-btn>
         </v-card-text>
 
         <v-card-actions>
