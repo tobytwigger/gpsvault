@@ -9,61 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
-class StravaIntegration extends Integration
+class StravaIntegration
 {
-
-    public function id(): string
-    {
-        return 'strava';
-    }
-
-    public function serviceUrl(): string
-    {
-        return 'https://www.strava.com/';
-    }
-
-    public function name(): string
-    {
-        return 'Strava';
-    }
-
-    public function description(): string
-    {
-        return 'Strava is xyz';
-    }
-
-    public function functionality(): array
-    {
-        return [
-            'Import all your activities and their interactions.',
-            'Import all photos uploaded to Strava.'
-        ];
-    }
-
-    public function connected(User $user): bool
-    {
-        return $user->stravaTokens()->exists();
-    }
-
-    public function loginUrl(): string
-    {
-        return route('strava.client.index');
-    }
-
-    public function loginImageUrl(): ?string
-    {
-        return mix('dist/images/strava_logo.svg');
-    }
-
-    public function disconnect(User $user): void
-    {
-        $user->stravaTokens()->withoutGlobalScope('enabled')->withoutGlobalScope('not-expired')->delete();
-    }
-
-    public function vueAddOn(): ?string
-    {
-        return 'strava-integration-addon';
-    }
 
     public function vueAddOnProps(): array
     {

@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Strava\Commands\ResetRateLimit;
+use App\Integrations\Strava\Client\Commands\ResetRateLimit;
 use App\Integrations\Strava\Commands\SetupWebhooks;
 use App\Integrations\Strava\Events\NewStravaActivity;
 use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
@@ -43,6 +43,7 @@ class StravaServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->commands([ResetRateLimit::class]);
 //        $this->app->singleton(StravaImporter::class);
     }
 
@@ -88,13 +89,13 @@ class StravaServiceProvider extends ServiceProvider
 //            Route::delete('/client/{client}/leave', [ClientInvitationController::class, 'leave'])->name('strava.client.leave');
 //            Route::post('/client/{client}/enable', [ClientStatusController::class, 'enable'])->name('strava.client.enable');
 //            Route::post('/client/{client}/disable', [ClientStatusController::class, 'disable'])->name('strava.client.disable');
-//            Route::post('/client/{client}/public', [ClientStatusController::class, 'makePublic'])->name('strava.client.public');
+//            Route::post0('/client/{client}/public', [ClientStatusController::class, 'makePublic'])->name('strava.client.public');
 //            Route::post('/client/{client}/private', [ClientStatusController::class, 'makePrivate'])->name('strava.client.private');
 //            Route::resource('client', ClientController::class, ['as' => 'strava'])->only('index', 'store', 'destroy');
 //        });
 //        Route::middleware(['webhooks'])->prefix('strava/webhook/incoming')->group(function() {
 //            Route::get('/client/{client}', [IncomingWebhookController::class, 'verify'])->name('strava.webhook.verify');
-//            Route::post('/client/{client}', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
+//            Route::pos0t('/client/{client}', [IncomingWebhookController::class, 'incoming'])->name('strava.webhook.incoming');
 //        });
 //
 //        RateLimiter::for('strava', fn($job) => static::stravaLimiters());

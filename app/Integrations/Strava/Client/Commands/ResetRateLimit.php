@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Commands;
+namespace App\Integrations\Strava\Client\Commands;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Console\Command;
@@ -13,7 +13,9 @@ class ResetRateLimit extends Command
      *
      * @var string
      */
-    protected $signature = 'strava:ratelimit {limiter : One of minute or day}';
+    protected $signature = 'strava:reset-limits
+                                {--rate : Reset the rate limit}
+                                {--daily : Reset the daily rate limit}';
 
     /**
      * The console command description.
@@ -29,13 +31,10 @@ class ResetRateLimit extends Command
      */
     public function handle()
     {
-        if($this->argument('limiter') === 'minute') {
+        if($this->option('rate')) {
             StravaClient::query()->update(['used_15_min_calls' => 0]);
-        } elseif($this->argument('limiter') === 'day') {
+        } if($this->option('daily')) {
             StravaClient::query()->update(['used_daily_calls' => 0]);
-        } else {
-            $this->error('Argument must be one of minute or day');
-            return Command::FAILURE;
         }
         return Command::SUCCESS;
     }
