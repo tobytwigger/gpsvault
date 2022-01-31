@@ -73,7 +73,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
         Route::middleware('link')->get('/client/{client}/accept', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'accept'])->name('strava.client.accept');
         Route::post('/client/{client}/invite', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'invite'])->name('strava.client.invite');
         Route::delete('/client/{client}/leave', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'leave'])->name('strava.client.leave');
-        Route::delete('/client/{client}/remove', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'remove'])->name('strava.client.leave');
+        Route::delete('/client/{client}/remove', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'remove'])->name('strava.client.remove');
 
         /* Client status */
         Route::post('/client/{client}/enable', [\App\Integrations\Strava\Http\Controllers\Client\ClientEnabledController::class, 'enable'])->name('strava.client.enable');

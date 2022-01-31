@@ -4,6 +4,7 @@ namespace App\Integrations\Strava\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,8 @@ class ClientInvitationController extends Controller
 
     public function leave(Request $request, StravaClient $client)
     {
-        abort_if(!$client->sharedUsers()->where('user_id', Auth::id())->exists(), 403, 'You are not a part of this client.');
+        abort_if($client->user_id === Auth::id(), 403, 'You own this client. If you no longer use this client, please delete it.');
+        abort_if(!$client->sharedUsers()->where('user_id', Auth::id())->exists(), 403, 'You do not have access to this client.');
 
         $client->sharedUsers()->detach(Auth::id());
 
@@ -39,11 +41,18 @@ class ClientInvitationController extends Controller
 
     public function remove(Request $request, StravaClient $client)
     {
-        $request->validate([
-            'user_id' => ['required', 'integer', Rule::exists('users', 'id')->whereIn('id', $client->sharedUsers()->pluck('id')->toArray())]
-        ]);
+        abort_if($client->user_id !== Auth::id(), 403, 'You do not own this client.');
 
-        abort_if(!$client->user_id !== Auth::id(), 403, 'You do not own this client.');
+        $request->validate([
+            'user_id' => [
+                'required',
+                'integer',
+                Rule::exists('users', 'id')
+                    ->whereIn('id',
+                        $client->sharedUsers()->get()->pluck('id')->toArray()
+                    )
+            ]
+        ]);
 
         $client->sharedUsers()->detach($request->input('user_id'));
 
@@ -55,7 +64,7 @@ class ClientInvitationController extends Controller
         $link = $request->get(Link::class);
         abort_if($client->invitation_link_uuid !== $link->uuid, 403, 'The invitation is not valid or has expired.');
         abort_if($client->user_id === Auth::id(), 403, 'You cannot accept your own invitation.');
-        abort_if($client->sharedUsers()->where('user_id', Auth::id())->exists(), 403, 'You have already accepted this invitation');
+        abort_if($client->sharedUsers()->where('user_id', Auth::id())->exists(), 403, 'You have already accepted this invitation.');
 
         $client->sharedUsers()->attach(Auth::id());
 

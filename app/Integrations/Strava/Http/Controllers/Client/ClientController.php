@@ -14,16 +14,26 @@ class ClientController extends Controller
 
     public function index()
     {
-        $ownedClients = Auth::user()->ownedClients()->paginate(request()->input('perPage', 8));
+        $ownedClients = Auth::user()->ownedClients()->paginate(
+            perPage: request()->input('owned_per_page', 8),
+            columns: ['*'],
+            pageName: 'owned_page',
+        );
         foreach ($ownedClients->items() as $index => $client) {
             $client = array_merge($client->toArray(), [
                 'client_id' => $client->client_id,
                 'client_secret' => $client->client_secret,
+                'created_at' => $client->created_at->toIso8601String(),
+                'updated_at' => $client->updated_at->toIso8601String(),
             ]);
             $ownedClients->offsetSet($index, $client);
         }
 
-        $sharedClients = Auth::user()->sharedClients()->paginate(request()->input('perPage', 8));
+        $sharedClients = Auth::user()->sharedClients()->paginate(
+            perPage: request()->input('shared_per_page', 8),
+            columns: ['*'],
+            pageName: 'shared_page',
+        );
         foreach ($sharedClients->items() as $index => $client) {
             $client = [
                 'id' => $client->id,
@@ -39,7 +49,11 @@ class ClientController extends Controller
             $sharedClients->offsetSet($index, $client);
         }
 
-        $publicClients = StravaClient::public()->enabled()->where('user_id', '!=', Auth::id())->paginate(request()->input('perPage', 8));
+        $publicClients = StravaClient::public()->enabled()->where('user_id', '!=', Auth::id())->paginate(
+            perPage: request()->input('public_per_page', 8),
+            columns: ['*'],
+            pageName: 'public_page',
+        );
         foreach ($publicClients->items() as $index => $client) {
             $client =[
                 'id' => $client->id,
