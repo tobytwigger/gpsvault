@@ -61,4 +61,29 @@ class Authenticator
         return $token;
     }
 
+    public function exchangeCode(string $code, StravaClientModel $stravaClient): StravaTokenResponse
+    {
+        $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
+            'query' => [
+                'client_id' => $stravaClient->client_id,
+                'client_secret' => $stravaClient->client_secret,
+                'code' => $code,
+                'grant_type' => 'authorization_code'
+            ]
+        ]);
+
+        $credentials = json_decode(
+            $response->getBody()->getContents(),
+            true
+        );
+
+        return StravaTokenResponse::create(
+            new Carbon((int) $credentials['expires_at']),
+            (int)$credentials['expires_in'],
+            (string)$credentials['refresh_token'],
+            (string)$credentials['access_token'],
+            (int)$credentials['athlete']['id']
+        );
+    }
+
 }

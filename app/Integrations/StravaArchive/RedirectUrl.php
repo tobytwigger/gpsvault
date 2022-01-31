@@ -25,7 +25,7 @@ class RedirectUrl
         return sprintf('https://www.strava.com/oauth/authorize?%s', http_build_query($params));
     }
 
-        public function exchangeCode(string $code, StravaClientModel $stravaClient): StravaToken
+    public function exchangeCode(string $code, StravaClientModel $stravaClient): StravaToken
     {
         $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
             'query' => [

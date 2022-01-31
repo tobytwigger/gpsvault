@@ -26,13 +26,13 @@ class AcceptInvitationTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
         $client->delete();
 
-        $response = $this->post(route('strava.client.invite', $client->id));
+        $response = $this->get(route('strava.client.accept', $client->id));
         $response->assertStatus(404);
     }
 
     /** @test */
     public function you_must_be_authenticated(){
-        $response = $this->post(route('strava.client.invite', 500));
+        $response = $this->get(route('strava.client.accept', 500));
         $response->assertRedirect(route('login'));
     }
 

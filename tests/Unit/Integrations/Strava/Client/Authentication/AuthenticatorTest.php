@@ -4,6 +4,7 @@ namespace Unit\Integrations\Strava\Client\Authentication;
 
 use App\Integrations\Strava\Client\Authentication\Authenticator;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
+use App\Integrations\Strava\Client\Authentication\StravaTokenResponse;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Carbon\Carbon;
@@ -115,6 +116,41 @@ class AuthenticatorTest extends TestCase
         ])));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
         $authenticator->getAuthToken($client);
+    }
+
+    /** @test */
+    public function exchangeCode_creates_a_strava_token_representation(){
+        $client = StravaClient::factory()->create(['client_id' => 'my-client-id', 'client_secret' => 'my-client-secret']);
+        $user = User::factory()->create();
+        $user->setAdditionalData('strava_athlete_id', 12345);
+
+        $expiresAt = Carbon::now()->addDay();
+
+        $guzzleClient = $this->prophesize(Client::class);
+        $guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
+            'query' => [
+                'client_id' => $client->client_id,
+                'client_secret' => $client->client_secret,
+                'code' => '12345-code',
+                'grant_type' => 'authorization_code'
+            ]
+        ])->shouldBeCalled()->willReturn(new Response(200, [], json_encode([
+            'expires_at' => $expiresAt->unix(),
+            'expires_in' => 500,
+            'refresh_token' => 'new-refresh-token',
+            'access_token' => 'new-access-token',
+            'athlete' => ['id' => 12345]
+        ])));
+
+        $authenticator = new Authenticator($user, $guzzleClient->reveal());
+        $newToken = $authenticator->exchangeCode('12345-code', $client);
+        $this->assertInstanceOf(StravaTokenResponse::class, $newToken);
+
+        $this->assertEquals(12345, $newToken->getAthleteId());
+        $this->assertEquals(500, $newToken->getExpiresIn());
+        $this->assertEquals('new-access-token', $newToken->getAccessToken());
+        $this->assertEquals('new-refresh-token', $newToken->getRefreshToken());
+        $this->assertEquals($expiresAt->unix(), Carbon::make($newToken->getExpiresAt())->unix());
     }
 
 }
