@@ -27,7 +27,7 @@
 
                 <v-card-text>
                     <v-list two-line>
-                        <v-list-item v-for="user in client.shared_users">
+                        <v-list-item v-for="user in client.shared_users" :key="user.id">
                             <v-list-item-content>
                                 <v-list-item-title>{{user.name}}</v-list-item-title>
                                 <v-list-item-subtitle>{{user.email}}</v-list-item-subtitle>

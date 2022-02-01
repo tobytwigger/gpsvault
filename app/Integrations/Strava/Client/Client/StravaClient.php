@@ -27,12 +27,12 @@ class StravaClient
         ]);
     }
 
-    public function activity()
+    public function activity(): Activity
     {
         return $this->createHandler(Activity::class);
     }
 
-    public function webhook()
+    public function webhook(): Webhook
     {
         return $this->createHandler(Webhook::class);
     }
