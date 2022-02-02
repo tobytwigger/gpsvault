@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Activity;
-use App\Models\ActivityStats;
 use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
