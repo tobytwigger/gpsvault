@@ -60,7 +60,6 @@ abstract class Task implements Jsonable, Arrayable
 
     public function succeed(string $message)
     {
-        $this->task->addMessage($message);
         throw new TaskSucceeded($message);
     }
 
