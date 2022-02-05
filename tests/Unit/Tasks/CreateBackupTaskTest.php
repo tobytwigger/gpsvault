@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Tasks;
 
-use App\Integrations\Strava\Client\StravaClientFactory;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Route;
@@ -10,11 +9,8 @@ use App\Models\Tour;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use App\Services\Archive\ZipCreatorFactory;
-use App\Services\Sync\Sync;
-use App\Services\Sync\SyncTask;
 use App\Tasks\CreateBackupTask;
 use Carbon\Carbon;
-use Database\Factories\SyncTaskFactory;
 use Prophecy\Argument;
 use Tests\TestCase;
 use Tests\Utils\TestsTasks;

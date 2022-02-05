@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Geocoding\Nominatim;
+namespace App\Services\Geocoding;
 
 use App\Services\Geocoding\Geocoder;
 use Illuminate\Contracts\Cache\Repository;

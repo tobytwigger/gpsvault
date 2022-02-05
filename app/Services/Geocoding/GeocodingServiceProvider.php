@@ -2,7 +2,6 @@
 
 namespace App\Services\Geocoding;
 
-use App\Services\Geocoding\Nominatim\GeocoderCache;
 use App\Services\Geocoding\Nominatim\GeocoderRateLimiting;
 use App\Services\Geocoding\Nominatim\NominatimGeocoder;
 use Illuminate\Contracts\Cache\Repository;

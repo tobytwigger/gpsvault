@@ -20,14 +20,14 @@ class GeocoderRateLimiting implements Geocoder
         $this->cache = $cache;
     }
 
-    private function getUsage(): int
+    public function getUsage(): int
     {
         return $this->cache->get(static::CACHE_KEY, 0);
     }
 
-    private function isRateLimited(): bool
+    public function isRateLimited(): bool
     {
-        return $this->getUsage() > 2;
+        return $this->getUsage() >= 2;
     }
 
     private function markAttempt()

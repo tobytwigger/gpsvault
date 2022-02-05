@@ -21,7 +21,7 @@ class NominatimGeocoder implements Geocoder
         );
         if(array_key_exists('address', $result)) {
             $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
-            return join(', ', array_slice($address, 0, 4));
+            return join(', ', array_slice($address, 0, 2));
         }
         return null;
     }
