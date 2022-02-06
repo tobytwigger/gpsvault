@@ -4,19 +4,12 @@ namespace App\Models;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
-use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
 use App\Traits\HasStats;
-use Database\Factories\ActivityFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Query\JoinClause;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class Activity extends Model
 {
