@@ -23,6 +23,7 @@ class RouteFactory extends Factory
             'name' => $this->faker->title,
             'description' => $this->faker->paragraph,
             'notes' => $this->faker->paragraph,
+            'public' => false,
             'file_id' => null,
             'user_id' => fn() => User::factory()
         ];
