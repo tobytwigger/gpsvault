@@ -186,11 +186,11 @@ class ActivityTest extends TestCase
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
         $activity->setAdditionalData('strava_id', 12345);
-        $stats = Stats::factory()->activity($activity)->create(['distance' => 5000]);
+        $stats = Stats::factory()->activity($activity)->create(['distance' => 5000.0]);
 
         $apiData = [
             'id' => 12345,
-            'distance' => 5000
+            'distance' => 5000.0
         ];
 
         $importer = new Activity();
@@ -201,7 +201,6 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_is_marked_as_updated_if_updated(){
-        $this->markTestIncomplete();
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
         $activity->setAdditionalData('strava_id', 12345);
@@ -227,7 +226,7 @@ class ActivityTest extends TestCase
 
         $apiData = [
             'id' => 12345,
-            'distance' => 6000
+            'distance' => 6000.0
         ];
 
         $importer = new Activity();

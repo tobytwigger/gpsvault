@@ -17,6 +17,7 @@ use Inertia\Inertia;
 
 /* Public */
 Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'welcome'])->name('welcome');
+Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
 /* Documentation */
 Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');

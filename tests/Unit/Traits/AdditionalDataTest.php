@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Traits;
 
+use App\Models\Activity;
 use Tests\TestCase;
 
 class AdditionalDataTest extends TestCase
@@ -9,7 +10,9 @@ class AdditionalDataTest extends TestCase
 
     /** @test */
     public function single_additional_data_can_be_set_and_retrieved(){
-        $this->markTestIncomplete();
+        $activity = Activity::factory()->create();
+        $activity->setAdditionalData('demo-data', 'This is some demo data');
+        $this->assertEquals('This is some demo data', $activity->getAdditionalData('demo-data'));
 
     }
 

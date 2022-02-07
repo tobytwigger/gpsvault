@@ -2,11 +2,6 @@
 
 namespace App\Integrations\Strava\Client\Import\Resources;
 
-use App\Exceptions\ActivityDuplicate;
-use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
-use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
-use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
-use App\Integrations\Strava\Events\StravaActivityUpdated;
 use App\Models\Activity as ActivityModel;
 use App\Models\Stats;
 use App\Models\User;
@@ -91,39 +86,45 @@ class Activity
     {
         $importer = ActivityImporter::update($existingActivity)
             ->linkTo('strava');
-        $updated = [];
+        $updated = false;
 
         if(array_key_exists('upload_id_str', $activityData) && $existingActivity->getAdditionalData('strava_upload_id') !== data_get($activityData, 'upload_id_str')) {
             $importer->setAdditionalData('strava_upload_id', data_get($activityData, 'upload_id_str'));
-            $updated[] = 'strava_upload_id';
+            $updated = true;
         }
 
         if ($existingActivity->getAdditionalData('strava_photo_count') !== $this->getIntegerData($activityData, 'total_photo_count')) {
             $importer->setAdditionalData('strava_photo_count', $this->getIntegerData($activityData, 'total_photo_count'));
-            $updated[] = $this->getIntegerData($activityData, 'total_photo_count') > 0 ? 'photos' : null;
+            $updated = true;
         }
 
         if ($existingActivity->getAdditionalData('strava_comment_count') !== $this->getIntegerData($activityData, 'comment_count')) {
             $importer->setAdditionalData('strava_comment_count', $this->getIntegerData($activityData, 'comment_count'));
-            $updated[] = $this->getIntegerData($activityData, 'comment_count') > 0 ? 'comments' : null;
+            $updated = true;
         }
 
         if ($existingActivity->getAdditionalData('strava_kudos_count') !== $this->getIntegerData($activityData, 'kudos_count')) {
             $importer->setAdditionalData('strava_kudos_count', $this->getIntegerData($activityData, 'kudos_count'));
-            $updated[] = $this->getIntegerData($activityData, 'kudos_count') > 0 ? 'kudos' : null;
+            $updated = true;
         }
-
 
         if ($existingActivity->getAdditionalData('strava_pr_count') !== $this->getIntegerData($activityData, 'pr_count')
             || $existingActivity->getAdditionalData('strava_achievement_count') !== $this->getIntegerData($activityData, 'achievement_count')) {
             $importer
                 ->setAdditionalData('strava_pr_count', $this->getIntegerData($activityData, 'pr_count'))
                 ->setAdditionalData('strava_achievement_count', $this->getIntegerData($activityData, 'achievement_count'));
-            $updated[] = $this->getIntegerData($activityData, 'kudos_count') > 0 ? 'details' : null;
+            $updated = true;
         }
 
-        $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]))
-            ->save();
+        $stats = $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]));
+        if(
+            collect($stats->toArray())
+                ->filter(fn($value, $key) => array_key_exists($key, $activityData) && $activityData[$key] !== $value)
+                ->count() > 0
+        ) {
+            $updated = true;
+        }
+        $stats->save();
 
         $existingActivity = $importer->save();
 
@@ -138,7 +139,7 @@ class Activity
 //                $events[$updatedProperty]::dispatch($existingActivity);
 //            }
 //        }
-        if (count($updated) > 0) {
+        if ($updated === true) {
             $this->status = static::UPDATED;
         }
 
@@ -149,23 +150,23 @@ class Activity
     {
         $stats->fill([
             'integration' => 'strava',
-            'distance' => $activityData['distance'] ?? null,
-            'started_at' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : null,
-            'duration' => $activityData['elapsed_time'] ?? null,
-            'average_speed' => $activityData['average_speed'] ?? null,
-            'min_altitude' => $activityData['elev_low'] ?? null,
-            'max_altitude' => $activityData['elev_high'] ?? null,
-            'elevation_gain' => $activityData['total_elevation_gain'] ?? null,
-            'moving_time' => $activityData['moving_time'] ?? null,
-            'max_speed' => $activityData['max_speed'] ?? null,
-            'average_cadence' => $activityData['average_cadence'] ?? null,
-            'average_temp' => $activityData['average_temp'] ?? null,
-            'average_watts' => $activityData['average_watts'] ?? null,
-            'kilojoules' => $activityData['kilojoules'] ?? null,
-            'start_latitude' => Arr::first($activityData['start_latlng'] ?? []),
-            'start_longitude' => Arr::last($activityData['start_latlng'] ?? []),
-            'end_latitude' => Arr::first($activityData['end_latlng'] ?? []),
-            'end_longitude' => Arr::last($activityData['end_latlng'] ?? []),
+            'distance' => $activityData['distance'] ?? $stats->distance,
+            'started_at' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : $stats->started_at,
+            'duration' => $activityData['elapsed_time'] ?? $stats->duration,
+            'average_speed' => $activityData['average_speed'] ?? $stats->average_speed,
+            'min_altitude' => $activityData['elev_low'] ?? $stats->min_altitude,
+            'max_altitude' => $activityData['elev_high'] ?? $stats->max_altitude,
+            'elevation_gain' => $activityData['total_elevation_gain'] ?? $stats->elevation_gain,
+            'moving_time' => $activityData['moving_time'] ?? $stats->moving_time,
+            'max_speed' => $activityData['max_speed'] ?? $stats->max_speed,
+            'average_cadence' => $activityData['average_cadence'] ?? $stats->average_cadence,
+            'average_temp' => $activityData['average_temp'] ?? $stats->average_temp,
+            'average_watts' => $activityData['average_watts'] ?? $stats->average_watts,
+            'kilojoules' => $activityData['kilojoules'] ?? $stats->kilojoules,
+            'start_latitude' => Arr::first($activityData['start_latlng'] ?? [$stats->start_latitude]),
+            'start_longitude' => Arr::last($activityData['start_latlng'] ?? [$stats->start_longitude]),
+            'end_latitude' => Arr::first($activityData['end_latlng'] ?? [$stats->end_latitude]),
+            'end_longitude' => Arr::last($activityData['end_latlng'] ?? [$stats->end_longitude]),
         ]);
         return $stats;
     }

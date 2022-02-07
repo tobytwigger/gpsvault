@@ -19,6 +19,10 @@ class Route extends Model
         'cover_image', 'distance'
     ];
 
+    protected $casts = [
+        'public' => 'boolean'
+    ];
+
     public function getCoverImageAttribute()
     {
         $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();

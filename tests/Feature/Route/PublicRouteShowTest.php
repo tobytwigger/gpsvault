@@ -8,24 +8,20 @@ use App\Models\Stats;
 use Inertia\Testing\Assert;
 use Tests\TestCase;
 
-class RouteShowTest extends TestCase
+class PublicRouteShowTest extends TestCase
 {
 
     /** @test */
     public function it_shows_the_route(){
-        $this->authenticated();
-        $route = Route::factory()->create(['user_id' => $this->user->id]);
+        $route = Route::factory()->create(['public' => true]);
         $stat1 = Stats::factory()->route($route)->create(['integration' => 'int1']);
         $stat2 = Stats::factory()->route($route)->create(['integration' => 'int2']);
-        $files = File::factory()->routeMedia()->count(5)->create();
-        $route->files()->sync($files);
 
-        $this->get(route('route.show', $route))
+        $this->get(route('route.public', $route))
             ->assertInertia(fn(Assert $page) => $page
-                ->component('Route/Show')
+                ->component('Route/Public')
                 ->has('routeModel', fn (Assert $page) => $page
                     ->where('id', $route->id)
-                    ->has('files', 5)
                     ->has('stats', 2)
                     ->has('stats.0', fn(Assert $page) => $page
                         ->where('id', $stat1->id)
@@ -43,19 +39,20 @@ class RouteShowTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_the_route_is_not_owned_by_you(){
-        $this->authenticated();
-        $route = Route::factory()->create(['public' => true]);
+    public function it_returns_a_403_if_the_route_is_not_public(){
+        $route = Route::factory()->create(['public' => false]);
 
-        $this->get(route('route.show', $route))
+        $this->get(route('route.public', $route))
             ->assertStatus(403);
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
-        $route = Route::factory()->create();
-        $this->get(route('route.show', $route))
-            ->assertRedirect(route('login'));
+    public function you_can_be_authenticated(){
+        $this->authenticated();
+
+        $route = Route::factory()->create(['public' => true]);
+        $this->get(route('route.public', $route))
+            ->assertInertia(fn(Assert $page) => $page->component('Route/Public'));
     }
 
 }
