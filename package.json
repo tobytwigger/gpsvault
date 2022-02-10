@@ -15,7 +15,7 @@
         "@inertiajs/progress": "^0.2.6",
         "@vue/compiler-sfc": "^3.2.26",
         "acorn": "^8.7.0",
-        "axios": "^0.21",
+        "axios": "^0.18",
         "chart.js": "^3.6.2",
         "chartjs-adapter-moment": "^1.0.0",
         "convert-units": "^2.3.4",
@@ -33,8 +33,8 @@
         "vue-template-compiler": "^2.6.14"
     },
     "dependencies": {
-        "@elbowspaceuk/laravel-settings-vue": "./repos/laravel-settings-vue",
         "@bruit/component": "^1.3.15",
+        "@elbowspaceuk/laravel-settings-vue": "git+https://github.com/ElbowSpaceUK/laravel-settings-vue.git#build",
         "intro.js": "^4.3.0",
         "leaflet": "^1.7.1",
         "vue-easy-lightbox": "^0.16.2",

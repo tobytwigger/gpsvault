@@ -33,16 +33,16 @@ return [
 
     'routes' => [
         'enabled' => true,
-        'prefix' => 'settings',
+        'prefix' => 'api/settings',
         'middleware' => []
     ],
 
     'js' => [
         'autoload' => [
-            'unit_system',
-            'dark_mode',
-            'stats_order_preference',
-            'bruit_api_key'
+//            'unit_system',
+//            'dark_mode',
+//            'stats_order_preference',
+//            'bruit_api_key'
         ]
     ]
 
