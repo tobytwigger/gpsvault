@@ -7,10 +7,17 @@
             border="left"
         >
             The dashboard is still in development and will be available soon.
-            {{test}}
-<!--            {{$setting}}-->
-            {{test}}
-            {{testTwo}}
+        </v-alert>
+
+        <v-alert
+            outlined
+            type="info"
+            prominent
+            border="left"
+        >
+            Your unit system is {{$setting.unit_system}}.
+
+            Your theme is {{theme}}
             <v-btn @click="updateSettings">Update</v-btn>
         </v-alert>
     </c-app-wrapper>
@@ -21,36 +28,27 @@ import CAppWrapper from 'ui/layouts/CAppWrapper';
 export default {
     name: "Dashboard",
     components: {CAppWrapper},
+    mounted() {
+        this.$settings.loadSetting('unit_system');
+    },
     methods: {
         updateSettings() {
-            this.$testtwo = 'updated';
-            // this.$setting = 'yellow';
-            // if(this.$settings.getValue('unit_system') === 'metric') {
-            //     this.$settings.setValue('unit_system', 'imperial');
-            // } else {
-            //     this.$settings.setValue('unit_system', 'metric');
-            // }
+            if(this.unitSystem === 'metric') {
+                this.$settings.setValue('unit_system', 'imperial');
+            } else {
+                this.$settings.setValue('unit_system', 'metrics');
+            }
         }
     },
-    watch: {
-        // '$setting'(val) {
-        //     console.log('IN THE WATCHER');
-        //     console.log(val);
-        // }
-    },
     computed: {
-        test() {
-            return this.$testtwo;
-            console.log('begfore');
-            console.log(this.$testtwo);
-            console.log('after');
-            // console.log('IN THE COMPUTED PROP');
-            // return this.$setting;
+        unitSystem() {
+            if(this.$setting.unit_system === undefined) {
+                return 'undefined';
+            }
+            return this.$setting.unit_system;
         },
-        testTwo() {
-            // console.log('Diff setter');
-            // return this.$settings;
-            // return this.$setting.$data.unit_system;
+        theme() {
+            return this.$setting.theme;
         }
     }
 }
