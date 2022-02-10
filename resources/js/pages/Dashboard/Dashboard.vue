@@ -7,6 +7,7 @@
             border="left"
         >
             The dashboard is still in development and will be available soon.
+            {{test}}
         </v-alert>
     </c-app-wrapper>
 </template>
@@ -15,7 +16,18 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 export default {
     name: "Dashboard",
-    components: {CAppWrapper}
+    components: {CAppWrapper},
+    data() {
+        return {
+            test: null
+        }
+    },
+    mounted() {
+        setInterval(() => {
+            this.$settings.loadSetting('unit_system');
+            this.test = this.$settings.getValue('unit_system');
+        }, 5000);
+    }
 }
 </script>
 

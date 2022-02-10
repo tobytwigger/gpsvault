@@ -4,10 +4,14 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 import vuetify from './plugins/vuetify';
 import Vue from 'vue';
 
-require('./bootstrap');
+import Settings from '@elbowspaceuk/laravel-settings-vue/dist/index';
 
+require('./bootstrap');
 import { applyPolyfills, defineCustomElements } from '@bruit/component/loader';
 Vue.config.ignoredElements = [/bruit-\w*/];
+Vue.use(Settings, {
+    axios: axios
+});
 
 applyPolyfills().then(() => {
     defineCustomElements(window);

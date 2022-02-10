@@ -17,6 +17,7 @@
 
         <!-- Scripts -->
         @routes
+        @settings
         <script src="{{ mix('dist/js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
