@@ -8,6 +8,11 @@ use Settings\Types\UserSetting;
 class StatsOrder extends UserSetting
 {
 
+    public function alias(): ?string
+    {
+        return 'stats_order_preference';
+    }
+
     public function defaultValue(): mixed
     {
         return ['php', 'strava'];

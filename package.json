@@ -34,7 +34,7 @@
     },
     "dependencies": {
         "@bruit/component": "^1.3.15",
-        "@elbowspaceuk/laravel-settings-vue": "git+https://github.com/ElbowSpaceUK/laravel-settings-vue.git#build",
+        "@elbowspaceuk/laravel-settings-vue": "^0.0.3",
         "intro.js": "^4.3.0",
         "leaflet": "^1.7.1",
         "vue-easy-lightbox": "^0.16.2",

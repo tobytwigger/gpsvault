@@ -8,6 +8,11 @@ use Settings\Types\UserSetting;
 class BruitAPIKey extends UserSetting
 {
 
+    public function alias(): ?string
+    {
+        return 'bruit_api_key';
+    }
+
     public function defaultValue(): mixed
     {
         return config('services.bruit.key');

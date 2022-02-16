@@ -8,6 +8,11 @@ use Settings\Types\UserSetting;
 class DarkMode extends UserSetting
 {
 
+    public function alias(): ?string
+    {
+        return 'dark_mode';
+    }
+
     public function defaultValue(): mixed
     {
         return false;

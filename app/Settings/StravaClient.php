@@ -10,6 +10,11 @@ use Settings\Types\GlobalSetting;
 class StravaClient extends GlobalSetting
 {
 
+    public function alias(): ?string
+    {
+        return 'strava_client_id';
+    }
+
     public function defaultValue(): mixed
     {
         return null;
