@@ -34,6 +34,7 @@ class StravaRequestHandler
 
     public function request(string $method, string $uri, array $options = []): \Psr\Http\Message\ResponseInterface
     {
+        //
         $excluded = [];
         for($i=0;$i<20;$i++) {
             $client = $this->user->availableClient($excluded);

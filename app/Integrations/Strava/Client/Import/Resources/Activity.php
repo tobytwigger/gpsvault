@@ -2,6 +2,11 @@
 
 namespace App\Integrations\Strava\Client\Import\Resources;
 
+use App\Integrations\Strava\Jobs\LoadStravaActivity;
+use App\Integrations\Strava\Jobs\LoadStravaComments;
+use App\Integrations\Strava\Jobs\LoadStravaKudos;
+use App\Integrations\Strava\Jobs\LoadStravaPhotos;
+use App\Integrations\Strava\Jobs\LoadStravaStats;
 use App\Models\Activity as ActivityModel;
 use App\Models\Stats;
 use App\Models\User;
@@ -67,17 +72,18 @@ class Activity
 
         $stats = $this->fillStats($activityData, new Stats(['stats_id' => $activity->id, 'stats_type' => get_class($activity)]))->save();
 
-//        StravaActivityUpdated::dispatch($activity);
-//
-//        if ($this->getIntegerData($activityData, 'comment_count') > 0) {
-//            StravaActivityCommentsUpdated::dispatch($activity);
-//        }
-//        if ($this->getIntegerData($activityData, 'kudos_count') > 0) {
-//            StravaActivityKudosUpdated::dispatch($activity);
-//        }
-//        if ($this->getIntegerData($activityData, 'total_photo_count') > 0) {
-//            StravaActivityPhotosUpdated::dispatch($activity);
-//        }
+        LoadStravaActivity::dispatch($activity);
+        LoadStravaStats::dispatch($activity);
+
+        if ($this->getIntegerData($activityData, 'comment_count') > 0) {
+            LoadStravaComments::dispatch($activity);
+        }
+        if ($this->getIntegerData($activityData, 'kudos_count') > 0) {
+            LoadStravaKudos::dispatch($activity);
+        }
+        if ($this->getIntegerData($activityData, 'total_photo_count') > 0) {
+            LoadStravaPhotos::dispatch($activity);
+        }
 
         return $activity;
     }
@@ -86,26 +92,26 @@ class Activity
     {
         $importer = ActivityImporter::update($existingActivity)
             ->linkTo('strava');
-        $updated = false;
+        $updated = [];
 
         if(array_key_exists('upload_id_str', $activityData) && $existingActivity->getAdditionalData('strava_upload_id') !== data_get($activityData, 'upload_id_str')) {
             $importer->setAdditionalData('strava_upload_id', data_get($activityData, 'upload_id_str'));
-            $updated = true;
+            $updated[] = 'details';
         }
 
         if ($existingActivity->getAdditionalData('strava_photo_count') !== $this->getIntegerData($activityData, 'total_photo_count')) {
             $importer->setAdditionalData('strava_photo_count', $this->getIntegerData($activityData, 'total_photo_count'));
-            $updated = true;
+            $updated[] = 'photos';
         }
 
         if ($existingActivity->getAdditionalData('strava_comment_count') !== $this->getIntegerData($activityData, 'comment_count')) {
             $importer->setAdditionalData('strava_comment_count', $this->getIntegerData($activityData, 'comment_count'));
-            $updated = true;
+            $updated[] = 'comments';
         }
 
         if ($existingActivity->getAdditionalData('strava_kudos_count') !== $this->getIntegerData($activityData, 'kudos_count')) {
             $importer->setAdditionalData('strava_kudos_count', $this->getIntegerData($activityData, 'kudos_count'));
-            $updated = true;
+            $updated[] = 'kudos';
         }
 
         if ($existingActivity->getAdditionalData('strava_pr_count') !== $this->getIntegerData($activityData, 'pr_count')
@@ -113,7 +119,7 @@ class Activity
             $importer
                 ->setAdditionalData('strava_pr_count', $this->getIntegerData($activityData, 'pr_count'))
                 ->setAdditionalData('strava_achievement_count', $this->getIntegerData($activityData, 'achievement_count'));
-            $updated = true;
+            $updated[] = 'details';
         }
 
         $stats = $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]));
@@ -122,24 +128,39 @@ class Activity
                 ->filter(fn($value, $key) => array_key_exists($key, $activityData) && $activityData[$key] !== $value)
                 ->count() > 0
         ) {
-            $updated = true;
+            $updated[] = 'stats';
         }
         $stats->save();
 
         $existingActivity = $importer->save();
 
-//        $events = [
-//            'photos' => StravaActivityPhotosUpdated::class,
-//            'comments' => StravaActivityCommentsUpdated::class,
-//            'kudos' => StravaActivityKudosUpdated::class,
-//            'details' => StravaActivityUpdated::class
-//        ];
-//        foreach(array_filter($updated) as $updatedProperty) {
-//            if(array_key_exists($updatedProperty, $events)) {
-//                $events[$updatedProperty]::dispatch($existingActivity);
-//            }
-//        }
-        if ($updated === true) {
+        LoadStravaActivity::dispatch($existingActivity);
+        LoadStravaStats::dispatch($existingActivity);
+
+        if ($this->getIntegerData($activityData, 'comment_count') > 0) {
+            LoadStravaComments::dispatch($existingActivity);
+        }
+        if ($this->getIntegerData($activityData, 'kudos_count') > 0) {
+            LoadStravaKudos::dispatch($existingActivity);
+        }
+        if ($this->getIntegerData($activityData, 'total_photo_count') > 0) {
+            LoadStravaPhotos::dispatch($existingActivity);
+        }
+
+
+        $jobs = [
+            'photos' => LoadStravaPhotos::class,
+            'comments' => LoadStravaComments::class,
+            'kudos' => LoadStravaKudos::class,
+            'details' => LoadStravaActivity::class,
+            'stats' => LoadStravaStats::class
+        ];
+        foreach($updated as $updatedProperty) {
+            if(array_key_exists($updatedProperty, $jobs)) {
+                $jobs[$updatedProperty]::dispatch($existingActivity);
+            }
+        }
+        if (count($updated) > 0) {
             $this->status = static::UPDATED;
         }
 
