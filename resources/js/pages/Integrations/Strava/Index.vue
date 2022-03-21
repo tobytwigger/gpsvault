@@ -13,11 +13,25 @@
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-connection">
-                Connection
+                <v-alert
+                    outlined
+                    type="warning"
+                    prominent
+                    border="left"
+                >
+                    The dashboard is still in development and will be available soon.
+                </v-alert>
             </v-tab-item>
 
             <v-tab-item value="tab-import">
-                Imports
+                <v-alert
+                    outlined
+                    type="warning"
+                    prominent
+                    border="left"
+                >
+                    The dashboard is still in development and will be available soon.
+                </v-alert>
             </v-tab-item>
         </v-tabs-items>
         <template #sidebar>

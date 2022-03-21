@@ -145,11 +145,11 @@ class Stats extends Model
     public static function scopeOrderByPreference(Builder $query)
     {
         $order = collect(StatsOrder::getValue())
-            ->map(fn(string $integration) => sprintf('"%s"', $integration))
+            ->map(fn(string $integration) => sprintf('\'%s\'', $integration))
             ->join(', ');
 
         return $query->orderByRaw(
-            sprintf('FIELD(%sstats.integration, %s) ASC', DB::getTablePrefix() ?? '', $order)
+            sprintf('array_position(ARRAY[%s]::varchar[], %sstats.integration) ASC', $order, DB::getTablePrefix() ?? '')
         );
     }
 

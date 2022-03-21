@@ -105,7 +105,7 @@ trait HasStats
         $query->with('stats', fn(MorphMany $subQuery) => $subQuery->orderByPreference())
             ->when(
                 $orderedActivities->count() > 0,
-                fn(Builder $subQuery) => $subQuery->orderByRaw(sprintf('FIELD(id, %s)', $orderedActivities->join(', ')))
+                fn(Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::varchar[], id)', $orderedActivities->join(', ')))
             );
     }
 
