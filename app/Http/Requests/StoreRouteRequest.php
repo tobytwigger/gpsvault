@@ -25,7 +25,7 @@ class StoreRouteRequest extends FormRequest
     {
         return [
             'file' => 'sometimes|nullable|file',
-            'name' => 'sometimes|nullable|max:255',
+            'name' => 'required|nullable|max:255',
             'description' => 'sometimes|nullable|max:65535'
         ];
     }

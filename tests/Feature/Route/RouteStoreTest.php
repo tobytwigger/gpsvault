@@ -21,7 +21,7 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file
+            'file' => $file, 'name' => 'Test'
         ]);
 
         $this->assertDatabaseCount('routes', 1);
@@ -43,7 +43,7 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file
+            'file' => $file, 'name' => 'Test'
         ]);
 
         $this->assertDatabaseCount('routes', 1);
@@ -81,7 +81,7 @@ class RouteStoreTest extends TestCase
 
         $response = $this->post(route('route.store'), [$key => $value]);
         if(!$error) {
-            $response->assertSessionHasNoErrors();
+            $response->assertSessionMissing($key);
         } else {
             $response->assertSessionHasErrors([$key => $error]);
         }
@@ -91,7 +91,7 @@ class RouteStoreTest extends TestCase
     {
         return [
             ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
-            ['name', null, false],
+            ['name', null, 'The name field is required.'],
             ['name', 'This is a valid namne', false],
             ['description', Str::random(65570), 'The description must not be greater than 65535 characters.'],
             ['description', null, false],
@@ -122,7 +122,7 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file
+            'file' => $file, 'name' => 'Test'
         ]);
 
         Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
@@ -133,7 +133,19 @@ class RouteStoreTest extends TestCase
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
 
-        $response = $this->post(route('route.store'));
+        $response = $this->post(route('route.store'), ['name' => 'Test']);
+
+        Bus::assertNotDispatched(AnalyseFile::class);
+    }
+
+    /** @test */
+    public function it_does_not_fire_an_analysis_job_if_a_name_is_not_given(){
+        Bus::fake(AnalyseFile::class);
+        $this->authenticated();
+        Storage::fake('test-fake');
+
+        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $response = $this->post(route('route.store'), ['file' => $file]);
 
         Bus::assertNotDispatched(AnalyseFile::class);
     }
