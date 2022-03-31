@@ -49,8 +49,6 @@ class AnalyseFile implements ShouldQueue
      */
     public function handle()
     {
-        try {
-
         if(!$this->model->hasFile()) {
             throw new NotFoundHttpException(sprintf('%s %u does not have a model associated with it.', $this->getModelName(), $this->model->id));
         }
@@ -88,11 +86,6 @@ class AnalyseFile implements ShouldQueue
         );
 
         $this->savePoints($stats, $analysis->getPoints());
-        }
-catch (\Throwable $e) {
-    \Log::info($e->getMessage());
-    dd($e);
-}
     }
 
     private function savePoints(Stats $stats, array $points)
