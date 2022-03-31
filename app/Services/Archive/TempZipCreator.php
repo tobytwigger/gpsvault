@@ -2,7 +2,6 @@
 
 namespace App\Services\Archive;
 
-use Alchemy\Zippy\Zippy;
 use App\Models\File;
 use App\Services\Archive\Parser\FileResource;
 use App\Services\File\FileUploader;
@@ -25,7 +24,11 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
         $fullPath = dirname(Storage::disk('temp')->path(sprintf('zip_creator/%s/archive/test.txt', $rand)));
         $archivePath = sprintf('%s/result.zip', $fullPath);
 
-        Zippy::load()->create($archivePath, $files);
+        $zipFile = new \PhpZip\ZipFile();
+        foreach($files as $file) {
+            $zipFile->addFile($file);
+        }
+        $zipFile->saveAsFile($archivePath);
 
         return Upload::withContents(
             file_get_contents($archivePath),
