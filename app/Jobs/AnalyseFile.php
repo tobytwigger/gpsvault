@@ -112,7 +112,7 @@ class AnalyseFile implements ShouldQueue
     public function middleware()
     {
         return [
-            (new WithoutOverlapping(static::class))->releaseAfter(5)
+            (new WithoutOverlapping('FileAnalyser'))
         ];
     }
 
