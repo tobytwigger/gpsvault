@@ -352,8 +352,9 @@ class StravaClientTest extends TestCase
         StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
 
         $this->assertCount(2, StravaClient::connected($user->id)->get());
-        $this->assertTrue($client2->is(StravaClient::connected($user->id)->get()[0]));
-        $this->assertTrue($client3->is(StravaClient::connected($user->id)->get()[1]));
+
+        $this->assertTrue($client2->is(StravaClient::connected($user->id)->orderBy('id')->get()[0]));
+        $this->assertTrue($client3->is(StravaClient::connected($user->id)->orderBy('id')->get()[1]));
     }
 
 

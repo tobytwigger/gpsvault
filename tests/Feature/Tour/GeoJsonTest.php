@@ -16,13 +16,15 @@ class GeoJsonTest extends TestCase
 
     private function createNewRoute(array $coords)
     {
-        $points = array_map(fn(array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
-        $file = Upload::activityPoints(
-            $points,
-            $this->user
-        );
         $route = Route::factory()->create(['user_id' => $this->user->id]);
-        Stats::factory()->route($route)->create(['json_points_file_id' => $file->id]);
+        $stats = Stats::factory()->route($route)->create();
+
+        $points = array_map(fn(array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
+
+        $stats->waypoints()->createMany(collect($points)->map(fn(Point $point) => [
+            'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+        ]));
+
         return $route;
     }
 

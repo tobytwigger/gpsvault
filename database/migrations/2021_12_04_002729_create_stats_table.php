@@ -40,7 +40,6 @@ class CreateStatsTable extends Migration
             $table->float('max_heartrate')->nullable();
             $table->float('average_heartrate')->nullable();
             $table->float('calories')->nullable();
-            $table->string('json_points_file_id')->nullable();
             $table->unsignedBigInteger('stats_id');
             $table->string('stats_type');
             $table->timestamps();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pages\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour;
+use App\Models\Waypoint;
+use Location\Coordinate;
 
 class TourPointsController extends Controller
 {
@@ -15,7 +17,15 @@ class TourPointsController extends Controller
         $points = collect();
         foreach($tour->stages as $stage) {
             if($stage->route_id) {
-                $points = $points->merge($stage->route->stats()->orderByPreference()->whereNotNull('json_points_file_id')->first()?->points());
+                $points = $points->merge(
+                    $stage->route->stats()
+                        ->orderByPreference()
+                        ->first()
+                        ?->waypoints()
+                        ->whereNotNull('points')
+                        ->get()
+                        ->append(['latitude', 'longitude'])
+                    );
             }
         }
 

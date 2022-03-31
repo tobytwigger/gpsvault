@@ -6,8 +6,8 @@ use App\Models\Activity;
 use App\Models\Stats;
 use App\Models\User;
 use Carbon\Carbon;
-use Inertia\Testing\Assert;
 use Tests\TestCase;
+use Inertia\Testing\AssertableInertia as Assert;
 
 class ActivityIndexTest extends TestCase
 {

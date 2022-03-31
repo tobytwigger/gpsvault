@@ -100,12 +100,12 @@ trait HasStats
 
                 return $a->{$stat} < $b->{$stat} ? 1 : -1;
             })
-            ->map(fn(Stats $stats) => sprintf('"%s"', $stats->stats_id));
+            ->map(fn(Stats $stats) => sprintf('\'%s\'', $stats->stats_id));
 
         $query->with('stats', fn(MorphMany $subQuery) => $subQuery->orderByPreference())
             ->when(
                 $orderedActivities->count() > 0,
-                fn(Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::varchar[], id)', $orderedActivities->join(', ')))
+                fn(Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::bigint[], id)', $orderedActivities->join(', ')))
             );
     }
 

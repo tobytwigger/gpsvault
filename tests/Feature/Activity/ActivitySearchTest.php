@@ -98,4 +98,9 @@ class ActivitySearchTest extends TestCase
         $this->getJson(route('activity.search', ['query' => null]))
             ->assertStatus(401);
     }
+
+    /** @test */
+    public function it_orders_the_results_by_updated_at(){
+        $this->markTestIncomplete();
+    }
 }

@@ -5,7 +5,7 @@ namespace Tests\Feature\Route;
 use App\Models\Route;
 use App\Models\File;
 use App\Models\Stats;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class RouteShowTest extends TestCase

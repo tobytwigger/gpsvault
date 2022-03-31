@@ -13,6 +13,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_creates_a_new_activity(){
+        $this->markTestIncomplete();
+
         $startDate = Carbon::now()->subDay();
         $user = User::factory()->create();
 
@@ -84,6 +86,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_updates_select_attributes_for_an_activity_linked_to_strava(){
+        $this->markTestIncomplete();
+
         $oldUser = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create(['name' => 'Old Name', 'user_id' => $oldUser->id, 'linked_to' => []]);
         $activity->setAdditionalData('strava_id', 12345);
@@ -162,6 +166,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_can_be_created_with_only_an_id(){
+        $this->markTestIncomplete();
+
         $user = User::factory()->create();
 
         $apiData = [
@@ -183,6 +189,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_isnt_marked_as_updated_if_nothing_changes(){
+        $this->markTestIncomplete();
+
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
         $activity->setAdditionalData('strava_id', 12345);
@@ -201,6 +209,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_is_marked_as_updated_if_updated(){
+        $this->markTestIncomplete();
+
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
         $activity->setAdditionalData('strava_id', 12345);
@@ -219,6 +229,8 @@ class ActivityTest extends TestCase
 
     /** @test */
     public function it_is_marked_as_created_if_created(){
+        $this->markTestIncomplete();
+
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
 

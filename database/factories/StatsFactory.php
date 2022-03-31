@@ -47,7 +47,6 @@ class StatsFactory extends Factory
             'calories' => $this->faker->randomFloat(2, 1, 100),
             'moving_time' => $this->faker->randomFloat(2, 1, 100),
             'integration' => $this->faker->unique()->word,
-            'json_points_file_id' => null
         ];
     }
 

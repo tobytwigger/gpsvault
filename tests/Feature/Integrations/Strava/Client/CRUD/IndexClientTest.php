@@ -5,7 +5,7 @@ namespace Feature\Integrations\Strava\Client\CRUD;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Illuminate\Support\Collection;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class IndexClientTest extends TestCase

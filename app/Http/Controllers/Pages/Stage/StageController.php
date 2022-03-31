@@ -41,8 +41,8 @@ class StageController extends Controller
             'description' => 'sometimes|nullable|string|max:65535',
             'date' => 'sometimes|nullable|date_format:Y-m-d',
             'is_rest_day' => 'sometimes|boolean',
-            'route_id' => ['sometimes', 'nullable', Rule::exists('routes', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
-            'activity_id' => ['sometimes', 'nullable', Rule::exists('activities', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
+            'route_id' => ['sometimes', 'nullable', 'integer', Rule::exists('routes', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
+            'activity_id' => ['sometimes', 'nullable', 'integer', Rule::exists('activities', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
             'stage_number' => 'sometimes|integer|min:1'
         ]);
 

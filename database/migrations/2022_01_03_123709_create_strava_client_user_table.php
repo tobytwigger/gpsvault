@@ -16,7 +16,7 @@ class CreateStravaClientUserTable extends Migration
         Schema::create('strava_client_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->text('strava_client_id');
+            $table->unsignedBigInteger('strava_client_id');
             $table->timestamps();
         });
     }

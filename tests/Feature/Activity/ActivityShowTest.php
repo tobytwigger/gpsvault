@@ -5,7 +5,7 @@ namespace Tests\Feature\Activity;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class ActivityShowTest extends TestCase

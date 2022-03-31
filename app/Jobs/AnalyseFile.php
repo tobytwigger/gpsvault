@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Route;
 use App\Models\Stats;
 use App\Services\Analysis\Analyser\Analyser;
+use App\Services\Analysis\Parser\Point;
 use App\Services\File\Upload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,12 +49,14 @@ class AnalyseFile implements ShouldQueue
      */
     public function handle()
     {
+        try {
+
         if(!$this->model->hasFile()) {
             throw new NotFoundHttpException(sprintf('%s %u does not have a model associated with it.', $this->getModelName(), $this->model->id));
         }
         $analysis = Analyser::analyse($this->model->file);
 
-        Stats::updateOrCreate(
+        $stats = Stats::updateOrCreate(
             ['integration' => 'php', 'stats_id' => $this->model->id, 'stats_type' => get_class($this->model)],
             [
                 'distance' => $analysis->getDistance(),
@@ -81,25 +84,36 @@ class AnalyseFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'json_points_file_id' => $this->getPointsFileId($analysis->getPoints())
             ]
         );
+
+        $this->savePoints($stats, $analysis->getPoints());
+        }
+catch (\Throwable $e) {
+    \Log::info($e->getMessage());
+    dd($e);
+}
     }
 
-    private function getPointsFileId(array $points)
+    private function savePoints(Stats $stats, array $points)
     {
-        if($this->model instanceof Activity) {
-            return Upload::activityPoints(
-                $points,
-                $this->model->user
-            )->id;
-        } else {
-            return Upload::routePoints(
-                $points,
-                $this->model->user
-            )->id;
-        }
+        $stats->waypoints()->delete();
 
+        foreach(collect($points)->chunk(1000) as $chunkedPoints) {
+            $stats->waypoints()->createMany($chunkedPoints->map(fn(Point $point) => [
+                'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                'elevation' => $point->getElevation(),
+                'time' => $point->getTime(),
+                'cadence' => $point->getCadence(),
+                'temperature' => $point->getTemperature(),
+                'heart_rate' => $point->getHeartRate(),
+                'speed' => $point->getSpeed(),
+                'grade' => $point->getGrade(),
+                'battery' => $point->getBattery(),
+                'calories' => $point->getCalories(),
+                'cumulative_distance' => $point->getCumulativeDistance(),
+            ]));
+        }
     }
 
     public function middleware()

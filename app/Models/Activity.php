@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Scout\Searchable;
 
 class Activity extends Model
 {
-    use HasFactory, HasAdditionalData, HasStats;
+    use HasFactory, HasAdditionalData, HasStats, Searchable;
 
     protected $fillable = [
         'name', 'description', 'file_id', 'linked_to', 'user_id'
@@ -32,6 +33,14 @@ class Activity extends Model
         'user_id' => 'integer',
     ];
 
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'user_id' => $this->user_id
+        ];
+    }
 
     protected static function booted()
     {

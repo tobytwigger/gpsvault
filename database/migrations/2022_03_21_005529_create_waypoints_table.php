@@ -15,19 +15,25 @@ return new class extends Migration
     {
         Schema::create('waypoints', function (Blueprint $table) {
             $table->id();
+            $table->point('points')->nullable();
 //            'latitude' => $this->getLatitude(),
 //            'longitude' => $this->getLongitude(),
-//            'elevation' => $this->getElevation(),
-//            'time' => $this->getTime()?->unix(),
-//            'cadence' => $this->getCadence(),
-//            'temperature' => $this->getTemperature(),
-//            'heart_rate' => $this->getHeartRate(),
-//            'speed' => $this->getSpeed(),
-//            'grade' => $this->getGrade(),
-//            'battery' => $this->getBattery(),
-//            'calories' => $this->getCalories(),
-//            'cumulative_distance' => $this->getCumulativeDistance()
+            $table->float('elevation')->nullable();
+            $table->dateTime('time')->nullable();
+            $table->float('cadence')->nullable();
+            $table->float('temperature')->nullable();
+            $table->float('heart_rate')->nullable();
+            $table->float('speed')->nullable();
+            $table->float('grade')->nullable();
+            $table->float('battery')->nullable();
+            $table->float('calories')->nullable();
+            $table->float('cumulative_distance')->nullable();
+            $table->unsignedBigInteger('stats_id');
             $table->timestamps();
+        });
+
+        Schema::table('waypoints', function(Blueprint $table) {
+            $table->index(['stats_id']);
         });
     }
 

@@ -6,10 +6,11 @@ use App\Traits\HasStats;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Scout\Searchable;
 
 class Route extends Model
 {
-    use HasFactory, HasStats;
+    use HasFactory, HasStats, Searchable;
 
     protected $fillable = [
         'name', 'description', 'notes', 'file_id', 'public'
@@ -22,6 +23,16 @@ class Route extends Model
     protected $casts = [
         'public' => 'boolean'
     ];
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+            'notes' => $this->notes,
+            'user_id' => $this->user_id
+        ];
+    }
 
     public function getCoverImageAttribute()
     {

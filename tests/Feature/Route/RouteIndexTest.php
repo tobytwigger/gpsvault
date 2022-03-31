@@ -5,7 +5,7 @@ namespace Tests\Feature\Route;
 use App\Models\Route;
 use App\Models\User;
 use Carbon\Carbon;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class RouteIndexTest extends TestCase

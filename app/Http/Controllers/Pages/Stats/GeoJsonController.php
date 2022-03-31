@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages\Stats;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stats;
+use App\Models\Waypoint;
 use Location\Coordinate;
 use Location\Formatter\Polyline\GeoJSON;
 use Location\Polyline;
@@ -15,9 +16,10 @@ class GeoJsonController extends Controller
     {
         $this->authorize('view', $stats->model);
 
-        $points = collect($stats->points())
-            ->filter(fn(array $point) => ($point['latitude'] ?? null) !== null && ($point['longitude'] ?? null) !== null)
-            ->map(fn(array $point) => new Coordinate($point['latitude'], $point['longitude']));
+        $points = $stats->waypoints()
+            ->whereNotNull('points')
+            ->get()
+            ->map(fn(Waypoint $waypoint) => new Coordinate($waypoint->latitude, $waypoint->longitude));
 
         $polyline = new Polyline();
         $polyline->addPoints($points->all());

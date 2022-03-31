@@ -5,7 +5,7 @@ namespace Tests\Feature\Tour;
 use App\Models\Tour;
 use App\Models\User;
 use Carbon\Carbon;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TourIndexTest extends TestCase

@@ -6,7 +6,7 @@ use App\Models\Backup;
 use App\Models\File;
 use App\Models\User;
 use Carbon\Carbon;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class BackupIndexTest extends TestCase

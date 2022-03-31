@@ -46,8 +46,23 @@ class LoadStravaStats extends StravaActivityBaseJob
         }
 
         if($stats = $this->activity->statsFrom('strava')->first()) {
-            $stats->json_points_file_id = Upload::activityPoints($points, $this->activity->user)->id;
-            $stats->save();
+            $stats->waypoints()->delete();
+
+            foreach(collect($points)->chunk(1000) as $chunkedPoints) {
+                $stats->waypoints()->createMany($chunkedPoints->map(fn(Point $point) => [
+                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                    'elevation' => $point->getElevation(),
+                    'time' => $point->getTime(),
+                    'cadence' => $point->getCadence(),
+                    'temperature' => $point->getTemperature(),
+                    'heart_rate' => $point->getHeartRate(),
+                    'speed' => $point->getSpeed(),
+                    'grade' => $point->getGrade(),
+                    'battery' => $point->getBattery(),
+                    'calories' => $point->getCalories(),
+                    'cumulative_distance' => $point->getCumulativeDistance(),
+                ]));
+            }
         }
         $this->activity->setAdditionalData('strava_is_loading_stats', false);
     }

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Dashboard;
 
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class DashboardIndexTest extends TestCase

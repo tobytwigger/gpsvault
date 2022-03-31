@@ -72,8 +72,6 @@ class Stats extends Model
         'max_heartrate',
         // The number of calories burned
         'calories',
-        // A file that contains the points as json
-        'json_points_file_id'
     ];
 
     protected $casts = [
@@ -132,16 +130,6 @@ class Stats extends Model
         return new static();
     }
 
-    public function jsonPointsFile()
-    {
-        return $this->belongsTo(File::class, 'json_points_file_id');
-    }
-
-    public function getPointsAttribute()
-    {
-        return $this->points();
-    }
-
     public static function scopeOrderByPreference(Builder $query)
     {
         $order = collect(StatsOrder::getValue())
@@ -158,12 +146,9 @@ class Stats extends Model
         $query->orderByPreference();
     }
 
-    public function points()
+    public function waypoints()
     {
-        if($this->json_points_file_id === null) {
-            return [];
-        }
-        return json_decode(gzuncompress($this->jsonPointsFile?->getFileContents()) ?? [], true);
+        return $this->hasMany(Waypoint::class);
     }
 
 }

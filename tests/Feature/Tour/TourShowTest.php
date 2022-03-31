@@ -5,7 +5,7 @@ namespace Tests\Feature\Tour;
 use App\Models\Tour;
 use App\Models\TourStats;
 use App\Models\File;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class TourShowTest extends TestCase

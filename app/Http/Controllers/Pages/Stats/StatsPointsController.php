@@ -15,7 +15,7 @@ class StatsPointsController extends Controller
     {
         $this->authorize('view', $stats->model);
 
-        return $stats->points();
+        return $stats->waypoints()->get()->append(['latitude', 'longitude']);
     }
 
 }

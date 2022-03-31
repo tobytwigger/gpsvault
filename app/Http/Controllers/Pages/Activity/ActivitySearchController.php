@@ -17,12 +17,16 @@ class ActivitySearchController extends Controller
             'query' => 'sometimes|nullable|string|min:1|max:255'
         ]);
 
+        if($request->has('query') && $request->input('query')) {
+            return Activity::search($request->input('query'))
+                ->where('user_id', Auth::id())
+                ->orderBy('updated_at', 'DESC')
+                ->take(15)
+                ->get();
+        }
         return Activity::where('user_id', Auth::id())
-            ->when($request->has('query') && $request->input('query'), function(Builder $query) use ($request) {
-                $query->where('name', 'LIKE', '%' . $request->input('query') . '%')->get();
-            })
             ->orderBy('updated_at', 'DESC')
-            ->limit(15)
+            ->take(15)
             ->get();
     }
 

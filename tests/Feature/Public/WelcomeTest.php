@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Public;
 
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class WelcomeTest extends TestCase

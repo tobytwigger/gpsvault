@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Settings;
 
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class SettingIndexTest extends TestCase

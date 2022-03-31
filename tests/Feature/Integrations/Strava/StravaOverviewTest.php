@@ -2,7 +2,7 @@
 
 namespace Feature\Integrations\Strava;
 
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StravaOverviewTest extends TestCase

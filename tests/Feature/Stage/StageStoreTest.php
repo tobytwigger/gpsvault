@@ -4,7 +4,7 @@ namespace Tests\Feature\Stage;
 
 use App\Models\Stage;
 use App\Models\Tour;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StageStoreTest extends TestCase

@@ -8,7 +8,7 @@ use App\Models\Stage;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Inertia\Testing\Assert;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StageUpdateTest extends TestCase
@@ -167,6 +167,7 @@ class StageUpdateTest extends TestCase
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
 
         $response = $this->put(route('tour.stage.update', [$stage->tour_id, $stage]), [$key => $value]);
+
         if(!$error) {
             $response->assertSessionHasNoErrors();
         } else {
@@ -191,11 +192,11 @@ class StageUpdateTest extends TestCase
             ['is_rest_day', true, false],
             ['is_rest_day', 'not-a-bool', 'The is rest day field must be true or false.'],
             ['is_rest_day', null, 'The is rest day field must be true or false.'],
-            ['route_id','route-id', 'The selected route id is invalid.'],
+            ['route_id','route-id', 'The route id must be an integer.'],
             ['route_id', 300, 'The selected route id is invalid.'],
             ['route_id', fn() => Route::factory()->create()->id, 'The selected route id is invalid.'],
             ['route_id', fn($user) => Route::factory()->create(['user_id' => $user->id])->id, false],
-            ['activity_id','activity-id', 'The selected activity id is invalid.'],
+            ['activity_id','activity-id', 'The activity id must be an integer.'],
             ['activity_id', 300, 'The selected activity id is invalid.'],
             ['activity_id', fn() => Activity::factory()->create()->id, 'The selected activity id is invalid.'],
             ['activity_id', fn($user) => Activity::factory()->create(['user_id' => $user->id])->id, false],
