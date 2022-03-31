@@ -80,6 +80,9 @@ export default {
     },
     methods: {
         convertDistance(value) {
+            if(value === null) {
+                return 'No distance data';
+            }
             let converted = this.convert(value, 'distance');
             return converted.value + converted.unit;
         },
