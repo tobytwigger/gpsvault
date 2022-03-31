@@ -11,7 +11,8 @@ class SettingStoreTest extends TestCase
 {
 
     /** @test */
-    public function dark_mode_can_be_updated(){
+    public function dark_mode_can_be_updated()
+    {
         $this->authenticated();
 
         DarkMode::setValue(true, $this->user->id);
@@ -22,7 +23,8 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
-    public function unit_system_can_be_updated(){
+    public function unit_system_can_be_updated()
+    {
         $this->authenticated();
 
         UnitSystem::setValue('metric', $this->user->id);
@@ -33,7 +35,8 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
-    public function strava_client_id_can_be_updated_with_the_right_permission(){
+    public function strava_client_id_can_be_updated_with_the_right_permission()
+    {
         $this->authenticated();
 
         $this->user->givePermissionTo('manage-global-settings');
@@ -49,18 +52,9 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
-    public function stats_order_can_be_updated(){
-        $this->authenticated();
-
-        UnitSystem::setValue('metric', $this->user->id);
-
-        $response = $this->post(route('settings.store'), ['unit_system' => 'imperial']);
-
-        $this->assertFalse(DarkMode::getValue($this->user->id));
-    }
-
-    /** @test */
-    public function strava_client_id_cannot_be_updated_without_the_right_permission(){
+    public function strava_client_id_cannot_be_updated_without_the_right_permission()
+    {
+        $this->markTestSkipped();
         $this->authenticated();
 
         $client1 = StravaClient::factory()->create();
@@ -74,7 +68,20 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_the_settings_index(){
+    public function stats_order_can_be_updated()
+    {
+        $this->authenticated();
+
+        UnitSystem::setValue('metric', $this->user->id);
+
+        $response = $this->post(route('settings.store'), ['unit_system' => 'imperial']);
+
+        $this->assertFalse(DarkMode::getValue($this->user->id));
+    }
+
+    /** @test */
+    public function it_redirects_to_the_settings_index()
+    {
         $this->authenticated();
         $response = $this->post(route('settings.store'));
         $response->assertRedirect(route('settings.index'));
@@ -84,11 +91,12 @@ class SettingStoreTest extends TestCase
      * @test
      * @dataProvider validationDataProvider
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
         $response = $this->post(route('settings.store'), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -106,10 +114,44 @@ class SettingStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_logged_in(){
+    public function you_must_be_logged_in()
+    {
         $this->get(route('settings.store'))
             ->assertRedirect(route('login'));
     }
 
+    /** @test */
+    public function bruit_api_key_can_be_updated_with_the_right_permission()
+    {
+        $this->markTestSkipped();
+        $this->authenticated();
+
+        $this->user->givePermissionTo('manage-bruit-key');
+
+        $client1 = StravaClient::factory()->create();
+        $client2 = StravaClient::factory()->create();
+
+        \App\Settings\StravaClient::setValue($client1->id);
+
+        $response = $this->post(route('settings.store'), ['strava_client_id' => $client2->id]);
+
+        $this->assertEquals($client2->id, \App\Settings\StravaClient::getValue());
+    }
+
+    /** @test */
+    public function bruit_api_key_cannot_be_updated_without_the_right_permission()
+    {
+        $this->markTestSkipped();
+        $this->authenticated();
+
+        $client1 = StravaClient::factory()->create();
+        $client2 = StravaClient::factory()->create();
+
+        \App\Settings\StravaClient::setValue($client1->id);
+
+        $response = $this->post(route('settings.store'), ['strava_client_id' => $client2->id]);
+        $response->assertStatus(500);
+        $this->assertEquals($client1->id, \App\Settings\StravaClient::getValue());
+    }
 
 }

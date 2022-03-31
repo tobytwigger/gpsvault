@@ -26,17 +26,10 @@ export default {
         CFormSection,
     },
 
-    props: {
-        initialValue: {
-            required: true,
-            type: Boolean
-        }
-    },
-
     data() {
         return {
             form: this.$inertia.form({
-                dark_mode: this.initialValue
+                dark_mode: this.$setting.dark_mode
             })
         }
     },

@@ -33,17 +33,10 @@ export default {
         CFormSection,
     },
 
-    props: {
-        initialValue: {
-            required: true,
-            type: String
-        }
-    },
-
     data() {
         return {
             form: this.$inertia.form({
-                unit_system: this.initialValue
+                unit_system: this.$setting.unit_system
             }),
             units: [
                 {text: 'Metric', value: 'metric'},

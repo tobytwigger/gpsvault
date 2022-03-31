@@ -43,13 +43,13 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request)
     {
         return array_merge(parent::share($request), [
-            'settings' => fn() => [
-                'unit_system' => UnitSystem::getValue(),
-                'dark_mode' => DarkMode::getValue(),
-                'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null),
-                'stats_order_preference' => StatsOrder::getValue(),
-                'bruit_api_key' => BruitAPIKey::getValue()
-            ],
+//            'settings' => fn() => [
+//                'unit_system' => UnitSystem::getValue(),
+//                'dark_mode' => DarkMode::getValue(),
+//                'strava_client_id' => (Auth::check() && Auth::user()->can('manage-global-settings') ? StravaClient::getValue() : null),
+//                'stats_order_preference' => StatsOrder::getValue(),
+//                'bruit_api_key' => BruitAPIKey::getValue()
+//            ],
             'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : []
         ]);
     }

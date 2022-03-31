@@ -2,7 +2,7 @@
     <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
             <v-btn
-                v-if="$page.props.settings.bruit_api_key"
+                v-if="$setting.bruit_api_key"
                 fab
                 small
                 v-bind="attrs"
@@ -23,7 +23,7 @@ export default {
     computed: {
         bruitConfig() {
             return {
-                apiKey: this.$page.props.settings.bruit_api_key,
+                apiKey: this.$setting.bruit_api_key,
                 labels: {
                     title: 'Any feedback?',
                     introduction: 'If you have any feedback, suggestions or have found any issues, let us know!',

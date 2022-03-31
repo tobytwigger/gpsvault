@@ -45,21 +45,21 @@
             <v-tab-item value="tab-general">
                 <v-row>
                     <v-col>
-                        <c-unit-setting :initial-value="$page.props.settings.unit_system">
+                        <c-unit-setting>
 
                         </c-unit-setting>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col>
-                        <c-dark-mode :initial-value="$page.props.settings.dark_mode">
+                        <c-dark-mode>
 
                         </c-dark-mode>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col>
-                        <c-stats-order-setting :initial-value="$page.props.settings.stats_order_preference"></c-stats-order-setting>
+                        <c-stats-order-setting></c-stats-order-setting>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -85,10 +85,14 @@
                     <v-col>
                         <c-system-strava-client
                             v-if="$page.props.permissions.indexOf('manage-global-settings') > -1"
-                            :initial-value="$page.props.settings.system_strava_client || null"
                             :clients="stravaClients">
 
                         </c-system-strava-client>
+
+                        <c-bruit-api-key
+                            v-if="$page.props.permissions.indexOf('manage-bruit-key') > -1">
+
+                        </c-bruit-api-key>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -107,9 +111,11 @@ import CUnitSetting from 'ui/components/Settings/CUnitSetting';
 import CDarkMode from 'ui/components/Settings/CDarkMode';
 import CSystemStravaClient from 'ui/components/Settings/CSystemStravaClient';
 import CStatsOrderSetting from 'ui/components/Settings/CStatsOrderSetting';
+import CBruitApiKey from '../../ui/components/Settings/CBruitApiKey';
 export default {
     name: "Index",
     components: {
+        CBruitApiKey,
         CStatsOrderSetting,
         CSystemStravaClient,
         CDarkMode,

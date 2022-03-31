@@ -15,17 +15,19 @@ export default {
     props: {
         title: String
     },
-    mounted() {
-        this.$inertia.on('finish', () => this.checkDarkMode())
-        this.checkDarkMode();
+    watch: {
+        '$setting.dark_mode': function() {
+            this.updateVuetifyTheme();
+        }
     },
     methods: {
-        checkDarkMode() {
-            if(this.$vuetify.theme.dark !== this.$page.props.settings.dark_mode) {
-                this.$vuetify.theme.dark = this.$page.props.settings.dark_mode;
-            }
+        updateVuetifyTheme() {
+            this.$vuetify.theme.dark = this.$setting.dark_mode;
         }
-    }
+    },
+    mounted() {
+        this.updateVuetifyTheme();
+    },
 }
 </script>
 

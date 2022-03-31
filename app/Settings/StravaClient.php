@@ -5,10 +5,17 @@ namespace App\Settings;
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use FormSchema\Schema\Field;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Settings\Types\GlobalSetting;
 
 class StravaClient extends GlobalSetting
 {
+
+    public function canWrite(): bool
+    {
+        return Auth::check() && Auth::user()->can('manage-global-settings');
+    }
+
 
     public function alias(): ?string
     {

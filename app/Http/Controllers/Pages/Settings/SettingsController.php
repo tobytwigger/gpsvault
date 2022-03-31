@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Jenssegers\Agent\Agent;
+use Settings\Rules\ArrayKeyIsValidSettingKeyRule;
+use Settings\Rules\SettingValueIsValidRule;
 use Settings\Setting;
 
 class SettingsController extends Controller
@@ -27,27 +29,15 @@ class SettingsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'unit_system' => 'sometimes|' . Setting::getSettingByKey(UnitSystem::class)->rules(),
-            'dark_mode' => 'sometimes|' . Setting::getSettingByKey(DarkMode::class)->rules(),
-            'strava_client_id' => 'sometimes|' . Setting::getSettingByKey(StravaClient::class)->rules(),
-            'stats_order' => 'sometimes|' . Setting::getSettingByKey(StatsOrder::class)->rules(),
-            'stats_order.*' => 'string|in:php,strava'
+            '*' => [
+                app(ArrayKeyIsValidSettingKeyRule::class),
+                app(SettingValueIsValidRule::class)
+            ]
         ]);
 
-        if($request->has('unit_system')) {
-            UnitSystem::setValue($request->input('unit_system'));
-        }
-
-        if($request->has('dark_mode')) {
-            DarkMode::setValue($request->input('dark_mode'));
-        }
-
-        if($request->has('strava_client_id') && Auth::user()->can('manage-global-settings')) {
-            StravaClient::setValue($request->input('strava_client_id'));
-        }
-
-        if($request->has('stats_order')) {
-            StatsOrder::setValue($request->input('stats_order'));
+        foreach($request->all() as $key => $value) {
+            Setting::setValue($key, $value);
+            $settings[$key] = $value;
         }
 
         return redirect()->route('settings.index');

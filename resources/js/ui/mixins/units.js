@@ -62,7 +62,7 @@ export default {
             return units;
         },
         unitSystem() {
-            return this.$page.props.settings?.unit_system || 'metric';
+            return this.$setting.unit_system || 'metric';
         }
     },
     methods: {

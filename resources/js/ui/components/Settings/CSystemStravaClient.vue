@@ -34,16 +34,11 @@ export default {
             required: true,
             type: Array
         },
-        initialValue: {
-            required: false,
-            type: Number,
-            default: null
-        }
     },
     data() {
         return {
             form: this.$inertia.form({
-                system_client_id: this.initialValue
+                system_client_id: this.$setting.system_client_id
             })
         }
     },

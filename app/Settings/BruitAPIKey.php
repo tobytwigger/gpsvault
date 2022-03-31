@@ -3,10 +3,16 @@
 namespace App\Settings;
 
 use FormSchema\Schema\Field;
-use Settings\Types\UserSetting;
+use Illuminate\Support\Facades\Auth;
+use Settings\Types\GlobalSetting;
 
-class BruitAPIKey extends UserSetting
+class BruitAPIKey extends GlobalSetting
 {
+
+    public function canWrite(): bool
+    {
+        return Auth::check() && Auth::user()->can('manage-bruit-key');
+    }
 
     public function alias(): ?string
     {

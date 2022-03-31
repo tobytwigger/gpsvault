@@ -37,17 +37,10 @@ export default {
         draggable
     },
 
-    props: {
-        initialValue: {
-            required: true,
-            type: Array
-        }
-    },
-
     data() {
         return {
             form: this.$inertia.form({
-                stats_order: this.initialValue
+                stats_order_preference: this.$setting.stats_order_preference
             }),
             sources: {
                 php: {text: 'Cycle Store', value: 'php', description: 'Our own analysis of your activities.'},
@@ -68,10 +61,10 @@ export default {
     computed: {
         schema: {
             get() {
-                return this.form.stats_order.map(id => this.sources[id])
+                return this.form.stats_order_preference.map(id => this.sources[id])
             },
             set(val) {
-                this.form.stats_order = val.map(source => source.value);
+                this.form.stats_order_preference = val.map(source => source.value);
             }
         }
     }
