@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c459245317184d92bf0e48b4da1d268",
+    "content-hash": "8c5c6538fc6a38131bd53d61626521ad",
     "packages": [
         {
             "name": "adriangibbons/php-fit-file-analysis",
