@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Models\User;
 use App\Services\File\FileUploader;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FileFactory extends Factory
@@ -55,6 +56,17 @@ class FileFactory extends Factory
     {
         return $this->state(fn(array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
+            'filename' => $this->faker->word . '.gpx',
+            'extension' => 'gpx',
+            'type' => FileUploader::ACTIVITY_FILE,
+            'mimetype' => 'application/xml+gpx'
+        ]);
+    }
+
+    public function dartmoorDevil()
+    {
+        return $this->state(fn(array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevil') , storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
