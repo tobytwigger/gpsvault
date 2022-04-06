@@ -18,11 +18,6 @@ class DarkMode extends UserSetting
         return false;
     }
 
-    public function fieldOptions(): Field
-    {
-        return \FormSchema\Generator\Field::switch(static::class);
-    }
-
     public function rules(): array|string
     {
         return 'boolean';

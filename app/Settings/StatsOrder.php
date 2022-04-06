@@ -18,11 +18,6 @@ class StatsOrder extends UserSetting
         return ['php', 'strava'];
     }
 
-    public function fieldOptions(): Field
-    {
-        return \FormSchema\Generator\Field::number('test');
-    }
-
     public function rules(): array|string
     {
         return 'array';

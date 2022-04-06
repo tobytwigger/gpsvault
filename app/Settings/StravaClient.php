@@ -27,11 +27,6 @@ class StravaClient extends GlobalSetting
         return null;
     }
 
-    public function fieldOptions(): Field
-    {
-        return \FormSchema\Generator\Field::text('');
-    }
-
     /**
      * @param int|null $id The ID of the model to query against
      * @throws ModelNotFoundException

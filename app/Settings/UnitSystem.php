@@ -18,11 +18,6 @@ class UnitSystem extends UserSetting
         return 'metric';
     }
 
-    public function fieldOptions(): Field
-    {
-        return \FormSchema\Generator\Field::number('test');
-    }
-
     public function rules(): array|string
     {
         return 'string|in:metric,imperial';

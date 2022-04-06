@@ -24,11 +24,6 @@ class BruitAPIKey extends GlobalSetting
         return config('services.bruit.key');
     }
 
-    public function fieldOptions(): Field
-    {
-        return \FormSchema\Generator\Field::text('test');
-    }
-
     public function rules(): array|string
     {
         return 'string|min:1';
