@@ -8,7 +8,7 @@
         >
             <v-tabs-slider></v-tabs-slider>
             <v-tab href="#tab-summary">Summary<v-icon>mdi-information</v-icon></v-tab>
-            <v-tab href="#tab-accommodation">Accommodation<v-icon>mdi-bed</v-icon></v-tab>
+            <v-tab href="#tab-booking">Bookings<v-icon>mdi-bed</v-icon></v-tab>
             <v-tab href="#tab-waypoints">Waypoints<v-icon>mdi-map-marker</v-icon></v-tab>
         </v-tabs>
 
@@ -57,14 +57,14 @@
                 </v-row>
             </v-tab-item>
 
-            <v-tab-item value="tab-accommodation">
-                Accommodation
+            <v-tab-item value="tab-booking">
+                Booking
             </v-tab-item>
 
             <v-tab-item value="tab-waypoints">
                 Waypoints. Paginator of them all, can filter by type.
 
-                Points of interest, cafes & lunch, dinner, shops, toilets, viewpoints, accommodation
+                Points of interest, cafes & lunch, dinner, shops, toilets, viewpoints, booking
             </v-tab-item>
         </v-tabs-items>
 

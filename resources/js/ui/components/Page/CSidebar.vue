@@ -56,6 +56,20 @@
             nav
             dense
         >
+            <v-list-item :input-value="['place.index', 'place.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('place.index'))">
+                <v-list-item-icon>
+                    <v-icon>mdi-map-marker</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Places</v-list-item-title>
+            </v-list-item>
+        </v-list>
+
+        <v-divider></v-divider>
+
+        <v-list
+            nav
+            dense
+        >
             <v-list-group
                 :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"
                 no-action

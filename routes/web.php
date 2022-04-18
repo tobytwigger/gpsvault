@@ -32,6 +32,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     Route::get('/tour/{tour}/points', [\App\Http\Controllers\Pages\Tour\TourPointsController::class, 'show'])->name('tour.points');
     Route::get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
 
+    /* Places */
+    Route::resource('place', \App\Http\Controllers\Pages\Places\PlaceController::class)->only(['index', 'show', 'update', 'store']);
+
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
     Route::resource('activity', \App\Http\Controllers\Pages\Activity\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
