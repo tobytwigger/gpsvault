@@ -83,12 +83,16 @@ export default {
     },
     methods: {
         convertDistance(value) {
-            let converted = this.convert(value, 'distance');
-            return converted.value + converted.unit;
+            if(value) {
+                let converted = this.convert(value, 'distance');
+                return converted.value + converted.unit;
+            }
         },
         convertElevation(value) {
-            let converted = this.convert(value, 'elevation');
-            return converted.value + converted.unit;
+            if(value) {
+                let converted = this.convert(value, 'elevation');
+                return converted.value + converted.unit;
+            }
         },
         toDateTime(value) {
             if (value === null) {

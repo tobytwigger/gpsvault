@@ -72,6 +72,21 @@
 
             <v-spacer></v-spacer>
 
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        link
+                        @click="$inertia.get(route('tour.stage.show', [stage.tour_id, stage.id]))"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                </template>
+                View
+            </v-tooltip>
+
             <c-stage-form :tour-id="stage.tour_id" :old-stage="stage" title="Edit stage" button-text="Update">
                 <template v-slot:activator="{trigger, showing}">
                     <v-tooltip bottom>
@@ -92,8 +107,8 @@
                 </template>
             </c-stage-form>
 
-            <c-confirmation-dialog title="Delete stage?" button-text="Delete" :loading="isDeleting" cancel-button-text="Nevermind" @confirm="deleteStage">
-                <template v-slot:activator="{trigger,showing}">
+            <c-delete-stage-button :stage="stage">
+                <template #button="{trigger, showing}">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
@@ -111,10 +126,7 @@
                         Delete
                     </v-tooltip>
                 </template>
-                <p>Are you sure you want to delete this stage?</p>
-
-                <p>The route will still be available, but you will lose information about the date and any other plans.</p>
-            </c-confirmation-dialog>
+            </c-delete-stage-button>
 
         </v-card-actions>
 
@@ -127,10 +139,11 @@ import units from '../../mixins/units';
 import CStageForm from './CStageForm';
 import CConfirmationDialog from '../CConfirmationDialog';
 import stats from '../../mixins/stats';
+import CDeleteStageButton from './CDeleteStageButton';
 
 export default {
     name: "CStageCard",
-    components: {CConfirmationDialog, CStageForm},
+    components: {CDeleteStageButton, CConfirmationDialog, CStageForm},
     mixins: [units, stats],
     props: {
         stage: {

@@ -63,12 +63,23 @@ class FileFactory extends Factory
         ]);
     }
 
-    public function dartmoorDevil()
+    public function dartmoorDevilGpx()
     {
         return $this->state(fn(array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevil') , storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
+            'type' => FileUploader::ACTIVITY_FILE,
+            'mimetype' => 'application/xml+gpx'
+        ]);
+    }
+
+    public function dartmoorDevilFit()
+    {
+        return $this->state(fn(array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevilFit') , storage_path('tests'), false), 'tests/'),
+            'filename' => $this->faker->word . '.fit',
+            'extension' => 'fit',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'application/xml+gpx'
         ]);
