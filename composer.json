@@ -34,6 +34,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "linkeys/signed-url": "^4.0",
         "maxh/php-nominatim": "^2.3",
+        "meilisearch/meilisearch-php": "^0.23.1",
         "mjaschen/phpgeo": "^4.0",
         "mstaack/laravel-postgis": "^5.3",
         "nelexa/zip": "^4.0",

@@ -11,10 +11,6 @@ class Calories extends AnalyserContract
     public function canRun(Analysis $analysis): bool
     {
         return false;
-
-        return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null
-            && $analysis->getAverageSpeed() === null;
     }
 
     /**
@@ -23,10 +19,6 @@ class Calories extends AnalyserContract
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $duration = $analysis->getDuration();
-        $distance = $analysis->getDistance();
-        $pace = $duration / $distance;
-
-        return $analysis->setAveragePace($pace);
+        return $analysis;
     }
 }

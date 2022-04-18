@@ -24,12 +24,7 @@ class Distance extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        return $analysis->setDistance($this->polyline->getLength(new Vincenty()));
-    }
-
-    public function canRun(Analysis $analysis): bool
-    {
-        return $analysis->getDistance() === null;
+        return $analysis->setDistance(round($this->polyline->getLength(new Vincenty()), 2));
     }
 
     public function processPoint(Point $point): void

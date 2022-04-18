@@ -11,10 +11,6 @@ class Power extends AnalyserContract
     public function canRun(Analysis $analysis): bool
     {
         return false;
-
-        return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null
-            && $analysis->getAverageSpeed() === null;
     }
 
     /**

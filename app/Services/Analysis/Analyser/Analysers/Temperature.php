@@ -5,17 +5,10 @@ namespace App\Services\Analysis\Analyser\Analysers;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 
-class Temperature extends AnalyserContract
+class Temperature extends AnalyserContract implements PointAnalyser
 {
 
-    public function canRun(Analysis $analysis): bool
-    {
-        return false;
-
-        return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null
-            && $analysis->getAverageSpeed() === null;
-    }
+    protected array $temperatures = [];
 
     /**
      * @param Analysis $analysis
@@ -23,10 +16,20 @@ class Temperature extends AnalyserContract
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $duration = $analysis->getDuration();
-        $distance = $analysis->getDistance();
-        $pace = $duration / $distance;
+        if(!empty($this->temperatures)) {
+            $analysis->setAverageTemp(
+                round(array_sum($this->temperatures)/count($this->temperatures))
+            );
+        }
 
-        return $analysis->setAveragePace($pace);
+        return $analysis;
+    }
+
+    public function processPoint(Point $point): void
+    {
+        $temperature = $point->getTemperature();
+        if($temperature !== null) {
+            $this->temperatures[] = $temperature;
+        }
     }
 }

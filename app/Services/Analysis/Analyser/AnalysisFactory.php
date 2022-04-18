@@ -22,16 +22,14 @@ class AnalysisFactory implements AnalysisFactoryContract
 
     public function runAnalysis(Analysis $analysis): Analysis
     {
-        $pointAnalyser = $this->getChain(fn(AnalyserContract $analyser) => $analyser instanceof PointAnalyser);
+        $analyser = $this->getChain();
         foreach($this->pointsFor($analysis) as $point) {
-            $pointAnalyser->processPoint($point);
+            $analyser->preparePoint($point);
         }
-        $analysis = $pointAnalyser->analyse($analysis);
-        $analysis = $this->getChain(fn(AnalyserContract $analyser) => !($analyser instanceof PointAnalyser))->analyse($analysis);
-        return $analysis;
+        return $analyser->analyse($analysis);
     }
 
-    private function getChain(\Closure $filter): AnalyserContract
+    private function getChain(?\Closure $filter = null): AnalyserContract
     {
         $analysers = collect($this->analysers)
             ->map(fn(string $class) => app($class))

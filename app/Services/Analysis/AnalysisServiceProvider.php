@@ -40,16 +40,16 @@ class AnalysisServiceProvider extends ServiceProvider
             ->registerAnalyser(AverageSpeed::class)
             ->registerAnalyser(Elevation::class)
             ->registerAnalyser(Pace::class)
-//            ->registerAnalyser(Cadence::class)
-//            ->registerAnalyser(Calories::class)
-//            ->registerAnalyser(Energy::class)
-//            ->registerAnalyser(Heartrate::class)
+            ->registerAnalyser(Cadence::class)
+            ->registerAnalyser(Heartrate::class)
             ->registerAnalyser(Locations::class)
             ->registerAnalyser(MaxSpeed::class)
+            ->registerAnalyser(Temperature::class)
 //            ->registerAnalyser(MovingTime::class)
 //            ->registerAnalyser(Power::class)
-//            ->registerAnalyser(Temperature::class)
-            ;
+//            ->registerAnalyser(Calories::class)
+//            ->registerAnalyser(Energy::class)
+        ;
     }
 
 }

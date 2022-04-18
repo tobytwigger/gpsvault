@@ -18,13 +18,14 @@ class Pace extends AnalyserContract
         $distance = $analysis->getDistance();
         $pace = $duration / $distance;
 
-        return $analysis->setAveragePace($pace);
+        return $analysis->setAveragePace(round($pace, 2));
     }
 
     public function canRun(Analysis $analysis): bool
     {
         return $analysis->getDuration() !== null
             && $analysis->getDistance() !== null
+            && $analysis->getDistance() !== 0.0
             && $analysis->getAveragePace() === null;
     }
 }

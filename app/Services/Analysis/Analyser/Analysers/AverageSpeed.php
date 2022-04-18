@@ -11,8 +11,7 @@ class AverageSpeed extends AnalyserContract
     public function canRun(Analysis $analysis): bool
     {
         return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null
-            && $analysis->getAverageSpeed() === null;
+            && $analysis->getDistance() !== null;
     }
 
     /**
@@ -25,6 +24,6 @@ class AverageSpeed extends AnalyserContract
         $distance = $analysis->getDistance();
         $averageSpeed = $distance / $duration;
 
-        return $analysis->setAverageSpeed($averageSpeed);
+        return $analysis->setAverageSpeed(round($averageSpeed, 2));
     }
 }

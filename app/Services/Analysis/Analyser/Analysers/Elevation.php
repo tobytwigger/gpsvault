@@ -18,11 +18,6 @@ class Elevation extends AnalyserContract implements PointAnalyser
 
     private ?float $elevationLoss = 0;
 
-    public function canRun(Analysis $analysis): bool
-    {
-        return true;
-    }
-
     public function processPoint(Point $point): void
     {
         if ($point->getElevation() !== null) {

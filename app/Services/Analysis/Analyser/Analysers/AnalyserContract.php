@@ -3,6 +3,7 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
+use App\Services\Analysis\Parser\Point;
 
 abstract class AnalyserContract
 {
@@ -25,8 +26,19 @@ abstract class AnalyserContract
         return $analysis;
     }
 
+    public function preparePoint(Point $point): void
+    {
+        if($this instanceof PointAnalyser) {
+            $this->processPoint($point);
+        }
+        $this->nextAnalyser?->preparePoint($point);
+    }
+
     abstract protected function run(Analysis $analysis): Analysis;
 
-    abstract public function canRun(Analysis $analysis): bool;
+    public function canRun(Analysis $analysis): bool
+    {
+        return true;
+    }
 
 }

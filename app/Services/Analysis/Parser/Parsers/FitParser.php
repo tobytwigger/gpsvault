@@ -62,7 +62,7 @@ class FitParser implements ParserContract
             $points->push(
                 (new Point())
                     ->setCadence($get('cadence'))
-                    ->setTemperature($get('temperature', [Celsius::class, Fahrenheit::class]))
+                    ->setTemperature($get('temperature'))
                     ->setElevation($get('altitude'))
                     ->setHeartRate($get('heart_rate'))
                     ->setLatitude($get('position_lat'))

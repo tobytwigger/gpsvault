@@ -5,16 +5,10 @@ namespace App\Services\Analysis\Analyser\Analysers;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 
-class Cadence extends AnalyserContract
+class Cadence extends AnalyserContract implements PointAnalyser
 {
 
-    public function canRun(Analysis $analysis): bool
-    {
-        return false;
-        return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null
-            && $analysis->getAverageSpeed() === null;
-    }
+    protected array $cadences = [];
 
     /**
      * @param Analysis $analysis
@@ -22,10 +16,20 @@ class Cadence extends AnalyserContract
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $duration = $analysis->getDuration();
-        $distance = $analysis->getDistance();
-        $pace = $duration / $distance;
+        if(!empty($this->cadences)) {
+            $analysis->setAverageCadence(
+                round(array_sum($this->cadences)/count($this->cadences))
+            );
+        }
 
-        return $analysis->setAveragePace($pace);
+        return $analysis;
+    }
+
+    public function processPoint(Point $point): void
+    {
+        $cadence = $point->getCadence();
+        if($cadence !== null && $cadence !== 0.0) {
+            $this->cadences[] = $cadence;
+        }
     }
 }
