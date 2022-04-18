@@ -1,7 +1,6 @@
 <template>
 
-    <l-map style="height: 50vh" ref="map" zoom="9" @ready="initialiseClickListener">
-<!--        <l-control-layers position="topright"></l-control-layers>-->
+    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener">
 
         <l-tile-layer
             v-for="tileProvider in tileProviders"
@@ -12,7 +11,7 @@
             :attribution="tileProvider.attribution"
             layer-type="base"/>
 
-        <l-marker v-if="hasLocation" :lat-lng="value"></l-marker>
+        <l-marker v-if="hasLocation" :draggable="true" @update:latLng="(e) => setLatLng(e.lat, e.lng)" :lat-lng="markerLatLng"></l-marker>
 
     </l-map>
 
@@ -40,13 +39,14 @@ export default {
     methods: {
         initialiseClickListener() {
             this.$refs.map.mapObject.setView([52.025612, -0.801140]);
-
-            this.$refs.map.mapObject.on('click', function(e) {
-                this.$emit('input', {
-                    lat: e.latlng.lat,
-                    lng: e.latlng.lng,
-                })
-            });
+            this.$refs.map.mapObject.on('click', (e) => this.setLatLng(e.latlng.lat, e.latlng.lng));
+            this.$refs.map.mapObject.invalidateSize();
+        },
+        setLatLng(lat, lng) {
+            this.$emit('input', {lat: lat, lng: lng})
+        },
+        test(e) {
+            console.log(e);
         }
     },
     data() {
@@ -72,7 +72,13 @@ export default {
     },
     computed: {
         hasLocation() {
-            return this.value.latitude !== null && this.value.longitude !== null;
+            return this.value.lat !== null && this.value.lng !== null;
+        },
+        markerLatLng() {
+            if(this.hasLocation) {
+                return [this.value.lat, this.value.lng];
+            }
+            return [];
         }
     }
 }

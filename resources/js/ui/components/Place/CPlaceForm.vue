@@ -150,6 +150,7 @@ export default {
             form: this.$inertia.form({
                 name: null,
                 description: null,
+                type: null,
                 phone_number: null,
                 url: null,
                 address: null,
@@ -174,10 +175,17 @@ export default {
             if(this.oldPlace) {
                 this.form.name = this.oldPlace.name;
                 this.form.description = this.oldPlace.description;
+                this.form.type = this.oldPlace.type;
+                this.form.phone_number = this.oldPlace.phone_number;
+                this.form.url = this.oldPlace.url;
+                this.form.address = this.oldPlace.address;
+                this.form.email = this.oldPlace.email;
+                this.form.location = {lng: this.oldPlace?.location?.coordinates[0] ?? null, lat: this.oldPlace?.location?.coordinates[1] ?? null};
             }
         },
         submit() {
-            this.form.post(
+            this.form.submit(
+                this.oldPlace ? 'patch' : 'post',
                 this.oldPlace
                     ? route('place.update', this.oldPlace.id)
                     : route('place.store'),
