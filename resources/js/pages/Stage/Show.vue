@@ -62,6 +62,29 @@
             </v-tab-item>
 
             <v-tab-item value="tab-waypoints">
+
+                <v-row
+                    align="center"
+                    justify="center">
+                    <v-col>
+                        <v-progress-circular
+                            v-if="loading"
+                            :size="70"
+                            :width="7"
+                            color="primary"
+                            indeterminate
+                        ></v-progress-circular>
+
+                        <div v-else-if="places === null">No places found</div>
+
+                        <c-pagination-iterator v-else :paginator="places" item-key="id">
+                            <template v-slot:default="{item}">
+                                <c-place-card :place="item"></c-place-card>
+                            </template>
+                        </c-pagination-iterator>
+                    </v-col>
+                </v-row>
+
                 Waypoints. Paginator of them all, can filter by type.
 
                 Points of interest, cafes & lunch, dinner, shops, toilets, viewpoints, booking
@@ -124,11 +147,13 @@ import stats from '../../ui/mixins/stats';
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CRouteMap from '../../ui/components/Route/CRouteMap';
 import CDeleteStageButton from '../../ui/components/Stage/CDeleteStageButton';
+import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 
 export default {
     name: "Show",
     mixins: [stats],
     components: {
+        CPlaceCard,
         CDeleteStageButton,
         CRouteMap,
         CActivityLocationSummary,
@@ -152,6 +177,19 @@ export default {
     data() {
         return {
             tab: null,
+            loading: false,
+            places: null
+        }
+    },
+    mounted() {
+        this.loadPlaces();
+    },
+    methods: {
+        loadPlaces() {
+            this.loading = true;
+            axios.get(route('place.search'))
+                .then(response => this.places = response.data)
+                .then(() => this.loading = false);
         }
     },
     computed: {
