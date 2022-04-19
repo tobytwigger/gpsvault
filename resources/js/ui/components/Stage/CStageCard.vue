@@ -72,21 +72,6 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        link
-                        @click="$inertia.get(route('tour.stage.show', [stage.tour_id, stage.id]))"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-eye</v-icon>
-                    </v-btn>
-                </template>
-                View
-            </v-tooltip>
-
             <c-stage-form :tour-id="stage.tour_id" :old-stage="stage" title="Edit stage" button-text="Update">
                 <template v-slot:activator="{trigger, showing}">
                     <v-tooltip bottom>

@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     /* Places */
     Route::get('place/search', [\App\Http\Controllers\Pages\Place\PlaceSearchController::class, 'search'])->name('place.search');
+//    Route::post('place/{place}/favorite', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
     Route::resource('place', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
 
     /* Activities */

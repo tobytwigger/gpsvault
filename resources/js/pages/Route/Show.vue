@@ -17,6 +17,11 @@
                 Files
                 <v-icon>mdi-file-document-multiple</v-icon>
             </v-tab>
+
+            <v-tab href="#tab-waypoints">
+                Waypoints
+                <v-icon>mdi-map-marker</v-icon>
+            </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -75,6 +80,32 @@
                 </c-route-file-form-dialog>
                 <c-manage-route-media :route-model="routeModel"></c-manage-route-media>
             </v-tab-item>
+
+            <v-tab-item value="tab-waypoints">
+
+                <v-row
+                    align="center"
+                    justify="center">
+                    <v-col>
+                        <v-progress-circular
+                            v-if="loading"
+                            :size="70"
+                            :width="7"
+                            color="primary"
+                            indeterminate
+                        ></v-progress-circular>
+
+                        <div v-else-if="places === null">No places found</div>
+
+                        <c-pagination-iterator v-else :paginator="places" item-key="id">
+                            <template v-slot:default="{item}">
+                                <c-place-card :place="item"></c-place-card>
+                            </template>
+                        </c-pagination-iterator>
+                    </v-col>
+                </v-row>
+            </v-tab-item>
+
         </v-tabs-items>
 
         <template #sidebar>
@@ -133,10 +164,14 @@ import CRouteForm from 'ui/components/Route/CRouteForm';
 import CDeleteRouteButton from 'ui/components/Route/CDeleteRouteButton';
 import CUploadRouteFileButton from 'ui/components/Route/CUploadRouteFileButton';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
+import CPaginationIterator from '../../ui/components/CPaginationIterator';
+import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 
 export default {
     name: "Show",
     components: {
+        CPlaceCard,
+        CPaginationIterator,
         CActivityLocationSummary,
         CUploadRouteFileButton,
         CDeleteRouteButton, CRouteForm, CRouteMap, CStats, CManageRouteMedia, CRouteFileFormDialog, CAppWrapper},
@@ -149,12 +184,23 @@ export default {
     mixins: [stats],
     data() {
         return {
-            tab: 'tab-summary'
+            tab: 'tab-summary',
+            loading: false,
+            places: null
         }
+    },
+    mounted() {
+        this.loadPlaces();
     },
     methods: {
         formatDateTime(dt) {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
+        },
+        loadPlaces() {
+            this.loading = true;
+            axios.get(route('place.search'))
+                .then(response => this.places = response.data)
+                .then(() => this.loading = false);
         }
     },
     computed: {

@@ -7,12 +7,23 @@
             icons-and-text
         >
             <v-tabs-slider></v-tabs-slider>
-            <v-tab href="#tab-summary">Summary<v-icon>mdi-information</v-icon></v-tab>
-            <v-tab href="#tab-booking">Bookings<v-icon>mdi-bed</v-icon></v-tab>
-            <v-tab href="#tab-waypoints">Waypoints<v-icon>mdi-map-marker</v-icon></v-tab>
+<!--            <v-tab href="#tab-summary">Summary<v-icon>mdi-information</v-icon></v-tab>-->
+<!--            <v-tab href="#tab-booking">Bookings<v-icon>mdi-bed</v-icon></v-tab>-->
+<!--            <v-tab href="#tab-waypoints">Waypoints<v-icon>mdi-map-marker</v-icon></v-tab>-->
+            <v-tab href="#tab-unused">Not in use<v-icon>mdi-map-marker</v-icon></v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
+            <v-tab-item value="tab-unused">
+                <v-alert
+                    outlined
+                    type="warning"
+                    prominent
+                    border="left"
+                >
+                    This page is under development
+                </v-alert>
+            </v-tab-item>
             <v-tab-item value="tab-summary">
                 <v-row>
                     <v-col>
@@ -84,47 +95,43 @@
                         </c-pagination-iterator>
                     </v-col>
                 </v-row>
-
-                Waypoints. Paginator of them all, can filter by type.
-
-                Points of interest, cafes & lunch, dinner, shops, toilets, viewpoints, booking
             </v-tab-item>
         </v-tabs-items>
 
         <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <c-stage-form :tour-id="stage.tour_id" :old-stage="stage" title="Edit stage" button-text="Update">
-                        <template v-slot:activator="{trigger, showing}">
-                            <v-btn :disabled="showing" @click="trigger">
-                                Edit Stage
-                            </v-btn>
-                        </template>
-                    </c-stage-form>
-                </v-list-item>
+<!--            <v-list>-->
+<!--                <v-list-item>-->
+<!--                    <c-stage-form :tour-id="stage.tour_id" :old-stage="stage" title="Edit stage" button-text="Update">-->
+<!--                        <template v-slot:activator="{trigger, showing}">-->
+<!--                            <v-btn :disabled="showing" @click="trigger">-->
+<!--                                Edit Stage-->
+<!--                            </v-btn>-->
+<!--                        </template>-->
+<!--                    </c-stage-form>-->
+<!--                </v-list-item>-->
 
-                <v-list-item>
-                    <c-delete-stage-button :stage="stage">
-                        <template #button="{trigger, showing}">
-                            <v-btn :disabled="showing" @click="trigger" :loading="showing" color="error">
-                                Delete Stage
-                            </v-btn>
-                        </template>
-                    </c-delete-stage-button>
-                </v-list-item>
+<!--                <v-list-item>-->
+<!--                    <c-delete-stage-button :stage="stage">-->
+<!--                        <template #button="{trigger, showing}">-->
+<!--                            <v-btn :disabled="showing" @click="trigger" :loading="showing" color="error">-->
+<!--                                Delete Stage-->
+<!--                            </v-btn>-->
+<!--                        </template>-->
+<!--                    </c-delete-stage-button>-->
+<!--                </v-list-item>-->
 
-                <v-list-item v-if="stage.route_id">
-                    <v-btn @click="$inertia.get(route('route.show', stage.route_id))">
-                        View Route
-                    </v-btn>
-                </v-list-item>
+<!--                <v-list-item v-if="stage.route_id">-->
+<!--                    <v-btn @click="$inertia.get(route('route.show', stage.route_id))">-->
+<!--                        View Route-->
+<!--                    </v-btn>-->
+<!--                </v-list-item>-->
 
-                <v-list-item v-if="stage.activity_id">
-                    <v-btn @click="$inertia.get(activity('activity.show', stage.activity_id))">
-                        View Activity
-                    </v-btn>
-                </v-list-item>
-            </v-list>
+<!--                <v-list-item v-if="stage.activity_id">-->
+<!--                    <v-btn @click="$inertia.get(activity('activity.show', stage.activity_id))">-->
+<!--                        View Activity-->
+<!--                    </v-btn>-->
+<!--                </v-list-item>-->
+<!--            </v-list>-->
         </template>
 
     </c-app-wrapper>
