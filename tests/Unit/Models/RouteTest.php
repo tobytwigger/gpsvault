@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models;
 
 use App\Models\File;
+use App\Models\Place;
 use App\Models\Route;
 use App\Models\Stats;
 use App\Models\User;
@@ -68,6 +69,21 @@ class RouteTest extends TestCase
 
         StatsOrder::setDefaultValue(['strava', 'php']);
         $this->assertEquals(50, $route3->distance);
+    }
+
+    /** @test */
+    public function it_has_many_places(){
+        $route = Route::factory()->create();
+
+        $place1 = Place::factory()->create();
+        $place2 = Place::factory()->create();
+        $place3 = Place::factory()->create();
+
+        $route->places()->attach([$place1->id, $place2->id]);
+
+        $this->assertCount(2, $route->places);
+        $this->assertTrue($place1->is($route->places[0]));
+        $this->assertTrue($place2->is($route->places[1]));
     }
 
 }
