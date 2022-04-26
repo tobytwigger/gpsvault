@@ -68,7 +68,8 @@ class RouteController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'routeModel' => $route->load(['files', 'stats'])
+            'routeModel' => $route->load(['files', 'stats']),
+            'places' => $route->places()->paginate(request()->input('perPage', 8))
         ]);
     }
 

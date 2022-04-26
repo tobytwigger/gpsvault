@@ -65,15 +65,4 @@ class StageController extends Controller
         return redirect()->route('tour.show', $stage->tour_id);
     }
 
-    public function show(Request $request, Tour $tour, Stage $stage)
-    {
-        abort_if($tour->id !== $stage->tour_id, 404, 'The stage does not belong to the tour.');
-
-        return Inertia::render('Stage/Show', [
-            'tour' => $tour,
-            'stage' => $stage,
-            'routeModel' => $stage->route?->load('stats')
-        ]);
-    }
-
 }

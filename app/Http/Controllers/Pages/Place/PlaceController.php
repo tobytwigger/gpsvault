@@ -13,7 +13,7 @@ class PlaceController extends Controller
     public function index()
     {
         return Inertia::render('Place/Index', [
-            'places' => Place::paginate(request()->input('perPage', 8))
+            'places' => Place::orderBy('name')->paginate(request()->input('perPage', 8))
         ]);
     }
 
@@ -70,4 +70,5 @@ class PlaceController extends Controller
 
         return redirect()->route('place.show', $place);
     }
+
 }

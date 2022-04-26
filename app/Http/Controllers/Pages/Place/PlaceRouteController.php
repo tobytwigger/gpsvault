@@ -12,11 +12,6 @@ use Inertia\Inertia;
 class PlaceRouteController extends Controller
 {
 
-    public function index(Route $route)
-    {
-        return $route->places()->paginate(request()->input('perPage', 8));
-    }
-
     public function store(Request $request, Route $route)
     {
         $request->validate([
