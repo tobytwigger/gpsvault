@@ -65,4 +65,10 @@ class Route extends Model
         return $this->belongsToMany(File::class);
     }
 
+    public function places()
+    {
+        return $this->belongsToMany(Place::class)
+            ->using(PlaceRoute::class);
+    }
+
 }

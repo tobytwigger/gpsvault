@@ -23,6 +23,34 @@
 
             <v-spacer></v-spacer>
 
+            <v-tooltip bottom v-if="addToRoute">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        @click="$emit('addToRoute', place)"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </template>
+                Add to route
+            </v-tooltip>
+
+            <v-tooltip bottom v-if="removeFromRoute">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        @click="$emit('removeFromRoute', place)"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-minus</v-icon>
+                    </v-btn>
+                </template>
+                Remove from route
+            </v-tooltip>
+
             <v-tooltip bottom v-if="place.url">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -79,6 +107,16 @@ export default {
         place: {
             required: true,
             type: Object
+        },
+        addToRoute: {
+            required: false,
+            type: Boolean,
+            default: false
+        },
+        removeFromRoute: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     methods: {

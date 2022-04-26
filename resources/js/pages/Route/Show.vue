@@ -19,7 +19,7 @@
             </v-tab>
 
             <v-tab href="#tab-waypoints">
-                Waypoints
+                Places
                 <v-icon>mdi-map-marker</v-icon>
             </v-tab>
         </v-tabs>
@@ -87,6 +87,7 @@
                     align="center"
                     justify="center">
                     <v-col>
+
                         <v-progress-circular
                             v-if="loading"
                             :size="70"
@@ -99,9 +100,18 @@
 
                         <c-pagination-iterator v-else :paginator="places" item-key="id">
                             <template v-slot:default="{item}">
-                                <c-place-card :place="item"></c-place-card>
+                                <c-place-card :place="item" :remove-from-route="true" @removeFromRoute="removeFromRoute"></c-place-card>
                             </template>
                         </c-pagination-iterator>
+                    </v-col>
+                </v-row>
+
+
+                <v-row
+                    align="center"
+                    justify="center">
+                    <v-col>
+                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute"></c-place-search>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -166,10 +176,12 @@ import CUploadRouteFileButton from 'ui/components/Route/CUploadRouteFileButton';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 import CPaginationIterator from '../../ui/components/CPaginationIterator';
 import CPlaceCard from '../../ui/components/Place/CPlaceCard';
+import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
 
 export default {
     name: "Show",
     components: {
+        CPlaceSearch,
         CPlaceCard,
         CPaginationIterator,
         CActivityLocationSummary,
@@ -196,9 +208,27 @@ export default {
         formatDateTime(dt) {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
         },
+        addToRoute(place) {
+            this.$inertia.post(route('route.place.store', this.routeModel.id), {
+                place_id: place.id
+            }, {
+                onSuccess: (page) => {
+                    this.loadPlaces();
+                    this.$refs.placeSearch.loadPlaces();
+                }
+            });
+        },
+        removeFromRoute(place) {
+            this.$inertia.delete(route('route.place.destroy', [this.routeModel.id, place.id]), {
+                onSuccess: (page) => {
+                    this.loadPlaces();
+                    this.$refs.placeSearch.loadPlaces();
+                }
+            });
+        },
         loadPlaces() {
             this.loading = true;
-            axios.get(route('place.search'))
+            axios.get(route('route.place.index', this.routeModel.id))
                 .then(response => this.places = response.data)
                 .then(() => this.loading = false);
         }

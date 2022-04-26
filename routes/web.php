@@ -34,8 +34,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     /* Places */
     Route::get('place/search', [\App\Http\Controllers\Pages\Place\PlaceSearchController::class, 'search'])->name('place.search');
-//    Route::post('place/{place}/favorite', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
     Route::resource('place', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
+//    Route::post('route/{route}/place', [\App\Http\Controllers\Pages\Place\PlaceRouteController::class, 'store'])->name('route.place.store');
+//    Route::delete('route/{route}/place/{place}', [\App\Http\Controllers\Pages\Place\PlaceRouteController::class, 'destroy'])->name('route.place.destroy');
+    Route::resource('route.place', \App\Http\Controllers\Pages\Place\PlaceRouteController::class)->only(['index', 'store', 'destroy']);
 
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
