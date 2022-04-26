@@ -28,16 +28,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     /* Tours */
     Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
-    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy', 'show']);
+    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
     Route::get('/tour/{tour}/points', [\App\Http\Controllers\Pages\Tour\TourPointsController::class, 'show'])->name('tour.points');
     Route::get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
 
     /* Places */
     Route::get('place/search', [\App\Http\Controllers\Pages\Place\PlaceSearchController::class, 'search'])->name('place.search');
     Route::resource('place', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
-//    Route::post('route/{route}/place', [\App\Http\Controllers\Pages\Place\PlaceRouteController::class, 'store'])->name('route.place.store');
-//    Route::delete('route/{route}/place/{place}', [\App\Http\Controllers\Pages\Place\PlaceRouteController::class, 'destroy'])->name('route.place.destroy');
-    Route::resource('route.place', \App\Http\Controllers\Pages\Place\PlaceRouteController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('route.place', \App\Http\Controllers\Pages\Place\PlaceRouteController::class)->only(['store', 'destroy']);
 
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');

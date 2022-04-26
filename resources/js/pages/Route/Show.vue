@@ -88,17 +88,7 @@
                     justify="center">
                     <v-col>
 
-                        <v-progress-circular
-                            v-if="loading"
-                            :size="70"
-                            :width="7"
-                            color="primary"
-                            indeterminate
-                        ></v-progress-circular>
-
-                        <div v-else-if="places === null">No places found</div>
-
-                        <c-pagination-iterator v-else :paginator="places" item-key="id">
+                        <c-pagination-iterator :paginator="places" item-key="id">
                             <template v-slot:default="{item}">
                                 <c-place-card :place="item" :remove-from-route="true" @removeFromRoute="removeFromRoute"></c-place-card>
                             </template>
@@ -111,7 +101,26 @@
                     align="center"
                     justify="center">
                     <v-col>
-                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute"></c-place-search>
+                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute">
+<!--                                <template v-slot:activator="{trigger, showing}">-->
+<!--                                    <v-tooltip bottom>-->
+<!--                                        <template v-slot:activator="{ on, attrs }">-->
+<!--                                            <v-btn-->
+<!--                                                icon-->
+<!--                                                link-->
+<!--                                                @click="trigger"-->
+<!--                                                :disabled="showing"-->
+<!--                                                v-bind="attrs"-->
+<!--                                                v-on="on"-->
+<!--                                            >-->
+<!--                                                <v-icon>mdi-pencil</v-icon>-->
+<!--                                            </v-btn>-->
+<!--                                        </template>-->
+<!--                                        Edit-->
+<!--                                    </v-tooltip>-->
+<!--                                </template>-->
+
+                        </c-place-search>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -191,18 +200,17 @@ export default {
         routeModel: {
             required: true,
             type: Object
+        },
+        places: {
+            required: true,
+            type: Object
         }
     },
     mixins: [stats],
     data() {
         return {
-            tab: 'tab-summary',
-            loading: false,
-            places: null
+            tab: 'tab-summary'
         }
-    },
-    mounted() {
-        this.loadPlaces();
     },
     methods: {
         formatDateTime(dt) {
@@ -212,25 +220,13 @@ export default {
             this.$inertia.post(route('route.place.store', this.routeModel.id), {
                 place_id: place.id
             }, {
-                onSuccess: (page) => {
-                    this.loadPlaces();
-                    this.$refs.placeSearch.loadPlaces();
-                }
+                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
             });
         },
         removeFromRoute(place) {
             this.$inertia.delete(route('route.place.destroy', [this.routeModel.id, place.id]), {
-                onSuccess: (page) => {
-                    this.loadPlaces();
-                    this.$refs.placeSearch.loadPlaces();
-                }
+                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
             });
-        },
-        loadPlaces() {
-            this.loading = true;
-            axios.get(route('route.place.index', this.routeModel.id))
-                .then(response => this.places = response.data)
-                .then(() => this.loading = false);
         }
     },
     computed: {
