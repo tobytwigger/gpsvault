@@ -51,8 +51,8 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
             })
             ->merge(collect($metaPaths)
             ->mapWithKeys(function (string $path, string $file) {
-                    return [sprintf('%s.json', $file) => $path];
-                }))
+                return [sprintf('%s.json', $file) => $path];
+            }))
             ->all();
     }
 }

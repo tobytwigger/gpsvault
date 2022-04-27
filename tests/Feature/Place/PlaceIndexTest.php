@@ -25,18 +25,18 @@ class PlaceIndexTest extends TestCase
             ->assertStatus(200)
             ->assertInertia(
                 fn (Assert $page) => $page
-            ->component('Place/Index')
-            ->has(
-                'places',
-                fn (Assert $page) => $page
-            ->has('data', 5)
-            ->has('data.0', fn (Assert $page) => $page->where('name', $places[0]->name)->etc())
-            ->has('data.1', fn (Assert $page) => $page->where('id', $places[4]->id)->etc())
-            ->has('data.2', fn (Assert $page) => $page->where('id', $places[1]->id)->etc())
-            ->has('data.3', fn (Assert $page) => $page->where('id', $places[2]->id)->etc())
-            ->has('data.4', fn (Assert $page) => $page->where('id', $places[3]->id)->etc())
-            ->etc()
-            )
+                    ->component('Place/Index')
+                    ->has(
+                        'places',
+                        fn (Assert $page) => $page
+                    ->has('data', 5)
+                    ->has('data.0', fn (Assert $page) => $page->where('name', $places[0]->name)->etc())
+                    ->has('data.1', fn (Assert $page) => $page->where('id', $places[4]->id)->etc())
+                    ->has('data.2', fn (Assert $page) => $page->where('id', $places[1]->id)->etc())
+                    ->has('data.3', fn (Assert $page) => $page->where('id', $places[2]->id)->etc())
+                    ->has('data.4', fn (Assert $page) => $page->where('id', $places[3]->id)->etc())
+                    ->etc()
+                    )
             );
     }
 
@@ -74,19 +74,19 @@ class PlaceIndexTest extends TestCase
             ->assertStatus(200)
             ->assertInertia(
                 fn (Assert $page) => $page
-            ->component('Place/Index')
-            ->has(
-                'places',
-                fn (Assert $page) => $page
-            ->has('data', 6)
-            ->has('data.0', fn (Assert $page) => $page->where('name', $places[18]->name)->etc())
-            ->has('data.1', fn (Assert $page) => $page->where('name', $places[20]->name)->etc())
-            ->has('data.2', fn (Assert $page) => $page->where('name', $places[22]->name)->etc())
-            ->has('data.3', fn (Assert $page) => $page->where('name', $places[21]->name)->etc())
-            ->has('data.4', fn (Assert $page) => $page->where('name', $places[19]->name)->etc())
-            ->has('data.5', fn (Assert $page) => $page->where('name', $places[9]->name)->etc())
-            ->etc()
-            )
+                    ->component('Place/Index')
+                    ->has(
+                        'places',
+                        fn (Assert $page) => $page
+                    ->has('data', 6)
+                    ->has('data.0', fn (Assert $page) => $page->where('name', $places[18]->name)->etc())
+                    ->has('data.1', fn (Assert $page) => $page->where('name', $places[20]->name)->etc())
+                    ->has('data.2', fn (Assert $page) => $page->where('name', $places[22]->name)->etc())
+                    ->has('data.3', fn (Assert $page) => $page->where('name', $places[21]->name)->etc())
+                    ->has('data.4', fn (Assert $page) => $page->where('name', $places[19]->name)->etc())
+                    ->has('data.5', fn (Assert $page) => $page->where('name', $places[9]->name)->etc())
+                    ->etc()
+                    )
             );
     }
 

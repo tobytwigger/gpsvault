@@ -17,7 +17,7 @@ class StravaOverviewTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(
             fn (Assert $page) => $page
-            ->component('Integrations/Strava/Index')
+                ->component('Integrations/Strava/Index')
         );
     }
 

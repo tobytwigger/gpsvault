@@ -22,9 +22,9 @@ class PlaceSearchController extends Controller
         return Place::when(
             $request->has('exclude_route_id') && $request->input('exclude_route_id'),
             fn (Builder $query) => $query->whereDoesntHave(
-                    'routes',
-                    fn (Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
-                )
+                'routes',
+                fn (Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
+            )
         )
             ->when(
                 $request->has(['southwest_lat', 'southwest_lng', 'northeast_lat', 'northeast_lng']),

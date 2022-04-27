@@ -20,28 +20,28 @@ class PublicRouteShowTest extends TestCase
         $this->get(route('route.public', $route))
             ->assertInertia(
                 fn (Assert $page) => $page
-            ->component('Route/Public')
-            ->has(
-                'routeModel',
-                fn (Assert $page) => $page
-            ->where('id', $route->id)
-            ->has('stats', 2)
-            ->has(
-                'stats.0',
-                fn (Assert $page) => $page
-            ->where('id', $stat1->id)
-            ->where('integration', 'int1')
-            ->etc()
-            )
-            ->has(
-                'stats.1',
-                fn (Assert $page) => $page
-            ->where('id', $stat2->id)
-            ->where('integration', 'int2')
-            ->etc()
-            )
-            ->etc()
-            )
+                    ->component('Route/Public')
+                    ->has(
+                        'routeModel',
+                        fn (Assert $page) => $page
+                    ->where('id', $route->id)
+                    ->has('stats', 2)
+                    ->has(
+                        'stats.0',
+                        fn (Assert $page) => $page
+                    ->where('id', $stat1->id)
+                    ->where('integration', 'int1')
+                    ->etc()
+                    )
+                    ->has(
+                        'stats.1',
+                        fn (Assert $page) => $page
+                    ->where('id', $stat2->id)
+                    ->where('integration', 'int2')
+                    ->etc()
+                    )
+                    ->etc()
+                    )
             );
     }
 

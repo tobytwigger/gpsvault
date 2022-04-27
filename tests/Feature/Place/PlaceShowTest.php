@@ -18,13 +18,13 @@ class PlaceShowTest extends TestCase
         $this->get(route('place.show', $place))
             ->assertInertia(
                 fn (Assert $page) => $page
-            ->component('Place/Show')
-            ->has(
-                'place',
-                fn (Assert $page) => $page
-            ->where('id', $place->id)
-            ->etc()
-            )
+                    ->component('Place/Show')
+                    ->has(
+                        'place',
+                        fn (Assert $page) => $page
+                    ->where('id', $place->id)
+                    ->etc()
+                    )
             );
     }
 
