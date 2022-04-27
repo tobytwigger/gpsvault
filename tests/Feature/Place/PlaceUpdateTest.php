@@ -28,7 +28,7 @@ class PlaceUpdateTest extends TestCase
     {
         $this->authenticated();
 
-        $place = Place::factory()->create(['user_id' => $this->user->id]);
+        $place = Place::factory()->create(['user_id' => $this->user->id, 'type' => 'food_drink']);
 
         foreach (array_filter($this->getPlaceAttributes(['location' => ['lat' => 0.1, 'lng' => 55], 'user_id' => null])) as $key => $attribute) {
             $response = $this->patch(route('place.update', $place), $this->getPlaceAttributes());
