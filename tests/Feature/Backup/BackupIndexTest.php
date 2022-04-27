@@ -30,13 +30,13 @@ class BackupIndexTest extends TestCase
                     ->has(
                         'backups',
                         fn (Assert $page) => $page
-                    ->has('data', 5)
-                    ->has('data.0', fn (Assert $page) => $page->where('id', $backups[2]->id)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $backups[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $backups[0]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $backups[4]->id)->etc())
-                    ->has('data.4', fn (Assert $page) => $page->where('id', $backups[3]->id)->etc())
-                    ->etc()
+                            ->has('data', 5)
+                            ->has('data.0', fn (Assert $page) => $page->where('id', $backups[2]->id)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $backups[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $backups[0]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $backups[4]->id)->etc())
+                            ->has('data.4', fn (Assert $page) => $page->where('id', $backups[3]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -59,12 +59,12 @@ class BackupIndexTest extends TestCase
                     ->has(
                         'backups',
                         fn (Assert $page) => $page
-                    ->has('data', 4)
-                    ->has('data.0', fn (Assert $page) => $page->where('id', $backups[4]->id)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $backups[5]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $backups[6]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $backups[7]->id)->etc())
-                    ->etc()
+                            ->has('data', 4)
+                            ->has('data.0', fn (Assert $page) => $page->where('id', $backups[4]->id)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $backups[5]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $backups[6]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $backups[7]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -84,11 +84,11 @@ class BackupIndexTest extends TestCase
                     ->has(
                         'backups',
                         fn (Assert $page) => $page
-                    ->has('data', 3)
-                    ->has('data.0', fn (Assert $page) => $page->where('id', $backups[0]->id)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $backups[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $backups[2]->id)->etc())
-                    ->etc()
+                            ->has('data', 3)
+                            ->has('data.0', fn (Assert $page) => $page->where('id', $backups[0]->id)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $backups[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $backups[2]->id)->etc())
+                            ->etc()
                     )
             );
     }

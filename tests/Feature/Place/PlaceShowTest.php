@@ -22,8 +22,8 @@ class PlaceShowTest extends TestCase
                     ->has(
                         'place',
                         fn (Assert $page) => $page
-                    ->where('id', $place->id)
-                    ->etc()
+                            ->where('id', $place->id)
+                            ->etc()
                     )
             );
     }

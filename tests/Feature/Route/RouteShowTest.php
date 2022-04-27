@@ -28,24 +28,24 @@ class RouteShowTest extends TestCase
                     ->has(
                         'routeModel',
                         fn (Assert $page) => $page
-                    ->where('id', $route->id)
-                    ->has('files', 5)
-                    ->has('stats', 2)
-                    ->has(
-                        'stats.0',
-                        fn (Assert $page) => $page
-                    ->where('id', $stat1->id)
-                    ->where('integration', 'int1')
-                    ->etc()
-                    )
-                    ->has(
-                        'stats.1',
-                        fn (Assert $page) => $page
-                    ->where('id', $stat2->id)
-                    ->where('integration', 'int2')
-                    ->etc()
-                    )
-                    ->etc()
+                            ->where('id', $route->id)
+                            ->has('files', 5)
+                            ->has('stats', 2)
+                            ->has(
+                                'stats.0',
+                                fn (Assert $page) => $page
+                            ->where('id', $stat1->id)
+                            ->where('integration', 'int1')
+                            ->etc()
+                            )
+                            ->has(
+                                'stats.1',
+                                fn (Assert $page) => $page
+                            ->where('id', $stat2->id)
+                            ->where('integration', 'int2')
+                            ->etc()
+                            )
+                            ->etc()
                     )
             );
     }

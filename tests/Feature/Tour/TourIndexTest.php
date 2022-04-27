@@ -30,13 +30,13 @@ class TourIndexTest extends TestCase
                     ->has(
                         'tours',
                         fn (Assert $page) => $page
-                    ->has('data', 5)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $tours[2]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $tours[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $tours[0]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $tours[4]->id)->etc())
-                    ->has('data.4', fn (Assert $page) => $page->where('id', $tours[3]->id)->etc())
-                    ->etc()
+                            ->has('data', 5)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $tours[2]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $tours[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $tours[0]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $tours[4]->id)->etc())
+                            ->has('data.4', fn (Assert $page) => $page->where('id', $tours[3]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -59,12 +59,12 @@ class TourIndexTest extends TestCase
                     ->has(
                         'tours',
                         fn (Assert $page) => $page
-                    ->has('data', 4)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $tours[4]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $tours[5]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $tours[6]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $tours[7]->id)->etc())
-                    ->etc()
+                            ->has('data', 4)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $tours[4]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $tours[5]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $tours[6]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $tours[7]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -84,11 +84,11 @@ class TourIndexTest extends TestCase
                     ->has(
                         'tours',
                         fn (Assert $page) => $page
-                    ->has('data', 3)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $tours[0]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $tours[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $tours[2]->id)->etc())
-                    ->etc()
+                            ->has('data', 3)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $tours[0]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $tours[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $tours[2]->id)->etc())
+                            ->etc()
                     )
             );
     }

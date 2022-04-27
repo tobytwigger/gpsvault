@@ -30,13 +30,13 @@ class RouteIndexTest extends TestCase
                     ->has(
                         'routes',
                         fn (Assert $page) => $page
-                    ->has('data', 5)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $routes[2]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $routes[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $routes[0]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $routes[4]->id)->etc())
-                    ->has('data.4', fn (Assert $page) => $page->where('id', $routes[3]->id)->etc())
-                    ->etc()
+                            ->has('data', 5)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $routes[2]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $routes[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $routes[0]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $routes[4]->id)->etc())
+                            ->has('data.4', fn (Assert $page) => $page->where('id', $routes[3]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -59,12 +59,12 @@ class RouteIndexTest extends TestCase
                     ->has(
                         'routes',
                         fn (Assert $page) => $page
-                    ->has('data', 4)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $routes[4]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $routes[5]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $routes[6]->id)->etc())
-                    ->has('data.3', fn (Assert $page) => $page->where('id', $routes[7]->id)->etc())
-                    ->etc()
+                            ->has('data', 4)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $routes[4]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $routes[5]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $routes[6]->id)->etc())
+                            ->has('data.3', fn (Assert $page) => $page->where('id', $routes[7]->id)->etc())
+                            ->etc()
                     )
             );
     }
@@ -84,11 +84,11 @@ class RouteIndexTest extends TestCase
                     ->has(
                         'routes',
                         fn (Assert $page) => $page
-                    ->has('data', 3)
-                    ->has('data.0', fn (Assert $page) => $page->where('name', $routes[0]->name)->etc())
-                    ->has('data.1', fn (Assert $page) => $page->where('id', $routes[1]->id)->etc())
-                    ->has('data.2', fn (Assert $page) => $page->where('id', $routes[2]->id)->etc())
-                    ->etc()
+                            ->has('data', 3)
+                            ->has('data.0', fn (Assert $page) => $page->where('name', $routes[0]->name)->etc())
+                            ->has('data.1', fn (Assert $page) => $page->where('id', $routes[1]->id)->etc())
+                            ->has('data.2', fn (Assert $page) => $page->where('id', $routes[2]->id)->etc())
+                            ->etc()
                     )
             );
     }

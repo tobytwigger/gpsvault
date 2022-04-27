@@ -22,8 +22,8 @@ class TourShowTest extends TestCase
                     ->has(
                         'tour',
                         fn (Assert $page) => $page
-                    ->where('id', $tour->id)
-                    ->etc()
+                            ->where('id', $tour->id)
+                            ->etc()
                     )
             );
     }
