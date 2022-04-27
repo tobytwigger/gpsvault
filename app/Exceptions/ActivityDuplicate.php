@@ -6,7 +6,6 @@ use App\Models\Activity;
 
 class ActivityDuplicate extends \Exception
 {
-
     public Activity $activity;
 
     public function __construct(Activity $activity)
@@ -15,5 +14,4 @@ class ActivityDuplicate extends \Exception
 
         $this->activity = $activity;
     }
-
 }

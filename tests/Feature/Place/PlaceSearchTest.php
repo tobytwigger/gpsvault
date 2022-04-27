@@ -2,10 +2,8 @@
 
 namespace Feature\Place;
 
-use App\Models\Activity;
 use App\Models\Place;
 use App\Models\Route;
-use Carbon\Carbon;
 use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
 
@@ -13,7 +11,8 @@ class PlaceSearchTest extends TestCase
 {
 
     /** @test */
-    public function it_filters_by_those_not_part_of_the_given_route_id(){
+    public function it_filters_by_those_not_part_of_the_given_route_id()
+    {
         $this->authenticated();
 
         $route = Route::factory()->create();
@@ -35,7 +34,8 @@ class PlaceSearchTest extends TestCase
     }
 
     /** @test */
-    public function it_filters_on_bounds_given(){
+    public function it_filters_on_bounds_given()
+    {
         $this->authenticated();
 
         $route = Route::factory()->create();
@@ -63,11 +63,11 @@ class PlaceSearchTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $route = Route::factory()->create();
 
         $response = $this->getJson(route('place.search'), ['route_id' => $route->id]);
         $response->assertStatus(401);
     }
-
 }

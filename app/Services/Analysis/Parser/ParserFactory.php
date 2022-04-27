@@ -8,12 +8,9 @@ use App\Services\Analysis\Parser\Parsers\FitParser;
 use App\Services\Analysis\Parser\Parsers\GpxParser;
 use App\Services\Analysis\Parser\Parsers\ParserContract;
 use App\Services\Analysis\Parser\Parsers\TcxParser;
-use Illuminate\Support\Collection;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ParserFactory implements ParserFactoryContract
 {
-
     private array $custom = [];
 
     public function parse(File $file): Analysis
@@ -23,12 +20,12 @@ class ParserFactory implements ParserFactoryContract
 
     public function parser(string $type): ParserContract
     {
-        if(array_key_exists($type, $this->custom)) {
+        if (array_key_exists($type, $this->custom)) {
             return call_user_func($this->custom[$type]);
         }
 
         $method = sprintf('create%sParser', ucfirst($type));
-        if(method_exists($this, $method)) {
+        if (method_exists($this, $method)) {
             return $this->{$method}();
         }
 
@@ -54,5 +51,4 @@ class ParserFactory implements ParserFactoryContract
     {
         return new TcxParser();
     }
-
 }

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityImporter
 {
-
     private ?User $user = null;
 
     private Activity $existingActivity;
@@ -32,27 +31,28 @@ class ActivityImporter
     {
         $user = $activity->user;
         $instance = (new static($user))->setExistingActivity($activity);
-        if($activity->name) {
+        if ($activity->name) {
             $instance->withName($activity->name);
         }
-        if($activity->description) {
+        if ($activity->description) {
             $instance->withDescription($activity->description);
         }
-        if($activity->file) {
+        if ($activity->file) {
             $instance->withActivityFile($activity->file);
         }
-        if($activity->additionalData()->exists()) {
+        if ($activity->additionalData()->exists()) {
             $instance->activityDetails()->setAdditionalArrayData($activity->getAllArrayAdditionalData()->toArray());
             $instance->activityDetails()->setAdditionalData($activity->getAllNonArrayAdditionalData()->toArray());
         }
-        if($activity->files()->exists()) {
+        if ($activity->files()->exists()) {
             $instance->activityDetails()->setMedia(
                 $activity->files()->get()->all()
             );
         }
-        if($activity->linked_to) {
+        if ($activity->linked_to) {
             $instance->activityDetails()->setLinkedTo($activity->linked_to);
         }
+
         return $instance;
     }
 
@@ -69,84 +69,96 @@ class ActivityImporter
     public function setExistingActivity(Activity $activity): ActivityImporter
     {
         $this->existingActivity = $activity;
+
         return $this;
     }
 
     public function withName(?string $name = null): ActivityImporter
     {
-        if($name !== null) {
+        if ($name !== null) {
             $this->activityDetails->setName($name);
         }
+
         return $this;
     }
 
     public function withDescription(?string $description = null): ActivityImporter
     {
-        if($description !== null) {
+        if ($description !== null) {
             $this->activityDetails->setDescription($description);
         }
+
         return $this;
     }
 
     public function withActivityFile(File $file): ActivityImporter
     {
         $this->activityDetails->setActivityFile($file);
+
         return $this;
     }
 
     public function withoutDuplicateChecking(): ActivityImporter
     {
         $this->checkForDuplicates = false;
+
         return $this;
     }
 
     public function setAdditionalData(string $key, mixed $value): ActivityImporter
     {
         $this->activityDetails->setAdditionalDataKey($key, $value);
+
         return $this;
     }
 
     public function pushToAdditionalDataArray(string $key, mixed $value): ActivityImporter
     {
         $this->activityDetails->pushToAdditionalDataArrayKey($key, $value);
+
         return $this;
     }
 
     public function unsetAdditionalData(string $key): ActivityImporter
     {
         $this->activityDetails->unsetAdditionalData($key);
+
         return $this;
     }
 
     public function removeFromAdditionalDataArray(string $key, mixed $value): ActivityImporter
     {
         $additionalData = $this->activityDetails->getAdditionalArrayData();
-        if(array_key_exists($key, $additionalData) && is_array($additionalData[$key]) && in_array($value, $additionalData[$key])) {
+        if (array_key_exists($key, $additionalData) && is_array($additionalData[$key]) && in_array($value, $additionalData[$key])) {
             unset($additionalData[$key][array_search($value, $additionalData[$key])]);
         }
         $this->activityDetails->setAdditionalArrayData($additionalData);
+
         return $this;
     }
 
     public function linkTo(string $integration): ActivityImporter
     {
         $this->activityDetails->addLinkedTo($integration);
+
         return $this;
     }
 
     public function import(): Activity
     {
-        if($this->activityDetails->getActivityFile() !== null) {
+        if ($this->activityDetails->getActivityFile() !== null) {
             $this->checkForDuplication();
         }
+
         return $this->saveActivityModel(new Activity());
     }
 
     public function save(): Activity
     {
-        if($this->activityDetails->getActivityFile() !== null && $this->existingActivity->file_id !== $this->activityDetails->getActivityFile()->id) {
+        if ($this->activityDetails->getActivityFile() !== null && $this->existingActivity->file_id !== $this->activityDetails->getActivityFile()->id) {
             $this->checkForDuplication();
         }
+
         return $this->saveActivityModel($this->existingActivity);
     }
 
@@ -168,35 +180,36 @@ class ActivityImporter
         $currentAdditionalDataModels = $activity->additionalData()->get();
 
         // Iterate through each of the new additional datas
-        foreach($newAdditionalData as $key => $value) {
-            if(!$currentAdditionalData->has($key)) {
+        foreach ($newAdditionalData as $key => $value) {
+            if (!$currentAdditionalData->has($key)) {
                 $activity->additionalData()->create(['key' => $key, 'value' => $value]);
             }
         }
 
         // Iterate through each of the new additional array datas
-        foreach($newAdditionalArrayData as $key => $value) {
-            foreach($value as $dataElement) {
-                if(!$currentAdditionalData->has($key) || (is_array($currentAdditionalData->get($key)) && !in_array($dataElement, $currentAdditionalData->get($key)))) {
+        foreach ($newAdditionalArrayData as $key => $value) {
+            foreach ($value as $dataElement) {
+                if (!$currentAdditionalData->has($key) || (is_array($currentAdditionalData->get($key)) && !in_array($dataElement, $currentAdditionalData->get($key)))) {
                     $activity->additionalData()->create(['key' => $key, 'value' => $dataElement]);
                 }
             }
         }
 
         // Iterate through each of the old datas and remove any that aren't in use any more
-        foreach($currentAdditionalDataModels->groupBy(fn(AdditionalData $d) => $d->key) as $key => $additionalDataModels) {
-            if($additionalDataModels->count() > 1) {
-                foreach($additionalDataModels as $additionalDataModel) {
-                    if(!$newAdditionalArrayData->has($key) || !in_array($additionalDataModel->value, $newAdditionalArrayData->get($key))) {
+        foreach ($currentAdditionalDataModels->groupBy(fn (AdditionalData $d) => $d->key) as $key => $additionalDataModels) {
+            if ($additionalDataModels->count() > 1) {
+                foreach ($additionalDataModels as $additionalDataModel) {
+                    if (!$newAdditionalArrayData->has($key) || !in_array($additionalDataModel->value, $newAdditionalArrayData->get($key))) {
                         $additionalDataModel->delete();
                     }
                 }
-            } elseif($additionalDataModels->count() === 1) {
-                if(!$newAdditionalData->has($key)) {
+            } elseif ($additionalDataModels->count() === 1) {
+                if (!$newAdditionalData->has($key)) {
                     $additionalDataModels->first()->delete();
                 }
             }
         }
+
         return $activity;
     }
 
@@ -206,20 +219,21 @@ class ActivityImporter
             $this->activityDetails->getMedia(),
             $files
         ));
+
         return $this;
     }
 
     private function checkForDuplication()
     {
-        if($this->checkForDuplicates === true) {
+        if ($this->checkForDuplicates === true) {
             $hash = md5($this->activityDetails->getActivityFile()->getFileContents());
-            $duplicatedActivity = Activity::whereHas('file',
-                fn(Builder $query) => $query->where('hash', $hash)->where('type', FileUploader::ACTIVITY_FILE)
+            $duplicatedActivity = Activity::whereHas(
+                'file',
+                fn (Builder $query) => $query->where('hash', $hash)->where('type', FileUploader::ACTIVITY_FILE)
             )->first();
-            if($duplicatedActivity !== null) {
+            if ($duplicatedActivity !== null) {
                 throw new ActivityDuplicate($duplicatedActivity);
             }
         }
     }
-
 }

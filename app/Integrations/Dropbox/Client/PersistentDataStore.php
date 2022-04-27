@@ -5,9 +5,8 @@ namespace App\Integrations\Dropbox\Client;
 use Illuminate\Contracts\Session\Session;
 use Kunnu\Dropbox\Store\PersistentDataStoreInterface;
 
-class PersistentDataStore implements  PersistentDataStoreInterface
+class PersistentDataStore implements PersistentDataStoreInterface
 {
-
     private Session $session;
 
     public function __construct(Session $session)
@@ -29,5 +28,4 @@ class PersistentDataStore implements  PersistentDataStoreInterface
     {
         $this->session->forget($key);
     }
-
 }

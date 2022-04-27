@@ -2,14 +2,11 @@
 
 namespace Tests;
 
-use App\Http\Kernel;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
-use MagicTest\MagicTest\Middleware\MagicTestMiddleware;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -19,7 +16,6 @@ abstract class DuskTestCase extends BaseTestCase
      * Prepare for Dusk test execution.
      *
      * @beforeClass
-     * @return void
      */
     public static function prepare()
     {
@@ -35,7 +31,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver()
     {
-        $options = (new ChromeOptions)->addArguments(collect([
+        $options = (new ChromeOptions())->addArguments(collect([
             '--window-size=1920,1080',
         ])->unless($this->hasHeadlessDisabled(), function ($items) {
             return $items->merge([
@@ -47,7 +43,8 @@ abstract class DuskTestCase extends BaseTestCase
         return RemoteWebDriver::create(
             $_ENV['DUSK_DRIVER_URL'] ?? 'http://selenium:4444/wd/hub',
             DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
+                ChromeOptions::CAPABILITY,
+                $options
             )->setCapability('acceptInsecureCerts', true)
         );
     }

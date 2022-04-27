@@ -17,17 +17,15 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      *
-     * @return void
      */
     public function register()
     {
-        //
+        
     }
 
     /**
      * Bootstrap any application services.
      *
-     * @return void
      */
     public function boot()
     {
@@ -37,7 +35,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(5)->by($request->email.$request->ip());
+            return Limit::perMinute(5)->by($request->email . $request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {

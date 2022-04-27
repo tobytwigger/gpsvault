@@ -4,7 +4,6 @@ namespace App\Services\Analysis\Parser;
 
 use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -14,10 +13,8 @@ use Illuminate\Support\Facades\Facade;
  */
 class Parser extends Facade
 {
-
     protected static function getFacadeAccessor()
     {
         return ParserFactoryContract::class;
     }
-
 }

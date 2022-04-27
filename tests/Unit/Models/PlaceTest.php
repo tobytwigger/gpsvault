@@ -4,14 +4,14 @@ namespace Tests\Unit\Models;
 
 use App\Models\Place;
 use App\Models\Route;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class PlaceTest extends TestCase
 {
 
     /** @test */
-    public function it_has_many_routes(){
+    public function it_has_many_routes()
+    {
         /** @var Place $place */
         $place = Place::factory()->create();
 
@@ -25,5 +25,4 @@ class PlaceTest extends TestCase
         $this->assertTrue($route1->is($place->routes[0]));
         $this->assertTrue($route2->is($place->routes[1]));
     }
-
 }

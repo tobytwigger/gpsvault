@@ -9,7 +9,6 @@ class CreateImportResultsTable extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      */
     public function up()
     {
@@ -27,7 +26,6 @@ class CreateImportResultsTable extends Migration
     /**
      * Reverse the migrations.
      *
-     * @return void
      */
     public function down()
     {

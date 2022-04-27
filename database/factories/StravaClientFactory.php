@@ -18,7 +18,7 @@ class StravaClientFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fn() => User::factory(),
+            'user_id' => fn () => User::factory(),
             'client_id' => $this->faker->numberBetween(1000, 9999999),
             'client_secret' => Str::random(40),
             'enabled' => true,
@@ -34,7 +34,7 @@ class StravaClientFactory extends Factory
 
     public function full()
     {
-        return $this->state(fn($attributes) => [
+        return $this->state(fn ($attributes) => [
             'used_15_min_calls' => 100
         ]);
     }

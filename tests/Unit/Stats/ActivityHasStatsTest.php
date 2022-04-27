@@ -5,12 +5,7 @@ namespace Tests\Unit\Stats;
 use App\Jobs\AnalyseFile;
 use App\Models\Activity;
 use App\Models\File;
-use App\Models\Route;
-use App\Models\Stage;
 use App\Models\Stats;
-use App\Models\Tour;
-use App\Services\Geocoding\Geocoder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
@@ -18,7 +13,8 @@ class ActivityHasStatsTest extends TestCase
 {
 
     /** @test */
-    public function stats_can_be_attached_to_an_activity(){
+    public function stats_can_be_attached_to_an_activity()
+    {
         $activity = Activity::factory()->create();
         $stat = Stats::factory()->activity($activity)->create();
 
@@ -27,7 +23,8 @@ class ActivityHasStatsTest extends TestCase
     }
 
     /** @test */
-    public function an_activity_can_be_retrieved_from_the_stats(){
+    public function an_activity_can_be_retrieved_from_the_stats()
+    {
         $activity = Activity::factory()->create();
         $stat = Stats::factory()->activity($activity)->create();
 
@@ -36,7 +33,8 @@ class ActivityHasStatsTest extends TestCase
     }
 
     /** @test */
-    public function the_file_can_be_retrieved(){
+    public function the_file_can_be_retrieved()
+    {
         $file = File::factory()->activityFile()->create();
         $activity = Activity::factory()->create();
 
@@ -52,7 +50,8 @@ class ActivityHasStatsTest extends TestCase
     }
 
     /** @test */
-    public function we_can_scope_to_only_activities_missing_a_file(){
+    public function we_can_scope_to_only_activities_missing_a_file()
+    {
         Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
         Activity::factory()->count(5)->create(['file_id' => null]);
 
@@ -61,17 +60,19 @@ class ActivityHasStatsTest extends TestCase
     }
 
     /** @test */
-    public function the_analyse_file_job_can_be_dispatched(){
+    public function the_analyse_file_job_can_be_dispatched()
+    {
         Bus::fake(AnalyseFile::class);
 
         $activity = Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
         $activity->analyse();
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $activity->is($job->model));
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $activity->is($job->model));
     }
 
     /** @test */
-    public function it_can_scope_stats_from_an_integration(){
+    public function it_can_scope_stats_from_an_integration()
+    {
         $file = File::factory()->activityFile()->create();
         $activity = Activity::factory()->create();
         $stravaStats = Stats::factory()->activity($activity)->create(['integration' => 'strava']);
@@ -84,7 +85,8 @@ class ActivityHasStatsTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_stats_when_the_activity_is_deleted(){
+    public function it_deletes_stats_when_the_activity_is_deleted()
+    {
         $activity = Activity::factory()->create();
         $stats = Stats::factory()->activity($activity)->count(2)->create();
 
@@ -92,5 +94,4 @@ class ActivityHasStatsTest extends TestCase
         $activity->delete();
         $this->assertDatabaseCount('stats', 0);
     }
-
 }

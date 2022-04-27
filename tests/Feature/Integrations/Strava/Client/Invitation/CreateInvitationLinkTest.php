@@ -3,7 +3,6 @@
 namespace Feature\Integrations\Strava\Client\Invitation;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
-use App\Models\User;
 use Linkeys\UrlSigner\Models\Link;
 use Tests\TestCase;
 
@@ -11,7 +10,8 @@ class CreateInvitationLinkTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_a_404_if_the_client_is_not_found(){
+    public function it_returns_a_404_if_the_client_is_not_found()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
 
@@ -20,13 +20,15 @@ class CreateInvitationLinkTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->post(route('strava.client.invite', 500));
         $response->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission(){
+    public function it_returns_403_if_you_do_not_have_permission()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
@@ -36,7 +38,8 @@ class CreateInvitationLinkTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_client(){
+    public function it_returns_a_403_if_you_do_not_own_the_client()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -47,7 +50,8 @@ class CreateInvitationLinkTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_the_invitation_link_uuid_field_and_redirects(){
+    public function it_updates_the_invitation_link_uuid_field_and_redirects()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -64,5 +68,4 @@ class CreateInvitationLinkTest extends TestCase
         $this->assertEquals(route('strava.client.accept', $client), $link->url);
         $this->assertNotNull($client->invitation_link_uuid);
     }
-
 }

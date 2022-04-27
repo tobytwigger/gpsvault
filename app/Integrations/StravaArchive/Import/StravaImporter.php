@@ -6,17 +6,16 @@ use App\Integrations\Strava\Import\Importers\ImportingZip;
 use App\Integrations\Strava\Import\Importers\ImportResults;
 use App\Integrations\Strava\Import\Models\Import;
 use App\Integrations\Strava\Import\Models\ImportResult;
-use App\Services\Sync\SyncTask;
 use App\Models\User;
+use App\Services\Sync\SyncTask;
 
 class StravaImporter
 {
-
     private array $importers = [];
 
     public function registerImporter(string $importer)
     {
-        if(!is_a($importer, \App\Integrations\Strava\Import\Importers\Importer::class, true)) {
+        if (!is_a($importer, \App\Integrations\Strava\Import\Importers\Importer::class, true)) {
             throw new \Exception(sprintf('Importer [%s] must extend the Importer contract', $importer));
         }
         $this->importers[] = $importer;
@@ -25,15 +24,15 @@ class StravaImporter
     public function importers(): array
     {
         return collect($this->importers)
-            ->map(fn(string $importer) => app($importer))
+            ->map(fn (string $importer) => app($importer))
             ->all();
     }
 
     public function import(ImportingZip $zip, ?SyncTask $syncTask, User $user): Import
     {
         $results = new ImportResults();
-        foreach($this->importers() as $importer) {
-            if($syncTask) {
+        foreach ($this->importers() as $importer) {
+            if ($syncTask) {
                 $syncTask->addMessage(sprintf('Importing %s.', $importer->type()));
             }
             $results->merge(
@@ -41,11 +40,11 @@ class StravaImporter
             );
         }
         $import = Import::create(['user_id' => $user->id]);
-        foreach($results->all() as $result) {
+        foreach ($results->all() as $result) {
             ImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
         }
         $zip->clearUp();
+
         return $import;
     }
-
 }

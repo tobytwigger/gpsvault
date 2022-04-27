@@ -2,13 +2,11 @@
 
 namespace App\Settings;
 
-use FormSchema\Schema\Field;
 use Illuminate\Support\Facades\Auth;
 use Settings\Types\GlobalSetting;
 
 class BruitAPIKey extends GlobalSetting
 {
-
     public function canWrite(): bool
     {
         return Auth::check() && Auth::user()->can('manage-bruit-key');

@@ -56,7 +56,6 @@ class Activity extends Model
             $activity->stravaComments()->delete();
             $activity->stravaKudos()->delete();
         });
-
     }
 
     public function getCoverImageAttribute()
@@ -65,6 +64,7 @@ class Activity extends Model
         if ($image) {
             return route('file.preview', $image);
         }
+
         return null;
     }
 
@@ -98,5 +98,4 @@ class Activity extends Model
         $this->linked_to = array_unique(array_merge($this->linked_to, [$integration]));
         $this->save();
     }
-
 }

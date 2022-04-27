@@ -4,20 +4,21 @@ namespace Feature\Integrations\Strava\Client\Login;
 
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Models\StravaClient;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class LogOutOfStravaTest extends TestCase
 {
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->post(route('strava.client.logout', 500));
         $response->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_client_is_not_found(){
+    public function it_returns_a_404_if_the_client_is_not_found()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -28,7 +29,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission(){
+    public function it_returns_403_if_you_do_not_have_permission()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
@@ -38,7 +40,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_access_to_the_client(){
+    public function it_returns_403_if_you_do_not_have_access_to_the_client()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -51,7 +54,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_are_not_logged_into_the_client(){
+    public function it_returns_403_if_you_are_not_logged_into_the_client()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -64,7 +68,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_all_tokens_for_that_client_and_redirects_to_index(){
+    public function it_deletes_all_tokens_for_that_client_and_redirects_to_index()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -81,7 +86,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_works_for_shared_clients(){
+    public function it_works_for_shared_clients()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -98,7 +104,8 @@ class LogOutOfStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_works_for_public_clients(){
+    public function it_works_for_public_clients()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['public' => true]);
@@ -112,5 +119,4 @@ class LogOutOfStravaTest extends TestCase
 
         $this->assertDatabaseCount('strava_tokens', 0);
     }
-
 }

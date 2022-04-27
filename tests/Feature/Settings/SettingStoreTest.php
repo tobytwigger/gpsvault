@@ -90,6 +90,9 @@ class SettingStoreTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
     public function it_validates($key, $value, $error)
     {
@@ -153,5 +156,4 @@ class SettingStoreTest extends TestCase
         $response->assertStatus(500);
         $this->assertEquals($client1->id, \App\Settings\StravaClient::getValue());
     }
-
 }

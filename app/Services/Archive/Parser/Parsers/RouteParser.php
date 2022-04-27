@@ -2,12 +2,11 @@
 
 namespace App\Services\Archive\Parser\Parsers;
 
-use App\Models\Route;
 use App\Models\File;
-use App\Services\Archive\ParseResult;
-use App\Services\Archive\ParseResults;
-use App\Services\Archive\Parser\FileResource;
+use App\Models\Route;
 use App\Services\Archive\Contracts\Parser;
+use App\Services\Archive\Parser\FileResource;
+use App\Services\Archive\ParseResult;
 use App\Services\Archive\Traits\CreatesParseResult;
 
 class RouteParser implements Parser
@@ -27,12 +26,13 @@ class RouteParser implements Parser
     {
         $this->addMetaData('route', $item->toArray());
         $file = $item->file()->first();
-        if($file) {
+        if ($file) {
             $this->addFile($this->parseRouteFile($item->id, $file));
         }
-        foreach($item->files()->get() as $file) {
+        foreach ($item->files()->get() as $file) {
             $this->addFile($this->parseRouteMediaFile($item->id, $file));
         }
+
         return $this->result();
     }
 

@@ -10,7 +10,8 @@ class StatAdderTest extends TestCase
 {
 
     /** @test */
-    public function it_adds_the_distance_of_many_stats(){
+    public function it_adds_the_distance_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['distance' => 50000]);
         $stat2 = Stats::factory()->activity()->create(['distance' => 79333]);
         $stat3 = Stats::factory()->activity()->create(['distance' => 25933]);
@@ -21,7 +22,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_elevation_of_many_stats(){
+    public function it_adds_the_elevation_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['elevation_gain' => 1000]);
         $stat2 = Stats::factory()->activity()->create(['elevation_gain' => 500]);
         $stat3 = Stats::factory()->activity()->create(['elevation_gain' => 179]);
@@ -32,7 +34,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_start_latitude_of_the_first_of_many_stats(){
+    public function it_adds_the_start_latitude_of_the_first_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['start_latitude' => 1]);
         $stat2 = Stats::factory()->activity()->create(['start_latitude' => 2]);
         $stat3 = Stats::factory()->activity()->create(['start_latitude' => 3]);
@@ -43,7 +46,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_start_longitude_of_the_first_of_many_stats(){
+    public function it_adds_the_start_longitude_of_the_first_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['start_longitude' => 1]);
         $stat2 = Stats::factory()->activity()->create(['start_longitude' => 2]);
         $stat3 = Stats::factory()->activity()->create(['start_longitude' => 3]);
@@ -54,7 +58,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_end_latitude_of_the_first_of_many_stats(){
+    public function it_adds_the_end_latitude_of_the_first_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['end_latitude' => 1]);
         $stat2 = Stats::factory()->activity()->create(['end_latitude' => 2]);
         $stat3 = Stats::factory()->activity()->create(['end_latitude' => 3]);
@@ -65,7 +70,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_end_longitude_of_the_first_of_many_stats(){
+    public function it_adds_the_end_longitude_of_the_first_of_many_stats()
+    {
         $stat1 = Stats::factory()->activity()->create(['end_longitude' => 1]);
         $stat2 = Stats::factory()->activity()->create(['end_longitude' => 2]);
         $stat3 = Stats::factory()->activity()->create(['end_longitude' => 3]);
@@ -76,7 +82,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function push_pushes_extra_stats_onto_the_adder(){
+    public function push_pushes_extra_stats_onto_the_adder()
+    {
         $stat1 = Stats::factory()->activity()->create(['distance' => 50000]);
         $stat2 = Stats::factory()->activity()->create(['distance' => 79333]);
         $stat3 = Stats::factory()->activity()->create(['distance' => 25933]);
@@ -92,7 +99,8 @@ class StatAdderTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_null_when_there_are_no_stats(){
+    public function it_returns_null_when_there_are_no_stats()
+    {
         $stats = Stats::factory()->activity()->count(2)->create(['distance' => null, 'elevation_gain' => null]);
 
         $adder = new StatAdder($stats->all());
@@ -101,8 +109,8 @@ class StatAdderTest extends TestCase
     }
 
     /** @test */
-    public function toArray_returns_an_array_of_properties(){
-
+    public function to_array_returns_an_array_of_properties()
+    {
         $stat1 = Stats::factory()->activity()->create();
         $stat2 = Stats::factory()->activity()->create();
         $stat3 = Stats::factory()->activity()->create();
@@ -118,5 +126,4 @@ class StatAdderTest extends TestCase
             'end_longitude' => $stat3->end_longitude
         ], $adder->toArray());
     }
-
 }

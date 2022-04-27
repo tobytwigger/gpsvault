@@ -5,14 +5,10 @@ namespace App\Services\Analysis\Analyser;
 use App\Models\File;
 use App\Services\Analysis\Analyser\Analysers\AnalyserContract;
 use App\Services\Analysis\Analyser\Analysers\DummyAnalyser;
-use App\Services\Analysis\Analyser\Analysers\PointAnalyser;
 use App\Services\Analysis\Parser\Parser;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 class AnalysisFactory implements AnalysisFactoryContract
 {
-
     private array $analysers = [];
 
     public function analyse(File $file): Analysis
@@ -23,16 +19,17 @@ class AnalysisFactory implements AnalysisFactoryContract
     public function runAnalysis(Analysis $analysis): Analysis
     {
         $analyser = $this->getChain();
-        foreach($this->pointsFor($analysis) as $point) {
+        foreach ($this->pointsFor($analysis) as $point) {
             $analyser->preparePoint($point);
         }
+
         return $analyser->analyse($analysis);
     }
 
     private function getChain(?\Closure $filter = null): AnalyserContract
     {
         $analysers = collect($this->analysers)
-            ->map(fn(string $class) => app($class))
+            ->map(fn (string $class) => app($class))
             ->filter($filter)
             ->values();
 
@@ -50,12 +47,13 @@ class AnalysisFactory implements AnalysisFactoryContract
     public function registerAnalyser(string $class): AnalysisFactoryContract
     {
         $this->analysers[] = $class;
+
         return $this;
     }
 
     private function pointsFor(Analysis $analysis)
     {
-        foreach($analysis->getPoints() as $point) {
+        foreach ($analysis->getPoints() as $point) {
             yield $point;
         }
     }

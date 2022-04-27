@@ -3,17 +3,16 @@
 namespace Integration\Services\ActivityImport;
 
 use App\Models\Activity;
-use App\Models\ActivityStats;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
-use Carbon\Carbon;
 use Tests\TestCase;
 
 class ActivityImporterTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_an_activity(){
+    public function it_creates_an_activity()
+    {
         $user = User::factory()->create();
         $activity = ActivityImporter::for($user)
             ->import();
@@ -22,7 +21,8 @@ class ActivityImporterTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_information_on_the_activity(){
+    public function it_sets_information_on_the_activity()
+    {
         $user = User::factory()->create();
         $activity = ActivityImporter::for($user)
             ->withName('Test Name')
@@ -38,7 +38,8 @@ class ActivityImporterTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_additional_data(){
+    public function it_sets_additional_data()
+    {
         $activity = ActivityImporter::for(User::factory()->create())
             ->setAdditionalData('test', 'one')
             ->setAdditionalData('test-two', 'two')
@@ -48,7 +49,8 @@ class ActivityImporterTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_an_array_value_for_additional_data(){
+    public function it_sets_an_array_value_for_additional_data()
+    {
         $activity = ActivityImporter::for(User::factory()->create())
             ->pushToAdditionalDataArray('test', 'one')
             ->pushToAdditionalDataArray('test', 'two')
@@ -63,7 +65,8 @@ class ActivityImporterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_data(){
+    public function it_can_update_data()
+    {
         /** @var Activity $activity */
         $activity = Activity::factory()->create();
         $activity->setAdditionalData('test-single', 'hello');
@@ -85,7 +88,8 @@ class ActivityImporterTest extends TestCase
             ->pushToAdditionalDataArray('test-two', 'five')
             ->pushToAdditionalDataArray('test-two', 'six')
             ->import();
-        $this->assertEquals([
+        $this->assertEquals(
+            [
                 'test-single' => 'hello',
                 'test-single-two' => 'hello-three',
                 'test' => ['one', 'two'],
@@ -96,7 +100,8 @@ class ActivityImporterTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_data(){
+    public function it_can_remove_data()
+    {
         /** @var Activity $activity */
         $activity = Activity::factory()->create();
         $activity->setAdditionalData('test-single', 'hello');
@@ -119,10 +124,11 @@ class ActivityImporterTest extends TestCase
             ->removeFromAdditionalDataArray('test', 'two')
             ->save();
 
-        $this->assertEquals([
-            'test-single' => 'hello',
-            'test' => 'one'
-        ],
+        $this->assertEquals(
+            [
+                'test-single' => 'hello',
+                'test' => 'one'
+            ],
             $activity->getAllAdditionalData()->toArray()
         );
     }
@@ -136,5 +142,4 @@ class ActivityImporterTest extends TestCase
      * - Delete and add an element from an array check it updaets
      * - Mixture of them all
      */
-
 }

@@ -62,7 +62,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::deleting(function(User $user) {
+        static::deleting(function (User $user) {
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();
             $user->syncs()->delete();
@@ -79,12 +79,13 @@ class User extends Authenticatable
 
     public function disk()
     {
-        if(App::isLocal()) {
+        if (App::isLocal()) {
             return 'local';
         }
-        if(App::environment('testing')) {
+        if (App::environment('testing')) {
             return 'test-fake';
         }
+
         return 's3';
     }
 
@@ -107,5 +108,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(File::class);
     }
-
 }

@@ -18,7 +18,8 @@ class StravaRequestHandlerTest extends TestCase
 {
 
     /** @test */
-    public function unauthenticatedRequest_makes_a_request(){
+    public function unauthenticated_request_makes_a_request()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
 
@@ -40,7 +41,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_makes_a_request_with_an_available_client(){
+    public function request_makes_a_request_with_an_available_client()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
@@ -66,7 +68,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_updates_rate_limits_on_successful_response(){
+    public function request_updates_rate_limits_on_successful_response()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
@@ -103,7 +106,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_updates_rate_limits_on_429_exception(){
+    public function request_updates_rate_limits_on_429_exception()
+    {
         $this->markTestSkipped();
         $this->expectException(ClientNotAvailable::class);
 
@@ -120,10 +124,13 @@ class StravaRequestHandlerTest extends TestCase
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token->access_token]])
             ->shouldBeCalled()
-            ->willThrow(new ClientException('Rate limit', $request, new Response(429, [
+            ->willThrow(new ClientException('Rate limit', $request, new Response(
+                429,
+                [
                     'X-RateLimit-Usage' => '50,148',
                     'X-RateLimit-Limit' => '101,1001',
-                ], json_encode(['my' => 'test'])
+                ],
+                json_encode(['my' => 'test'])
             )));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
 
@@ -145,7 +152,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_throws_an_exception_that_isnt_a_429_and_updates_rate_limits(){
+    public function request_throws_an_exception_that_isnt_a_429_and_updates_rate_limits()
+    {
         $this->markTestSkipped();
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Something is wrong.');
@@ -163,10 +171,13 @@ class StravaRequestHandlerTest extends TestCase
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token->access_token]])
             ->shouldBeCalled()
-            ->willThrow(new ClientException('Something is wrong.', $request, new Response(422, [
-                'X-RateLimit-Usage' => '50,148',
-                'X-RateLimit-Limit' => '101,1001',
-            ], json_encode(['my' => 'test'])
+            ->willThrow(new ClientException('Something is wrong.', $request, new Response(
+                422,
+                [
+                    'X-RateLimit-Usage' => '50,148',
+                    'X-RateLimit-Limit' => '101,1001',
+                ],
+                json_encode(['my' => 'test'])
             )));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
 
@@ -188,7 +199,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_tries_with_other_available_clients_if_first_client_throws_rate_limit_exception(){
+    public function request_tries_with_other_available_clients_if_first_client_throws_rate_limit_exception()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
@@ -205,10 +217,13 @@ class StravaRequestHandlerTest extends TestCase
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token3->access_token]])
             ->shouldBeCalled()
-            ->willThrow(new ClientException('Rate limit', $request, new Response(429, [
-                'X-RateLimit-Usage' => '501,1481',
-                'X-RateLimit-Limit' => '1011,10011',
-            ], json_encode(['my' => 'test'])
+            ->willThrow(new ClientException('Rate limit', $request, new Response(
+                429,
+                [
+                    'X-RateLimit-Usage' => '501,1481',
+                    'X-RateLimit-Limit' => '1011,10011',
+                ],
+                json_encode(['my' => 'test'])
             )));
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token2->access_token]])
@@ -244,7 +259,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_throws_an_exception_if_all_clients_are_full_or_throw_rate_limit_exception(){
+    public function request_throws_an_exception_if_all_clients_are_full_or_throw_rate_limit_exception()
+    {
         $this->markTestSkipped();
         $this->expectException(ClientNotAvailable::class);
 
@@ -263,18 +279,24 @@ class StravaRequestHandlerTest extends TestCase
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token3->access_token]])
             ->shouldBeCalled()
-            ->willThrow(new ClientException('Rate limit', $request, new Response(429, [
-                'X-RateLimit-Usage' => '501,1481',
-                'X-RateLimit-Limit' => '1011,10011',
-            ], json_encode(['my' => 'test'])
+            ->willThrow(new ClientException('Rate limit', $request, new Response(
+                429,
+                [
+                    'X-RateLimit-Usage' => '501,1481',
+                    'X-RateLimit-Limit' => '1011,10011',
+                ],
+                json_encode(['my' => 'test'])
             )));
 
         $guzzleClient->request('get', 'test', ['headers' => ['Authorization' => 'Bearer ' . $token2->access_token]])
             ->shouldBeCalled()
-            ->willThrow(new ClientException('Rate limit', $request, new Response(429, [
-                'X-RateLimit-Usage' => '502,1482',
-                'X-RateLimit-Limit' => '1012,10012',
-            ], json_encode(['my' => 'test'])
+            ->willThrow(new ClientException('Rate limit', $request, new Response(
+                429,
+                [
+                    'X-RateLimit-Usage' => '502,1482',
+                    'X-RateLimit-Limit' => '1012,10012',
+                ],
+                json_encode(['my' => 'test'])
             )));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
 
@@ -303,7 +325,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function decodeResponse_decodes_a_response(){
+    public function decode_response_decodes_a_response()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
         $guzzleClient = $this->prophesize(Client::class);
@@ -324,7 +347,8 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function getGuzzleClient_returns_the_guzzle_client(){
+    public function get_guzzle_client_returns_the_guzzle_client()
+    {
         $this->markTestSkipped();
         $user = User::factory()->create();
         $guzzleClient = $this->prophesize(Client::class);
@@ -340,6 +364,4 @@ class StravaRequestHandlerTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
         $this->assertEquals($guzzleClient->reveal(), $client);
     }
-
 }
-

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientVisibilityController extends Controller
 {
-
     public function makePublic(StravaClient $client)
     {
         abort_if($client->user_id !== Auth::id(), 403, 'You can only make a client that you own public.');
@@ -28,5 +27,4 @@ class ClientVisibilityController extends Controller
 
         return redirect()->route('strava.client.index');
     }
-
 }

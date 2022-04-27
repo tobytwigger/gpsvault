@@ -6,7 +6,6 @@ use App\Services\Analysis\Analyser\Analysis;
 
 class DummyAnalyser extends AnalyserContract
 {
-
     public function canRun(Analysis $analysis): bool
     {
         return false;

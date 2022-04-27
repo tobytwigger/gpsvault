@@ -7,7 +7,6 @@ use App\Services\Analysis\Parser\Point;
 
 class Temperature extends AnalyserContract implements PointAnalyser
 {
-
     protected array $temperatures = [];
 
     /**
@@ -16,7 +15,7 @@ class Temperature extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        if(!empty($this->temperatures)) {
+        if (!empty($this->temperatures)) {
             $analysis->setAverageTemp(
                 round(array_sum($this->temperatures)/count($this->temperatures))
             );
@@ -28,7 +27,7 @@ class Temperature extends AnalyserContract implements PointAnalyser
     public function processPoint(Point $point): void
     {
         $temperature = $point->getTemperature();
-        if($temperature !== null) {
+        if ($temperature !== null) {
             $this->temperatures[] = $temperature;
         }
     }

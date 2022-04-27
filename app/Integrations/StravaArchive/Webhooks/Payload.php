@@ -5,11 +5,9 @@ namespace App\Integrations\Strava\Webhooks;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class Payload
 {
-
     private string $objectType;
 
     private int $objectId;
@@ -39,6 +37,7 @@ class Payload
     public function setObjectType(string $objectType): Payload
     {
         $this->objectType = $objectType;
+
         return $this;
     }
 
@@ -57,6 +56,7 @@ class Payload
     public function setObjectId(int $objectId): Payload
     {
         $this->objectId = $objectId;
+
         return $this;
     }
 
@@ -75,6 +75,7 @@ class Payload
     public function setAspectType(string $aspectType): Payload
     {
         $this->aspectType = $aspectType;
+
         return $this;
     }
 
@@ -93,6 +94,7 @@ class Payload
     public function setUpdates(array $updates): Payload
     {
         $this->updates = $updates;
+
         return $this;
     }
 
@@ -111,6 +113,7 @@ class Payload
     public function setOwnerId(int $ownerId): Payload
     {
         $this->ownerId = $ownerId;
+
         return $this;
     }
 
@@ -129,6 +132,7 @@ class Payload
     public function setSubscriptionId(int $subscriptionId): Payload
     {
         $this->subscriptionId = $subscriptionId;
+
         return $this;
     }
 
@@ -147,6 +151,7 @@ class Payload
     public function setEventTime(Carbon $eventTime): Payload
     {
         $this->eventTime = $eventTime;
+
         return $this;
     }
 
@@ -173,6 +178,7 @@ class Payload
         $instance->setOwnerId($request->input('owner_id'));
         $instance->setSubscriptionId($request->input('subscription_id'));
         $instance->setEventTime(Carbon::createFromFormat('U', $request->input('event_time')));
+
         return $instance;
     }
 
@@ -185,12 +191,11 @@ class Payload
             'updates' => 'sometimes|array',
             'owner_id' => ['required', 'integer', function ($attribute, $value, $fail) {
                 if (!User::whereAdditionalData('strava_athlete_id', $value)->exists()) {
-                    $fail('The '.$attribute.' has not requested webhooks.');
+                    $fail('The ' . $attribute . ' has not requested webhooks.');
                 }
             }],
             'subscription_id' => 'required|integer',
             'event_time' => 'required|date_format:U'
         ];
     }
-
 }

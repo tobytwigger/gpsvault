@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Integrations\Strava\Import\Models\Import;
-use App\Models\ActivityStats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +18,7 @@ class ImportFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fn() => User::factory()
+            'user_id' => fn () => User::factory()
         ];
     }
 }

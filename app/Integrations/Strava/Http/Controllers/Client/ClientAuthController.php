@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientAuthController extends Controller
 {
-
     public function login(Request $request, StravaClient $client, Authenticator $authenticator)
     {
         $request->validate([
             'code' => 'required|string',
-//            'state' => 'required|string'
+            //            'state' => 'required|string'
         ]);
 
 //        abort_if($request->input('state') !== $request->session()->get('state'), 403, 'The states do not match.');
@@ -42,5 +41,4 @@ class ClientAuthController extends Controller
 
         return redirect()->route('strava.client.index');
     }
-
 }

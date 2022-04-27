@@ -10,7 +10,8 @@ class TourUpdateTest extends TestCase
 {
 
     /** @test */
-    public function an_tour_can_be_updated(){
+    public function an_tour_can_be_updated()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes']);
 
@@ -22,7 +23,8 @@ class TourUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_updated_tour(){
+    public function it_redirects_to_show_the_updated_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name']);
 
@@ -33,14 +35,18 @@ class TourUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->put(route('tour.update', $tour), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -63,7 +69,8 @@ class TourUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $tour = Tour::factory()->create(['name' => 'Old Name']);
 
         $response = $this->put(route('tour.update', $tour), ['name' => 'New Name'])
@@ -71,7 +78,8 @@ class TourUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_update_your_own_tour(){
+    public function you_can_only_update_your_own_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['name' => 'Old Name']);
 

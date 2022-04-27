@@ -3,13 +3,8 @@
 namespace App\Http\Controllers\Pages\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Settings\DarkMode;
-use App\Settings\StatsOrder;
-use App\Settings\StravaClient;
-use App\Settings\UnitSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Jenssegers\Agent\Agent;
@@ -35,7 +30,7 @@ class SettingsController extends Controller
             ]
         ]);
 
-        foreach($request->all() as $key => $value) {
+        foreach ($request->all() as $key => $value) {
             Setting::setValue($key, $value);
             $settings[$key] = $value;
         }
@@ -84,7 +79,7 @@ class SettingsController extends Controller
      */
     protected function createAgent($session)
     {
-        return tap(new Agent, function ($agent) use ($session) {
+        return tap(new Agent(), function ($agent) use ($session) {
             $agent->setUserAgent($session->user_agent);
         });
     }

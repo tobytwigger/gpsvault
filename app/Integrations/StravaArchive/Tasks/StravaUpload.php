@@ -2,30 +2,15 @@
 
 namespace App\Integrations\Strava\Tasks;
 
-use Alchemy\Zippy\Archive\MemberInterface;
-use Alchemy\Zippy\Zippy;
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\Importer;
 use App\Integrations\Strava\Import\Importers\ImportingZip;
-use App\Models\Activity;
-use App\Models\File;
-use App\Services\Sync\SyncTask;
 use App\Models\User;
-use App\Services\ActivityImport\ActivityImporter;
-use App\Services\File\FileUploader;
-use App\Services\File\Upload;
 use App\Services\Sync\Task;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class StravaUpload extends Task
 {
-
     private Strava $strava;
 
     public function __construct(Strava $strava)
@@ -71,6 +56,7 @@ class StravaUpload extends Task
         $path = $config['file'][0]->store('strava_archives', 'temp');
         $config['file_path'] = $path;
         unset($config['file']);
+
         return $config;
     }
 

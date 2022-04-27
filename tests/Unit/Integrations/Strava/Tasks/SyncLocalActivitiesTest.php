@@ -3,7 +3,6 @@
 namespace Unit\Integrations\Strava\Tasks;
 
 use App\Integrations\Strava\Client\Client\Resources\Activity as ActivityClientResource;
-use App\Integrations\Strava\Client\Import\ApiImport;
 use App\Integrations\Strava\Client\Import\Resources\Activity as ActivityImporter;
 use App\Integrations\Strava\Client\StravaClientFactory;
 use App\Integrations\Strava\Tasks\SyncLocalActivities;
@@ -18,7 +17,8 @@ class SyncLocalActivitiesTest extends TestCase
     use TestsTasks, MocksStrava;
 
     /** @test */
-    public function it_paginates_activities(){
+    public function it_paginates_activities()
+    {
         $user = User::factory()->create();
 
         $stravaActivityClient = $this->prophesize(ActivityClientResource::class);
@@ -35,9 +35,9 @@ class SyncLocalActivitiesTest extends TestCase
         $this->app->instance(StravaClientFactory::class, $this->stravaFactory($user));
 
         $importer = $this->prophesize(ActivityImporter::class);
-        $importer->import(['id' => 1], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
-        $importer->import(['id' => 2], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
-        $importer->import(['id' => 3], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 1], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 2], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 3], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
         $importer->status()->willReturn(ActivityImporter::CREATED);
         $this->app->instance(ActivityImporter::class, $importer->reveal());
 
@@ -49,7 +49,8 @@ class SyncLocalActivitiesTest extends TestCase
     }
 
     /** @test */
-    public function it_gives_feedback_during_execution(){
+    public function it_gives_feedback_during_execution()
+    {
         $user = User::factory()->create();
 
         $stravaActivityClient = $this->prophesize(ActivityClientResource::class);
@@ -66,9 +67,9 @@ class SyncLocalActivitiesTest extends TestCase
         $this->app->instance(StravaClientFactory::class, $this->stravaFactory($user));
 
         $importer = $this->prophesize(ActivityImporter::class);
-        $importer->import(['id' => 1], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
-        $importer->import(['id' => 2], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
-        $importer->import(['id' => 3], Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 1], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 2], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
+        $importer->import(['id' => 3], Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))->shouldBeCalled()->willReturn($importer->reveal());
         $importer->status()->willReturn(ActivityImporter::CREATED, ActivityImporter::UPDATED, ActivityImporter::CREATED);
         $this->app->instance(ActivityImporter::class, $importer->reveal());
 

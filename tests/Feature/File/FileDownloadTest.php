@@ -9,7 +9,8 @@ class FileDownloadTest extends TestCase
 {
 
     /** @test */
-    public function it_downloads_a_file(){
+    public function it_downloads_a_file()
+    {
         $this->authenticated();
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id, 'filename' => 'filename.jpeg']);
 
@@ -19,7 +20,8 @@ class FileDownloadTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_download_your_own_files(){
+    public function you_can_only_download_your_own_files()
+    {
         $this->authenticated();
         $file = File::factory()->activityMedia()->create(['filename' => 'filename.jpeg']);
 
@@ -28,7 +30,8 @@ class FileDownloadTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_exist(){
+    public function it_returns_a_404_if_the_file_does_not_exist()
+    {
         $this->authenticated();
 
         $response = $this->get(route('file.download', 1000))
@@ -36,11 +39,11 @@ class FileDownloadTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $file = File::factory()->activityMedia()->create(['filename' => 'filename.jpeg']);
 
         $response = $this->get(route('file.download', $file))
             ->assertRedirect(route('login'));
     }
-
 }

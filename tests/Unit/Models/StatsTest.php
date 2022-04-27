@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Activity;
-use App\Models\File;
 use App\Models\Stats;
 use App\Services\Geocoding\Geocoder;
 use App\Settings\StatsOrder;
@@ -14,7 +13,8 @@ class StatsTest extends TestCase
 {
 
     /** @test */
-    public function it_has_a_relationship_to_a_model(){
+    public function it_has_a_relationship_to_a_model()
+    {
         $activity = Activity::factory()->create();
         $stats = Stats::factory()->activity($activity)->create();
 
@@ -22,7 +22,8 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function get_human_started_at_gets_the_human_name_for_the_started_at_location(){
+    public function get_human_started_at_gets_the_human_name_for_the_started_at_location()
+    {
         $stats = Stats::factory()->activity(Activity::factory()->create())->create();
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition($stats->start_latitude, $stats->start_longitude)
@@ -33,7 +34,8 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function get_human_ended_at_gets_the_human_name_for_the_ended_at_location(){
+    public function get_human_ended_at_gets_the_human_name_for_the_ended_at_location()
+    {
         $stats = Stats::factory()->activity(Activity::factory()->create())->create();
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition($stats->end_latitude, $stats->end_longitude)
@@ -44,7 +46,8 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function get_human_started_at_returns_null_until_the_start_lat_and_long_are_set(){
+    public function get_human_started_at_returns_null_until_the_start_lat_and_long_are_set()
+    {
         $stats = Stats::factory()->activity(Activity::factory()->create())->create(['start_latitude' => null, 'start_longitude' => null]);
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('StartSummary');
@@ -67,7 +70,8 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function get_human_ended_at_returns_null_until_the_end_lat_and_long_are_set(){
+    public function get_human_ended_at_returns_null_until_the_end_lat_and_long_are_set()
+    {
         $stats = Stats::factory()->activity(Activity::factory()->create())->create(['end_latitude' => null, 'end_longitude' => null]);
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('EndSummary');
@@ -90,7 +94,8 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function orderByPreference_orders_stats_by_preference(){
+    public function order_by_preference_orders_stats_by_preference()
+    {
         $activity1 = Activity::factory()->create();
         $stats1 = Stats::factory()->activity($activity1)->create(['integration' => 'php', 'started_at' => Carbon::now()]);
 
@@ -152,5 +157,4 @@ class StatsTest extends TestCase
         $this->assertInstanceOf(Stats::class, $stats);
         $this->assertTrue($stats4->is($stats));
     }
-
 }

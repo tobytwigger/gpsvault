@@ -3,19 +3,15 @@
 namespace App\Http\Controllers\Pages\Stage;
 
 use App\Http\Controllers\Controller;
-use App\Models\Route;
 use App\Models\Stage;
 use App\Models\Tour;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\UnauthorizedException;
-use Inertia\Inertia;
 
 class StageController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(Tour::class, 'tour');
@@ -23,7 +19,7 @@ class StageController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
-        if($tour->user_id !== Auth::id()) {
+        if ($tour->user_id !== Auth::id()) {
             throw new AuthorizationException(null, 403);
         }
         $stage = Stage::create([
@@ -42,14 +38,14 @@ class StageController extends Controller
             'description' => 'sometimes|nullable|string|max:65535',
             'date' => 'sometimes|nullable|date_format:Y-m-d',
             'is_rest_day' => 'sometimes|boolean',
-            'route_id' => ['sometimes', 'nullable', 'integer', Rule::exists('routes', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
-            'activity_id' => ['sometimes', 'nullable', 'integer', Rule::exists('activities', 'id')->where(fn($query) => $query->where('user_id', Auth::id()))],
+            'route_id' => ['sometimes', 'nullable', 'integer', Rule::exists('routes', 'id')->where(fn ($query) => $query->where('user_id', Auth::id()))],
+            'activity_id' => ['sometimes', 'nullable', 'integer', Rule::exists('activities', 'id')->where(fn ($query) => $query->where('user_id', Auth::id()))],
             'stage_number' => 'sometimes|integer|min:1'
         ]);
 
         $stage->fill($validated);
         $stage->save();
-        if($request->has('stage_number') && $request->input('stage_number')) {
+        if ($request->has('stage_number') && $request->input('stage_number')) {
             $stage->setStageNumber((int) $request->input('stage_number'));
         }
 
@@ -64,5 +60,4 @@ class StageController extends Controller
 
         return redirect()->route('tour.show', $stage->tour_id);
     }
-
 }

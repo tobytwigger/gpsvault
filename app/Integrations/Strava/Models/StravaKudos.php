@@ -31,5 +31,4 @@ class StravaKudos extends Model
     {
         return new StravaKudosFactory();
     }
-
 }

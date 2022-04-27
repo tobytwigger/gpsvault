@@ -1,9 +1,5 @@
 <?php
 
-use App\Settings\BruitAPIKey;
-use App\Settings\DarkMode;
-use App\Settings\StatsOrder;
-use App\Settings\StravaClient;
 
 return [
 
@@ -35,26 +31,26 @@ return [
      * For an anonymous setting, view the documentation to see how to register one here.
      */
     'settings' => [
-//        \App\Setting\SiteTheme::class,
-//        [ // An anonymous setting
-//            'type' => 'user', // 'user', 'global', or a custom type
-//            'key' => 'timezone', // The setting key
-//            'defaultValue' => 'Europe/London', // The default value
-//            // The field. You must serialize this so your config can still be cached.
-//            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
-//            'groups' => ['language', 'content'], // Groups to put the setting in
-//            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value
-//        ]
+        //        \App\Setting\SiteTheme::class,
+        //        [ // An anonymous setting
+        //            'type' => 'user', // 'user', 'global', or a custom type
+        //            'key' => 'timezone', // The setting key
+        //            'defaultValue' => 'Europe/London', // The default value
+        //            // The field. You must serialize this so your config can still be cached.
+        //            'fieldOptions' => serialize(\FormSchema\Generator\Field::textInput('timezone')->setValue('Europe/London')),
+        //            'groups' => ['language', 'content'], // Groups to put the setting in
+        //            'rules' => ['string|timezone'] // Laravel validation rules to check the setting value
+        //        ]
     ],
 
     /*
      * You can register setting groups here.
      */
     'groups' => [
-//        'branding' => [
-//            'title' => 'Branding',
-//            'subtitle' => 'Settings related to the site brand'
-//        ],
+        //        'branding' => [
+        //            'title' => 'Branding',
+        //            'subtitle' => 'Settings related to the site brand'
+        //        ],
     ],
 
     /*

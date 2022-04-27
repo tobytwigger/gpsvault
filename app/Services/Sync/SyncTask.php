@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class SyncTask extends Model
 {
@@ -33,9 +31,10 @@ class SyncTask extends Model
 
     public function getRuntimeAttribute()
     {
-        if($this->started_at && $this->finished_at) {
+        if ($this->started_at && $this->finished_at) {
             return $this->started_at->diffInSeconds($this->finished_at);
         }
+
         return null;
     }
 
@@ -48,34 +47,35 @@ class SyncTask extends Model
 
     public function getLatestMessageAttribute(): string
     {
-        if(!empty($this->messages)) {
+        if (!empty($this->messages)) {
             return Arr::last($this->messages);
         }
-        if($this->status === 'failed') {
+        if ($this->status === 'failed') {
             return 'Task failed';
         }
-        if($this->status === 'cancelled') {
+        if ($this->status === 'cancelled') {
             return 'Task cancelled';
         }
-        if($this->status === 'succeeded') {
+        if ($this->status === 'succeeded') {
             return 'Task ran successfully';
         }
-        if($this->status === 'queued') {
+        if ($this->status === 'queued') {
             return 'Task in queue';
         }
-        if($this->status === 'processing') {
+        if ($this->status === 'processing') {
             return 'Task running';
         }
+
         return 'Loading';
     }
 
     protected static function booted()
     {
-        static::saved(function(SyncTask $task) {
+        static::saved(function (SyncTask $task) {
             TaskUpdated::dispatch($task);
         });
-        static::saved(function(SyncTask $task) {
-            if(
+        static::saved(function (SyncTask $task) {
+            if (
                 $task->isDirty(['status'])
                 && $task->sync->pendingTasks()->count() === 0
                 && in_array($task->getOriginal('status'), ['processing', 'queued'])
@@ -179,5 +179,4 @@ class SyncTask extends Model
     {
         return new SyncTaskFactory();
     }
-
 }

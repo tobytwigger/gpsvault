@@ -7,7 +7,6 @@ use App\Services\Analysis\Parser\Point;
 
 abstract class AnalyserContract
 {
-
     private ?AnalyserContract $nextAnalyser = null;
 
     public function setNext(AnalyserContract $nextAnalyser)
@@ -17,18 +16,19 @@ abstract class AnalyserContract
 
     public function analyse(Analysis $analysis): Analysis
     {
-        if($this->canRun($analysis)) {
+        if ($this->canRun($analysis)) {
             $analysis = $this->run($analysis);
         }
-        if($this->nextAnalyser !== null) {
+        if ($this->nextAnalyser !== null) {
             return $this->nextAnalyser->analyse($analysis);
         }
+
         return $analysis;
     }
 
     public function preparePoint(Point $point): void
     {
-        if($this instanceof PointAnalyser) {
+        if ($this instanceof PointAnalyser) {
             $this->processPoint($point);
         }
         $this->nextAnalyser?->preparePoint($point);
@@ -40,5 +40,4 @@ abstract class AnalyserContract
     {
         return true;
     }
-
 }

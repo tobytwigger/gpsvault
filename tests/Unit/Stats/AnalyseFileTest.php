@@ -12,7 +12,8 @@ class AnalyseFileTest extends TestCase
 {
 
     /** @test */
-    public function it_throws_an_exception_if_an_activity_is_missing_a_file(){
+    public function it_throws_an_exception_if_an_activity_is_missing_a_file()
+    {
         $activity = Activity::factory()->create(['file_id' => null]);
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Activity ' . $activity->id . ' does not have a model associated with it.');
@@ -22,7 +23,8 @@ class AnalyseFileTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_a_route_is_missing_a_file(){
+    public function it_throws_an_exception_if_a_route_is_missing_a_file()
+    {
         $route = Route::factory()->create(['file_id' => null]);
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Route ' . $route->id . ' does not have a model associated with it.');
@@ -32,7 +34,8 @@ class AnalyseFileTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_stats_for_an_activity(){
+    public function it_creates_stats_for_an_activity()
+    {
         $activity = Activity::factory()->create([
             'file_id' => File::factory()->routeFile()->create()->id
         ]);
@@ -47,7 +50,8 @@ class AnalyseFileTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_stats_for_a_route(){
+    public function it_creates_stats_for_a_route()
+    {
         $route = Route::factory()->create([
             'file_id' => File::factory()->routeFile()->create()->id
         ]);
@@ -62,9 +66,9 @@ class AnalyseFileTest extends TestCase
     }
 
     /** @test */
-    public function it_maps_stats_across_to_the_model_correctly(){
+    public function it_maps_stats_across_to_the_model_correctly()
+    {
         $this->markTestIncomplete();
         // Mock analyser, give prophecy results and check stats is same in DB as we said it should be
     }
-
 }

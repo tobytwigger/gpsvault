@@ -2,11 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Settings\BruitAPIKey;
-use App\Settings\DarkMode;
-use App\Settings\StatsOrder;
-use App\Settings\StravaClient;
-use App\Settings\UnitSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;

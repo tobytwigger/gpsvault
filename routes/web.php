@@ -2,7 +2,6 @@
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +12,16 @@ use Inertia\Inertia;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 /* Public */
 Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'welcome'])->name('welcome');
 Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
 /* Documentation */
-Route::get('/documentation', fn() => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');
+Route::get('/documentation', fn () => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function() {
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Dashboard */
     Route::get('/dashboard', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'index'])->name('dashboard');
 
@@ -40,7 +39,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
     Route::resource('activity', \App\Http\Controllers\Pages\Activity\ActivityController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
-    Route::prefix('activity/{activity}')->group(function() {
+    Route::prefix('activity/{activity}')->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Activity\ActivityDownloadController::class, 'downloadActivity'])->name('activity.download');
         Route::resource('file', \App\Http\Controllers\Pages\Activity\ActivityFileController::class, ['as' => 'activity'])->only(['destroy', 'update', 'store']);
     });
@@ -49,7 +48,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     /* Routes */
     Route::get('/route/search', [\App\Http\Controllers\Pages\Route\RouteSearchController::class, 'search'])->name('route.search');
     Route::resource('route', \App\Http\Controllers\Pages\Route\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
-    Route::prefix('route/{route}')->group(function() {
+    Route::prefix('route/{route}')->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Route\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
         Route::resource('file', \App\Http\Controllers\Pages\Route\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
     });
@@ -72,10 +71,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
 
     /* Strava */
     Route::get('/integration/strava', [\App\Integrations\Strava\Http\Controllers\StravaOverviewController::class, 'index'])->name('integration.strava');
-    Route::middleware('can:manage-strava-clients')->group(function() {
+    Route::middleware('can:manage-strava-clients')->group(function () {
         Route::resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'index', 'update', 'destroy']);
 
-        /* Client invitations **/
+        /* Client invitations */
         Route::middleware('link')->get('/client/{client}/accept', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'accept'])->name('strava.client.accept');
         Route::post('/client/{client}/invite', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'invite'])->name('strava.client.invite');
         Route::delete('/client/{client}/leave', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'leave'])->name('strava.client.leave');
@@ -91,6 +90,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
         Route::get('client/{client}/login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'login'])->name('strava.client.login');
         Route::post('client/{client}/logout', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'logout'])->name('strava.client.logout');
     });
-
 });
-

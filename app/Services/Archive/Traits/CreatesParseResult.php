@@ -7,17 +7,17 @@ use App\Services\Archive\ParseResult;
 
 trait CreatesParseResult
 {
-
     private array $metaData = [];
 
     private array $files = [];
 
     public function addMetaData(string $file, array $metadata): static
     {
-        if(!isset($this->metaData[$file])) {
+        if (!isset($this->metaData[$file])) {
             $this->metaData[$file] = [];
         }
         $this->metaData[$file][] = $metadata;
+
         return $this;
     }
 
@@ -25,6 +25,7 @@ trait CreatesParseResult
     {
         $this->addMetaData('files', $file->getFile()->toArray());
         $this->files[] = $file;
+
         return $this;
     }
 
@@ -32,5 +33,4 @@ trait CreatesParseResult
     {
         return new ParseResult($this->metaData, $this->files);
     }
-
 }

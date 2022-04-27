@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 
 class ImportingZip
 {
-
     private string $extractedDirectory;
 
     private string $archivePath;
@@ -37,7 +36,7 @@ class ImportingZip
 
         // Get the absolute path to this directory
         $extractTo = dirname(
-            Storage::disk('temp')->path($this->extractedDirectory  . '/cycle_store_test.txt')
+            Storage::disk('temp')->path($this->extractedDirectory . '/cycle_store_test.txt')
         );
         $this->zip->extract($extractTo);
     }
@@ -73,10 +72,10 @@ class ImportingZip
     public function getCsv(string $path): array
     {
         $member = collect($this->zip->getMembers())
-            ->filter(fn(MemberInterface $member) => $member->getLocation() === $path)
+            ->filter(fn (MemberInterface $member) => $member->getLocation() === $path)
             ->first();
 
-        if(!$member) {
+        if (!$member) {
             throw new \Exception('Photos csv not found');
         }
 
@@ -85,13 +84,13 @@ class ImportingZip
 
         array_shift($lines);
 
-        foreach($lines as $line) {
+        foreach ($lines as $line) {
             $parsedLine = str_getcsv($line);
-            if(count($parsedLine) === 2) {
+            if (count($parsedLine) === 2) {
                 $data[$parsedLine[0]] = $parsedLine[1];
             }
         }
+
         return $data;
     }
-
 }

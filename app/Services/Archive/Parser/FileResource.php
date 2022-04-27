@@ -6,7 +6,6 @@ use App\Models\File;
 
 class FileResource
 {
-
     private string $newDirectory;
 
     private string $newName;
@@ -62,6 +61,7 @@ class FileResource
     public function setNewDirectory(string $newDirectory): FileResource
     {
         $this->newDirectory = $newDirectory;
+
         return $this;
     }
 
@@ -80,6 +80,7 @@ class FileResource
     public function setNewName(string $newName): FileResource
     {
         $this->newName = $newName;
+
         return $this;
     }
 
@@ -87,5 +88,4 @@ class FileResource
     {
         return sprintf('%s/%s', $this->getNewDirectory(), $this->getNewName());
     }
-
 }

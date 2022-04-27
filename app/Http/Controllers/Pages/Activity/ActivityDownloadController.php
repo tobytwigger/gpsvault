@@ -8,7 +8,6 @@ use App\Services\Archive\ZipCreator;
 
 class ActivityDownloadController extends Controller
 {
-
     public function downloadActivity(Activity $activity)
     {
         $this->authorize('view', $activity);
@@ -17,5 +16,4 @@ class ActivityDownloadController extends Controller
 
         return redirect()->route('file.download', $file);
     }
-
 }

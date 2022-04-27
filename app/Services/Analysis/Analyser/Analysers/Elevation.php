@@ -7,7 +7,6 @@ use App\Services\Analysis\Parser\Point;
 
 class Elevation extends AnalyserContract implements PointAnalyser
 {
-
     private ?float $maxAltitude = null;
 
     private ?float $minAltitude = null;
@@ -21,7 +20,6 @@ class Elevation extends AnalyserContract implements PointAnalyser
     public function processPoint(Point $point): void
     {
         if ($point->getElevation() !== null) {
-
             if ($this->maxAltitude === null || $this->maxAltitude < $point->getElevation()) {
                 $this->maxAltitude = $point->getElevation();
             }
@@ -57,6 +55,7 @@ class Elevation extends AnalyserContract implements PointAnalyser
         if ($analysis->getCumulativeElevationLoss() === null) {
             $analysis->setCumulativeElevationLoss($this->elevationLoss);
         }
+
         return $analysis;
     }
 }

@@ -10,7 +10,8 @@ class ActivityUpdateTest extends TestCase
 {
 
     /** @test */
-    public function an_activity_can_be_updated(){
+    public function an_activity_can_be_updated()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description']);
 
@@ -22,7 +23,8 @@ class ActivityUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_updated_activity(){
+    public function it_redirects_to_show_the_updated_activity()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description']);
 
@@ -33,14 +35,18 @@ class ActivityUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->put(route('activity.update', $activity), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -60,7 +66,8 @@ class ActivityUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $activity = Activity::factory()->create(['name' => 'Old Name', 'description' => 'Old Description']);
 
         $response = $this->put(route('activity.update', $activity), ['name' => 'New Name', 'description' => 'New Description'])
@@ -68,7 +75,8 @@ class ActivityUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_update_your_own_activity(){
+    public function you_can_only_update_your_own_activity()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['name' => 'Old Name', 'description' => 'Old Description']);
 

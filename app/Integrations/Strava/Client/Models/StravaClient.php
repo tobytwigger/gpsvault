@@ -6,11 +6,9 @@ use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Models\User;
 use Database\Factories\StravaClientFactory;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Linkeys\UrlSigner\Models\Link;
 use Linkeys\UrlSigner\Support\LinkRepository\LinkRepository;
@@ -57,7 +55,7 @@ class StravaClient extends Model
             if ($client->user_id === null) {
                 $client->user_id = Auth::id();
             }
-            if($client->webhook_verify_token === null) {
+            if ($client->webhook_verify_token === null) {
                 $client->webhook_verify_token = Str::random(20);
             }
         });
@@ -65,8 +63,9 @@ class StravaClient extends Model
 
     public static function scopeExcluding(Builder $query, array $excluding)
     {
-        $query->when(!empty($excluding),
-            fn(Builder $query) => $query->whereNotIn('strava_clients.id', $excluding)
+        $query->when(
+            !empty($excluding),
+            fn (Builder $query) => $query->whereNotIn('strava_clients.id', $excluding)
         );
     }
 
@@ -82,13 +81,13 @@ class StravaClient extends Model
 
     public static function scopeConnected(Builder $query, int $userId)
     {
-        $query->whereHas('tokens', fn(Builder $subquery) => $subquery->forUser($userId)->active()->enabled());
+        $query->whereHas('tokens', fn (Builder $subquery) => $subquery->forUser($userId)->active()->enabled());
     }
 
     public static function scopeForUser(Builder $query, int $userId)
     {
         $query->where('user_id', $userId)
-            ->orWhereHas('sharedUsers', function(Builder $query) use ($userId) {
+            ->orWhereHas('sharedUsers', function (Builder $query) use ($userId) {
                 $query->where('users.id', $userId);
             })
             ->orWhere('public', true);
@@ -105,7 +104,7 @@ class StravaClient extends Model
     }
 
     /**
-     * Check if the strava client has space to make a new request
+     * Check if the strava client has space to make a new request.
      * @return bool
      */
     public function hasSpaces(): bool
@@ -126,9 +125,10 @@ class StravaClient extends Model
 
     public function getIsConnectedAttribute(): bool
     {
-        if(Auth::check()) {
+        if (Auth::check()) {
             return $this->isConnected(Auth::id());
         }
+
         return false;
     }
 
@@ -154,9 +154,10 @@ class StravaClient extends Model
 
     public function getInvitationLink(): ?Link
     {
-        if($this->invitation_link_uuid !== null) {
+        if ($this->invitation_link_uuid !== null) {
             return app(LinkRepository::class)->findByUuid($this->invitation_link_uuid);
         }
+
         return null;
     }
 

@@ -11,7 +11,6 @@ class LoadStravaComments extends StravaActivityBaseJob
     /**
      * Execute the job.
      *
-     * @return void
      */
     public function handle(Strava $strava)
     {
@@ -19,7 +18,7 @@ class LoadStravaComments extends StravaActivityBaseJob
         $page = 1;
         do {
             $comments = $strava->client($this->stravaClientModel)->getComments($this->activity->getAdditionalData('strava_id'), $page);
-            foreach($comments as $comment) {
+            foreach ($comments as $comment) {
                 $this->importComment($comment);
             }
             $page++;
@@ -41,5 +40,4 @@ class LoadStravaComments extends StravaActivityBaseJob
             ]
         );
     }
-
 }

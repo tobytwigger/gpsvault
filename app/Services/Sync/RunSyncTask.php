@@ -21,7 +21,6 @@ class RunSyncTask implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      */
     public function __construct(SyncTask $task)
     {
@@ -31,22 +30,25 @@ class RunSyncTask implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      */
     public function handle()
     {
-        if($this->task->status === 'queued') {
+        if ($this->task->status === 'queued') {
             $this->task->setStatusAsProcessing();
+
             try {
                 $this->task->createTaskObject()->process($this->task);
             } catch (TaskSucceeded $e) {
                 $this->succeedTask($e->getMessage());
+
                 return;
             } catch (TaskCancelled $e) {
                 $this->cancelTask($e->getMessage());
+
                 return;
             } catch (\Throwable $e) {
                 $this->failTask($e->getMessage());
+
                 throw $e;
             }
             $this->task->setStatusAsSucceeded();
@@ -55,7 +57,7 @@ class RunSyncTask implements ShouldQueue
 
     private function succeedTask(?string $message = null)
     {
-        if($message !== null) {
+        if ($message !== null) {
             $this->task->addMessage($message);
         }
         $this->task->setStatusAsSucceeded();
@@ -63,7 +65,7 @@ class RunSyncTask implements ShouldQueue
 
     private function failTask(?string $message = null)
     {
-        if($message !== null) {
+        if ($message !== null) {
             $this->task->addMessage($message);
         }
         $this->task->setStatusAsFailed();
@@ -71,7 +73,7 @@ class RunSyncTask implements ShouldQueue
 
     private function cancelTask(?string $message = null)
     {
-        if($message !== null) {
+        if ($message !== null) {
             $this->task->addMessage($message);
         }
         $this->task->setStatusAsCancelled();
@@ -81,5 +83,4 @@ class RunSyncTask implements ShouldQueue
     {
         return now()->addMinutes(360);
     }
-
 }

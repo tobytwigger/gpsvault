@@ -8,7 +8,6 @@ use Inertia\Inertia;
 
 class ImportController extends \Illuminate\Routing\Controller
 {
-
     public function show(Import $import)
     {
         abort_if($import->user_id !== Auth::id(), 403, 'You can only view your own imports.');
@@ -17,5 +16,4 @@ class ImportController extends \Illuminate\Routing\Controller
             'importData' => $import
         ]);
     }
-
 }

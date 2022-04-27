@@ -7,14 +7,11 @@ use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Webhooks\HandleDeletedActivity;
 use App\Integrations\Strava\Webhooks\HandleIndexingActivity;
 use App\Integrations\Strava\Webhooks\Payload;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class IncomingWebhookController extends Controller
 {
-
     public function verify(Request $request, StravaClient $client)
     {
         $request->validate([
@@ -28,8 +25,8 @@ class IncomingWebhookController extends Controller
 
     public function incoming(Request $request, StravaClient $client)
     {
-
         \Log::info($request->all());
+
         try {
             $request->validate(Payload::rules());
         } catch (ValidationException $e) {
@@ -38,14 +35,14 @@ class IncomingWebhookController extends Controller
         $payload = Payload::createFromRequest($request);
         \Log::info($payload->toArray());
 
-        if($payload->getObjectType() === 'activity') {
-            if(in_array($payload->getAspectType(), ['update', 'create'])) {
+        if ($payload->getObjectType() === 'activity') {
+            if (in_array($payload->getAspectType(), ['update', 'create'])) {
                 HandleIndexingActivity::dispatch($payload);
-            } elseif($payload->getAspectType() === 'delete') {
+            } elseif ($payload->getAspectType() === 'delete') {
                 HandleDeletedActivity::dispatch($payload);
             }
         }
+
         return response('', 200);
     }
-
 }

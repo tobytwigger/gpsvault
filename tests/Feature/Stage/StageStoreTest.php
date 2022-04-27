@@ -4,14 +4,14 @@ namespace Tests\Feature\Stage;
 
 use App\Models\Stage;
 use App\Models\Tour;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StageStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_a_stage_and_shows_the_tour(){
+    public function it_creates_a_stage_and_shows_the_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
 
@@ -24,7 +24,8 @@ class StageStoreTest extends TestCase
     }
 
     /** @test */
-    public function ordering_is_sorted_and_the_new_stage_is_pushed_to_the_end(){
+    public function ordering_is_sorted_and_the_new_stage_is_pushed_to_the_end()
+    {
         $this->authenticated();
 
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
@@ -44,7 +45,8 @@ class StageStoreTest extends TestCase
     }
 
     /** @test */
-    public function a_403_is_returned_if_you_do_not_own_the_tour(){
+    public function a_403_is_returned_if_you_do_not_own_the_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create();
 
@@ -53,10 +55,10 @@ class StageStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $tour = Tour::factory()->create();
 
         $this->post(route('tour.stage.store', [$tour]))->assertRedirect(route('login'));
     }
-
 }

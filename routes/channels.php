@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Broadcast;
 | application supports. The given channel authorization callbacks are
 | used to check if an authenticated user can listen to the channel.
 |
-*/
+ */
 
-Broadcast::channel('sync.{syncId}', function (\App\Models\User $user, $syncId) {
+Broadcast::channel('sync.{syncId}', function (App\Models\User $user, $syncId) {
     return (int) $user->id === (int) \App\Services\Sync\Sync::findOrFail($syncId)->user_id;
 });
 
-Broadcast::channel('task.{taskId}', function (\App\Models\User $user, $taskId) {
+Broadcast::channel('task.{taskId}', function (App\Models\User $user, $taskId) {
     return (int) $user->id === (int) \App\Services\Sync\SyncTask::findOrFail($taskId)->sync->user_id;
 });

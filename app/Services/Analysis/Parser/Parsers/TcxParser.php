@@ -7,12 +7,10 @@ use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use Illuminate\Support\Collection;
 use Waddle\Parsers\TCXParser as BaseParser;
 
 class TcxParser implements ParserContract
 {
-
     public function read(File $file): Analysis
     {
         $parser = new BaseParser();
@@ -24,8 +22,8 @@ class TcxParser implements ParserContract
             'max_heart_rate' => null,
             'avg_cadence' => []
         ];
-        foreach($file->getLaps() as $lap) {
-            foreach($lap->getTrackPoints() as $trackPoint) {
+        foreach ($file->getLaps() as $lap) {
+            foreach ($lap->getTrackPoints() as $trackPoint) {
                 $points->push(
                     (new Point())
                         ->setCadence($trackPoint->getCadence())
@@ -38,7 +36,7 @@ class TcxParser implements ParserContract
                         ->setTime(Carbon::createFromTimestamp($trackPoint->getTime('U')))
                 );
                 $averages['avg_heart_rate'][] = $lap->getAvgHeartRate();
-                if($averages['max_heart_rate'] === null || $lap->getMaxHeartRate() > $averages['max_heart_rate']) {
+                if ($averages['max_heart_rate'] === null || $lap->getMaxHeartRate() > $averages['max_heart_rate']) {
                     $averages['max_heart_rate'] = $lap->getMaxHeartRate();
                 }
                 $averages['avg_cadence'][] = $lap->getCadence();
@@ -58,6 +56,7 @@ class TcxParser implements ParserContract
         $analysis->setCumulativeElevationGain($file->getTotalAscentDescent()['ascent']);
         $analysis->setCumulativeElevationLoss($file->getTotalAscentDescent()['descent']);
         $analysis->setAveragePace(CarbonInterval::createFromFormat('H:i:s', $file->getAveragePacePerKilometre())->totalMinutes * 0.06);
+
         return $analysis;
     }
 }

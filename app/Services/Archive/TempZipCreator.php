@@ -7,13 +7,11 @@ use App\Services\Archive\Parser\FileResource;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
 {
-
     public function archive(): File
     {
         $rand = Str::random();
@@ -25,7 +23,7 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
         $archivePath = sprintf('%s/result.zip', $fullPath);
 
         $zipFile = new \PhpZip\ZipFile();
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $zipFile->addFile($file);
         }
         $zipFile->saveAsFile($archivePath);
@@ -41,18 +39,18 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
     private function getFilesToSave(string $rand): array
     {
         $metaPaths = [];
-        foreach($this->results->getAllMetadata() as $file => $data) {
+        foreach ($this->results->getAllMetadata() as $file => $data) {
             $path = sprintf('zip_creator/%s/meta/%s.json', $rand, $file);
             Storage::disk('temp')->put($path, json_encode($data, JSON_PRETTY_PRINT));
             $metaPaths[$file] = Storage::disk('temp')->path($path);
         }
 
         return collect($this->results->getFiles())
-            ->mapWithKeys(function(FileResource $fileResource) {
+            ->mapWithKeys(function (FileResource $fileResource) {
                 return [$fileResource->getNewPath() => $fileResource->fullPath()];
             })
             ->merge(collect($metaPaths)
-                ->mapWithKeys(function(string $path, string $file) {
+            ->mapWithKeys(function (string $path, string $file) {
                     return [sprintf('%s.json', $file) => $path];
                 }))
             ->all();

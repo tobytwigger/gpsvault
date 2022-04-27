@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pages\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRouteRequest;
 use App\Models\Route;
-use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Http\Request;
@@ -42,7 +41,7 @@ class RouteController extends Controller
     public function store(StoreRouteRequest $request)
     {
         $fileId = null;
-        if($request->has('file')) {
+        if ($request->has('file')) {
             $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
 
@@ -52,7 +51,7 @@ class RouteController extends Controller
             'file_id' => $fileId
         ]);
 
-        if($request->has('file') && $request->file('file') !== null) {
+        if ($request->has('file') && $request->file('file') !== null) {
             $route->analyse();
         }
 
@@ -90,7 +89,7 @@ class RouteController extends Controller
         ]);
 
         $fileId = $route->file_id;
-        if($request->has('file') && $request->file('file') !== null) {
+        if ($request->has('file') && $request->file('file') !== null) {
             $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
 
@@ -100,7 +99,7 @@ class RouteController extends Controller
         $route->file_id = $fileId;
         $route->save();
 
-        if($request->has('file') && $request->file('file') !== null) {
+        if ($request->has('file') && $request->file('file') !== null) {
             $route->analyse();
         }
 

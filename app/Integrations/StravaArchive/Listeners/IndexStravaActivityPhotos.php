@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Listeners;
 
-use App\Integrations\Strava\Jobs\LoadStravaPhotos;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
+use App\Integrations\Strava\Jobs\LoadStravaPhotos;
 
 class IndexStravaActivityPhotos
 {
@@ -24,5 +24,4 @@ class IndexStravaActivityPhotos
         $activity = $activityEvent->activity->refresh();
         LoadStravaPhotos::dispatch($activity);
     }
-
 }

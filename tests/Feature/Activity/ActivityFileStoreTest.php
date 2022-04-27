@@ -12,7 +12,8 @@ class ActivityFileStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_activity(){
+    public function it_returns_a_403_if_you_do_not_own_the_activity()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -25,7 +26,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_activity_does_not_exist(){
+    public function it_returns_a_404_if_the_activity_does_not_exist()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -37,7 +39,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function a_new_file_can_be_stored(){
+    public function a_new_file_can_be_stored()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         Storage::fake('test-fake');
@@ -53,7 +56,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function many_files_can_be_uploaded(){
+    public function many_files_can_be_uploaded()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         Storage::fake('test-fake');
@@ -70,7 +74,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function the_title_and_caption_can_be_set(){
+    public function the_title_and_caption_can_be_set()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         Storage::fake('test-fake');
@@ -90,7 +95,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function the_title_and_caption_apply_to_all_uploaded_files(){
+    public function the_title_and_caption_apply_to_all_uploaded_files()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         Storage::fake('test-fake');
@@ -112,7 +118,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_directs_you_back_to_view_the_activity(){
+    public function it_directs_you_back_to_view_the_activity()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         Storage::fake('test-fake');
@@ -125,7 +132,8 @@ class ActivityFileStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
         $activity = Activity::factory()->create();
@@ -139,8 +147,12 @@ class ActivityFileStoreTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
 
@@ -148,10 +160,10 @@ class ActivityFileStoreTest extends TestCase
         $fakeFile = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.file.store', $activity), array_merge([$key => $value], $key === 'files' ? [] : ['files' => [$fakeFile]]));
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
-            if(is_array($error)) {
+            if (is_array($error)) {
                 $response->assertSessionHasErrors($error);
             } else {
                 $response->assertSessionHasErrors([$key => $error]);
@@ -172,5 +184,4 @@ class ActivityFileStoreTest extends TestCase
             ['caption', 'This is a valid caption', false],
         ];
     }
-
 }

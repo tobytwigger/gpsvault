@@ -32,8 +32,9 @@ class SetupWebhooks extends Command
     {
         // When we have clients, this will handle each client. We can then easily get the user id from the client user id.
 
-        if(!$this->option('user')) {
+        if (!$this->option('user')) {
             $this->warn('The user to run as is not set, skipping.');
+
             return Command::SUCCESS;
         }
 
@@ -41,13 +42,13 @@ class SetupWebhooks extends Command
         $strava->setUserId($user->id);
         $client = $strava->client($user->availableClient());
 
-        if(!$client->webhookExists()) {
+        if (!$client->webhookExists()) {
             $this->line('Webhook missing, creating.');
             $client->createWebhook();
         } else {
             $this->line('Webhook already exists');
         }
+
         return Command::SUCCESS;
     }
-
 }

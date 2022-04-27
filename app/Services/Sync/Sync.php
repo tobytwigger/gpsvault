@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class Sync extends Model
 {
@@ -31,8 +30,8 @@ class Sync extends Model
 
     protected static function booted()
     {
-        static::creating(fn(Sync $sync) => $sync->user_id = $sync->user_id ?? Auth::id());
-        static::deleting(fn(Sync $sync) => $sync->tasks()->delete());
+        static::creating(fn (Sync $sync) => $sync->user_id = $sync->user_id ?? Auth::id());
+        static::deleting(fn (Sync $sync) => $sync->tasks()->delete());
     }
 
     public function user()
@@ -53,15 +52,16 @@ class Sync extends Model
 
     public function getRuntimeAttribute()
     {
-        if($this->started_at && $this->finished_at) {
+        if ($this->started_at && $this->finished_at) {
             return $this->started_at->diffInSeconds($this->finished_at);
         }
+
         return null;
     }
 
     public function cancel()
     {
-        $this->pendingTasks->each(fn(SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
+        $this->pendingTasks->each(fn (SyncTask $syncTask) => $syncTask->setStatusAsCancelled());
     }
 
     public function finish()
@@ -86,6 +86,7 @@ class Sync extends Model
     public function withTask(Task $task, array $config): SYnc
     {
         $task = SyncTask::newTask($task, $this, $config);
+
         return $this;
     }
 
@@ -96,12 +97,11 @@ class Sync extends Model
 
     public function dispatch()
     {
-        $this->tasks->each(fn(SyncTask $task) => $task->dispatch());
+        $this->tasks->each(fn (SyncTask $task) => $task->dispatch());
     }
 
     protected static function newFactory()
     {
         return new SyncFactory();
     }
-
 }

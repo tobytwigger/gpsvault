@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Http\Controllers;
 
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Client\Strava;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 
 class StravaController extends \Illuminate\Routing\Controller
 {
-
     public function login(Request $request, StravaClient $client, Strava $strava)
     {
         $request->session()->put('state', $state = Str::random(40));
@@ -43,5 +42,4 @@ class StravaController extends \Illuminate\Routing\Controller
 
         return redirect()->route('strava.client.index');
     }
-
 }

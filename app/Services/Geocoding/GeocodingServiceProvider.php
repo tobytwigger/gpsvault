@@ -10,19 +10,18 @@ use maxh\Nominatim\Nominatim;
 
 class GeocodingServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
-        $this->app->singleton('nominatim', fn() => new Nominatim('https://nominatim.openstreetmap.org/', ['User-Agent' => 'Cycle Store']));
+        $this->app->singleton('nominatim', fn () => new Nominatim('https://nominatim.openstreetmap.org/', ['User-Agent' => 'Cycle Store']));
 
         $this->app->bind(Geocoder::class, NominatimGeocoder::class);
-        $this->app->extend(NominatimGeocoder::class, function(NominatimGeocoder $geocoder) {
+        $this->app->extend(NominatimGeocoder::class, function (NominatimGeocoder $geocoder) {
             $cache = $this->app->make(Repository::class);
+
             return new GeocoderRateLimiting(
                 new GeocoderCache($geocoder, $cache),
                 $this->app->make(Repository::class)
             );
         });
     }
-
 }

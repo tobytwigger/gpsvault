@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Client\Authentication;
 
 class StravaTokenResponse
 {
-
     private \DateTime $expiresAt;
 
     private int $expiresIn;
@@ -94,6 +93,7 @@ class StravaTokenResponse
     public function setAthleteId(int $athleteId): StravaTokenResponse
     {
         $this->athleteId = $athleteId;
+
         return $this;
     }
 
@@ -103,15 +103,14 @@ class StravaTokenResponse
         string $refreshToken,
         string $accessToken,
         int $athleteId
-    ): static
-    {
+    ): static {
         $instance = new static();
         $instance->setExpiresAt($expiresAt);
         $instance->setExpiresIn($expiresIn);
         $instance->setRefreshToken($refreshToken);
         $instance->setAccessToken($accessToken);
         $instance->setAthleteId($athleteId);
+
         return $instance;
     }
-
 }

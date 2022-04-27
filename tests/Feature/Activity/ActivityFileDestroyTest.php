@@ -11,7 +11,8 @@ class ActivityFileDestroyTest extends TestCase
 {
 
     /** @test */
-    public function it_deletes_the_activity_file(){
+    public function it_deletes_the_activity_file()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);
@@ -24,7 +25,8 @@ class ActivityFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_file(){
+    public function it_returns_a_403_if_you_do_not_own_the_file()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->activityMedia()->create();
@@ -35,7 +37,8 @@ class ActivityFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_activity(){
+    public function it_returns_a_403_if_you_do_not_own_the_activity()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create();
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);
@@ -46,7 +49,8 @@ class ActivityFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_exist(){
+    public function it_returns_a_404_if_the_file_does_not_exist()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
 
@@ -55,7 +59,8 @@ class ActivityFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_activity_does_not_exist(){
+    public function it_returns_a_404_if_the_activity_does_not_exist()
+    {
         $this->authenticated();
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);
 
@@ -64,19 +69,21 @@ class ActivityFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_belong_to_the_activity_as_a_media_file(){
+    public function it_returns_a_404_if_the_file_does_not_belong_to_the_activity_as_a_media_file()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);
         $activity->file_id = $file->id;
-        Model::withoutEvents(fn() => $activity->save());
+        Model::withoutEvents(fn () => $activity->save());
 
         $response = $this->delete(route('activity.file.destroy', [$activity, $file]), []);
         $response->assertStatus(404);
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $activity = Activity::factory()->create();
         $file = File::factory()->activityMedia()->create();
         $activity->files()->sync($file);
@@ -84,5 +91,4 @@ class ActivityFileDestroyTest extends TestCase
         $this->delete(route('activity.file.destroy', [$activity, $file]))
             ->assertRedirect(route('login'));
     }
-
 }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Activity;
-use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,7 +22,7 @@ class ActivityFactory extends Factory
             'description' => $this->faker->paragraph,
             'file_id' => null,
             'linked_to' => [],
-            'user_id' => fn() => User::factory()
+            'user_id' => fn () => User::factory()
         ];
     }
 }

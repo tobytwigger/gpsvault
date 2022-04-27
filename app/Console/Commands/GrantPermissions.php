@@ -4,10 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class GrantPermissions extends Command
 {
@@ -28,7 +25,6 @@ class GrantPermissions extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -45,12 +41,14 @@ class GrantPermissions extends Command
         /** @var User $user */
         $user = User::findOrFail($this->argument('user'));
         $permission = Permission::findByName($this->argument('permission'));
-        if($user->hasPermissionTo($permission)) {
+        if ($user->hasPermissionTo($permission)) {
             $this->error('User already has the permission.');
+
             return Command::FAILURE;
         }
         $user->givePermissionTo($permission);
         $this->info('Granted user the permission.');
+
         return Command::SUCCESS;
     }
 }

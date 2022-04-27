@@ -2,21 +2,13 @@
 
 namespace Tests\Feature\Place;
 
-use App\Jobs\AnalyseFile;
 use App\Models\Place;
-use App\Models\File;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
 
 class PlaceStoreTest extends TestCase
 {
-
     private function getPlaceAttributes(array $overrides = [], bool $withoutLocation = false): array
     {
         return array_merge([
@@ -32,7 +24,8 @@ class PlaceStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_a_place(){
+    public function it_creates_a_place()
+    {
         $this->authenticated();
 
         $response = $this->post(route('place.store'), $this->getPlaceAttributes());
@@ -45,7 +38,8 @@ class PlaceStoreTest extends TestCase
     }
 
     /** @test */
-    public function the_user_id_is_always_taken_from_the_user(){
+    public function the_user_id_is_always_taken_from_the_user()
+    {
         $this->authenticated();
 
         $response = $this->post(route('place.store'), $this->getPlaceAttributes(['user_id' => Auth::user()->id]));
@@ -58,7 +52,8 @@ class PlaceStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_new_place(){
+    public function it_redirects_to_show_the_new_place()
+    {
         $this->authenticated();
 
         $response = $this->post(route('place.store'), $this->getPlaceAttributes());
@@ -73,16 +68,21 @@ class PlaceStoreTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
+     * @param null|mixed $errorKeyOverride
      */
-    public function it_validates($key, $value, $error, $errorKeyOverride = null){
+    public function it_validates($key, $value, $error, $errorKeyOverride = null)
+    {
         $this->authenticated();
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = call_user_func($value, $this->user);
         }
 
         $response = $this->post(route('place.store'), $this->getPlaceAttributes([$key => $value]));
 
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionMissing($errorKeyOverride ?? $key);
         } else {
             $response->assertSessionHasErrors([$errorKeyOverride ?? $key => $error]);
@@ -114,7 +114,7 @@ class PlaceStoreTest extends TestCase
             ['phone_number', '+44123456789', false],
             ['email', 'notanemail', 'The email must be a valid email address.'],
             ['email', 'anemail@example.com', false],
-            ['email', Str::random(300).'@hotmail.co.uk', 'The email must not be greater than 255 characters.'],
+            ['email', Str::random(300) . '@hotmail.co.uk', 'The email must not be greater than 255 characters.'],
             ['address', Str::random(65570), 'The address must not be greater than 65535 characters.'],
             ['location', ['lat' => -0.2, 'lng' => 55], false],
             ['location', ['lat' => -91, 'lng' => 55], 'The location.lat must be at least -90.', 'location.lat'],
@@ -128,10 +128,9 @@ class PlaceStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
-
+    public function you_must_be_authenticated()
+    {
         $response = $this->post(route('place.store'), $this->getPlaceAttributes());
         $response->assertRedirect(route('login'));
     }
-
 }

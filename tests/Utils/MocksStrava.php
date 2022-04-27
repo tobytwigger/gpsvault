@@ -2,14 +2,10 @@
 
 namespace Tests\Utils;
 
-use App\Integrations\Strava\Client\Authentication\Authenticator;
-use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\Resource;
 use App\Integrations\Strava\Client\Client\StravaClient;
 use App\Integrations\Strava\Client\StravaClientFactory;
 use App\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
@@ -21,17 +17,19 @@ trait MocksStrava
 
     public function stravaClientProphecy()
     {
-        if(!isset($this->stravaProphecy)) {
+        if (!isset($this->stravaProphecy)) {
             $this->stravaProphecy = $this->prophesize(StravaClient::class);
         }
+
         return $this->stravaProphecy;
     }
 
     public function stravaFactory(User $user): StravaClientFactory
     {
         $factory = $this->prophesize(StravaClientFactory::class);
-        $factory->client(Argument::that(fn($arg) => $arg instanceof User && $arg->is($user)))
+        $factory->client(Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user)))
             ->willReturn($this->stravaClientProphecy()->reveal());
+
         return $factory->reveal();
     }
 
@@ -39,5 +37,4 @@ trait MocksStrava
     {
         $this->stravaClientProphecy()->{$resourceName}()->willReturn($mock);
     }
-
 }

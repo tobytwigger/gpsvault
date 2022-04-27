@@ -12,7 +12,8 @@ class ActivityTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_a_new_activity(){
+    public function it_creates_a_new_activity()
+    {
         $this->markTestIncomplete();
 
         $startDate = Carbon::now()->subDay();
@@ -81,11 +82,11 @@ class ActivityTest extends TestCase
         $this->assertEquals(52, $stats->start_longitude);
         $this->assertEquals(2, $stats->end_latitude);
         $this->assertEquals(50, $stats->end_longitude);
-
     }
 
     /** @test */
-    public function it_updates_select_attributes_for_an_activity_linked_to_strava(){
+    public function it_updates_select_attributes_for_an_activity_linked_to_strava()
+    {
         $this->markTestIncomplete();
 
         $oldUser = User::factory()->create();
@@ -161,11 +162,11 @@ class ActivityTest extends TestCase
 
         $this->assertEquals('Old Name', $activity->name);
         $this->assertEquals($oldUser->id, $activity->user_id);
-
     }
 
     /** @test */
-    public function it_can_be_created_with_only_an_id(){
+    public function it_can_be_created_with_only_an_id()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -188,7 +189,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_isnt_marked_as_updated_if_nothing_changes(){
+    public function it_isnt_marked_as_updated_if_nothing_changes()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -208,7 +210,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_is_marked_as_updated_if_updated(){
+    public function it_is_marked_as_updated_if_updated()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -228,7 +231,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_is_marked_as_created_if_created(){
+    public function it_is_marked_as_created_if_created()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -248,8 +252,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_an_activity_with_a_similar_distance_and_start_time(){
+    public function it_updates_an_activity_with_a_similar_distance_and_start_time()
+    {
         $this->markTestIncomplete();
     }
-
 }

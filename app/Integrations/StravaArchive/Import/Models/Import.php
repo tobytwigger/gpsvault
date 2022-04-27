@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class Import extends Model
 {
-
     protected $table = 'imports';
 
     protected $fillable = ['user_id'];
@@ -20,8 +19,8 @@ class Import extends Model
 
     protected static function booted()
     {
-        static::creating(function(Import $import) {
-            if($import->user_id === null && Auth::check()) {
+        static::creating(function (Import $import) {
+            if ($import->user_id === null && Auth::check()) {
                 $import->user_id = Auth::id();
             }
         });
@@ -31,5 +30,4 @@ class Import extends Model
     {
         return $this->hasMany(ImportResult::class);
     }
-
 }

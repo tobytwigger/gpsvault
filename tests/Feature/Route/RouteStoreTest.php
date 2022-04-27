@@ -3,8 +3,8 @@
 namespace Tests\Feature\Route;
 
 use App\Jobs\AnalyseFile;
-use App\Models\Route;
 use App\Models\File;
+use App\Models\Route;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,8 @@ class RouteStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_an_route_from_a_file(){
+    public function it_creates_an_route_from_a_file()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -37,7 +38,8 @@ class RouteStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_new_route(){
+    public function it_redirects_to_show_the_new_route()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -51,7 +53,8 @@ class RouteStoreTest extends TestCase
     }
 
     /** @test */
-    public function a_name_and_description_can_be_set(){
+    public function a_name_and_description_can_be_set()
+    {
         $this->authenticated();
 
         $response = $this->post(route('route.store'), [
@@ -64,23 +67,26 @@ class RouteStoreTest extends TestCase
             'name' => 'This is the route name',
             'description' => 'A route description'
         ]);
-
     }
 
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = call_user_func($value, $this->user);
         }
 
         Storage::fake('test-fake');
 
         $response = $this->post(route('route.store'), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionMissing($key);
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -96,14 +102,15 @@ class RouteStoreTest extends TestCase
             ['description', Str::random(65570), 'The description must not be greater than 65535 characters.'],
             ['description', null, false],
             ['description', 'This is a valid namne', false],
-            ['file', fn() => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
+            ['file', fn () => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
             ['file', null, false],
             ['file', 'This is not a file', 'The file must be a file.']
         ];
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
@@ -115,7 +122,8 @@ class RouteStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_analysis_job_if_a_file_is_given(){
+    public function it_fires_an_analysis_job_if_a_file_is_given()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -125,11 +133,12 @@ class RouteStoreTest extends TestCase
             'file' => $file, 'name' => 'Test'
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */
-    public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given(){
+    public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
 
@@ -139,7 +148,8 @@ class RouteStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_does_not_fire_an_analysis_job_if_a_name_is_not_given(){
+    public function it_does_not_fire_an_analysis_job_if_a_name_is_not_given()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -149,5 +159,4 @@ class RouteStoreTest extends TestCase
 
         Bus::assertNotDispatched(AnalyseFile::class);
     }
-
 }

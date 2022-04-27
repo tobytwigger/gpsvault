@@ -6,14 +6,11 @@ use App\Models\File;
 use App\Models\User;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FileUploader
 {
-
     const ACTIVITY_FILE = 'activity_file';
 
     const ACTIVITY_MEDIA = 'activity_media';
@@ -65,11 +62,10 @@ class FileUploader
             'type' => $type
         ]);
 
-        if($uploadedFile->getClientOriginalExtension() === 'tcx') {
+        if ($uploadedFile->getClientOriginalExtension() === 'tcx') {
             Storage::disk($file->disk)->update($file->path, trim($file->getFileContents()));
         }
 
         return $file;
     }
-
 }

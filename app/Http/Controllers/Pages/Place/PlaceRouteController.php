@@ -8,11 +8,9 @@ use App\Models\PlaceRoute;
 use App\Models\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class PlaceRouteController extends Controller
 {
-
     public function store(Request $request, Route $route)
     {
         $request->validate([
@@ -42,5 +40,4 @@ class PlaceRouteController extends Controller
 
         return redirect()->route('route.show', $route);
     }
-
 }

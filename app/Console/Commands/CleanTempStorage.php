@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class CleanTempStorage extends Command
@@ -31,7 +30,7 @@ class CleanTempStorage extends Command
     public function handle()
     {
         $files = collect(Storage::disk('temp')->allFiles())
-            ->filter(fn(string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()));
+            ->filter(fn (string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()));
 
         $this->line(sprintf('Removing %u files from temp.', $files->count()));
 
@@ -41,7 +40,6 @@ class CleanTempStorage extends Command
     }
 
     protected function expiry()
-
     {
         return Carbon::now()->subHours(12);
     }

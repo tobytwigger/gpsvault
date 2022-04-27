@@ -12,7 +12,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     /**
      * Register any application services.
      *
-     * @return void
      */
     public function register()
     {
@@ -36,7 +35,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     /**
      * Prevent sensitive request details from being logged by Telescope.
      *
-     * @return void
      */
     protected function hideSensitiveRequestDetails()
     {
@@ -58,7 +56,6 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      *
      * This gate determines who can access Telescope in non-local environments.
      *
-     * @return void
      */
     protected function gate()
     {

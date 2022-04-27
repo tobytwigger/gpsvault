@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Listeners;
 
-use App\Integrations\Strava\Jobs\LoadStravaActivity;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
+use App\Integrations\Strava\Jobs\LoadStravaActivity;
 
 class IndexStravaActivity
 {

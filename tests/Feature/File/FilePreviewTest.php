@@ -12,7 +12,8 @@ class FilePreviewTest extends TestCase
 {
 
     /** @test */
-    public function it_previews_a_file(){
+    public function it_previews_a_file()
+    {
         $this->authenticated();
         $path = 'preview-file-' . Str::random(10) . '.txt';
         Storage::disk('tests')->put($path, 'Text Content');
@@ -32,7 +33,8 @@ class FilePreviewTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_preview_your_own_files(){
+    public function you_can_only_preview_your_own_files()
+    {
         $this->authenticated();
         $file = File::factory()->activityMedia()->create(['filename' => 'filename.jpeg']);
 
@@ -41,7 +43,8 @@ class FilePreviewTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_exist(){
+    public function it_returns_a_404_if_the_file_does_not_exist()
+    {
         $this->authenticated();
 
         $response = $this->get(route('file.preview', 1000))
@@ -49,11 +52,11 @@ class FilePreviewTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $file = File::factory()->activityMedia()->create(['filename' => 'filename.jpeg']);
 
         $response = $this->get(route('file.preview', $file))
             ->assertRedirect(route('login'));
     }
-
 }

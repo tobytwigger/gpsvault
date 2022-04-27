@@ -3,10 +3,8 @@
 namespace Unit\Integrations\Strava\Client\Client\Resources;
 
 use App\Integrations\Strava\Client\Authentication\Authenticator;
-use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Client\Resources\Webhook;
 use App\Integrations\Strava\Client\Client\StravaRequestHandler;
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -18,7 +16,8 @@ class WebhookTest extends TestCase
     use ConnectsToStrava;
 
     /** @test */
-    public function webhook_exists_returns_true_if_any_webhooks_returned(){
+    public function webhook_exists_returns_true_if_any_webhooks_returned()
+    {
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
 
@@ -30,7 +29,8 @@ class WebhookTest extends TestCase
         ]));
         $guzzleClient = $this->prophesize(Client::class);
         $guzzleClient->request(
-            'GET', 'push_subscriptions',
+            'GET',
+            'push_subscriptions',
             ['json' => [
                 'client_id' => $client->client_id,
                 'client_secret' => $client->client_secret,
@@ -50,7 +50,8 @@ class WebhookTest extends TestCase
     }
 
     /** @test */
-    public function webhook_exists_returns_false_if_no_webhooks_returned(){
+    public function webhook_exists_returns_false_if_no_webhooks_returned()
+    {
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
 
@@ -59,7 +60,8 @@ class WebhookTest extends TestCase
         $response = new Response(200, [], json_encode([]));
         $guzzleClient = $this->prophesize(Client::class);
         $guzzleClient->request(
-            'GET', 'push_subscriptions',
+            'GET',
+            'push_subscriptions',
             ['json' => [
                 'client_id' => $client->client_id,
                 'client_secret' => $client->client_secret,
@@ -77,5 +79,4 @@ class WebhookTest extends TestCase
 
         $this->assertFalse($resource->webhookExists($client));
     }
-
 }

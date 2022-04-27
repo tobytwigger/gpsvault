@@ -10,7 +10,8 @@ class BackupUpdateTest extends TestCase
 {
 
     /** @test */
-    public function an_backup_can_be_updated(){
+    public function an_backup_can_be_updated()
+    {
         $this->authenticated();
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id, 'title' => 'Old Name', 'caption' => 'Old Description']);
 
@@ -22,7 +23,8 @@ class BackupUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_index(){
+    public function it_redirects_to_index()
+    {
         $this->authenticated();
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id, 'title' => 'Old Name', 'caption' => 'Old Description']);
 
@@ -33,14 +35,18 @@ class BackupUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id]);
 
         $response = $this->put(route('backup.update', $backup), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -60,7 +66,8 @@ class BackupUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $backup = File::factory()->archive()->create(['title' => 'Old Name', 'caption' => 'Old Description']);
 
         $response = $this->put(route('backup.update', $backup), ['title' => 'New Name', 'caption' => 'New Description'])
@@ -68,7 +75,8 @@ class BackupUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_update_your_own_backup(){
+    public function you_can_only_update_your_own_backup()
+    {
         $this->authenticated();
         $backup = File::factory()->archive()->create(['title' => 'Old Name', 'caption' => 'Old Description']);
 

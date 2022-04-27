@@ -5,18 +5,16 @@ namespace App\Integrations\Dropbox\Tasks;
 use App\Integrations\Dropbox\Client\Dropbox;
 use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Models\Activity;
-use App\Services\Sync\Sync;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
+use App\Services\Sync\Sync;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Kunnu\Dropbox\DropboxFile;
 
 class ExportFullBackup extends Task
 {
-
     public function description(): string
     {
         return 'Export a full backup of all your data to Dropbox';
@@ -32,6 +30,7 @@ class ExportFullBackup extends Task
         if (!DropboxToken::where('user_id', $user->id)->exists()) {
             return 'Your account must be connected to Dropbox';
         }
+
         return null;
     }
 
@@ -40,10 +39,10 @@ class ExportFullBackup extends Task
         $this->line('Creating archive');
         $zipCreator = ZipCreator::start($this->user());
         $zipCreator->add($this->user());
-        foreach(Activity::where('user_id', $this->user()->id)->get() as $activity) {
+        foreach (Activity::where('user_id', $this->user()->id)->get() as $activity) {
             $zipCreator->add($activity);
         }
-        foreach(Sync::where('user_id', $this->user()->id)->get() as $sync) {
+        foreach (Sync::where('user_id', $this->user()->id)->get() as $sync) {
             $zipCreator->add($sync);
         }
         $file = $zipCreator->archive();

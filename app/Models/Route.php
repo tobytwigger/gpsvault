@@ -37,20 +37,21 @@ class Route extends Model
     public function getCoverImageAttribute()
     {
         $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
-        if($image) {
+        if ($image) {
             return route('file.preview', $image);
         }
+
         return null;
     }
 
     protected static function booted()
     {
-        static::creating(function(Route $route) {
-            if($route->user_id === null) {
+        static::creating(function (Route $route) {
+            if ($route->user_id === null) {
                 $route->user_id = Auth::id();
             }
         });
-        static::deleting(function(Route $route) {
+        static::deleting(function (Route $route) {
             $route->files()->delete();
         });
     }
@@ -70,5 +71,4 @@ class Route extends Model
         return $this->belongsToMany(Place::class)
             ->using(PlaceRoute::class);
     }
-
 }

@@ -6,8 +6,6 @@ use App\Integrations\Strava\Client\Client\Resource;
 
 class Activity extends Resource
 {
-
-
     public function getActivity(int $activityId)
     {
         $response = $this->request->request('GET', 'activities/' . $activityId, [
@@ -77,5 +75,4 @@ class Activity extends Resource
 
         return $this->request->decodeResponse($response);
     }
-
 }

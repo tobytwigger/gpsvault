@@ -12,7 +12,8 @@ class RevokePermissionCommandTest extends TestCase
 {
 
     /** @test */
-    public function it_removes_a_permission_from_a_user(){
+    public function it_removes_a_permission_from_a_user()
+    {
         $user = User::factory()->create();
         Permission::create(['name' => 'permission-name']);
         $user->givePermissionTo('permission-name');
@@ -26,7 +27,8 @@ class RevokePermissionCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_the_permission_does_not_exist(){
+    public function it_throws_an_exception_if_the_permission_does_not_exist()
+    {
         $this->expectException(PermissionDoesNotExist::class);
 
         $user = User::factory()->create();
@@ -37,7 +39,8 @@ class RevokePermissionCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_does_nothing_if_the_user_does_not_already_have_the_permission(){
+    public function it_does_nothing_if_the_user_does_not_already_have_the_permission()
+    {
         $user = User::factory()->create();
         Permission::create(['name' => 'permission-name']);
 

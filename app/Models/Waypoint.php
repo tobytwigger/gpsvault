@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
-use MStaack\LaravelPostgis\Geometries\Point;
 
 class Waypoint extends Model
 {
@@ -57,5 +55,4 @@ class Waypoint extends Model
     {
         return $this->points->getLat();
     }
-
 }

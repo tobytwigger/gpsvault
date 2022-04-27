@@ -2,12 +2,11 @@
 
 namespace App\Services\Archive\Parser\Parsers;
 
-use App\Services\Sync\Sync;
-use App\Models\File;
-use App\Services\Archive\ParseResult;
-use App\Services\Archive\Parser\FileResource;
 use App\Services\Archive\Contracts\Parser;
+use App\Services\Archive\Parser\FileResource;
+use App\Services\Archive\ParseResult;
 use App\Services\Archive\Traits\CreatesParseResult;
+use App\Services\Sync\Sync;
 
 class SyncParser implements Parser
 {
@@ -25,7 +24,7 @@ class SyncParser implements Parser
     public function parse($item): ParseResult
     {
         $this->addMetaData('sync', $item->toArray());
+
         return $this->result();
     }
-
 }

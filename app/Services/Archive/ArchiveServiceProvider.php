@@ -11,7 +11,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ArchiveServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->app->singleton(ResourceParser::class);
@@ -25,5 +24,4 @@ class ArchiveServiceProvider extends ServiceProvider
         ResourceParser::withParser(UserParser::class);
         ResourceParser::withParser(RouteParser::class);
     }
-
 }

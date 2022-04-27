@@ -11,7 +11,6 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     /**
      * Bootstrap any application services.
      *
-     * @return void
      */
     public function boot()
     {
@@ -21,7 +20,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
         // Horizon::routeMailNotificationsTo('example@example.com');
         // Horizon::routeSlackNotificationsTo('slack-webhook-url', '#channel');
 
-         Horizon::night();
+        Horizon::night();
     }
 
     /**
@@ -29,7 +28,6 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      *
      * This gate determines who can access Horizon in non-local environments.
      *
-     * @return void
      */
     protected function gate()
     {

@@ -10,8 +10,8 @@ class ApiImportTest extends TestCase
 {
 
     /** @test */
-    public function it_loads_an_activity_importer(){
+    public function it_loads_an_activity_importer()
+    {
         $this->assertInstanceOf(Activity::class, ApiImport::activity());
     }
-
 }

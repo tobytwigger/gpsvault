@@ -10,7 +10,8 @@ class ActivityDestroyTest extends TestCase
 {
 
     /** @test */
-    public function it_deletes_the_activity(){
+    public function it_deletes_the_activity()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $this->assertDatabaseHas('activities', ['id' => $activity->id]);
@@ -22,7 +23,8 @@ class ActivityDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_the_activity_is_not_owned_by_you(){
+    public function it_returns_a_403_if_the_activity_is_not_owned_by_you()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create();
 
@@ -31,7 +33,8 @@ class ActivityDestroyTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $activity = Activity::factory()->create();
 
         $this->delete(route('activity.destroy', $activity))
@@ -39,7 +42,8 @@ class ActivityDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_attached_files(){
+    public function it_deletes_attached_files()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $files = File::factory()->count(5)->activityMedia()->create();
@@ -53,5 +57,4 @@ class ActivityDestroyTest extends TestCase
 
         $this->assertDatabaseCount('files', 5);
     }
-
 }

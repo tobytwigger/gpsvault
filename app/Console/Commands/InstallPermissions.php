@@ -4,10 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Config\Repository;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class InstallPermissions extends Command
 {
@@ -28,7 +25,6 @@ class InstallPermissions extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -42,23 +38,23 @@ class InstallPermissions extends Command
      */
     public function handle(Repository $config)
     {
-        foreach($config->get('permission.seed', []) as $permission) {
+        foreach ($config->get('permission.seed', []) as $permission) {
             $this->createPermissionIfMissing($permission);
         }
-        foreach(Permission::whereNotIn('name', $config->get('permission.seed', []))->get() as $permission) {
+        foreach (Permission::whereNotIn('name', $config->get('permission.seed', []))->get() as $permission) {
             $permission->delete();
             $this->line('Removed permission ' . $permission->name);
         }
         $this->info('All permissions up to date');
+
         return 0;
     }
 
     protected function createPermissionIfMissing(string $name): void
     {
-        if(!Permission::where(['name' => $name])->exists()) {
+        if (!Permission::where(['name' => $name])->exists()) {
             Permission::create(['name' => $name]);
             $this->line('Created permission ' . $name);
         }
-
     }
 }

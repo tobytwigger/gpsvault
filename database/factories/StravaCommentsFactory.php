@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Models\Activity;
-use App\Models\ActivityStats;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StravaCommentsFactory extends Factory
@@ -25,7 +23,7 @@ class StravaCommentsFactory extends Factory
             'last_name' => $this->faker->lastName,
             'text' => $this->faker->paragraph,
             'posted_at' => $this->faker->dateTimeBetween('-1 year', '-1 hour'),
-            'activity_id' => fn() => Activity::factory()
+            'activity_id' => fn () => Activity::factory()
         ];
     }
 }

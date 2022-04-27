@@ -8,15 +8,14 @@ use App\Models\Stats;
 use App\Models\Tour;
 use App\Models\User;
 use App\Services\Analysis\Parser\Point;
-use App\Services\File\Upload;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class PointsTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_an_array_of_points_for_each_stage(){
+    public function it_returns_an_array_of_points_for_each_stage()
+    {
         $this->authenticated();
         $route = $this->createNewRoute([[1,50],[2,51],[3,52],[4,53]]);
         $route2 = $this->createNewRoute([[5,54],[6,55],[7,56],[8,57]]);
@@ -47,15 +46,17 @@ class PointsTest extends TestCase
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $stats = Stats::factory()->route($route)->create();
 
-        $points = array_map(fn(array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
-        $stats->waypoints()->createMany(collect($points)->map(fn(Point $point) => [
+        $points = array_map(fn (array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
+        $stats->waypoints()->createMany(collect($points)->map(fn (Point $point) => [
             'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
         ]));
+
         return $route;
     }
 
     /** @test */
-    public function it_ignores_any_stage_without_a_route(){
+    public function it_ignores_any_stage_without_a_route()
+    {
         $this->authenticated();
         $route = $this->createNewRoute([[1,50],[2,51],[3,52],[4,53]]);
         $route2 = $this->createNewRoute([[5,54],[6,55],[7,56],[8,57]]);
@@ -86,7 +87,8 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_an_empty_array_if_no_stages_have_a_route(){
+    public function it_returns_an_empty_array_if_no_stages_have_a_route()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         Stage::factory()->create(['route_id' => null, 'tour_id' => $tour->id]);
@@ -99,7 +101,8 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_access_your_tours(){
+    public function you_can_only_access_your_tours()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => User::factory()->create()->id]);
 
@@ -108,11 +111,11 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $tour = Tour::factory()->create();
 
         $response = $this->getJson(route('tour.points', $tour));
         $response->assertStatus(401);
     }
-
 }

@@ -3,16 +3,12 @@
 namespace Database\Factories;
 
 use App\Models\Activity;
-use App\Models\ActivityStats;
-use App\Models\File;
 use App\Models\Route;
 use App\Models\Stats;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class StatsFactory extends Factory
 {
-
     protected $model = Stats::class;
 
     /**
@@ -53,7 +49,8 @@ class StatsFactory extends Factory
     public function activity(Activity $activity = null)
     {
         $activity = $activity ?? Activity::factory()->create();
-        return $this->state(fn(array $attributes) => [
+
+        return $this->state(fn (array $attributes) => [
             'stats_id' => $activity->id,
             'stats_type' => Activity::class
         ]);
@@ -63,7 +60,7 @@ class StatsFactory extends Factory
     {
         $route = $route ?? Route::factory()->create();
 
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'stats_id' => $route->id,
             'stats_type' => Route::class
         ]);

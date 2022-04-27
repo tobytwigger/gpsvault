@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 
 trait HasAdditionalData
 {
-
     public function initializeHasAdditionalData()
     {
         $this->append('additional_data');
@@ -16,7 +15,7 @@ trait HasAdditionalData
 
     public static function bootHasAdditionalData()
     {
-        static::deleting(function($model) {
+        static::deleting(function ($model) {
             $model->additionalData()->delete();
         });
     }
@@ -48,21 +47,22 @@ trait HasAdditionalData
 
     public function getAdditionalData(string $key = null, mixed $default = null)
     {
-        if($key === null) {
+        if ($key === null) {
             return $this->getAllAdditionalData();
         }
-        if($this->hasAdditionalData($key)) {
+        if ($this->hasAdditionalData($key)) {
             $result = $this->additionalData()
                 ->where('key', $key)
                 ->get()
                 ->map
                 ->value;
-            if($result->count() > 1) {
+            if ($result->count() > 1) {
                 return $result;
-            } elseif($result->count() === 1) {
+            } elseif ($result->count() === 1) {
                 return $result->first();
             }
         }
+
         return $default;
     }
 
@@ -76,13 +76,14 @@ trait HasAdditionalData
         return $this->additionalData()
             ->get()
             ->groupBy('key')
-            ->mapWithKeys(function(Collection $additionalData, string $key) {
+            ->mapWithKeys(function (Collection $additionalData, string $key) {
                 $value = null;
-                if($additionalData->count() === 1) {
+                if ($additionalData->count() === 1) {
                     $value = $additionalData->first()->value;
-                } elseif($additionalData->count() > 1) {
+                } elseif ($additionalData->count() > 1) {
                     $value = $additionalData->map->value;
                 }
+
                 return [$key => $value];
             });
     }
@@ -96,8 +97,8 @@ trait HasAdditionalData
         return $this->additionalData()
             ->get()
             ->groupBy('key')
-            ->filter(fn(Collection $datas) => $datas->count() === 1)
-            ->mapWithKeys(fn(Collection $additionalData, string $key) => [$key => $additionalData->first()->value]);
+            ->filter(fn (Collection $datas) => $datas->count() === 1)
+            ->mapWithKeys(fn (Collection $additionalData, string $key) => [$key => $additionalData->first()->value]);
     }
 
     /**
@@ -109,21 +110,20 @@ trait HasAdditionalData
         return $this->additionalData()
             ->get()
             ->groupBy('key')
-            ->filter(fn(Collection $datas) => $datas->count() > 1)
-            ->mapWithKeys(fn(Collection $additionalData, string $key) => [$key => $additionalData->map->value]);
+            ->filter(fn (Collection $datas) => $datas->count() > 1)
+            ->mapWithKeys(fn (Collection $additionalData, string $key) => [$key => $additionalData->map->value]);
     }
 
     public function scopeWhereHasAdditionalData(Builder $query, string $key)
     {
-        $query->whereHas('additionalData', fn(Builder $subquery) => $subquery->where('key', $key));
+        $query->whereHas('additionalData', fn (Builder $subquery) => $subquery->where('key', $key));
     }
 
     public function scopeWhereAdditionalData(Builder $query, string $key, $value)
     {
         $query->whereHas(
             'additionalData',
-            fn(Builder $subQuery) => $subQuery->where('key', $key)->where('value', serialize($value))
+            fn (Builder $subQuery) => $subQuery->where('key', $key)->where('value', serialize($value))
         );
     }
-
 }

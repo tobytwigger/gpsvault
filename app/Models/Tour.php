@@ -29,8 +29,8 @@ class Tour extends Model
 
     protected static function booted()
     {
-        static::creating(function(Tour $tour) {
-            if($tour->user_id === null) {
+        static::creating(function (Tour $tour) {
+            if ($tour->user_id === null) {
                 $tour->user_id = Auth::id();
             }
         });
@@ -44,11 +44,12 @@ class Tour extends Model
     private function getStatAdder(): StatAdder
     {
         $adder = new StatAdder();
-        foreach($this->stages as $stage) {
-            if($stage->route_id && $stat = $stage->route->stats()->orderByPreference()->first()) {
+        foreach ($this->stages as $stage) {
+            if ($stage->route_id && $stat = $stage->route->stats()->orderByPreference()->first()) {
                 $adder->push($stat);
             }
         }
+
         return $adder;
     }
 
@@ -71,9 +72,10 @@ class Tour extends Model
     {
         $latitude = $this->getStatAdder()->startLatitude();
         $longitude = $this->getStatAdder()->startLongitude();
-        if($latitude === null || $longitude === null) {
+        if ($latitude === null || $longitude === null) {
             return null;
         }
+
         return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
     }
 
@@ -82,10 +84,10 @@ class Tour extends Model
         $latitude = $this->getStatAdder()->endLatitude();
         $longitude = $this->getStatAdder()->endLongitude();
 
-        if($latitude === null || $longitude === null) {
+        if ($latitude === null || $longitude === null) {
             return null;
         }
+
         return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
     }
-
 }

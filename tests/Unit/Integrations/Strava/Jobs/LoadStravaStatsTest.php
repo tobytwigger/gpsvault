@@ -7,7 +7,8 @@ use Tests\TestCase;
 class LoadStravaStatsTest extends TestCase
 {
     /** @test */
-    public function incomplete(){
+    public function incomplete()
+    {
         $this->markTestIncomplete();
     }
 }

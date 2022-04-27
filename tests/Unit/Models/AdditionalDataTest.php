@@ -12,8 +12,10 @@ class AdditionalDataTest extends TestCase
     /**
      * @test
      * @dataProvider storableData
+     * @param mixed $data
      */
-    public function it_can_store_a_variety_of_data($data){
+    public function it_can_store_a_variety_of_data($data)
+    {
         /** @var Activity $activity */
         $activity = Activity::factory()->create();
         $activity->setAdditionalData('data', $data);
@@ -33,5 +35,4 @@ class AdditionalDataTest extends TestCase
             [false]
         ];
     }
-
 }

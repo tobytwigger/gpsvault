@@ -3,7 +3,6 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
-use App\Services\Analysis\Parser\Point;
 
 class TimesAndDurations extends AnalyserContract
 {
@@ -17,21 +16,22 @@ class TimesAndDurations extends AnalyserContract
         $startTime = collect($analysis->getPoints())->first()->getTime();
         $endTime = collect($analysis->getPoints())->last()->getTime();
 
-        if($startTime) {
+        if ($startTime) {
             if ($analysis->getStartedAt() === null) {
                 $analysis->setStartedAt($startTime);
             }
         }
-        if($endTime) {
+        if ($endTime) {
             if ($analysis->getFinishedAt() === null) {
                 $analysis->setFinishedAt($endTime);
             }
         }
-        if($startTime && $endTime) {
+        if ($startTime && $endTime) {
             if ($analysis->getDuration() === null) {
                 $analysis->setDuration($endTime->diffInSeconds($startTime));
             }
         }
+
         return $analysis;
     }
 

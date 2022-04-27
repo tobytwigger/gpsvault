@@ -8,18 +8,18 @@ use App\Models\Activity;
 
 class HandleUpdatedActivity extends HandleStravaWebhookJob
 {
-
     public function getActivityData(Activity $activity)
     {
         $strava = app(Strava::class);
         $strava->setUserId($activity->user_id);
+
         return $strava->client($activity->user->availableClient())->getActivity($activity->getAdditionalData($this->payload->getObjectId()));
     }
 
     public function handle()
     {
         $activity = Activity::whereAdditionalData('strava_id', $this->payload->getObjectId())->first();
-        if($activity) {
+        if ($activity) {
             ImportStravaActivity::importFromApi($this->getActivityData($activity), $activity->user);
         }
     }

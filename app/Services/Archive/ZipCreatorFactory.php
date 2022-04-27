@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ZipCreatorFactory
 {
-
     private array $items = [];
 
     private ResourceParser $parser;
@@ -23,9 +22,10 @@ class ZipCreatorFactory
 
     public function start(?User $user = null): ZipCreatorFactory
     {
-        if($user !== null) {
+        if ($user !== null) {
             $this->forUser($user);
         }
+
         return $this;
     }
 
@@ -37,6 +37,7 @@ class ZipCreatorFactory
     public function add($data): ZipCreatorFactory
     {
         $this->items[] = $data;
+
         return $this;
     }
 
@@ -45,7 +46,7 @@ class ZipCreatorFactory
         return $this->create()->archive();
     }
 
-    public function create(): \App\Services\Archive\Contracts\ZipCreator
+    public function create(): Contracts\ZipCreator
     {
         return app(\App\Services\Archive\Contracts\ZipCreator::class, ['results' => $this->parse(), 'user' => $this->user ?? Auth::user()]);
     }
@@ -53,10 +54,10 @@ class ZipCreatorFactory
     private function parse(): ParseResults
     {
         $results = new ParseResults();
-        foreach($this->items as $item) {
+        foreach ($this->items as $item) {
             $results->mergeResults($this->parser->parse($item));
         }
+
         return $results;
     }
-
 }

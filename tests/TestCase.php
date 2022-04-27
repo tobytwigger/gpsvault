@@ -6,8 +6,6 @@ use App\Console\Commands\InstallPermissions;
 use App\Models\User;
 use App\Services\Geocoding\Geocoder;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
@@ -20,7 +18,7 @@ abstract class TestCase extends BaseTestCase
 
     protected ?User $user = null;
 
-    static bool $initialised = false;
+    public static bool $initialised = false;
 
     protected function setUp(): void
     {

@@ -14,13 +14,15 @@ class LogIntoStravaTest extends TestCase
 {
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->get(route('strava.client.login', ['client' => 500, 'code' => 'secret-code']));
         $response->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_client_is_not_found(){
+    public function it_returns_a_404_if_the_client_is_not_found()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -31,7 +33,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission(){
+    public function it_returns_403_if_you_do_not_have_permission()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
@@ -41,7 +44,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_access_to_the_client(){
+    public function it_returns_403_if_you_do_not_have_access_to_the_client()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -52,7 +56,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_are_logged_into_the_client_already(){
+    public function it_returns_403_if_you_are_logged_into_the_client_already()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -67,7 +72,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_a_token_and_redirects_to_index(){
+    public function it_creates_a_token_and_redirects_to_index()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $this->user->setAdditionalData('strava_athlete_id', 12345);
@@ -84,7 +90,7 @@ class LogIntoStravaTest extends TestCase
         );
 
         $authenticator = $this->prophesize(Authenticator::class);
-        $authenticator->exchangeCode('secret-code', Argument::that(fn($arg) => $arg instanceof StravaClient && $arg->is($client)))
+        $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
@@ -102,7 +108,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_works_for_shared_clients(){
+    public function it_works_for_shared_clients()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $this->user->setAdditionalData('strava_athlete_id', 12345);
@@ -120,7 +127,7 @@ class LogIntoStravaTest extends TestCase
         );
 
         $authenticator = $this->prophesize(Authenticator::class);
-        $authenticator->exchangeCode('secret-code', Argument::that(fn($arg) => $arg instanceof StravaClient && $arg->is($client)))
+        $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
@@ -135,11 +142,11 @@ class LogIntoStravaTest extends TestCase
         $this->assertEquals('refresh-token', $token->refresh_token);
         $this->assertEquals('access-token', $token->access_token);
         $this->assertEquals($expiresAt->unix(), $token->expires_at->unix());
-
     }
 
     /** @test */
-    public function it_works_for_public_clients(){
+    public function it_works_for_public_clients()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $this->user->setAdditionalData('strava_athlete_id', 12345);
@@ -156,7 +163,7 @@ class LogIntoStravaTest extends TestCase
         );
 
         $authenticator = $this->prophesize(Authenticator::class);
-        $authenticator->exchangeCode('secret-code', Argument::that(fn($arg) => $arg instanceof StravaClient && $arg->is($client)))
+        $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
@@ -174,7 +181,8 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_if_code_is_not_given(){
+    public function it_validates_if_code_is_not_given()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -182,5 +190,4 @@ class LogIntoStravaTest extends TestCase
         $response = $this->get(route('strava.client.login', ['client' => $client->id]));
         $response->assertSessionHasErrors(['code' => 'The code field is required.']);
     }
-
 }

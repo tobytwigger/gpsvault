@@ -3,11 +3,9 @@
 namespace App\Services\ActivityImport;
 
 use App\Models\File;
-use Carbon\Carbon;
 
 class ActivityDetails
 {
-
     protected ?File $file = null;
 
     protected string $name;
@@ -37,12 +35,14 @@ class ActivityDetails
     public function setLinkedTo(array $linkedTo): ActivityDetails
     {
         $this->linkedTo = $linkedTo;
+
         return $this;
     }
 
     public function addLinkedTo(string $integration): ActivityDetails
     {
         $this->linkedTo[] = $integration;
+
         return $this;
     }
 
@@ -61,6 +61,7 @@ class ActivityDetails
     public function setActivityFile(?File $file): ActivityDetails
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -79,6 +80,7 @@ class ActivityDetails
     public function setName(string $name): ActivityDetails
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -97,6 +99,7 @@ class ActivityDetails
     public function setDescription(?string $description): ActivityDetails
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -115,6 +118,7 @@ class ActivityDetails
     public function setMedia(array $media): ActivityDetails
     {
         $this->media = $media;
+
         return $this;
     }
 
@@ -149,15 +153,16 @@ class ActivityDetails
     public function setAdditionalData(array $additionalData): ActivityDetails
     {
         $this->additionalData = $additionalData;
+
         return $this;
     }
 
     public function unsetAdditionalData(string $key)
     {
-        if(isset($this->additionalData[$key])) {
+        if (isset($this->additionalData[$key])) {
             unset($this->additionalData[$key]);
         }
-        if(isset($this->additionalArrayData[$key])) {
+        if (isset($this->additionalArrayData[$key])) {
             unset($this->additionalArrayData[$key]);
         }
     }
@@ -169,6 +174,7 @@ class ActivityDetails
     public function setAdditionalArrayData(array $additionalArrayData): ActivityDetails
     {
         $this->additionalArrayData = $additionalArrayData;
+
         return $this;
     }
 
@@ -179,10 +185,9 @@ class ActivityDetails
 
     public function pushToAdditionalDataArrayKey(string $key, mixed $value): void
     {
-        if(!isset($this->additionalArrayData[$key])) {
+        if (!isset($this->additionalArrayData[$key])) {
             $this->additionalArrayData[$key] = [];
         }
         $this->additionalArrayData[$key][] = $value;
     }
-
 }

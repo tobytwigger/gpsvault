@@ -4,10 +4,9 @@ namespace App\Services\Archive\Parser\Parsers;
 
 use App\Models\Activity;
 use App\Models\File;
-use App\Services\Archive\ParseResult;
-use App\Services\Archive\ParseResults;
-use App\Services\Archive\Parser\FileResource;
 use App\Services\Archive\Contracts\Parser;
+use App\Services\Archive\Parser\FileResource;
+use App\Services\Archive\ParseResult;
 use App\Services\Archive\Traits\CreatesParseResult;
 
 class ActivityParser implements Parser
@@ -27,12 +26,13 @@ class ActivityParser implements Parser
     {
         $this->addMetaData('activity', $item->toArray());
         $file = $item->file()->first();
-        if($file) {
+        if ($file) {
             $this->addFile($this->parseActivityFile($item->id, $file));
         }
-        foreach($item->files()->get() as $file) {
+        foreach ($item->files()->get() as $file) {
             $this->addFile($this->parseActivityMediaFile($item->id, $file));
         }
+
         return $this->result();
     }
 

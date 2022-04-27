@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Route;
 
-use App\Models\Route;
 use App\Models\File;
+use App\Models\Route;
 use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
@@ -11,7 +11,8 @@ class RouteFileDestroyTest extends TestCase
 {
 
     /** @test */
-    public function it_deletes_the_route_file(){
+    public function it_deletes_the_route_file()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
@@ -24,7 +25,8 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_file(){
+    public function it_returns_a_403_if_you_do_not_own_the_file()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create();
@@ -35,7 +37,8 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_route(){
+    public function it_returns_a_403_if_you_do_not_own_the_route()
+    {
         $this->authenticated();
         $route = Route::factory()->create();
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
@@ -46,7 +49,8 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_exist(){
+    public function it_returns_a_404_if_the_file_does_not_exist()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
 
@@ -55,7 +59,8 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_route_does_not_exist(){
+    public function it_returns_a_404_if_the_route_does_not_exist()
+    {
         $this->authenticated();
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
 
@@ -64,19 +69,21 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file(){
+    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
         $route->file_id = $file->id;
-        Model::withoutEvents(fn() => $route->save());
+        Model::withoutEvents(fn () => $route->save());
 
         $response = $this->delete(route('route.file.destroy', [$route, $file]), []);
         $response->assertStatus(404);
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $route = Route::factory()->create();
         $file = File::factory()->routeMedia()->create();
         $route->files()->sync($file);
@@ -84,5 +91,4 @@ class RouteFileDestroyTest extends TestCase
         $this->delete(route('route.file.destroy', [$route, $file]))
             ->assertRedirect(route('login'));
     }
-
 }

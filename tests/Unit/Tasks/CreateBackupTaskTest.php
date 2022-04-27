@@ -20,7 +20,8 @@ class CreateBackupTaskTest extends TestCase
     use TestsTasks;
 
     /** @test */
-    public function it_creates_an_export_and_creates_a_file(){
+    public function it_creates_an_export_and_creates_a_file()
+    {
         $now = Carbon::create(2022, 02, 04, 11, 30, 44);
         Carbon::setTestNow($now);
 
@@ -30,24 +31,24 @@ class CreateBackupTaskTest extends TestCase
         $tours = Tour::factory()->count(5)->create(['user_id' => $user->id]);
         $exporter = $this->prophesize(ZipCreatorFactory::class);
         $exporter->start(
-            Argument::that(fn($arg) => $arg instanceof User && $arg->is($user))
+            Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user))
         )->shouldBeCalled()->willReturn($exporter->reveal());
         $exporter->add(
-            Argument::that(fn($arg) => $arg instanceof User && $arg->is($user))
+            Argument::that(fn ($arg) => $arg instanceof User && $arg->is($user))
         )->shouldBeCalled()->willReturn($exporter->reveal());
-        foreach($activities as $activity) {
+        foreach ($activities as $activity) {
             $exporter->add(
-                Argument::that(fn($arg) => $arg instanceof Activity && $arg->is($activity))
+                Argument::that(fn ($arg) => $arg instanceof Activity && $arg->is($activity))
             )->shouldBeCalled()->willReturn($exporter->reveal());
         }
-        foreach($tours as $tour) {
+        foreach ($tours as $tour) {
             $exporter->add(
-                Argument::that(fn($arg) => $arg instanceof Tour && $arg->is($tour))
+                Argument::that(fn ($arg) => $arg instanceof Tour && $arg->is($tour))
             )->shouldBeCalled()->willReturn($exporter->reveal());
         }
-        foreach($routes as $route) {
+        foreach ($routes as $route) {
             $exporter->add(
-                Argument::that(fn($arg) => $arg instanceof Route && $arg->is($route))
+                Argument::that(fn ($arg) => $arg instanceof Route && $arg->is($route))
             )->shouldBeCalled()->willReturn($exporter->reveal());
         }
         $file = File::factory()->archive()->create(['title' => null, 'caption' => null]);
@@ -71,5 +72,4 @@ class CreateBackupTaskTest extends TestCase
             'Generated full backup of your data.'
         ]);
     }
-
 }

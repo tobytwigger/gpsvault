@@ -15,7 +15,7 @@ class ResourceParser
 
     public static function withParser(string $parser)
     {
-        if(!is_a($parser, Parser::class, true)) {
+        if (!is_a($parser, Parser::class, true)) {
             throw new \Exception(sprintf('Parser [%s] must extend the Parser contract', $parser));
         }
         static::$parsers[] = app($parser);
@@ -23,12 +23,12 @@ class ResourceParser
 
     public function parse($item): ParseResult
     {
-        foreach(static::$parsers as $parser) {
-            if($parser->canHandle($item)) {
+        foreach (static::$parsers as $parser) {
+            if ($parser->canHandle($item)) {
                 return $parser->parse($item);
             }
         }
+
         throw new \Exception('Cannot export item of type [%s].', typeOf($item));
     }
-
 }

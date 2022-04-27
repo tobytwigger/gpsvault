@@ -3,14 +3,12 @@
 namespace App\Integrations\Dropbox;
 
 use App\Integrations\Dropbox\Client\Dropbox;
-use App\Integrations\Integration;
 use App\Integrations\Dropbox\Models\DropboxToken;
+use App\Integrations\Integration;
 use App\Models\User;
-use Kunnu\Dropbox\Authentication\DropboxAuthHelper;
 
 class DropboxIntegration extends Integration
 {
-
     public function id(): string
     {
         return 'dropbox';

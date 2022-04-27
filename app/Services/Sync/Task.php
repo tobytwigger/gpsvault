@@ -4,24 +4,20 @@ namespace App\Services\Sync;
 
 use App\Exceptions\TaskCancelled;
 use App\Exceptions\TaskSucceeded;
-use App\Services\Sync\Sync;
-use App\Services\Sync\SyncTask;
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 
 abstract class Task implements Jsonable, Arrayable
 {
-
     protected SyncTask $task;
 
     private User $user;
 
     public static function registerTask(string $class)
     {
-        if(!is_a($class, Task::class, true)) {
+        if (!is_a($class, Task::class, true)) {
             throw new \Exception(sprintf('Task class [%s] must extend the base task class', $class));
         }
         $alias = 'tasks.' . $class::id();
@@ -65,7 +61,7 @@ abstract class Task implements Jsonable, Arrayable
 
     public function offerBail(string $message = null)
     {
-        if($this->task->status === 'cancelled') {
+        if ($this->task->status === 'cancelled') {
             throw new TaskCancelled($message);
         }
     }
@@ -96,5 +92,4 @@ abstract class Task implements Jsonable, Arrayable
     {
         return json_encode($this->toArray(), $options);
     }
-
 }

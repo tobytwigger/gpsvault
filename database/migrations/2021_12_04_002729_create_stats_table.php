@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 
 class CreateStatsTable extends Migration
@@ -10,7 +9,6 @@ class CreateStatsTable extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      */
     public function up()
     {
@@ -46,13 +44,11 @@ class CreateStatsTable extends Migration
 
             $table->unique(['integration', 'stats_id', 'stats_type']);
         });
-
     }
 
     /**
      * Reverse the migrations.
      *
-     * @return void
      */
     public function down()
     {

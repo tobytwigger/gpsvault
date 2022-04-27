@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SyncFactory extends Factory
 {
-
     protected $model = Sync::class;
 
     /**
@@ -19,6 +18,7 @@ class SyncFactory extends Factory
     public function definition()
     {
         $startedAt = $this->faker->dateTimeBetween('-1 year', '-1 hour');
+
         return [
             'user_id' => User::factory(),
             'started_at' => $startedAt,

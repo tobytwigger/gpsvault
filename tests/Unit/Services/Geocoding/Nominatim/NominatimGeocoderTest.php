@@ -4,7 +4,6 @@ namespace Tests\Unit\Services\Geocoding\Nominatim;
 
 use App\Services\Geocoding\Nominatim\NominatimGeocoder;
 use maxh\Nominatim\Nominatim;
-use maxh\Nominatim\QueryInterface;
 use maxh\Nominatim\Reverse;
 use Prophecy\Argument;
 use Tests\TestCase;
@@ -15,8 +14,11 @@ class NominatimGeocoderTest extends TestCase
     /**
      * @test
      * @dataProvider nominatimParsingDataProvider
+     * @param mixed $address
+     * @param mixed $expected
      */
-    public function it_parses_information_correctly($address, $expected){
+    public function it_parses_information_correctly($address, $expected)
+    {
         $reverse = $this->prophesize(Reverse::class);
         $reverse->latlon(55, 33)->willReturn($reverse->reveal());
 
@@ -59,7 +61,6 @@ class NominatimGeocoderTest extends TestCase
             ], 'Milton Keynes, South East England'],
         ];
     }
-
 }
 
 //[

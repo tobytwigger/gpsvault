@@ -3,7 +3,6 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
-use App\Services\Analysis\Parser\Point;
 
 class Pace extends AnalyserContract
 {

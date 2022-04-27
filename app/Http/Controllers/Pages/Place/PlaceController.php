@@ -10,7 +10,6 @@ use Inertia\Inertia;
 
 class PlaceController extends Controller
 {
-
     public function index()
     {
         return Inertia::render('Place/Index', [
@@ -43,7 +42,7 @@ class PlaceController extends Controller
         ]);
 
 
-        if(array_key_exists('location', $validated)) {
+        if (array_key_exists('location', $validated)) {
             $validated['location'] = new \MStaack\LaravelPostgis\Geometries\Point($validated['location']['lat'], $validated['location']['lng']);
         }
 
@@ -75,5 +74,4 @@ class PlaceController extends Controller
 
         return redirect()->route('place.show', $place);
     }
-
 }

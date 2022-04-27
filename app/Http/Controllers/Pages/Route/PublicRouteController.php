@@ -8,7 +8,6 @@ use Inertia\Inertia;
 
 class PublicRouteController extends Controller
 {
-
     public function show(Route $route)
     {
         abort_if($route->public !== true, 403, 'This route is not public');
@@ -17,5 +16,4 @@ class PublicRouteController extends Controller
             'routeModel' => $route->load('stats')
         ]);
     }
-
 }

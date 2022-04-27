@@ -7,17 +7,13 @@ use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use PhpUnitConversion\Unit\Length\KiloMeter;
 use PhpUnitConversion\Unit\Length\Meter;
-use PhpUnitConversion\Unit\Temperature\Celsius;
-use PhpUnitConversion\Unit\Temperature\Fahrenheit;
 use PhpUnitConversion\Unit\Velocity\KiloMeterPerHour;
 use PhpUnitConversion\Unit\Velocity\MeterPerSecond;
 
 class FitParser implements ParserContract
 {
-
     public function read(File $file): Analysis
     {
         $fit = new phpFITFileAnalysis(
@@ -26,9 +22,10 @@ class FitParser implements ParserContract
                 'input_is_data' => true,
                 'fix_data' => ['all'],
                 'units' => 'metric'
-            ]);
+            ]
+        );
         $points = collect();
-        $getTimeData = fn(string $property) => array_key_exists($property, $fit->data_mesgs['record']) && is_array($fit->data_mesgs['record'][$property]) ? $fit->data_mesgs['record'][$property] : [];
+        $getTimeData = fn (string $property) => array_key_exists($property, $fit->data_mesgs['record']) && is_array($fit->data_mesgs['record'][$property]) ? $fit->data_mesgs['record'][$property] : [];
 
         $timestamps = collect([])
             ->merge($getTimeData('timestamp'))
@@ -48,14 +45,16 @@ class FitParser implements ParserContract
         $record = $fit->data_mesgs['record'] ?? [];
         foreach ($timestamps as $timestamp) {
             $get = function ($key, array $units = []) use ($timestamp, $record) {
-                if(array_key_exists($key, $record) && is_array($record[$key]) && array_key_exists($timestamp, $record[$key])) {
+                if (array_key_exists($key, $record) && is_array($record[$key]) && array_key_exists($timestamp, $record[$key])) {
                     $data = $record[$key][$timestamp];
                     unset($record[$key][$timestamp]);
-                    if(count($units) === 2) {
+                    if (count($units) === 2) {
                         return (new $units[0]($data))->to($units[1])->getValue();
                     }
+
                     return $data;
                 }
+
                 return null;
             };
 
@@ -75,11 +74,12 @@ class FitParser implements ParserContract
             );
         }
 
-        $getSessionData = function($key, array $units = []) use ($fit) {
+        $getSessionData = function ($key, array $units = []) use ($fit) {
             $data = data_get($fit->data_mesgs['session'], $key, null);
-            if($data !== null && count($units) === 2) {
+            if ($data !== null && count($units) === 2) {
                 return (new $units[0]($data))->to($units[1])->getValue();
             }
+
             return $data;
         };
         $analysis = new Analysis();
@@ -95,6 +95,7 @@ class FitParser implements ParserContract
         $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
         $analysis->setCalories($getSessionData('total_calories'));
         $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
+
         return $analysis;
     }
 }

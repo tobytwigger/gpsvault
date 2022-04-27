@@ -36,7 +36,7 @@ class SyncRequest extends FormRequest
                 if (!app()->has('tasks.' . $value)) {
                     $fail(sprintf('The task %s is not a valid task.', $value));
                 }
-                if(app()->make('tasks.' . $value)->disabled($this->user())) {
+                if (app()->make('tasks.' . $value)->disabled($this->user())) {
                     $fail(sprintf('The task %s is disabled and so cannot be used.', $value));
                 }
             }],
@@ -46,7 +46,7 @@ class SyncRequest extends FormRequest
 
     public function withValidator(Validator $validator)
     {
-        foreach(app()->tagged('tasks') as $task) {
+        foreach (app()->tagged('tasks') as $task) {
             foreach ($task->validationRules() as $key => $rules) {
                 $validator->sometimes(
                     'tasks.*.config',
@@ -54,18 +54,17 @@ class SyncRequest extends FormRequest
                         $data = array_key_exists($key, $value) ? [$key => $value[$key]] : [];
                         $v = \Illuminate\Support\Facades\Validator::make($data, [$key => $rules]);
                         if ($v->fails()) {
-                            foreach($v->errors()->toArray() as $errorKey => $errorMessages) {
-                                foreach($errorMessages as $errorMessage) {
+                            foreach ($v->errors()->toArray() as $errorKey => $errorMessages) {
+                                foreach ($errorMessages as $errorMessage) {
                                     $validator->errors()->add($attribute . '.' . $errorKey, $errorMessage);
                                 }
                             }
                             $fail('The task configuration is invalid');
                         }
                     }],
-                    fn($input, $item) => $item->id === $task::id()
+                    fn ($input, $item) => $item->id === $task::id()
                 );
             }
         }
     }
-
 }

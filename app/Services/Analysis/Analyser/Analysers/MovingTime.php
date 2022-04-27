@@ -3,11 +3,9 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
-use App\Services\Analysis\Parser\Point;
 
 class MovingTime extends AnalyserContract
 {
-
     public function canRun(Analysis $analysis): bool
     {
         return false;

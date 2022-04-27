@@ -31,12 +31,13 @@ class ResetRateLimit extends Command
      */
     public function handle()
     {
-        if($this->option('rate')) {
+        if ($this->option('rate')) {
             StravaClient::query()->update(['used_15_min_calls' => 0]);
-        } if($this->option('daily')) {
+        }
+        if ($this->option('daily')) {
             StravaClient::query()->update(['used_daily_calls' => 0]);
         }
+
         return Command::SUCCESS;
     }
-
 }

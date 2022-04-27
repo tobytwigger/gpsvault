@@ -8,8 +8,8 @@ class LoadStravaActivityTest extends TestCase
 {
 
     /** @test */
-    public function incomplete(){
+    public function incomplete()
+    {
         $this->markTestIncomplete();
     }
-
 }

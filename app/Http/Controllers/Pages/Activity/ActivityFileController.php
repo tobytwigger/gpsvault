@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityFileController extends Controller
 {
-
     public function destroy(Activity $activity, File $file)
     {
         $this->authorize('view', $activity);
@@ -40,11 +39,12 @@ class ActivityFileController extends Controller
 
         $importer = ActivityImporter::update($activity);
         $files = collect($request->file('files', []))
-            ->map(function(UploadedFile $uploadedFile) use ($request) {
+            ->map(function (UploadedFile $uploadedFile) use ($request) {
                 $file = Upload::uploadedFile($uploadedFile, Auth::user(), FileUploader::ACTIVITY_MEDIA);
                 $file->title = $request->input('title');
                 $file->caption = $request->input('caption');
                 $file->save();
+
                 return $file;
             });
         $importer->addMedia($files->all());

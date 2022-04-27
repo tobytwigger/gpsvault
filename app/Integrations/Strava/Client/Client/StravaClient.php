@@ -8,7 +8,6 @@ use App\Models\User;
 
 class StravaClient
 {
-
     protected User $user;
 
     private StravaRequestHandler $requestHandler;
@@ -46,6 +45,4 @@ class StravaClient
     {
         return $this->requestHandler;
     }
-
-
 }

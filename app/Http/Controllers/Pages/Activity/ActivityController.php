@@ -14,7 +14,6 @@ use Inertia\Inertia;
 
 class ActivityController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(Activity::class);
@@ -78,13 +77,14 @@ class ActivityController extends Controller
     public function update(UpdateActivityRequest $request, Activity $activity, FileUploader $fileUploader)
     {
         $importer = ActivityImporter::update($activity);
-        if($request->has('name')) {
+        if ($request->has('name')) {
             $importer->withName($request->input('name'));
         }
-        if($request->has('description')) {
+        if ($request->has('description')) {
             $importer->withDescription($request->input('description'));
         }
         $activity = $importer->save();
+
         return redirect()->route('activity.show', $activity);
     }
 
@@ -100,5 +100,4 @@ class ActivityController extends Controller
 
         return redirect()->route('activity.index');
     }
-
 }

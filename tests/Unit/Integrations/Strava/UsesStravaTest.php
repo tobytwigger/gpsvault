@@ -12,7 +12,8 @@ class UsesStravaTest extends TestCase
 {
 
     /** @test */
-    public function strava_tokens_are_deleted_on_user_delete(){
+    public function strava_tokens_are_deleted_on_user_delete()
+    {
         $user = User::factory()->create();
         $tokens = StravaToken::factory()->count(5)->create(['user_id' => $user->id]);
         $this->assertDatabaseCount('strava_tokens', 5);
@@ -21,7 +22,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_strava_tokens(){
+    public function it_has_a_relationship_with_strava_tokens()
+    {
         $user = User::factory()->create();
         $tokens = StravaToken::factory()->count(5)->create(['user_id' => $user->id]);
         StravaToken::factory()->count(5)->create();
@@ -35,7 +37,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_to_owned_clients(){
+    public function it_has_a_relationship_to_owned_clients()
+    {
         $user = User::factory()->create();
         $clients = StravaClient::factory()->count(2)->create(['user_id' => $user->id]);
         StravaClient::factory()->count(5)->create();
@@ -46,7 +49,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_to_shared_clients(){
+    public function it_has_a_relationship_to_shared_clients()
+    {
         $user = User::factory()->create();
         $clients = StravaClient::factory()->count(2)->create();
         $user->sharedClients()->attach($clients);
@@ -58,7 +62,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function stravaClients_returns_all_strava_clients_the_user_can_see(){
+    public function strava_clients_returns_all_strava_clients_the_user_can_see()
+    {
         $user = User::factory()->create();
 
         $client1 = StravaClient::factory()->create(['user_id' => $user->id]);
@@ -78,7 +83,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_a_free_owned_client_if_you_have_permission(){
+    public function available_client_returns_a_free_owned_client_if_you_have_permission()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -102,7 +108,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_takes_into_account_exclusions_for_owned_clients(){
+    public function available_client_takes_into_account_exclusions_for_owned_clients()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -126,7 +133,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_a_free_shared_client_if_permission_and_do_not_have_free_owned_client(){
+    public function available_client_returns_a_free_shared_client_if_permission_and_do_not_have_free_owned_client()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -149,7 +157,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_takes_into_account_exclusions_for_shared_clients(){
+    public function available_client_takes_into_account_exclusions_for_shared_clients()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -172,7 +181,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_a_public_client_if_permission_and_no_manage_strava_permission(){
+    public function available_client_returns_a_public_client_if_permission_and_no_manage_strava_permission()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -198,7 +208,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_takes_into_account_exclusions_for_public_clients(){
+    public function available_client_takes_into_account_exclusions_for_public_clients()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -224,7 +235,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_a_public_client_if_permission_and_no_owned_or_shared_available_clients(){
+    public function available_client_returns_a_public_client_if_permission_and_no_owned_or_shared_available_clients()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -251,7 +263,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_the_system_client_if_no_public_permission(){
+    public function available_client_returns_the_system_client_if_no_public_permission()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -273,7 +286,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_returns_the_system_client_if_no_public_clients_available(){
+    public function available_client_returns_the_system_client_if_no_public_clients_available()
+    {
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
@@ -291,7 +305,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_throws_an_exception_if_no_clients_found(){
+    public function available_client_throws_an_exception_if_no_clients_found()
+    {
         $this->markTestIncomplete();
 
         $this->expectException(ClientNotAvailable::class);
@@ -305,7 +320,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function availableClient_throws_an_exception_if_system_client_is_full(){
+    public function available_client_throws_an_exception_if_system_client_is_full()
+    {
         $this->markTestIncomplete();
 
         $this->expectException(ClientNotAvailable::class);
@@ -322,7 +338,8 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_clients_that_are_not_connected(){
+    public function it_ignores_clients_that_are_not_connected()
+    {
         $this->markTestIncomplete();
 
         $this->expectException(ClientNotAvailable::class);
@@ -334,5 +351,4 @@ class UsesStravaTest extends TestCase
 
         $client = $user->availableClient();
     }
-
 }

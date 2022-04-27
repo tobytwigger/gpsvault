@@ -9,7 +9,6 @@ class CreateSyncsTable extends Migration
     /**
      * Run the migrations.
      *
-     * @return void
      */
     public function up()
     {
@@ -25,7 +24,6 @@ class CreateSyncsTable extends Migration
     /**
      * Reverse the migrations.
      *
-     * @return void
      */
     public function down()
     {

@@ -3,23 +3,13 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
-use App\Integrations\Strava\Events\StravaActivityUpdated;
 use App\Integrations\Strava\Models\StravaKudos;
-use App\Models\Activity;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\RateLimited;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
-use Illuminate\Queue\SerializesModels;
 
 class LoadStravaKudos extends StravaActivityBaseJob
 {
     /**
      * Execute the job.
      *
-     * @return void
      */
     public function handle(Strava $strava)
     {
@@ -27,7 +17,7 @@ class LoadStravaKudos extends StravaActivityBaseJob
         $page = 1;
         do {
             $kudoses = $strava->client($this->stravaClientModel)->getKudos($this->activity->getAdditionalData('strava_id'), $page);
-            foreach($kudoses as $kudos) {
+            foreach ($kudoses as $kudos) {
                 $this->importKudos($kudos);
             }
             $page++;
@@ -44,5 +34,4 @@ class LoadStravaKudos extends StravaActivityBaseJob
             'activity_id' => $this->activity->id
         ], []);
     }
-
 }

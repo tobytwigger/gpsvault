@@ -10,7 +10,6 @@ use Location\Polyline;
 
 class Distance extends AnalyserContract implements PointAnalyser
 {
-
     private Polyline $polyline;
 
     public function __construct(Polyline $polyline)
@@ -29,7 +28,7 @@ class Distance extends AnalyserContract implements PointAnalyser
 
     public function processPoint(Point $point): void
     {
-        if($point->getLatitude() !== null && $point->getLongitude() !== null) {
+        if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
             $this->polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude()));
         }
     }

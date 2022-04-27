@@ -28,8 +28,8 @@ class Place extends Model
 
     protected static function booted()
     {
-        static::creating(function(Place $place) {
-            if($place->user_id === null) {
+        static::creating(function (Place $place) {
+            if ($place->user_id === null) {
                 $place->user_id = Auth::id();
             }
         });

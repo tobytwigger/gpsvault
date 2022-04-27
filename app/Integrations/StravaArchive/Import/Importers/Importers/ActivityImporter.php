@@ -14,10 +14,9 @@ use Illuminate\Support\Str;
 
 class ActivityImporter extends Importer
 {
-
     protected function import()
     {
-        $this->availableActivityFiles()->each(function(MemberInterface $member, int $key) {
+        $this->availableActivityFiles()->each(function (MemberInterface $member, int $key) {
             $this->updateProgress($key + 1, $this->availableActivityFiles()->count());
             $this->processActivityFile($member);
         });
@@ -26,13 +25,14 @@ class ActivityImporter extends Importer
     private function availableActivityFiles(): Collection
     {
         return $this->zip->getMembers()
-            ->filter(fn(MemberInterface $member) => Str::startsWith($member->getLocation(), 'activities/') && Str::length($member->getLocation()) > 11)
+            ->filter(fn (MemberInterface $member) => Str::startsWith($member->getLocation(), 'activities/') && Str::length($member->getLocation()) > 11)
             ->values();
     }
 
     private function existingActivityUsingFile(MemberInterface $file): ?Activity
     {
         $uploadId = intval((string) Str::of(Str::substr($file->getLocation(), 11))->before('.'));
+
         return Activity::linkedTo('strava')->whereAdditionalData('strava_upload_id', $uploadId)->first();
     }
 
@@ -45,16 +45,18 @@ class ActivityImporter extends Importer
     {
         try {
             $activity = $this->existingActivityUsingFile($file);
-            if($activity === null) {
+            if ($activity === null) {
                 $this->failed('unmatched', [
                     'file_location' => $file->getLocation(),
                 ]);
+
                 return;
             }
-            if($activity->file()->exists()) {
+            if ($activity->file()->exists()) {
                 $this->failed('duplicate', [
                     'duplicate_id' => $activity->id,
                 ]);
+
                 return;
             }
 
@@ -71,6 +73,7 @@ class ActivityImporter extends Importer
             $this->succeeded('Activity file added to activity ' . $activity->id);
         } catch (\Exception $e) {
             $this->failed('exception', ['message' => $e->getMessage()]);
+
             return;
         }
     }
@@ -78,12 +81,12 @@ class ActivityImporter extends Importer
     public function convertMemberToFile(MemberInterface $member): File
     {
         $fullMemberPath = $this->zip->getFullExtractedDirectory($member->getLocation());
-        if($this->memberIsTarFile($member)) {
+        if ($this->memberIsTarFile($member)) {
             $fullMemberPath = $this->unzipMember($member);
         }
 
         $filename = Str::substr($member->getLocation(), 11);
-        if($this->memberIsTarFile($member)) {
+        if ($this->memberIsTarFile($member)) {
             $filename = Str::replace('.gz', '', $filename);
         }
 
@@ -122,5 +125,4 @@ class ActivityImporter extends Importer
 
         return $outputFileName;
     }
-
 }

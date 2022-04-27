@@ -10,7 +10,8 @@ class AcceptInvitationTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_a_404_if_the_link_is_invalid(){
+    public function it_returns_a_404_if_the_link_is_invalid()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -20,7 +21,8 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_client_is_not_found(){
+    public function it_returns_a_404_if_the_client_is_not_found()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -31,13 +33,15 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->get(route('strava.client.accept', 500));
         $response->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission(){
+    public function it_returns_403_if_you_do_not_have_permission()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
@@ -55,7 +59,8 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_the_link_uuid_does_not_match_the_one_on_the_client(){
+    public function it_returns_a_403_if_the_link_uuid_does_not_match_the_one_on_the_client()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -73,7 +78,8 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_are_the_owner(){
+    public function it_returns_a_403_if_you_are_the_owner()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
@@ -91,7 +97,8 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_already_have_access(){
+    public function it_returns_a_403_if_you_already_have_access()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -111,7 +118,8 @@ class AcceptInvitationTest extends TestCase
     }
 
     /** @test */
-    public function it_attaches_you_to_the_client_and_redirects(){
+    public function it_attaches_you_to_the_client_and_redirects()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
@@ -132,6 +140,4 @@ class AcceptInvitationTest extends TestCase
         $this->assertCount(1, $client->sharedUsers()->get());
         $this->assertEquals($this->user->id, $client->sharedUsers()->get()->first()->id);
     }
-
-
 }

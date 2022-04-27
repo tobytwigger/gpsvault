@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Listeners;
 
-use App\Integrations\Strava\Jobs\LoadStravaKudos;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
+use App\Integrations\Strava\Jobs\LoadStravaKudos;
 
 class IndexStravaActivityKudos
 {
@@ -24,7 +24,4 @@ class IndexStravaActivityKudos
         $activity = $activityEvent->activity->refresh();
         LoadStravaKudos::dispatch($activity);
     }
-
-
-
 }

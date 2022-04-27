@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CancelBackupController
 {
-
     public function cancel(Sync $sync)
     {
         abort_if($sync->user_id !== Auth::id(), 403, 'You do not own this sync.');
@@ -16,5 +15,4 @@ class CancelBackupController
 
         return redirect()->route('backup.index');
     }
-
 }

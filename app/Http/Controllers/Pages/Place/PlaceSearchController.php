@@ -6,11 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Place;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PlaceSearchController extends Controller
 {
-
     public function search(Request $request)
     {
         $request->validate([
@@ -22,19 +20,22 @@ class PlaceSearchController extends Controller
         ]);
 
         return Place::when(
-                $request->has('exclude_route_id') && $request->input('exclude_route_id'),
-                fn(Builder $query) => $query->whereDoesntHave('routes',
-                    fn(Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
-                ))
+            $request->has('exclude_route_id') && $request->input('exclude_route_id'),
+            fn (Builder $query) => $query->whereDoesntHave(
+                    'routes',
+                    fn (Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
+                )
+        )
             ->when(
                 $request->has(['southwest_lat', 'southwest_lng', 'northeast_lat', 'northeast_lng']),
                 // longitude min, latitude min, long mx, lat max
-                fn(Builder $query) => $query->whereRaw(
-                    'places.location && ST_MakeEnvelope(?, ?, ?, ?, 4326)', [
-                    $request->input('southwest_lng'), $request->input('southwest_lat'), $request->input('northeast_lng'), $request->input('northeast_lat'), ])
+                fn (Builder $query) => $query->whereRaw(
+                    'places.location && ST_MakeEnvelope(?, ?, ?, ?, 4326)',
+                    [
+                        $request->input('southwest_lng'), $request->input('southwest_lat'), $request->input('northeast_lng'), $request->input('northeast_lat'), ]
+                )
             )
             ->orderBy('name')
             ->paginate(request()->input('perPage', 8));
     }
-
 }

@@ -18,7 +18,8 @@ class AuthenticatorTest extends TestCase
 {
 
     /** @test */
-    public function it_throws_an_exception_if_no_tokens_are_found_for_the_client(){
+    public function it_throws_an_exception_if_no_tokens_are_found_for_the_client()
+    {
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessage('Your account is not connected to Strava.');
 
@@ -32,7 +33,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_when_only_disabled_tokens_are_available(){
+    public function it_throws_an_exception_when_only_disabled_tokens_are_available()
+    {
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessage('Your account is not connected to Strava.');
 
@@ -47,7 +49,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function it_scopes_tokens_to_the_current_user(){
+    public function it_scopes_tokens_to_the_current_user()
+    {
         $this->expectException(UnauthorizedException::class);
         $this->expectExceptionMessage('Your account is not connected to Strava.');
 
@@ -62,7 +65,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_the_access_token_for_a_token_that_has_not_expired(){
+    public function it_returns_the_access_token_for_a_token_that_has_not_expired()
+    {
         $client = StravaClient::factory()->create();
         $user = User::factory()->create();
         StravaToken::factory()->create(['strava_client_id' => $client->id, 'access_token' => 'my-token', 'user_id' => $user->id]);
@@ -74,7 +78,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function it_refreshes_an_access_token_when_it_has_expired(){
+    public function it_refreshes_an_access_token_when_it_has_expired()
+    {
         $client = StravaClient::factory()->create(['client_id' => 'my-client-id', 'client_secret' => 'my-client-secret']);
         $user = User::factory()->create();
         $user->setAdditionalData('strava_athlete_id', 12345);
@@ -101,7 +106,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_athlete_id_is_not_set(){
+    public function it_throws_an_exception_if_athlete_id_is_not_set()
+    {
         $user = User::factory()->create();
 
         $this->expectException(\Exception::class);
@@ -119,7 +125,8 @@ class AuthenticatorTest extends TestCase
     }
 
     /** @test */
-    public function exchangeCode_creates_a_strava_token_representation(){
+    public function exchange_code_creates_a_strava_token_representation()
+    {
         $client = StravaClient::factory()->create(['client_id' => 'my-client-id', 'client_secret' => 'my-client-secret']);
         $user = User::factory()->create();
         $user->setAdditionalData('strava_athlete_id', 12345);
@@ -152,5 +159,4 @@ class AuthenticatorTest extends TestCase
         $this->assertEquals('new-refresh-token', $newToken->getRefreshToken());
         $this->assertEquals($expiresAt->unix(), Carbon::make($newToken->getExpiresAt())->unix());
     }
-
 }

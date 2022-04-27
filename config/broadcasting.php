@@ -13,7 +13,7 @@ return [
     |
     | Supported: "pusher", "ably", "redis", "log", "null"
     |
-    */
+     */
 
     'default' => env('BROADCAST_DRIVER', 'null'),
 
@@ -26,7 +26,7 @@ return [
     | to broadcast events to other systems or over websockets. Samples of
     | each available type of connection are provided inside this array.
     |
-    */
+     */
 
     'connections' => [
 

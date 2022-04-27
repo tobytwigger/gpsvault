@@ -14,7 +14,8 @@ class StravaClientFactoryTest extends TestCase
 {
 
     /** @test */
-    public function client_throws_an_exception_if_no_user_logged_in(){
+    public function client_throws_an_exception_if_no_user_logged_in()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('No user has been given to the Strava client');
 
@@ -23,7 +24,8 @@ class StravaClientFactoryTest extends TestCase
     }
 
     /** @test */
-    public function client_returns_a_client_if_user_given(){
+    public function client_returns_a_client_if_user_given()
+    {
         $user = User::factory()->create();
 
         $strava = app(StravaClientFactory::class);
@@ -45,7 +47,8 @@ class StravaClientFactoryTest extends TestCase
     }
 
     /** @test */
-    public function client_prioritises_the_given_user_over_the_logged_in_user(){
+    public function client_prioritises_the_given_user_over_the_logged_in_user()
+    {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
         $this->be($user1);
@@ -57,7 +60,8 @@ class StravaClientFactoryTest extends TestCase
     }
 
     /** @test */
-    public function the_base_url_can_be_changed(){
+    public function the_base_url_can_be_changed()
+    {
         $user = User::factory()->create();
         $repo = $this->prophesize(Repository::class);
         $repo->get('services.strava.base_url')->willReturn('https://testurl.com');
@@ -76,5 +80,4 @@ class StravaClientFactoryTest extends TestCase
         $this->assertInstanceOf(\GuzzleHttp\Psr7\Uri::class, $value);
         $this->assertEquals('testurl.com', $value->getHost());
     }
-
 }

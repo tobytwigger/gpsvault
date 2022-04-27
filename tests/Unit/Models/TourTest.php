@@ -13,18 +13,20 @@ class TourTest extends TestCase
 {
 
     /** @test */
-    public function it_has_a_relationship_to_stages(){
+    public function it_has_a_relationship_to_stages()
+    {
         $tour = Tour::factory()->create();
         $stages = Stage::factory()->count(5)->create(['tour_id' => $tour->id, 'stage_number' => null]);
 
         $this->assertContainsOnlyInstancesOf(Stage::class, $tour->stages);
-        foreach($tour->stages as $stage) {
+        foreach ($tour->stages as $stage) {
             $this->assertTrue($stages->shift()->is($stage));
         }
     }
 
     /** @test */
-    public function stages_are_ordered(){
+    public function stages_are_ordered()
+    {
         $tour = Tour::factory()->create();
         $stage1 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
         $stage2 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => null]);
@@ -41,7 +43,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_the_user_id_when_created(){
+    public function it_adds_the_user_id_when_created()
+    {
         $this->authenticated();
         $tour = Tour::factory()->make(['user_id' => null]);
         $tour->save();
@@ -50,7 +53,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_distance(){
+    public function it_appends_the_distance()
+    {
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
@@ -64,7 +68,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_elevation_gain(){
+    public function it_appends_the_elevation_gain()
+    {
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
@@ -78,7 +83,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function the_stats_can_be_loaded(){
+    public function the_stats_can_be_loaded()
+    {
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
@@ -99,7 +105,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_distance_and_ignores_any_stages_without_a_route(){
+    public function it_appends_the_distance_and_ignores_any_stages_without_a_route()
+    {
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
@@ -114,7 +121,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function human_started_at_returns_the_started_at_attribute_from_geocoder(){
+    public function human_started_at_returns_the_started_at_attribute_from_geocoder()
+    {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -132,7 +140,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function human_started_at_returns_null_if_stats_have_start_latitude_or_longitude_as_null(){
+    public function human_started_at_returns_null_if_stats_have_start_latitude_or_longitude_as_null()
+    {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -161,7 +170,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function human_ended_at_returns_the_ended_at_attribute_from_geocoder(){
+    public function human_ended_at_returns_the_ended_at_attribute_from_geocoder()
+    {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(2, 54)->willReturn('Oxford, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -179,7 +189,8 @@ class TourTest extends TestCase
     }
 
     /** @test */
-    public function human_ended_at_returns_null_if_stats_have_end_latitude_or_longitude_as_null(){
+    public function human_ended_at_returns_null_if_stats_have_end_latitude_or_longitude_as_null()
+    {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());

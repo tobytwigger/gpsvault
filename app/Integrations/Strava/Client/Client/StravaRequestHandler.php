@@ -13,7 +13,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class StravaRequestHandler
 {
-
     private GuzzleClient $guzzleClient;
 
     private Authenticator $authenticator;
@@ -32,11 +31,11 @@ class StravaRequestHandler
         return $this->guzzleClient->request($method, $uri, $options);
     }
 
-    public function request(string $method, string $uri, array $options = []): \Psr\Http\Message\ResponseInterface
+    public function request(string $method, string $uri, array $options = []): ResponseInterface
     {
-        //
+        
         $excluded = [];
-        for($i=0;$i<20;$i++) {
+        for ($i=0;$i<20;$i++) {
             $client = $this->user->availableClient($excluded);
             $excluded[] = $client->id;
 
@@ -46,42 +45,47 @@ class StravaRequestHandler
                 continue;
             }
         }
+
         throw new ClientNotAvailable();
     }
 
-    private function handleRequest(\App\Integrations\Strava\Client\Models\StravaClient $client, string $method, string $uri, array $options = []): \Psr\Http\Message\ResponseInterface
+    private function handleRequest(\App\Integrations\Strava\Client\Models\StravaClient $client, string $method, string $uri, array $options = []): ResponseInterface
     {
         try {
             $response = $this->guzzleClient->request($method, $uri, array_merge([
                 'headers' => array_merge(
                     ['Authorization' => sprintf('Bearer %s', $this->authenticator->getAuthToken($client))],
-                    $options['headers'] ?? [])
+                    $options['headers'] ?? []
+                )
             ], $options));
             $this->updateRateLimits($response, $client);
+
             return $response;
         } catch (ClientException $e) {
             if ($e->getCode() === 429) {
                 $this->updateRateLimits($e->getResponse(), $client);
+
                 throw new StravaRateLimitedException();
             }
+
             throw $e;
         }
     }
 
-    private function updateRateLimits(\Psr\Http\Message\ResponseInterface $response, \App\Integrations\Strava\Client\Models\StravaClient $client)
+    private function updateRateLimits(ResponseInterface $response, \App\Integrations\Strava\Client\Models\StravaClient $client)
     {
-        if($response->hasHeader('X-RateLimit-Usage')) {
+        if ($response->hasHeader('X-RateLimit-Usage')) {
             $usage = explode(',', Arr::first($response->getHeader('X-RateLimit-Usage')));
-            if(count($usage) !== 2) {
+            if (count($usage) !== 2) {
                 throw new \Exception(sprintf('The Strava API must return rate limit usage, %s given.', Arr::first($response->getHeader('X-RateLimit-Usage'))));
             }
             $client->used_15_min_calls = $usage[0];
             $client->used_daily_calls = $usage[1];
         }
         // Get the rate limit usage from the header
-        if($response->hasHeader('X-RateLimit-Limit')) {
+        if ($response->hasHeader('X-RateLimit-Limit')) {
             $limits = explode(',', Arr::first($response->getHeader('X-RateLimit-Limit')));
-            if(count($limits) !== 2) {
+            if (count($limits) !== 2) {
                 throw new \Exception(sprintf('The Strava API must return rate limit limits, %s given.', Arr::first($response->getHeader('X-RateLimit-Limit'))));
             }
             $client->limit_15_min = $limits[0];
@@ -90,7 +94,7 @@ class StravaRequestHandler
         $client->save();
     }
 
-    public function decodeResponse(\Psr\Http\Message\ResponseInterface $response): array
+    public function decodeResponse(ResponseInterface $response): array
     {
         return json_decode(
             $response->getBody()->getContents(),
@@ -102,7 +106,4 @@ class StravaRequestHandler
     {
         return $this->guzzleClient;
     }
-
-
-
 }

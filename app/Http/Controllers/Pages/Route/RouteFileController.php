@@ -3,30 +3,27 @@
 namespace App\Http\Controllers\Pages\Route;
 
 use App\Http\Controllers\Controller;
-use App\Models\Route;
 use App\Models\File;
-use App\Services\RouteImport\RouteImporter;
+use App\Models\Route;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteFileController extends Controller
 {
-
     public function destroy(Route $route, File $file)
     {
         $this->authorize('view', $route);
         $this->authorize('delete', $file);
         abort_if(!$route->files()->where('files.id', $file->id)->exists(), 404, 'The file is not attached to the route');
 
-        if(!(
+        if (!(
             $route->file_id === $file->id
-            || $route->whereHas('files', fn(Builder $query) => $query->where('files.id', $file->id))->exists()
+            || $route->whereHas('files', fn (Builder $query) => $query->where('files.id', $file->id))->exists()
         )) {
             throw new NotFoundHttpException('The file is not attached to the route');
         }
@@ -49,11 +46,12 @@ class RouteFileController extends Controller
         ]);
 
         $files = collect($request->file('files', []))
-            ->map(function(UploadedFile $uploadedFile) use ($request) {
+            ->map(function (UploadedFile $uploadedFile) use ($request) {
                 $file = Upload::uploadedFile($uploadedFile, Auth::user(), FileUploader::ROUTE_MEDIA);
                 $file->title = $request->input('title');
                 $file->caption = $request->input('caption');
                 $file->save();
+
                 return $file;
             });
         $route->files()->sync($files->pluck('id'));

@@ -13,7 +13,7 @@ return [
     | setting is null, Horizon will reside under the same domain as the
     | application. Otherwise, this value will serve as the subdomain.
     |
-    */
+     */
 
     'domain' => env('HORIZON_DOMAIN', null),
 
@@ -26,7 +26,7 @@ return [
     | to change this path to anything you like. Note that the URI will not
     | affect the paths of its internal API that aren't exposed to users.
     |
-    */
+     */
 
     'path' => env('HORIZON_PATH', 'horizon'),
 
@@ -39,7 +39,7 @@ return [
     | meta information required for it to function. It includes the list
     | of supervisors, failed jobs, job metrics, and other information.
     |
-    */
+     */
 
     'use' => 'default',
 
@@ -52,11 +52,11 @@ return [
     | may modify the prefix when you are running multiple installations
     | of Horizon on the same server so that they don't have problems.
     |
-    */
+     */
 
     'prefix' => env(
         'HORIZON_PREFIX',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_horizon:'
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
     ),
 
     /*
@@ -68,7 +68,7 @@ return [
     | the chance to add your own middleware to this list or change any of
     | the existing middleware. Or, you can simply stick with this list.
     |
-    */
+     */
 
     'middleware' => ['web'],
 
@@ -81,7 +81,7 @@ return [
     | will be fired. Every connection / queue combination may have its
     | own, unique threshold (in seconds) before this event is fired.
     |
-    */
+     */
 
     'waits' => [
         'redis:default' => 60,
@@ -96,7 +96,7 @@ return [
     | persist the recent and failed jobs. Typically, recent jobs are kept
     | for one hour while all failed jobs are stored for an entire week.
     |
-    */
+     */
 
     'trim' => [
         'recent' => 60,
@@ -116,7 +116,7 @@ return [
     | the metrics graph. This will get used in combination with Horizon's
     | `horizon:snapshot` schedule to define how long to retain metrics.
     |
-    */
+     */
 
     'metrics' => [
         'trim_snapshots' => [
@@ -136,7 +136,7 @@ return [
     | allowing a new instance of Horizon to start while the last
     | instance will continue to terminate each of its workers.
     |
-    */
+     */
 
     'fast_termination' => false,
 
@@ -149,7 +149,7 @@ return [
     | supervisor may consume before it is terminated and restarted. For
     | configuring these limits on your workers, see the next section.
     |
-    */
+     */
 
     'memory_limit' => 64,
 
@@ -162,7 +162,7 @@ return [
     | in all environments. These supervisors and settings handle all your
     | queued jobs and will be provisioned by Horizon during deployment.
     |
-    */
+     */
 
     'defaults' => [
         'supervisor-1' => [

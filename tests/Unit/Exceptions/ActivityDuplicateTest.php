@@ -10,10 +10,10 @@ class ActivityDuplicateTest extends TestCase
 {
 
     /** @test */
-    public function it_sets_the_message(){
+    public function it_sets_the_message()
+    {
         $activity = Activity::factory()->create();
         $exception = new ActivityDuplicate($activity);
         $this->assertEquals('The activity is duplicated by activity #' . $activity->id . '.', $exception->getMessage());
     }
-
 }

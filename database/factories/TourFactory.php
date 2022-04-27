@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TourFactory extends Factory
 {
-
     protected $model = Tour::class;
 
     /**
@@ -19,7 +18,7 @@ class TourFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fn() => User::factory(),
+            'user_id' => fn () => User::factory(),
             'name' => $this->faker->name,
             'description' => $this->faker->paragraph,
             'notes' => $this->faker->paragraph,

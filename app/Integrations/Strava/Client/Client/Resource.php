@@ -6,7 +6,6 @@ use App\Models\User;
 
 abstract class Resource
 {
-
     public User $user;
 
     public StravaRequestHandler $request;
@@ -16,5 +15,4 @@ abstract class Resource
         $this->user = $user;
         $this->request = $request;
     }
-
 }

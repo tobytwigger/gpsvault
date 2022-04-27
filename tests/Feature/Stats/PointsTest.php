@@ -3,17 +3,16 @@
 namespace Tests\Feature\Stats;
 
 use App\Models\Activity;
-use App\Models\File;
 use App\Models\Stats;
 use App\Services\Analysis\Parser\Point;
-use App\Services\File\Upload;
 use Tests\TestCase;
 
 class PointsTest extends TestCase
 {
 
     /** @test */
-    public function you_get_a_list_of_points(){
+    public function you_get_a_list_of_points()
+    {
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $stats = Stats::factory()->activity($activity)->create();
@@ -24,7 +23,7 @@ class PointsTest extends TestCase
             (new Point())->setLatitude(3)->setLongitude(52)->setSpeed(22),
             (new Point())->setLatitude(4)->setLongitude(53)->setSpeed(23),
         ];
-        $stats->waypoints()->createMany(collect($points)->map(fn(Point $point) => [
+        $stats->waypoints()->createMany(collect($points)->map(fn (Point $point) => [
             'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
             'speed' => $point->getSpeed(),
         ]));
@@ -40,7 +39,8 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_see_stats_for_your_activity(){
+    public function you_can_only_see_stats_for_your_activity()
+    {
         $this->authenticated();
 
         $activity = Activity::factory()->create();
@@ -51,7 +51,8 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $activity = Activity::factory()->create();
         $stats = Stats::factory()->activity($activity)->create();
 
@@ -60,7 +61,8 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function an_empty_array_is_returned_if_no_waypoints_exist(){
+    public function an_empty_array_is_returned_if_no_waypoints_exist()
+    {
         $this->authenticated();
 
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
@@ -69,5 +71,4 @@ class PointsTest extends TestCase
         $response = $this->getJson(route('stats.points', $stats));
         $this->assertEquals('[]', $response->content());
     }
-
 }

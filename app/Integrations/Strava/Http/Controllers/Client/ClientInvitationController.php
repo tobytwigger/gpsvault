@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -12,7 +11,6 @@ use Linkeys\UrlSigner\Models\Link;
 
 class ClientInvitationController extends Controller
 {
-
     public function invite(Request $request, StravaClient $client)
     {
         abort_if($client->user_id !== Auth::id(), 403, 'You can only invite users to a client you own.');
@@ -48,7 +46,8 @@ class ClientInvitationController extends Controller
                 'required',
                 'integer',
                 Rule::exists('users', 'id')
-                    ->whereIn('id',
+                    ->whereIn(
+                        'id',
                         $client->sharedUsers()->get()->pluck('id')->toArray()
                     )
             ]
@@ -70,6 +69,4 @@ class ClientInvitationController extends Controller
 
         return redirect()->route('strava.client.index');
     }
-
-
 }

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ImportResult extends Model
 {
-
     protected $table = 'import_results';
 
     protected $fillable = [
@@ -33,5 +32,4 @@ class ImportResult extends Model
             'data' => $data
         ]);
     }
-
 }

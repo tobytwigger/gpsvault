@@ -2,18 +2,16 @@
 
 namespace Tests\Feature\Place;
 
-use App\Models\Route;
 use App\Models\Place;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Route;
 use Tests\TestCase;
 
 class RoutePlaceDestroyTest extends TestCase
 {
 
     /** @test */
-    public function it_detaches_the_route_place(){
+    public function it_detaches_the_route_place()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $place = Place::factory()->create(['user_id' => $this->user->id]);
@@ -27,7 +25,8 @@ class RoutePlaceDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_the_route_is_not_owned_by_you(){
+    public function it_returns_a_403_if_the_route_is_not_owned_by_you()
+    {
         $this->authenticated();
         $route = Route::factory()->create();
         $place = Place::factory()->create(['user_id' => $this->user->id]);
@@ -38,7 +37,8 @@ class RoutePlaceDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_place_is_not_attached(){
+    public function it_returns_a_404_if_the_place_is_not_attached()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $place = Place::factory()->create();
@@ -48,7 +48,8 @@ class RoutePlaceDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_place_does_not_exist(){
+    public function it_returns_a_404_if_the_place_does_not_exist()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
 
@@ -57,7 +58,8 @@ class RoutePlaceDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_route_does_not_exist(){
+    public function it_returns_a_404_if_the_route_does_not_exist()
+    {
         $this->authenticated();
         $place = Place::factory()->create(['user_id' => $this->user->id]);
 
@@ -66,7 +68,8 @@ class RoutePlaceDestroyTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $route = Route::factory()->create();
         $place = Place::factory()->create();
         $route->places()->sync($place);
@@ -74,5 +77,4 @@ class RoutePlaceDestroyTest extends TestCase
         $this->delete(route('route.place.destroy', [$route, $place]))
             ->assertRedirect(route('login'));
     }
-
 }

@@ -4,14 +4,14 @@ namespace Tests\Feature\Stage;
 
 use App\Models\Stage;
 use App\Models\Tour;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StageDestroyTest extends TestCase
 {
 
     /** @test */
-    public function destroy_deletes_a_stage(){
+    public function destroy_deletes_a_stage()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
@@ -24,7 +24,8 @@ class StageDestroyTest extends TestCase
     }
 
     /** @test */
-    public function stages_are_reordered_on_delete(){
+    public function stages_are_reordered_on_delete()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $stage1 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => 1]);
@@ -43,7 +44,8 @@ class StageDestroyTest extends TestCase
     }
 
     /** @test */
-    public function a_404_response_is_returned_if_the_tour_does_not_contain_the_stage(){
+    public function a_404_response_is_returned_if_the_tour_does_not_contain_the_stage()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
@@ -57,7 +59,8 @@ class StageDestroyTest extends TestCase
     }
 
     /** @test */
-    public function a_403_is_returned_if_you_do_not_own_the_tour(){
+    public function a_403_is_returned_if_you_do_not_own_the_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create();
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
@@ -67,11 +70,11 @@ class StageDestroyTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $tour = Tour::factory()->create();
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
 
         $this->delete(route('tour.stage.destroy', [$tour, $stage]))->assertRedirect(route('login'));
     }
-
 }

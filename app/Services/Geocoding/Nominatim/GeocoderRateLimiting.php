@@ -7,7 +7,6 @@ use Illuminate\Contracts\Cache\Repository;
 
 class GeocoderRateLimiting implements Geocoder
 {
-
     private Geocoder $geocoder;
 
     private Repository $cache;
@@ -38,11 +37,12 @@ class GeocoderRateLimiting implements Geocoder
 
     public function getPlaceSummaryFromPosition(float $latitude, float $longitude): ?string
     {
-        if($this->isRateLimited()) {
+        if ($this->isRateLimited()) {
             return null;
         }
         $result = $this->geocoder->getPlaceSummaryFromPosition($latitude, $longitude);
         $this->markAttempt();
+
         return $result;
     }
 }

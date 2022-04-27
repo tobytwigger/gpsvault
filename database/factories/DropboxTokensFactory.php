@@ -20,7 +20,7 @@ class DropboxTokensFactory extends Factory
     {
         return [
             'access_token' => Str::random(30),
-            'user_id' => fn() => User::factory()
+            'user_id' => fn () => User::factory()
         ];
     }
 }

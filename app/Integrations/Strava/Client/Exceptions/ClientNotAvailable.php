@@ -6,10 +6,8 @@ use Throwable;
 
 class ClientNotAvailable extends \Exception
 {
-
-    public function __construct($message = "Strava rate limit exceeded. Please try again later.", $code = 429, Throwable $previous = null)
+    public function __construct($message = 'Strava rate limit exceeded. Please try again later.', $code = 429, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }
-
 }

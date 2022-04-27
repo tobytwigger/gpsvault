@@ -8,14 +8,14 @@ use App\Models\Stage;
 use App\Models\Tour;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StageUpdateTest extends TestCase
 {
 
     /** @test */
-    public function it_updates_a_stage_and_shows_the_tour(){
+    public function it_updates_a_stage_and_shows_the_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $route = Route::factory()->create(['user_id' => $this->user->id]);
@@ -50,12 +50,12 @@ class StageUpdateTest extends TestCase
             'route_id' => $route2->id,
             'activity_id' => $activity2->id
         ]);
-
     }
 
 
     /** @test */
-    public function the_tour_id_cannot_be_updated(){
+    public function the_tour_id_cannot_be_updated()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $tour2 = Tour::factory()->create(['user_id' => $this->user->id]);
@@ -69,7 +69,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function stages_are_reordered_if_the_stage_number_changes(){
+    public function stages_are_reordered_if_the_stage_number_changes()
+    {
         $this->authenticated();
 
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
@@ -90,7 +91,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function the_stage_number_is_set_to_the_next_number_available_if_a_higher_number_given(){
+    public function the_stage_number_is_set_to_the_next_number_available_if_a_higher_number_given()
+    {
         $this->authenticated();
 
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
@@ -111,7 +113,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_404_response_is_returned_if_the_stage_or_tour_does_not_exist(){
+    public function a_404_response_is_returned_if_the_stage_or_tour_does_not_exist()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $stage = Stage::factory()->create();
@@ -123,7 +126,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_404_response_is_returned_if_the_tour_does_not_contain_the_stage(){
+    public function a_404_response_is_returned_if_the_tour_does_not_contain_the_stage()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
@@ -137,7 +141,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_403_is_returned_if_you_do_not_own_the_tour(){
+    public function a_403_is_returned_if_you_do_not_own_the_tour()
+    {
         $this->authenticated();
         $tour = Tour::factory()->create();
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
@@ -147,7 +152,8 @@ class StageUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $tour = Tour::factory()->create();
         $stage = Stage::factory()->create(['tour_id' => $tour->id]);
 
@@ -157,10 +163,14 @@ class StageUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = call_user_func($value, $this->user);
         }
         $tour = Tour::factory()->create(['user_id' => $this->user->id]);
@@ -168,7 +178,7 @@ class StageUpdateTest extends TestCase
 
         $response = $this->put(route('tour.stage.update', [$stage->tour_id, $stage]), [$key => $value]);
 
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -194,12 +204,12 @@ class StageUpdateTest extends TestCase
             ['is_rest_day', null, 'The is rest day field must be true or false.'],
             ['route_id','route-id', 'The route id must be an integer.'],
             ['route_id', 300, 'The selected route id is invalid.'],
-            ['route_id', fn() => Route::factory()->create()->id, 'The selected route id is invalid.'],
-            ['route_id', fn($user) => Route::factory()->create(['user_id' => $user->id])->id, false],
+            ['route_id', fn () => Route::factory()->create()->id, 'The selected route id is invalid.'],
+            ['route_id', fn ($user) => Route::factory()->create(['user_id' => $user->id])->id, false],
             ['activity_id','activity-id', 'The activity id must be an integer.'],
             ['activity_id', 300, 'The selected activity id is invalid.'],
-            ['activity_id', fn() => Activity::factory()->create()->id, 'The selected activity id is invalid.'],
-            ['activity_id', fn($user) => Activity::factory()->create(['user_id' => $user->id])->id, false],
+            ['activity_id', fn () => Activity::factory()->create()->id, 'The selected activity id is invalid.'],
+            ['activity_id', fn ($user) => Activity::factory()->create(['user_id' => $user->id])->id, false],
             ['stage_number', 0, 'The stage number must be at least 1.'],
             ['stage_number', 'not-a-number', 'The stage number must be an integer.']
         ];

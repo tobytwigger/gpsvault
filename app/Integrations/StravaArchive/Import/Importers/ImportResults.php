@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Import\Importers;
 
 class ImportResults
 {
-
     protected array $results = [];
 
     public function addResult(string $type, string $message, bool $success, array $data = [])
@@ -25,8 +24,7 @@ class ImportResults
     public function merge(ImportResults $importResult): ImportResults
     {
         $this->results = array_merge($this->results, $importResult->all());
+
         return $this;
-
     }
-
 }

@@ -2,22 +2,19 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Integration;
 use App\Models\Activity;
 use App\Models\File;
-use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 
 class StravaIntegration
 {
-
     public function vueAddOnProps(): array
     {
         $timeUntilReady = null;
-        foreach(StravaServiceProvider::stravaLimiters() as $limit) {
-            $key = md5('strava'.$limit->key);
-            if(RateLimiter::tooManyAttempts($key, $limit->maxAttempts)) {
+        foreach (StravaServiceProvider::stravaLimiters() as $limit) {
+            $key = md5('strava' . $limit->key);
+            if (RateLimiter::tooManyAttempts($key, $limit->maxAttempts)) {
                 $newTimeUntilReady = RateLimiter::availableIn($key);
                 $timeUntilReady = $newTimeUntilReady === null && ($timeUntilReady === null || $timeUntilReady > $newTimeUntilReady)
                     ? $timeUntilReady
@@ -39,14 +36,14 @@ class StravaIntegration
                 ->with('additionalData')
                 ->get()
                 ->filter(function (Activity $activity) {
-                    $uploadedFiles = $activity->files->map(fn(File $file) => Str::of($file->filename)->before('.'));
+                    $uploadedFiles = $activity->files->map(fn (File $file) => Str::of($file->filename)->before('.'));
+
                     return collect($activity->getAdditionalData('strava_photo_ids'))
-                            ->filter(fn(string $photoId) => !$uploadedFiles->contains($photoId))
-                            ->count() > 0;
+                        ->filter(fn (string $photoId) => !$uploadedFiles->contains($photoId))
+                        ->count() > 0;
                 })
                 ->count(),
             'timeUntilReady' => $timeUntilReady
         ];
     }
-
 }

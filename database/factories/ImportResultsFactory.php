@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use App\Integrations\Strava\Import\Models\Import;
 use App\Integrations\Strava\Import\Models\ImportResult;
-use App\Models\ActivityStats;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ImportResultsFactory extends Factory
@@ -24,7 +22,7 @@ class ImportResultsFactory extends Factory
             'message' => $this->faker->paragraph,
             'success' => $this->faker->boolean,
             'data' => null,
-            'import_id' => fn() => Import::factory()
+            'import_id' => fn () => Import::factory()
         ];
     }
 }

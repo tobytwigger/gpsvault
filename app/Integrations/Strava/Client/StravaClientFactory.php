@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class StravaClientFactory
 {
-
     private Repository $config;
 
     public function __construct(Repository $config)
@@ -25,7 +24,8 @@ class StravaClientFactory
             Auth::check()
                 ? Auth::user()
                 : throw new \Exception('No user has been given to the Strava client')
-            );
+        );
+
         return new StravaClient(
             $user,
             app(StravaRequestHandler::class, [
@@ -34,5 +34,4 @@ class StravaClientFactory
             ])
         );
     }
-
 }

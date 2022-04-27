@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientEnabledController extends Controller
 {
-
     public function enable(StravaClient $client)
     {
         abort_if($client->user_id !== Auth::id(), 403, 'You can only turn on a client you own.');
@@ -28,5 +27,4 @@ class ClientEnabledController extends Controller
 
         return redirect()->route('strava.client.index');
     }
-
 }

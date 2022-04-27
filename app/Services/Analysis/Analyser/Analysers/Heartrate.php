@@ -7,7 +7,6 @@ use App\Services\Analysis\Parser\Point;
 
 class Heartrate extends AnalyserContract implements PointAnalyser
 {
-
     protected array $heartRates = [];
 
     protected ?float $maxHeartrate = null;
@@ -18,12 +17,12 @@ class Heartrate extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        if(!empty($this->heartRates)) {
+        if (!empty($this->heartRates)) {
             $analysis->setAverageHeartrate(
                 round(array_sum($this->heartRates)/count($this->heartRates))
             );
         }
-        if($this->maxHeartrate !== null) {
+        if ($this->maxHeartrate !== null) {
             $analysis->setMaxHeartrate($this->maxHeartrate);
         }
 
@@ -33,9 +32,9 @@ class Heartrate extends AnalyserContract implements PointAnalyser
     public function processPoint(Point $point): void
     {
         $heartRate = $point->getHeartRate();
-        if($heartRate !== null) {
+        if ($heartRate !== null) {
             $this->heartRates[] = $heartRate;
-            if($this->maxHeartrate === null || $this->maxHeartrate < $heartRate) {
+            if ($this->maxHeartrate === null || $this->maxHeartrate < $heartRate) {
                 $this->maxHeartrate = $heartRate;
             }
         }

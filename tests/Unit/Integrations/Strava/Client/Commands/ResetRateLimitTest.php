@@ -9,7 +9,8 @@ class ResetRateLimitTest extends TestCase
 {
 
     /** @test */
-    public function it_resets_the_15_minute_limit(){
+    public function it_resets_the_15_minute_limit()
+    {
         $client1 = StravaClient::factory()->create(['used_15_min_calls' => 87, 'used_daily_calls' => 870]);
         $client2 = StravaClient::factory()->create(['used_15_min_calls' => 150, 'used_daily_calls' => 1500]);
         $client3 = StravaClient::factory()->create(['used_15_min_calls' => 0, 'used_daily_calls' => 0]);
@@ -26,7 +27,8 @@ class ResetRateLimitTest extends TestCase
     }
 
     /** @test */
-    public function it_resets_the_daily_limit(){
+    public function it_resets_the_daily_limit()
+    {
         $client1 = StravaClient::factory()->create(['used_15_min_calls' => 87, 'used_daily_calls' => 870]);
         $client2 = StravaClient::factory()->create(['used_15_min_calls' => 150, 'used_daily_calls' => 1500]);
         $client3 = StravaClient::factory()->create(['used_15_min_calls' => 0, 'used_daily_calls' => 0]);
@@ -43,7 +45,8 @@ class ResetRateLimitTest extends TestCase
     }
 
     /** @test */
-    public function it_resets_both(){
+    public function it_resets_both()
+    {
         $client1 = StravaClient::factory()->create(['used_15_min_calls' => 87, 'used_daily_calls' => 870]);
         $client2 = StravaClient::factory()->create(['used_15_min_calls' => 150, 'used_daily_calls' => 1500]);
         $client3 = StravaClient::factory()->create(['used_15_min_calls' => 0, 'used_daily_calls' => 0]);
@@ -58,5 +61,4 @@ class ResetRateLimitTest extends TestCase
         $this->assertEquals(0, $client2->refresh()->used_daily_calls);
         $this->assertEquals(0, $client3->refresh()->used_daily_calls);
     }
-
 }

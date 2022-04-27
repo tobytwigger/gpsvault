@@ -10,7 +10,6 @@ use Illuminate\Validation\UnauthorizedException;
 
 class Authenticator
 {
-
     private User $user;
 
     private Client $guzzleClient;
@@ -26,13 +25,14 @@ class Authenticator
         $token = $this->user->stravaTokens()->enabled()->where('strava_client_id', $client->id)->orderBy('created_at', 'desc')->first()
             ?? throw new UnauthorizedException('Your account is not connected to Strava.');
 
-        if($token->expired()) {
+        if ($token->expired()) {
             $token = $this->refreshToken($token, $client);
         }
+
         return $token->access_token;
     }
 
-    public function refreshToken(\App\Integrations\Strava\Client\Authentication\StravaToken $token, StravaClientModel $client): StravaToken
+    public function refreshToken(StravaToken $token, StravaClientModel $client): StravaToken
     {
         $response = $this->guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
             'query' => [
@@ -50,9 +50,9 @@ class Authenticator
 
         $stravaToken = StravaTokenResponse::create(
             new Carbon((int) $credentials['expires_at']),
-            (int)$credentials['expires_in'],
-            (string)$credentials['refresh_token'],
-            (string)$credentials['access_token'],
+            (int) $credentials['expires_in'],
+            (string) $credentials['refresh_token'],
+            (string) $credentials['access_token'],
             $this->user->getAdditionalData('strava_athlete_id') ?? throw new \Exception(sprintf('Athlete ID not set for user %u.', $this->user->id))
         );
 
@@ -79,11 +79,10 @@ class Authenticator
 
         return StravaTokenResponse::create(
             new Carbon((int) $credentials['expires_at']),
-            (int)$credentials['expires_in'],
-            (string)$credentials['refresh_token'],
-            (string)$credentials['access_token'],
-            (int)$credentials['athlete']['id']
+            (int) $credentials['expires_in'],
+            (string) $credentials['refresh_token'],
+            (string) $credentials['access_token'],
+            (int) $credentials['athlete']['id']
         );
     }
-
 }

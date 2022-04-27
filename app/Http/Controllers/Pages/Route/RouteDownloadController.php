@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Pages\Route;
 
 use App\Http\Controllers\Controller;
 use App\Models\Route;
-use App\Models\User;
 use App\Services\Archive\ZipCreator;
-use Illuminate\Support\Facades\Auth;
 
 class RouteDownloadController extends Controller
 {
@@ -18,5 +16,4 @@ class RouteDownloadController extends Controller
 
         return redirect()->route('file.download', $file);
     }
-
 }

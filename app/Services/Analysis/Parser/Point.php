@@ -8,7 +8,6 @@ use Illuminate\Contracts\Support\Jsonable;
 
 class Point implements Arrayable, Jsonable
 {
-
     private ?float $cumulativeDistance = null;
 
     private ?float $grade = null;
@@ -80,6 +79,7 @@ class Point implements Arrayable, Jsonable
     public function setGrade(?float $grade): Point
     {
         $this->grade = $grade;
+
         return $this;
     }
 
@@ -90,6 +90,7 @@ class Point implements Arrayable, Jsonable
     public function setLatitude(?float $latitude): Point
     {
         $this->latitude = $latitude;
+
         return $this;
     }
 
@@ -108,6 +109,7 @@ class Point implements Arrayable, Jsonable
     public function setLongitude(?float $longitude): Point
     {
         $this->longitude = $longitude;
+
         return $this;
     }
 
@@ -126,6 +128,7 @@ class Point implements Arrayable, Jsonable
     public function setElevation(?float $elevation): Point
     {
         $this->elevation = $elevation;
+
         return $this;
     }
 
@@ -144,6 +147,7 @@ class Point implements Arrayable, Jsonable
     public function setTime(?Carbon $time): Point
     {
         $this->time = $time;
+
         return $this;
     }
 
@@ -162,6 +166,7 @@ class Point implements Arrayable, Jsonable
     public function setCadence(?float $cadence): Point
     {
         $this->cadence = $cadence;
+
         return $this;
     }
 
@@ -180,6 +185,7 @@ class Point implements Arrayable, Jsonable
     public function setTemperature(?float $temperature): Point
     {
         $this->temperature = $temperature;
+
         return $this;
     }
 
@@ -198,6 +204,7 @@ class Point implements Arrayable, Jsonable
     public function setHeartRate(?float $heartRate): Point
     {
         $this->heartRate = $heartRate;
+
         return $this;
     }
 
@@ -216,6 +223,7 @@ class Point implements Arrayable, Jsonable
     public function setSpeed(?float $speed): Point
     {
         $this->speed = $speed;
+
         return $this;
     }
 
@@ -234,6 +242,7 @@ class Point implements Arrayable, Jsonable
     public function setBattery(?float $battery): Point
     {
         $this->battery = $battery;
+
         return $this;
     }
 
@@ -252,6 +261,7 @@ class Point implements Arrayable, Jsonable
     public function setCalories(?float $calories): Point
     {
         $this->calories = $calories;
+
         return $this;
     }
 
@@ -270,6 +280,7 @@ class Point implements Arrayable, Jsonable
     public function setCumulativeDistance(?float $cumulativeDistance): Point
     {
         $this->cumulativeDistance = $cumulativeDistance;
+
         return $this;
     }
 

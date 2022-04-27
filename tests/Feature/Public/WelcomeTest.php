@@ -13,7 +13,6 @@ class WelcomeTest extends TestCase
     {
         $response = $this->get(route('welcome'));
 
-        $response->assertInertia(fn(Assert $page) => $page->component('Public/Welcome'));
+        $response->assertInertia(fn (Assert $page) => $page->component('Public/Welcome'));
     }
-
 }

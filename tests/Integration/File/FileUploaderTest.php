@@ -4,8 +4,6 @@ namespace Tests\Integration\File;
 
 use App\Models\File;
 use App\Models\User;
-use App\Services\Analysis\Parser\Point;
-use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +14,8 @@ class FileUploaderTest extends TestCase
 {
 
     /** @test */
-    public function it_saves_a_file_with_contents(){
+    public function it_saves_a_file_with_contents()
+    {
         $contents = 'This is a test';
         $user = User::factory()->create();
 
@@ -34,7 +33,8 @@ class FileUploaderTest extends TestCase
     }
 
     /** @test */
-    public function it_saves_a_file_from_an_uploaded_file(){
+    public function it_saves_a_file_from_an_uploaded_file()
+    {
         $contents = 'This is a test';
         $path = Str::random('20') . '.txt';
         Storage::disk('tests')->put($path, $contents);
@@ -54,5 +54,4 @@ class FileUploaderTest extends TestCase
         $this->assertEquals($user->id, $file->user_id);
         $this->assertEquals($contents, $file->getFileContents());
     }
-
 }

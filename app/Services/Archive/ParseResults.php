@@ -4,15 +4,14 @@ namespace App\Services\Archive;
 
 class ParseResults
 {
-
     private array $files = [];
 
     private array $metadata = [];
 
     public function mergeResults(ParseResult $result)
     {
-        foreach($result->getMetadata() as $file => $data) {
-            if(!array_key_exists($file, $this->metadata)) {
+        foreach ($result->getMetadata() as $file => $data) {
+            if (!array_key_exists($file, $this->metadata)) {
                 $this->metadata[$file] = [];
             }
             $this->metadata[$file][] = $data;
@@ -35,5 +34,4 @@ class ParseResults
     {
         return $this->metadata;
     }
-
 }

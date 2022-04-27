@@ -10,7 +10,8 @@ class ActivitySearchTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_all_activities_sorted_by_updated_at_when_no_query_given(){
+    public function it_returns_all_activities_sorted_by_updated_at_when_no_query_given()
+    {
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id]);
@@ -33,11 +34,12 @@ class ActivitySearchTest extends TestCase
     }
 
     /** @test */
-    public function it_limits_to_15_activities(){
+    public function it_limits_to_15_activities()
+    {
         $this->authenticated();
 
         $activities = Activity::factory()->count(20)->create(['user_id' => $this->user->id]);
-        foreach($activities as $index => $activity) {
+        foreach ($activities as $index => $activity) {
             $activity->updated_at = Carbon::now()->subDays($index);
             $activity->save();
         }
@@ -46,13 +48,14 @@ class ActivitySearchTest extends TestCase
         $response->assertJsonCount(15);
         $json = $response->decodeResponseJson();
 
-        foreach($activities->take(15) as $index => $activity) {
+        foreach ($activities->take(15) as $index => $activity) {
             $this->assertEquals($activity->id, $json[$index]['id']);
         }
     }
 
     /** @test */
-    public function it_only_returns_your_activities(){
+    public function it_only_returns_your_activities()
+    {
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id]);
@@ -67,7 +70,8 @@ class ActivitySearchTest extends TestCase
     }
 
     /** @test */
-    public function it_filters_by_name(){
+    public function it_filters_by_name()
+    {
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -81,7 +85,8 @@ class ActivitySearchTest extends TestCase
     }
 
     /** @test */
-    public function filtering_is_not_case_sensitive(){
+    public function filtering_is_not_case_sensitive()
+    {
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -92,7 +97,8 @@ class ActivitySearchTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $activities = Activity::factory()->count(5)->create();
 
         $this->getJson(route('activity.search', ['query' => null]))
@@ -100,7 +106,8 @@ class ActivitySearchTest extends TestCase
     }
 
     /** @test */
-    public function it_orders_the_results_by_updated_at(){
+    public function it_orders_the_results_by_updated_at()
+    {
         $this->markTestIncomplete();
     }
 }

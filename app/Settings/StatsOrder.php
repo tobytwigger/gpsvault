@@ -2,12 +2,10 @@
 
 namespace App\Settings;
 
-use FormSchema\Schema\Field;
 use Settings\Types\UserSetting;
 
 class StatsOrder extends UserSetting
 {
-
     public function alias(): ?string
     {
         return 'stats_order_preference';

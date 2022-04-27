@@ -2,7 +2,6 @@
 
 namespace Feature\Route;
 
-use App\Models\Activity;
 use App\Models\Route;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -11,7 +10,8 @@ class RouteSearchTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_all_routes_sorted_by_updated_at_when_no_query_given(){
+    public function it_returns_all_routes_sorted_by_updated_at_when_no_query_given()
+    {
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id]);
@@ -34,11 +34,12 @@ class RouteSearchTest extends TestCase
     }
 
     /** @test */
-    public function it_limits_to_15_routes(){
+    public function it_limits_to_15_routes()
+    {
         $this->authenticated();
 
         $routes = Route::factory()->count(20)->create(['user_id' => $this->user->id]);
-        foreach($routes as $index => $route) {
+        foreach ($routes as $index => $route) {
             $route->updated_at = Carbon::now()->subDays($index);
             $route->save();
         }
@@ -47,13 +48,14 @@ class RouteSearchTest extends TestCase
         $response->assertJsonCount(15);
         $json = $response->decodeResponseJson();
 
-        foreach($routes->take(15) as $index => $route) {
+        foreach ($routes->take(15) as $index => $route) {
             $this->assertEquals($route->id, $json[$index]['id']);
         }
     }
 
     /** @test */
-    public function it_only_returns_your_routes(){
+    public function it_only_returns_your_routes()
+    {
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id]);
@@ -68,7 +70,8 @@ class RouteSearchTest extends TestCase
     }
 
     /** @test */
-    public function it_filters_by_name(){
+    public function it_filters_by_name()
+    {
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -82,7 +85,8 @@ class RouteSearchTest extends TestCase
     }
 
     /** @test */
-    public function filtering_is_not_case_sensitive(){
+    public function filtering_is_not_case_sensitive()
+    {
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -91,5 +95,4 @@ class RouteSearchTest extends TestCase
         $response = $this->getJson(route('route.search', ['query' => 'name']));
         $response->assertJsonCount(6);
     }
-
 }

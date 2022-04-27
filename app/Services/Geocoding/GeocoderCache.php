@@ -2,12 +2,10 @@
 
 namespace App\Services\Geocoding;
 
-use App\Services\Geocoding\Geocoder;
 use Illuminate\Contracts\Cache\Repository;
 
 class GeocoderCache implements Geocoder
 {
-
     private Geocoder $geocoder;
     private Repository $cache;
 
@@ -20,14 +18,14 @@ class GeocoderCache implements Geocoder
     public function getPlaceSummaryFromPosition(float $latitude, float $longitude): ?string
     {
         $key = sprintf('getPlaceSummaryFromPosition@%s:%s', $latitude, $longitude);
-        if($this->cache->has($key)) {
+        if ($this->cache->has($key)) {
             return $this->cache->get($key);
         }
         $result = $this->geocoder->getPlaceSummaryFromPosition($latitude, $longitude);
-        if($result !== null) {
+        if ($result !== null) {
             $this->cache->forever($key, $result);
         }
+
         return $result;
     }
-
 }

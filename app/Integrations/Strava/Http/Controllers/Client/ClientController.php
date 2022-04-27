@@ -11,7 +11,6 @@ use Inertia\Inertia;
 
 class ClientController extends Controller
 {
-
     public function index()
     {
         $ownedClients = Auth::user()->ownedClients()->with('sharedUsers')->paginate(
@@ -25,7 +24,7 @@ class ClientController extends Controller
                 'client_secret' => $client->client_secret,
                 'created_at' => $client->created_at->toIso8601String(),
                 'updated_at' => $client->updated_at->toIso8601String(),
-                'shared_users' => $client->sharedUsers->map(fn(User $user) => [
+                'shared_users' => $client->sharedUsers->map(fn (User $user) => [
                     'id' => $user->id, 'name' => $user->name, 'email' => $user->email
                 ])
             ]);
@@ -121,5 +120,4 @@ class ClientController extends Controller
 
         return redirect()->route('strava.client.index');
     }
-
 }

@@ -13,7 +13,8 @@ class StravaClientTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_an_activity_handler(){
+    public function it_creates_an_activity_handler()
+    {
         $user = User::factory()->create();
         $requestHandler = $this->prophesize(StravaRequestHandler::class);
 
@@ -39,7 +40,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function the_user_can_be_retrieved(){
+    public function the_user_can_be_retrieved()
+    {
         $user = User::factory()->create();
         $requestHandler = $this->prophesize(StravaRequestHandler::class);
 
@@ -50,7 +52,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function the_request_handler_can_be_retrieved(){
+    public function the_request_handler_can_be_retrieved()
+    {
         $user = User::factory()->create();
         $requestHandler = $this->prophesize(StravaRequestHandler::class);
 
@@ -59,5 +62,4 @@ class StravaClientTest extends TestCase
         $this->assertInstanceOf(StravaRequestHandler::class, $client->getRequestHandler());
         $this->assertEquals($requestHandler->reveal(), $client->getRequestHandler());
     }
-
 }

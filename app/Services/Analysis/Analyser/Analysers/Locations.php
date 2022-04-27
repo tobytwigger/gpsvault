@@ -3,11 +3,9 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
-use App\Services\Analysis\Parser\Point;
 
 class Locations extends AnalyserContract
 {
-
     public function canRun(Analysis $analysis): bool
     {
         return count($analysis->getPoints()) > 1;
@@ -31,6 +29,7 @@ class Locations extends AnalyserContract
         if ($analysis->getEndLongitude() === null) {
             $analysis->setEndLongitude(collect($analysis->getPoints())->last()->getLongitude());
         }
+
         return $analysis;
     }
 }

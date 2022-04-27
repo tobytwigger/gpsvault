@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Listeners;
 
-use App\Integrations\Strava\Jobs\LoadStravaComments;
 use App\Integrations\Strava\Events\StravaActivityUpdated;
+use App\Integrations\Strava\Jobs\LoadStravaComments;
 
 class IndexStravaActivityComments
 {
@@ -24,7 +24,4 @@ class IndexStravaActivityComments
         $activity = $activityEvent->activity->refresh();
         LoadStravaComments::dispatch($activity);
     }
-
-
-
 }

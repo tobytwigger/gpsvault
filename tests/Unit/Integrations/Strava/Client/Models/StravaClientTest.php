@@ -2,18 +2,18 @@
 
 namespace Unit\Integrations\Strava\Client\Models;
 
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Carbon\Carbon;
-use Linkeys\UrlSigner\Models\Link;
 use Tests\TestCase;
 
 class StravaClientTest extends TestCase
 {
 
     /** @test */
-    public function it_adds_a_user_id_on_creation(){
+    public function it_adds_a_user_id_on_creation()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->make(['user_id' => null]);
         $client->save();
@@ -22,7 +22,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_a_random_token_for_webhook_verify_on_creation(){
+    public function it_adds_a_random_token_for_webhook_verify_on_creation()
+    {
         $client = StravaClient::factory()->make(['webhook_verify_token' => null]);
         $client->save();
 
@@ -31,7 +32,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function excluding_excludes_all_given_ids_from_results(){
+    public function excluding_excludes_all_given_ids_from_results()
+    {
         $client1 = StravaClient::factory()->create();
         $client2 = StravaClient::factory()->create();
         $client3 = StravaClient::factory()->create();
@@ -44,7 +46,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function excluding_does_nothing_if_excluding_array_is_empty(){
+    public function excluding_does_nothing_if_excluding_array_is_empty()
+    {
         $client1 = StravaClient::factory()->create();
         $client2 = StravaClient::factory()->create();
         $client3 = StravaClient::factory()->create();
@@ -59,7 +62,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function enabled_limits_queries_to_only_enabled_clients(){
+    public function enabled_limits_queries_to_only_enabled_clients()
+    {
         $client1 = StravaClient::factory()->create(['enabled' => true]);
         $client2 = StravaClient::factory()->create(['enabled' => true]);
         $client3 = StravaClient::factory()->create(['enabled' => false]);
@@ -86,7 +90,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function it_has_an_owner(){
+    public function it_has_an_owner()
+    {
         $user = User::factory()->create();
         $client = StravaClient::factory()->create(['user_id' => $user->id]);
 
@@ -94,7 +99,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_shared_users(){
+    public function it_has_a_relationship_with_shared_users()
+    {
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $user3 = User::factory()->create();
@@ -109,7 +115,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function forUser_returns_any_clients_the_user_owns_has_access_to_or_is_public(){
+    public function for_user_returns_any_clients_the_user_owns_has_access_to_or_is_public()
+    {
         $user = User::factory()->create();
 
         $client1 = StravaClient::factory()->create(['user_id' => $user->id]);
@@ -129,7 +136,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function has_spaces_returns_true_if_both_are_below_the_limit(){
+    public function has_spaces_returns_true_if_both_are_below_the_limit()
+    {
         $client = StravaClient::factory()->create([
             'used_15_min_calls' => 50,
             'used_daily_calls' => 250,
@@ -140,7 +148,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function has_spaces_returns_false_if_15_mins_is_over(){
+    public function has_spaces_returns_false_if_15_mins_is_over()
+    {
         $client = StravaClient::factory()->create([
             'used_15_min_calls' => 90,
             'used_daily_calls' => 250,
@@ -151,7 +160,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function has_spaces_returns_false_if_daily_is_over(){
+    public function has_spaces_returns_false_if_daily_is_over()
+    {
         $client = StravaClient::factory()->create([
             'used_15_min_calls' => 200,
             'used_daily_calls' => 855,
@@ -162,7 +172,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function has_spaces_returns_false_if_both_are_over(){
+    public function has_spaces_returns_false_if_both_are_over()
+    {
         $client = StravaClient::factory()->create([
             'used_15_min_calls' => 200,
             'used_daily_calls' => 855,
@@ -173,7 +184,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function public_scopes_only_public_clients(){
+    public function public_scopes_only_public_clients()
+    {
         $client1 = StravaClient::factory()->create(['public' => true]);
         $client2 = StravaClient::factory()->create(['public' => true]);
         $client3 = StravaClient::factory()->create(['public' => false]);
@@ -187,7 +199,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function withSpaces_scopes_to_all_clients_with_spaces(){
+    public function with_spaces_scopes_to_all_clients_with_spaces()
+    {
         // Daily no spaces
         StravaClient::factory()->create(['used_15_min_calls' => 200, 'limit_15_min' => 500, 'used_daily_calls' => 855, 'limit_daily' => 100]);
         // 15 min no spaces
@@ -218,7 +231,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function connected_returns_true_if_tokens_are_connected_and_valid_for_the_given_user(){
+    public function connected_returns_true_if_tokens_are_connected_and_valid_for_the_given_user()
+    {
         $user = User::factory()->create();
 
         $client = StravaClient::factory()->create();
@@ -229,7 +243,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function connected_returns_false_if_no_available_tokens(){
+    public function connected_returns_false_if_no_available_tokens()
+    {
         $user = User::factory()->create();
 
         $client = StravaClient::factory()->create();
@@ -242,7 +257,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function is_connected_returns_true_if_tokens_are_connected_and_valid_for_the_logged_in_user(){
+    public function is_connected_returns_true_if_tokens_are_connected_and_valid_for_the_logged_in_user()
+    {
         $user = User::factory()->create();
         $this->be($user);
 
@@ -254,7 +270,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function is_connected_returns_false_if_no_available_tokens(){
+    public function is_connected_returns_false_if_no_available_tokens()
+    {
         $user = User::factory()->create();
         $this->be($user);
 
@@ -268,14 +285,16 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function is_connected_returns_false_if_user_logged_out(){
+    public function is_connected_returns_false_if_user_logged_out()
+    {
         $client = StravaClient::factory()->create();
         $token = StravaToken::factory()->create(['strava_client_id' => $client->id]);
         $this->assertFalse($client->is_connected);
     }
 
     /** @test */
-    public function getInvitationLink_returns_a_link_when_uuid_set(){
+    public function get_invitation_link_returns_a_link_when_uuid_set()
+    {
         $client = StravaClient::factory()->create();
 
         $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
@@ -290,14 +309,16 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function getInvitationLink_returns_null_if_no_uuid_set(){
+    public function get_invitation_link_returns_null_if_no_uuid_set()
+    {
         $client = StravaClient::factory()->create();
 
         $this->assertNull($client->getInvitationLink());
     }
 
     /** @test */
-    public function invitation_link_expired_attribute_is_added_to_the_client(){
+    public function invitation_link_expired_attribute_is_added_to_the_client()
+    {
         $client = StravaClient::factory()->create();
 
         $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
@@ -312,7 +333,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function invitation_link_attribute_is_added_to_the_client(){
+    public function invitation_link_attribute_is_added_to_the_client()
+    {
         $client = StravaClient::factory()->create();
 
         $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
@@ -327,7 +349,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function invitation_link_expires_at_attribute_is_added_to_the_client(){
+    public function invitation_link_expires_at_attribute_is_added_to_the_client()
+    {
         $client = StravaClient::factory()->create();
 
         $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
@@ -342,7 +365,8 @@ class StravaClientTest extends TestCase
     }
 
     /** @test */
-    public function connected_only_returns_connected_clients(){
+    public function connected_only_returns_connected_clients()
+    {
         $user = User::factory()->create();
 
         $client1 = StravaClient::factory()->create();
@@ -356,6 +380,4 @@ class StravaClientTest extends TestCase
         $this->assertTrue($client2->is(StravaClient::connected($user->id)->orderBy('id')->get()[0]));
         $this->assertTrue($client3->is(StravaClient::connected($user->id)->orderBy('id')->get()[1]));
     }
-
-
 }

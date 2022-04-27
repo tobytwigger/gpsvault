@@ -8,7 +8,6 @@ use maxh\Nominatim\Nominatim;
 
 class NominatimGeocoder implements Geocoder
 {
-
     private function nominatim(): Nominatim
     {
         return app('nominatim');
@@ -19,10 +18,12 @@ class NominatimGeocoder implements Geocoder
         $result = $this->nominatim()->find(
             $this->nominatim()->newReverse()->latlon($latitude, $longitude)
         );
-        if(array_key_exists('address', $result)) {
+        if (array_key_exists('address', $result)) {
             $address = Arr::only($result['address'], ['town', 'city', 'county', 'state_district', 'state', 'country']);
+
             return join(', ', array_slice($address, 0, 2));
         }
+
         return null;
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Pages\Activity;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
-use App\Models\File;
 use App\Services\File\FileUploader;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -12,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ActivityDuplicateController extends Controller
 {
-
     public function index(Request $request)
     {
         $this->authorize('create', Activity::class);
@@ -20,8 +18,9 @@ class ActivityDuplicateController extends Controller
         $request->validate([
             'hash' => 'required|string'
         ]);
-        $activity = Activity::where('user_id', Auth::id())->whereHas('file',
-            fn(Builder $query) => $query->where('hash', $request->input('hash'))->where('type', FileUploader::ACTIVITY_FILE)
+        $activity = Activity::where('user_id', Auth::id())->whereHas(
+            'file',
+            fn (Builder $query) => $query->where('hash', $request->input('hash'))->where('type', FileUploader::ACTIVITY_FILE)
         )->first();
 
         return [
@@ -30,5 +29,4 @@ class ActivityDuplicateController extends Controller
             'activity' => $activity
         ];
     }
-
 }

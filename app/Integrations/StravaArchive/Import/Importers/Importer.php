@@ -2,13 +2,11 @@
 
 namespace App\Integrations\Strava\Import\Importers;
 
-use App\Models\File;
-use App\Services\Sync\SyncTask;
 use App\Models\User;
+use App\Services\Sync\SyncTask;
 
 abstract class Importer
 {
-
     protected ImportingZip $zip;
 
     private ?SyncTask $task;
@@ -23,17 +21,19 @@ abstract class Importer
         $this->importResults = new ImportResults();
         $this->zip = $zip;
         $this->task = $task;
+
         try {
             $this->import();
         } catch (\Exception $e) {
             $this->failed($e->getMessage(), [], $this->type());
         }
+
         return $this->importResults;
     }
 
     public function statusUpdate(string $message)
     {
-        if($this->task !== null) {
+        if ($this->task !== null) {
             $this->task->addMessage($message);
         }
     }
@@ -50,7 +50,7 @@ abstract class Importer
 
     protected function updateProgress(int $number, int $outOf)
     {
-        if($number%20 === 0) {
+        if ($number%20 === 0) {
             $this->statusUpdate(sprintf('Extracting %u/%u %s', $number, $outOf, $this->type()));
         }
     }
@@ -58,5 +58,4 @@ abstract class Importer
     abstract protected function import();
 
     abstract public function type(): string;
-
 }

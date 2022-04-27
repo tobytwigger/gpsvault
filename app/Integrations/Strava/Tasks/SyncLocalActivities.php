@@ -3,15 +3,12 @@
 namespace App\Integrations\Strava\Tasks;
 
 use App\Integrations\Strava\Client\Import\ApiImport;
-use App\Integrations\Strava\Client\Import\ImportStravaActivity;
 use App\Integrations\Strava\Client\Import\Resources\Activity;
 use App\Integrations\Strava\Client\Strava;
-use App\Models\User;
 use App\Services\Sync\Task;
 
 class SyncLocalActivities extends Task
 {
-
     public function run()
     {
         $strava = Strava::client($this->user());
@@ -23,7 +20,7 @@ class SyncLocalActivities extends Task
         do {
             $activities = $strava->activity()->getActivities($page);
 
-            if(count($activities) === 0) {
+            if (count($activities) === 0) {
                 continue;
             }
 
@@ -34,7 +31,7 @@ class SyncLocalActivities extends Task
             foreach ($activities as $activityData) {
                 $import = ApiImport::activity()->import($activityData, $this->user());
 
-                match($import->status()) {
+                match ($import->status()) {
                     Activity::CREATED => $createdActivies++,
                     Activity::UPDATED => $updatedActivities++
                 };
@@ -46,7 +43,4 @@ class SyncLocalActivities extends Task
 
         $this->line(sprintf('Found %u activities, including %u new and %u updated.', $totalActivities, $createdActivies, $updatedActivities));
     }
-
-
-
 }

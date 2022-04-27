@@ -32,7 +32,6 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Define your route model bindings, pattern filters, etc.
      *
-     * @return void
      */
     public function boot()
     {
@@ -49,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        Route::bind('integration', function(string $integrationKey) {
+        Route::bind('integration', function (string $integrationKey) {
             try {
                 return app(sprintf('integrations.%s', $integrationKey));
             } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
@@ -61,7 +60,6 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Configure the rate limiters for the application.
      *
-     * @return void
      */
     protected function configureRateLimiting()
     {

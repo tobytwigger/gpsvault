@@ -10,9 +10,9 @@ class UploadTest extends TestCase
 {
 
     /** @test */
-    public function it_resolves_the_underlying_instance(){
+    public function it_resolves_the_underlying_instance()
+    {
         $instance = Upload::getFacadeRoot();
         $this->assertInstanceOf(FileUploader::class, $instance);
     }
-
 }

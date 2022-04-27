@@ -28,7 +28,7 @@ class StravaToken extends Model
 
     protected $fillable = ['user_id', 'strava_client_id', 'access_token', 'refresh_token', 'expires_at', 'disabled'];
 
-    public static function makeFromStravaTokenResponse(\App\Integrations\Strava\Client\Authentication\StravaTokenResponse $token, int $clientId)
+    public static function makeFromStravaTokenResponse(StravaTokenResponse $token, int $clientId)
     {
         $instance = new StravaToken();
 
@@ -42,7 +42,7 @@ class StravaToken extends Model
         return $instance;
     }
 
-    public function updateFromStravaTokenResponse(\App\Integrations\Strava\Client\Authentication\StravaTokenResponse $token)
+    public function updateFromStravaTokenResponse(StravaTokenResponse $token)
     {
         $this->access_token = $token->getAccessToken() ?? $this->access_token;
         $this->refresh_token = $token->getRefreshToken() ?? $this->refresh_token;
@@ -84,5 +84,4 @@ class StravaToken extends Model
     {
         return new StravaTokenFactory();
     }
-
 }

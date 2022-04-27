@@ -26,7 +26,6 @@ class AnalyseActivityFiles extends Command
     /**
      * Create a new command instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -42,11 +41,12 @@ class AnalyseActivityFiles extends Command
     {
         $count = 0;
         $activities = $this->argument('activity') ? Arr::wrap(Activity::findOrFail($this->argument('activity'))) : Activity::get();
-        foreach($activities as $activity) {
+        foreach ($activities as $activity) {
             AnalyseFile::dispatch($activity);
             $count++;
         }
         $this->line(sprintf('Set %u activities for analysis.', $count));
+
         return Command::SUCCESS;
     }
 }

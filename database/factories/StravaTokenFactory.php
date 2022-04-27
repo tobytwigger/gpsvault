@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
-use App\Models\Team;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -30,7 +29,7 @@ class StravaTokenFactory extends Factory
             'refresh_token' => Str::random(15),
             'access_token' => Str::random(15),
             'user_id' => fn () => User::factory(),
-            'strava_client_id' => fn() => StravaClient::factory(),
+            'strava_client_id' => fn () => StravaClient::factory(),
             'disabled' => false
         ];
     }

@@ -13,7 +13,8 @@ class StravaTokenTest extends TestCase
 {
 
     /** @test */
-    public function it_belongs_to_a_client(){
+    public function it_belongs_to_a_client()
+    {
         $client = StravaClient::factory()->create();
         $token = StravaToken::factory()->create(['strava_client_id' => $client->id]);
 
@@ -21,7 +22,8 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_a_user(){
+    public function it_belongs_to_a_user()
+    {
         $user = User::factory()->create();
         $token = StravaToken::factory()->create(['user_id' => $user->id]);
 
@@ -29,7 +31,8 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function forUser_scopes_to_tokens_belonging_to_a_user(){
+    public function for_user_scopes_to_tokens_belonging_to_a_user()
+    {
         $user = User::factory()->create();
         $token1 = StravaToken::factory()->create(['user_id' => $user->id]);
         $token2 = StravaToken::factory()->create();
@@ -42,7 +45,8 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function enabled_scopes_to_enabled_tokens(){
+    public function enabled_scopes_to_enabled_tokens()
+    {
         $user = User::factory()->create();
         $token1 = StravaToken::factory()->create(['disabled' => false]);
         $token2 = StravaToken::factory()->create(['disabled' => true]);
@@ -55,7 +59,8 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function active_scopes_to_non_expired_tokens(){
+    public function active_scopes_to_non_expired_tokens()
+    {
         $token1 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addDay()]);
         $token2 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addMinutes(3)]);
         $token3 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addMinute()]); // 2 minute buffer time on expiring
@@ -68,7 +73,8 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function expired_determines_if_the_token_is_expired(){
+    public function expired_determines_if_the_token_is_expired()
+    {
         $token1 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addDay()]);
         $token2 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addMinutes(3)]);
         $token3 = StravaToken::factory()->create(['expires_at' => Carbon::now()->addMinute()]); // 2 minute buffer time on expiring
@@ -81,13 +87,18 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function makeFromStravaTokenResponse_returns_a_new_strava_token_model(){
+    public function make_from_strava_token_response_returns_a_new_strava_token_model()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create();
 
         $expiresAt = Carbon::now()->addDay();
         $stravaTokenResponse = StravaTokenResponse::create(
-            $expiresAt, 11, 'refresh-token', 'access-token', 5
+            $expiresAt,
+            11,
+            'refresh-token',
+            'access-token',
+            5
         );
 
         $token = StravaToken::makeFromStravaTokenResponse($stravaTokenResponse, $client->id);
@@ -101,13 +112,18 @@ class StravaTokenTest extends TestCase
     }
 
     /** @test */
-    public function updateFromStravaTokenResponse_updates_a_strava_token(){
+    public function update_from_strava_token_response_updates_a_strava_token()
+    {
         $this->authenticated();
         $client = StravaClient::factory()->create();
 
         $expiresAt = Carbon::now()->addDay();
         $stravaTokenResponse = StravaTokenResponse::create(
-            $expiresAt, 11, 'refresh-token-updated', 'access-token-updated', 5
+            $expiresAt,
+            11,
+            'refresh-token-updated',
+            'access-token-updated',
+            5
         );
         $token = StravaToken::factory()->create([
             'access_token' => 'access-token',
@@ -126,5 +142,4 @@ class StravaTokenTest extends TestCase
         $this->assertEquals(false, $token->disabled);
         $this->assertEquals($client->id, $token->strava_client_id);
     }
-
 }

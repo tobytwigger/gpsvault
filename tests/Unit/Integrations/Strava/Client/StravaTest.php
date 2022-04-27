@@ -17,7 +17,8 @@ class StravaTest extends TestCase
     }
 
     /** @test */
-    public function it_calls_the_underlying_instance(){
+    public function it_calls_the_underlying_instance()
+    {
         $instance = $this->prophesize(StravaClientFactory::class);
         $client = $this->prophesize(StravaClient::class)->reveal();
         $instance->client()->shouldBeCalled()->willReturn($client);
@@ -25,5 +26,4 @@ class StravaTest extends TestCase
 
         $this->assertEquals($client, Strava::client());
     }
-
 }

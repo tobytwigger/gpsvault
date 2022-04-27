@@ -4,14 +4,15 @@ namespace Feature\Integrations\Strava\Client\CRUD;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Support\Str;
-use Tests\TestCase;
 use function route;
+use Tests\TestCase;
 
 class StoreClientTest extends TestCase
 {
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->post(
             route('strava.client.store'),
             ['client_id' => 123, 'client_secret' => 'secret-123', 'name' => 'name123', 'description' => 'desc123']
@@ -20,7 +21,8 @@ class StoreClientTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission(){
+    public function it_returns_403_if_you_do_not_have_permission()
+    {
         $this->authenticated();
 
         $response = $this->post(
@@ -33,7 +35,8 @@ class StoreClientTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_the_client_and_redirects(){
+    public function it_creates_the_client_and_redirects()
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $this->assertDatabaseCount('strava_clients', 0);
@@ -62,14 +65,18 @@ class StoreClientTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $attributes
+     * @param mixed $key
+     * @param mixed $error
      */
-    public function it_validates($attributes, $key, $error){
+    public function it_validates($attributes, $key, $error)
+    {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
 
         $response = $this->post(route('strava.client.store'), $attributes);
 
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -91,5 +98,4 @@ class StoreClientTest extends TestCase
             [['client_id' => 123, 'client_secret' => 'sec', 'description' => []], 'description', 'The description must be a string.'],
         ];
     }
-
 }

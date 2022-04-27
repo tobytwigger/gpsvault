@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ActivityStats;
 use App\Models\Route;
-use App\Models\Stats;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +23,7 @@ class RouteFactory extends Factory
             'notes' => $this->faker->paragraph,
             'public' => false,
             'file_id' => null,
-            'user_id' => fn() => User::factory()
+            'user_id' => fn () => User::factory()
         ];
     }
 }

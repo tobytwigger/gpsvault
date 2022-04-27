@@ -8,18 +8,16 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PhotoImporter extends Importer
 {
-
     protected function import()
     {
         $captions = $this->zip->getCsv('photos.csv');
 
-        $this->availablePhotos()->each(function(MemberInterface $member, int $key) use ($captions) {
+        $this->availablePhotos()->each(function (MemberInterface $member, int $key) use ($captions) {
             $this->updateProgress($key + 1, $this->availablePhotos()->count());
             $this->processFile($member, $captions);
         });
@@ -28,13 +26,14 @@ class PhotoImporter extends Importer
     private function availablePhotos(): Collection
     {
         return $this->zip->getMembers()
-            ->filter(fn(MemberInterface $member) => Str::startsWith($member->getLocation(), 'photos/') && Str::length($member->getLocation()) > 7)
+            ->filter(fn (MemberInterface $member) => Str::startsWith($member->getLocation(), 'photos/') && Str::length($member->getLocation()) > 7)
             ->values();
     }
 
     private function photoExists(MemberInterface $file): ?File
     {
         $fileName = Str::substr($file->getLocation(), 7);
+
         return File::where('filename', $fileName)->first();
     }
 
@@ -47,10 +46,11 @@ class PhotoImporter extends Importer
     {
         try {
             $file = $this->photoExists($member);
-            if($file !== null) {
+            if ($file !== null) {
                 $this->failed('duplicate', [
                     'file_location' => $member->getLocation()
                 ]);
+
                 return;
             }
 
@@ -62,12 +62,12 @@ class PhotoImporter extends Importer
             $file = $this->convertMemberToFile($member);
 
             $caption = $captions[$member->getLocation()] ?? null;
-            if($caption) {
+            if ($caption) {
                 $file->caption = $caption;
                 $file->save();
             }
 
-            if($activity !== null) {
+            if ($activity !== null) {
                 $file->type = FileUploader::ACTIVITY_MEDIA;
                 $file->save();
 
@@ -82,6 +82,7 @@ class PhotoImporter extends Importer
             ]);
         } catch (\Exception $e) {
             $this->failed($e->getMessage(), ['reason' => 'exception']);
+
             return;
         }
     }
@@ -99,5 +100,4 @@ class PhotoImporter extends Importer
             FileUploader::ACTIVITY_MEDIA
         );
     }
-
 }

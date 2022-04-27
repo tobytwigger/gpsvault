@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Pages\Backup;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
-use App\Services\Sync\Sync;
 use App\Services\File\FileUploader;
+use App\Services\Sync\Sync;
 use App\Tasks\CreateBackupTask;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -14,7 +14,6 @@ use Inertia\Inertia;
 
 class BackupController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(File::class);
@@ -33,7 +32,7 @@ class BackupController extends Controller
                 ->orderBy('created_at', 'DESC')
                 ->paginate(request()->input('perPage', 8)),
             'task' => Auth::user()->syncs()
-                ->whereHas('pendingTasks', fn(Builder $query) => $query->where('task_id', CreateBackupTask::id()))
+                ->whereHas('pendingTasks', fn (Builder $query) => $query->where('task_id', CreateBackupTask::id()))
                 ->first()
                 ?->tasks()->where('task_id', CreateBackupTask::id())->first()
         ]);
@@ -48,8 +47,9 @@ class BackupController extends Controller
     public function store(Request $request)
     {
         abort_if(
-            Auth::user()->syncs()->whereHas('pendingTasks', fn(Builder $query) => $query->where('task_id', CreateBackupTask::id()))->exists(),
-            400, 'A backup is already being generated'
+            Auth::user()->syncs()->whereHas('pendingTasks', fn (Builder $query) => $query->where('task_id', CreateBackupTask::id()))->exists(),
+            400,
+            'A backup is already being generated'
         );
 
         $sync = Sync::start();
@@ -94,5 +94,4 @@ class BackupController extends Controller
 
         return redirect()->route('backup.index');
     }
-
 }

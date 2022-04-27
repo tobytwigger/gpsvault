@@ -16,7 +16,6 @@ use Illuminate\Support\Arr;
 
 class Activity
 {
-
     public const CREATED = 'created';
 
     public const UPDATED = 'updated';
@@ -94,7 +93,7 @@ class Activity
             ->linkTo('strava');
         $updated = [];
 
-        if(array_key_exists('upload_id_str', $activityData) && $existingActivity->getAdditionalData('strava_upload_id') !== data_get($activityData, 'upload_id_str')) {
+        if (array_key_exists('upload_id_str', $activityData) && $existingActivity->getAdditionalData('strava_upload_id') !== data_get($activityData, 'upload_id_str')) {
             $importer->setAdditionalData('strava_upload_id', data_get($activityData, 'upload_id_str'));
             $updated[] = 'details';
         }
@@ -123,9 +122,9 @@ class Activity
         }
 
         $stats = $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]));
-        if(
+        if (
             collect($stats->toArray())
-                ->filter(fn($value, $key) => array_key_exists($key, $activityData) && $activityData[$key] !== $value)
+                ->filter(fn ($value, $key) => array_key_exists($key, $activityData) && $activityData[$key] !== $value)
                 ->count() > 0
         ) {
             $updated[] = 'stats';
@@ -155,8 +154,8 @@ class Activity
             'details' => LoadStravaActivity::class,
             'stats' => LoadStravaStats::class
         ];
-        foreach($updated as $updatedProperty) {
-            if(array_key_exists($updatedProperty, $jobs)) {
+        foreach ($updated as $updatedProperty) {
+            if (array_key_exists($updatedProperty, $jobs)) {
                 $jobs[$updatedProperty]::dispatch($existingActivity);
             }
         }
@@ -189,6 +188,7 @@ class Activity
             'end_latitude' => Arr::first($activityData['end_latlng'] ?? [$stats->end_latitude]),
             'end_longitude' => Arr::last($activityData['end_latlng'] ?? [$stats->end_longitude]),
         ]);
+
         return $stats;
     }
 
@@ -196,5 +196,4 @@ class Activity
     {
         return $this->status;
     }
-
 }

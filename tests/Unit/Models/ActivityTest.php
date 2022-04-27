@@ -10,14 +10,14 @@ use App\Models\Stats;
 use App\Models\User;
 use App\Settings\StatsOrder;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ActivityTest extends TestCase
 {
 
     /** @test */
-    public function the_user_id_is_automatically_set_on_creation_if_null(){
+    public function the_user_id_is_automatically_set_on_creation_if_null()
+    {
         $this->authenticated();
         $activity = Activity::factory()->make(['user_id' => null]);
         $activity->save();
@@ -26,7 +26,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_related_models(){
+    public function it_deletes_related_models()
+    {
         $file = File::factory()->activityFile()->create();
         $activity = Activity::factory()->create(['file_id' => $file->id]);
         Stats::factory()->activity($activity)->count(5)->create();
@@ -49,7 +50,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function cover_image_returns_the_preview_for_the_file(){
+    public function cover_image_returns_the_preview_for_the_file()
+    {
         $activity = Activity::factory()->create();
         $file = File::factory()->activityMedia()->create();
         $activity->files()->attach($file);
@@ -58,13 +60,15 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function cover_image_returns_null_if_file_not_set(){
+    public function cover_image_returns_null_if_file_not_set()
+    {
         $activity = Activity::factory()->create();
         $this->assertNull($activity->cover_image);
     }
 
     /** @test */
-    public function it_has_a_relationship_with_strava_comments(){
+    public function it_has_a_relationship_with_strava_comments()
+    {
         $activity = Activity::factory()->create();
         $stravaComments = StravaComment::factory()->count(5)->create(['activity_id' => $activity->id]);
 
@@ -73,7 +77,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_strava_kudos(){
+    public function it_has_a_relationship_with_strava_kudos()
+    {
         $activity = Activity::factory()->create();
         $stravaKudos = StravaKudos::factory()->count(5)->create(['activity_id' => $activity->id]);
 
@@ -82,7 +87,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_user(){
+    public function it_has_a_relationship_with_user()
+    {
         $user = User::factory()->create();
         $activity = Activity::factory()->create(['user_id' => $user]);
 
@@ -91,28 +97,30 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_files(){
+    public function it_has_a_relationship_with_files()
+    {
         $activity = Activity::factory()->create();
         $files = File::factory()->activityMedia()->count(5)->create();
         $activity->files()->attach($files);
 
         $this->assertContainsOnlyInstancesOf(File::class, $activity->files);
-        foreach($activity->files as $file) {
+        foreach ($activity->files as $file) {
             $this->assertTrue($files->shift()->is($file));
         }
     }
 
     /** @test */
-    public function it_can_be_linked_to_an_integration_and_queried_as_such(){
+    public function it_can_be_linked_to_an_integration_and_queried_as_such()
+    {
         $activity = Activity::factory()->create();
         $activity2 = Activity::factory()->create();
         $activity->linkTo('strava');
         $this->assertCount(1, Activity::linkedTo('strava')->get());
-
     }
 
     /** @test */
-    public function orderByStartedAt_orders_by_started_at(){
+    public function order_by_started_at_orders_by_started_at()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['started_at' => Carbon::now()]);
 
@@ -131,7 +139,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function orderByStartedAt_prioritises_based_on_stats_preference(){
+    public function order_by_started_at_prioritises_based_on_stats_preference()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['integration' => 'php', 'started_at' => Carbon::now()]);
 
@@ -160,7 +169,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function orderByStartedAt_orders_undated_models_first(){
+    public function order_by_started_at_orders_undated_models_first()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['integration' => 'php', 'started_at' => null]);
 
@@ -180,7 +190,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function orderByDistance_orders_by_distance(){
+    public function order_by_distance_orders_by_distance()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['distance' => 100]);
 
@@ -199,7 +210,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function orderByDistance_prioritises_based_on_stats_preference(){
+    public function order_by_distance_prioritises_based_on_stats_preference()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['integration' => 'php', 'distance' => 100]);
 
@@ -228,7 +240,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function orderByDistance_orders_undated_models_first(){
+    public function order_by_distance_orders_undated_models_first()
+    {
         $activity1 = Activity::factory()->create();
         Stats::factory()->activity($activity1)->create(['integration' => 'php', 'distance' => null]);
 
@@ -248,7 +261,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_preferred_distance(){
+    public function it_appends_the_preferred_distance()
+    {
         $activity3 = Activity::factory()->create();
         Stats::factory()->activity($activity3)->create(['integration' => 'php', 'distance' => 95]);
         Stats::factory()->activity($activity3)->create(['integration' => 'strava', 'distance' => 50]);
@@ -261,7 +275,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_preferred_started_at(){
+    public function it_appends_the_preferred_started_at()
+    {
         $activity3 = Activity::factory()->create();
         $now = Carbon::now();
         $subDay = Carbon::now()->subDay();
@@ -276,7 +291,8 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function started_at_attribute_is_null_if_no_stats_available(){
+    public function started_at_attribute_is_null_if_no_stats_available()
+    {
         $activity3 = Activity::factory()->create();
 
         $this->assertNull($activity3->started_at);

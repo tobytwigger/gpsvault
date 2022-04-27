@@ -11,7 +11,8 @@ class GeocoderRateLimitTest extends TestCase
 {
 
     /** @test */
-    public function it_allows_two_calls_per_second(){
+    public function it_allows_two_calls_per_second()
+    {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(55, 33)->willReturn('MK, Bucks');
 
@@ -20,5 +21,4 @@ class GeocoderRateLimitTest extends TestCase
         $this->assertEquals('MK, Bucks', $limiter->getPlaceSummaryFromPosition(55, 33));
         $this->assertNull($limiter->getPlaceSummaryFromPosition(55, 33));
     }
-
 }

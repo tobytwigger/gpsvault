@@ -11,7 +11,6 @@ use Location\Polyline;
 
 class GeoJsonController extends Controller
 {
-
     public function show(Stats $stats)
     {
         $this->authorize('view', $stats->model);
@@ -19,12 +18,11 @@ class GeoJsonController extends Controller
         $points = $stats->waypoints()
             ->whereNotNull('points')
             ->get()
-            ->map(fn(Waypoint $waypoint) => new Coordinate($waypoint->latitude, $waypoint->longitude));
+            ->map(fn (Waypoint $waypoint) => new Coordinate($waypoint->latitude, $waypoint->longitude));
 
         $polyline = new Polyline();
         $polyline->addPoints($points->all());
 
         return $polyline->format(new GeoJSON());
     }
-
 }

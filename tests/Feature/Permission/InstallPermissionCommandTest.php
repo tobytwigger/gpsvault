@@ -2,11 +2,8 @@
 
 namespace Tests\Feature\Permission;
 
-use App\Console\Commands\GrantPermissions;
 use App\Console\Commands\InstallPermissions;
-use App\Models\User;
 use Illuminate\Contracts\Config\Repository;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Models\Permission;
 use Tests\TestCase;
 
@@ -14,7 +11,8 @@ class InstallPermissionCommandTest extends TestCase
 {
 
     /** @test */
-    public function it_installs_all_permissions(){
+    public function it_installs_all_permissions()
+    {
         $config = $this->prophesize(Repository::class);
         $config->get('permission.seed', [])->willReturn(['per-one', 'per-two', 'per-three']);
         $this->instance(Repository::class, $config->reveal());
@@ -31,7 +29,8 @@ class InstallPermissionCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_installs_new_permissions(){
+    public function it_installs_new_permissions()
+    {
         $config = $this->prophesize(Repository::class);
         $config->get('permission.seed', [])->willReturn(['per-one', 'per-two', 'per-three']);
         $this->instance(Repository::class, $config->reveal());
@@ -49,7 +48,8 @@ class InstallPermissionCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_permissions(){
+    public function it_can_remove_permissions()
+    {
         $config = $this->prophesize(Repository::class);
         $config->get('permission.seed', [])->willReturn(['per-two', 'per-three']);
         $this->instance(Repository::class, $config->reveal());
@@ -65,6 +65,4 @@ class InstallPermissionCommandTest extends TestCase
         $this->assertTrue(Permission::where('name', 'per-two')->exists());
         $this->assertTrue(Permission::where('name', 'per-three')->exists());
     }
-
-
 }

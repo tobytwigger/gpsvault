@@ -2,20 +2,15 @@
 
 namespace App\Tasks;
 
-use App\Integrations\Strava\Client\Import\ImportStravaActivity;
-use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
 use App\Models\Route;
 use App\Models\Tour;
-use App\Services\Sync\Sync;
-use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use App\Services\Sync\Task;
 use Carbon\Carbon;
 
 class CreateBackupTask extends Task
 {
-
     public static function id(): string
     {
         return 'backup-all-tasks';
@@ -28,21 +23,21 @@ class CreateBackupTask extends Task
         $zipCreator->add($this->user());
 
         $activityCount = 0;
-        foreach(Activity::where('user_id', $this->user()->id)->get() as $activity) {
+        foreach (Activity::where('user_id', $this->user()->id)->get() as $activity) {
             $zipCreator->add($activity);
             $activityCount++;
         }
         $this->line(sprintf('Added %u activities.', $activityCount));
 
         $routeCount = 0;
-        foreach(Route::where('user_id', $this->user()->id)->get() as $route) {
+        foreach (Route::where('user_id', $this->user()->id)->get() as $route) {
             $zipCreator->add($route);
             $routeCount++;
         }
         $this->line(sprintf('Added %u routes.', $routeCount));
 
         $tourCount = 0;
-        foreach(Tour::where('user_id', $this->user()->id)->get() as $tour) {
+        foreach (Tour::where('user_id', $this->user()->id)->get() as $tour) {
             $zipCreator->add($tour);
             $tourCount++;
         }
@@ -59,7 +54,4 @@ class CreateBackupTask extends Task
 
         $this->succeed('Generated full backup of your data.');
     }
-
-
-
 }

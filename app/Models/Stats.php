@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Services\File\FileUploader;
 use App\Services\Geocoding\Geocoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
@@ -111,17 +110,19 @@ class Stats extends Model
 
     public function getHumanStartedAtAttribute()
     {
-        if(!$this->start_latitude || !$this->start_longitude) {
+        if (!$this->start_latitude || !$this->start_longitude) {
             return null;
         }
+
         return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_latitude, $this->start_longitude);
     }
 
     public function getHumanEndedAtAttribute()
     {
-        if(!$this->end_latitude || !$this->end_longitude) {
+        if (!$this->end_latitude || !$this->end_longitude) {
             return null;
         }
+
         return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_latitude, $this->end_longitude);
     }
 
@@ -133,7 +134,7 @@ class Stats extends Model
     public static function scopeOrderByPreference(Builder $query)
     {
         $order = collect(StatsOrder::getValue())
-            ->map(fn(string $integration) => sprintf('\'%s\'', $integration))
+            ->map(fn (string $integration) => sprintf('\'%s\'', $integration))
             ->join(', ');
 
         return $query->orderByRaw(
@@ -150,5 +151,4 @@ class Stats extends Model
     {
         return $this->hasMany(Waypoint::class);
     }
-
 }

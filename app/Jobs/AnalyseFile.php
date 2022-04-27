@@ -7,7 +7,6 @@ use App\Models\Route;
 use App\Models\Stats;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Parser\Point;
-use App\Services\File\Upload;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,7 +26,6 @@ class AnalyseFile implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      */
     public function __construct(Activity|Route $model)
     {
@@ -45,11 +43,10 @@ class AnalyseFile implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      */
     public function handle()
     {
-        if(!$this->model->hasFile()) {
+        if (!$this->model->hasFile()) {
             throw new NotFoundHttpException(sprintf('%s %u does not have a model associated with it.', $this->getModelName(), $this->model->id));
         }
         $analysis = Analyser::analyse($this->model->file);
@@ -92,8 +89,8 @@ class AnalyseFile implements ShouldQueue
     {
         $stats->waypoints()->delete();
 
-        foreach(collect($points)->chunk(1000) as $chunkedPoints) {
-            $stats->waypoints()->createMany($chunkedPoints->map(fn(Point $point) => [
+        foreach (collect($points)->chunk(1000) as $chunkedPoints) {
+            $stats->waypoints()->createMany($chunkedPoints->map(fn (Point $point) => [
                 'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
                 'elevation' => $point->getElevation(),
                 'time' => $point->getTime(),
@@ -115,5 +112,4 @@ class AnalyseFile implements ShouldQueue
             (new WithoutOverlapping('FileAnalyser'))
         ];
     }
-
 }

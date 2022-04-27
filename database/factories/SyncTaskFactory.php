@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use App\Services\Sync\Sync;
 use App\Services\Sync\SyncTask;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -10,7 +9,6 @@ use Illuminate\Support\Str;
 
 class SyncTaskFactory extends Factory
 {
-
     protected $model = SyncTask::class;
 
     /**
@@ -21,8 +19,9 @@ class SyncTaskFactory extends Factory
     public function definition()
     {
         $startedAt = $this->faker->dateTimeBetween('-1 year', '-1 hour');
+
         return [
-            'sync_id' => fn() => Sync::factory(),
+            'sync_id' => fn () => Sync::factory(),
             'task_id' => Str::random(20),
             'config' => [],
             'status' => 'queued',

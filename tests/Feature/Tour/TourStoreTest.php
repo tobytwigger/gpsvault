@@ -10,7 +10,8 @@ class TourStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_an_tour_from_a_name(){
+    public function it_creates_an_tour_from_a_name()
+    {
         $this->authenticated();
 
         $response = $this->post(route('tour.store'), [
@@ -24,7 +25,8 @@ class TourStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_new_tour(){
+    public function it_redirects_to_show_the_new_tour()
+    {
         $this->authenticated();
 
         $response = $this->post(route('tour.store'), [
@@ -38,13 +40,17 @@ class TourStoreTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
 
         $response = $this->post(route('tour.store'), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -61,11 +67,11 @@ class TourStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->post(route('tour.store'), [
             'name' => 'This is the tour name'
         ]);
         $response->assertRedirect(route('login'));
     }
-
 }

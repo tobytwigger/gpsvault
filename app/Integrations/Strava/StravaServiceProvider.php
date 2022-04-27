@@ -2,9 +2,9 @@
 
 namespace App\Integrations\Strava;
 
+use App\Integrations\Integration;
 use App\Integrations\Strava\Client\Commands\ResetRateLimit;
 use App\Integrations\Strava\Commands\SetupWebhooks;
-use App\Integrations\Strava\Events\NewStravaActivity;
 use App\Integrations\Strava\Events\StravaActivityCommentsUpdated;
 use App\Integrations\Strava\Events\StravaActivityKudosUpdated;
 use App\Integrations\Strava\Events\StravaActivityPhotosUpdated;
@@ -15,7 +15,6 @@ use App\Integrations\Strava\Http\Controllers\ClientStatusController;
 use App\Integrations\Strava\Http\Controllers\ImportController;
 use App\Integrations\Strava\Http\Controllers\IncomingWebhookController;
 use App\Integrations\Strava\Http\Controllers\StravaController;
-use App\Integrations\Integration;
 use App\Integrations\Strava\Import\Importer;
 use App\Integrations\Strava\Import\Importers\Importers\ActivityImporter;
 use App\Integrations\Strava\Import\Importers\Importers\PhotoImporter;
@@ -33,7 +32,6 @@ use App\Integrations\Strava\Tasks\StravaUpload;
 use App\Integrations\Strava\Tasks\SyncLocalActivities;
 use App\Services\Sync\Task;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Events\CallQueuedListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +39,6 @@ use Illuminate\Support\ServiceProvider;
 
 class StravaServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->commands([ResetRateLimit::class]);
@@ -110,5 +107,4 @@ class StravaServiceProvider extends ServiceProvider
             Limit::perDay(900)->by('strava-daily')
         ];
     }
-
 }

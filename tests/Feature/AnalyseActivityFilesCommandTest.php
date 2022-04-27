@@ -12,7 +12,8 @@ class AnalyseActivityFilesCommandTest extends TestCase
 {
 
     /** @test */
-    public function it_fires_an_analysis_job_for_the_given_activity(){
+    public function it_fires_an_analysis_job_for_the_given_activity()
+    {
         Bus::fake(AnalyseFile::class);
 
         $activity = Activity::factory()->create();
@@ -22,11 +23,12 @@ class AnalyseActivityFilesCommandTest extends TestCase
             ->expectsOutput('Set 1 activities for analysis.')
             ->assertSuccessful();
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model->is($activity));
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model->is($activity));
     }
 
     /** @test */
-    public function it_fires_an_analysis_job_for_all_activities_if_no_id_given(){
+    public function it_fires_an_analysis_job_for_all_activities_if_no_id_given()
+    {
         Bus::fake(AnalyseFile::class);
 
         $activities = Activity::factory()->count(10)->create();
@@ -36,9 +38,8 @@ class AnalyseActivityFilesCommandTest extends TestCase
             ->assertSuccessful();
 
         Bus::assertDispatchedTimes(AnalyseFile::class, 10);
-        foreach($activities as $activity) {
-            Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model->is($activity));
+        foreach ($activities as $activity) {
+            Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model->is($activity));
         }
     }
-
 }

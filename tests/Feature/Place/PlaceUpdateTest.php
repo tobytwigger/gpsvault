@@ -4,13 +4,11 @@ namespace Tests\Feature\Place;
 
 use App\Models\Place;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class PlaceUpdateTest extends TestCase
 {
-
     private function getPlaceAttributes(array $overrides = [], bool $withoutLocation = false): array
     {
         return array_merge([
@@ -26,17 +24,18 @@ class PlaceUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_a_place(){
+    public function it_updates_a_place()
+    {
         $this->authenticated();
 
         $place = Place::factory()->create(['user_id' => $this->user->id]);
 
-        foreach(array_filter($this->getPlaceAttributes(['location' => ['lat' => 0.1, 'lng' => 55], 'user_id' => null])) as $key => $attribute) {
+        foreach (array_filter($this->getPlaceAttributes(['location' => ['lat' => 0.1, 'lng' => 55], 'user_id' => null])) as $key => $attribute) {
             $response = $this->patch(route('place.update', $place), $this->getPlaceAttributes());
             $response->assertRedirect();
             $response->assertSessionHasNoErrors();
             $this->assertDatabaseCount('places', 1);
-            if($key !== 'location') {
+            if ($key !== 'location') {
                 $this->assertDatabaseMissing('places', [$key => $place->{$key}]);
                 $this->assertDatabaseHas('places', [$key => $attribute]);
             }
@@ -44,7 +43,8 @@ class PlaceUpdateTest extends TestCase
     }
 
     /** @test */
-    public function the_user_id_cannot_be_updated(){
+    public function the_user_id_cannot_be_updated()
+    {
         $this->authenticated();
 
         $user = User::factory()->create();
@@ -60,7 +60,8 @@ class PlaceUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_place(){
+    public function it_redirects_to_show_the_place()
+    {
         $this->authenticated();
         $place = Place::factory()->create(['user_id' => $this->user->id]);
 
@@ -76,7 +77,8 @@ class PlaceUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_get_a_403_if_you_try_to_edit_a_place_that_is_not_yours(){
+    public function you_get_a_403_if_you_try_to_edit_a_place_that_is_not_yours()
+    {
         $this->authenticated();
 
         $place = Place::factory()->create();
@@ -102,10 +104,15 @@ class PlaceUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
+     * @param null|mixed $overrideErrorKey
      */
-    public function it_validates($key, $value, $error, $overrideErrorKey = null){
+    public function it_validates($key, $value, $error, $overrideErrorKey = null)
+    {
         $this->authenticated();
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = call_user_func($value, $this->user);
         }
 
@@ -113,7 +120,7 @@ class PlaceUpdateTest extends TestCase
 
         $response = $this->patch(route('place.update', $place), [$key => $value]);
 
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionMissing($overrideErrorKey ?? $key);
         } else {
             $response->assertSessionHasErrors([$overrideErrorKey ?? $key => $error]);
@@ -144,7 +151,7 @@ class PlaceUpdateTest extends TestCase
             ['phone_number', '+44123456789', false],
             ['email', 'notanemail', 'The email must be a valid email address.'],
             ['email', 'anemail@example.com', false],
-            ['email', Str::random(300).'@hotmail.co.uk', 'The email must not be greater than 255 characters.'],
+            ['email', Str::random(300) . '@hotmail.co.uk', 'The email must not be greater than 255 characters.'],
             ['address', Str::random(65570), 'The address must not be greater than 65535 characters.'],
             ['location', ['lat' => -0.2, 'lng' => 55], false],
             ['location', ['lat' => -91, 'lng' => 55], 'The location.lat must be at least -90.', 'location.lat'],
@@ -158,11 +165,11 @@ class PlaceUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $place = Place::factory()->create();
 
         $response = $this->patch(route('place.update', $place), $this->getPlaceAttributes());
         $response->assertRedirect(route('login'));
     }
-
 }

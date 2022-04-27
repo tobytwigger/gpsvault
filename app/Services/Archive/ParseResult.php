@@ -4,7 +4,6 @@ namespace App\Services\Archive;
 
 class ParseResult
 {
-
     private array $metadata;
 
     private array $files;
@@ -30,5 +29,4 @@ class ParseResult
     {
         return $this->files;
     }
-
 }

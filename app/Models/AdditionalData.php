@@ -22,6 +22,4 @@ class AdditionalData extends Model
     {
         $this->attributes['value'] = serialize($value);
     }
-
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Services\Sync\Sync;
 use App\Models\User;
+use App\Services\Sync\Sync;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 

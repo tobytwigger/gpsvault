@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class DropboxController extends Controller
 {
-
     public function callback(Request $request)
     {
         $request->validate([
@@ -22,7 +21,7 @@ class DropboxController extends Controller
             'access_token' => $accessToken->getToken(),
             'user_id' => Auth::id()
         ]);
+
         return redirect()->route('sync.index');
     }
-
 }

@@ -23,5 +23,4 @@ class AdditionalDataFactory extends Factory
             'additional_data_id' => null
         ];
     }
-
 }

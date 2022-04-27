@@ -2,8 +2,8 @@
 
 namespace Feature\Route;
 
-use App\Models\Route;
 use App\Models\File;
+use App\Models\Route;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -12,7 +12,8 @@ class RouteFileUpdateTest extends TestCase
 {
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_file(){
+    public function it_returns_a_403_if_you_do_not_own_the_file()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create();
@@ -23,7 +24,8 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_you_do_not_own_the_route(){
+    public function it_returns_a_403_if_you_do_not_own_the_route()
+    {
         $this->authenticated();
         $route = Route::factory()->create();
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
@@ -34,7 +36,8 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_exist(){
+    public function it_returns_a_404_if_the_file_does_not_exist()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
 
@@ -43,7 +46,8 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_route_does_not_exist(){
+    public function it_returns_a_404_if_the_route_does_not_exist()
+    {
         $this->authenticated();
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
 
@@ -52,19 +56,21 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file(){
+    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
         $route->file_id = $file->id;
-        Model::withoutEvents(fn() => $route->save());
+        Model::withoutEvents(fn () => $route->save());
 
         $response = $this->put(route('route.file.update', [$route, $file]), []);
         $response->assertStatus(404);
     }
 
     /** @test */
-    public function the_title_and_caption_can_be_updated(){
+    public function the_title_and_caption_can_be_updated()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
@@ -83,7 +89,8 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_back_to_route_show(){
+    public function it_redirects_back_to_route_show()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
@@ -97,7 +104,8 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $route = Route::factory()->create();
         $file = File::factory()->routeMedia()->create();
         $route->files()->sync($file);
@@ -109,18 +117,22 @@ class RouteFileUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
         $route->files()->sync($file);
 
         $response = $this->put(route('route.file.update', [$route, $file]), [$key => $value]);
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
-            if(is_array($error)) {
+            if (is_array($error)) {
                 $response->assertSessionHasErrors($error);
             } else {
                 $response->assertSessionHasErrors([$key => $error]);
@@ -139,5 +151,4 @@ class RouteFileUpdateTest extends TestCase
             ['caption', 'This is a valid caption', false],
         ];
     }
-
 }

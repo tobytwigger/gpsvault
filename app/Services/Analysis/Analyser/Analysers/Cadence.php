@@ -7,7 +7,6 @@ use App\Services\Analysis\Parser\Point;
 
 class Cadence extends AnalyserContract implements PointAnalyser
 {
-
     protected array $cadences = [];
 
     /**
@@ -16,7 +15,7 @@ class Cadence extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        if(!empty($this->cadences)) {
+        if (!empty($this->cadences)) {
             $analysis->setAverageCadence(
                 round(array_sum($this->cadences)/count($this->cadences))
             );
@@ -28,7 +27,7 @@ class Cadence extends AnalyserContract implements PointAnalyser
     public function processPoint(Point $point): void
     {
         $cadence = $point->getCadence();
-        if($cadence !== null && $cadence !== 0.0) {
+        if ($cadence !== null && $cadence !== 0.0) {
             $this->cadences[] = $cadence;
         }
     }

@@ -10,7 +10,8 @@ class BackupDestroyTest extends TestCase
 {
 
     /** @test */
-    public function it_deletes_the_backup(){
+    public function it_deletes_the_backup()
+    {
         $this->authenticated();
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id]);
         $this->assertDatabaseHas('files', ['id' => $backup->id]);
@@ -22,7 +23,8 @@ class BackupDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_403_if_the_backup_is_not_owned_by_you(){
+    public function it_returns_a_403_if_the_backup_is_not_owned_by_you()
+    {
         $this->authenticated();
         $backup = File::factory()->archive()->create();
 
@@ -31,7 +33,8 @@ class BackupDestroyTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $backup = File::factory()->archive()->create();
 
         $this->delete(route('backup.destroy', $backup))
@@ -39,7 +42,8 @@ class BackupDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_the_file_from_storage(){
+    public function it_deletes_the_file_from_storage()
+    {
         $this->authenticated();
 
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id]);
@@ -50,5 +54,4 @@ class BackupDestroyTest extends TestCase
 
         Storage::disk('tests')->assertMissing($backup->path);
     }
-
 }

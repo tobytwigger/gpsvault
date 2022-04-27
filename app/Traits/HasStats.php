@@ -5,17 +5,13 @@ namespace App\Traits;
 use App\Jobs\AnalyseFile;
 use App\Models\Activity;
 use App\Models\File;
-use App\Models\Route;
 use App\Models\Stats;
-use App\Services\Geocoding\Geocoder;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Arr;
 
 trait HasStats
 {
-
     public function getDistanceAttribute(): ?int
     {
         return $this->getPreferredStatValue('distance');
@@ -33,7 +29,7 @@ trait HasStats
 
     public static function bootHasStats()
     {
-        static::deleting(function($model) {
+        static::deleting(function ($model) {
             $model->stats()->delete();
             $model->file()->delete();
         });
@@ -45,7 +41,7 @@ trait HasStats
     }
 
     /**
-     * A relationship to all the linked stats
+     * A relationship to all the linked stats.
      * @return MorphMany
      */
     public function stats(): MorphMany
@@ -70,7 +66,7 @@ trait HasStats
 
     public function analyse()
     {
-        if(!$this->hasFile()) {
+        if (!$this->hasFile()) {
             throw new \Exception('No file exists on this model');
         }
         dispatch(new AnalyseFile($this));
@@ -86,7 +82,7 @@ trait HasStats
             ->orderByPreference()
             ->select(['id', 'stats_id', $stat])
             ->get()
-            ->unique(fn(Stats $stats) => $stats->stats_id)
+            ->unique(fn (Stats $stats) => $stats->stats_id)
             ->sort(function (Stats $a, Stats $b) use ($stat) {
                 if (!$a->{$stat}) {
                     return !$b->{$stat} ? 1 : 0;
@@ -100,13 +96,12 @@ trait HasStats
 
                 return $a->{$stat} < $b->{$stat} ? 1 : -1;
             })
-            ->map(fn(Stats $stats) => sprintf('\'%s\'', $stats->stats_id));
+            ->map(fn (Stats $stats) => sprintf('\'%s\'', $stats->stats_id));
 
-        $query->with('stats', fn(MorphMany $subQuery) => $subQuery->orderByPreference())
+        $query->with('stats', fn (MorphMany $subQuery) => $subQuery->orderByPreference())
             ->when(
                 $orderedActivities->count() > 0,
-                fn(Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::bigint[], id)', $orderedActivities->join(', ')))
+                fn (Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::bigint[], id)', $orderedActivities->join(', ')))
             );
     }
-
 }

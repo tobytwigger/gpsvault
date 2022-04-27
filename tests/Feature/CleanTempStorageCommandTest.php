@@ -10,7 +10,8 @@ class CleanTempStorageCommandTest extends TestCase
 {
 
     /** @test */
-    public function it_removes_everything_older_than_12_hours(){
+    public function it_removes_everything_older_than_12_hours()
+    {
         Storage::fake('temp');
         Storage::disk('temp')->put('test', 'one');
         Storage::disk('temp')->put('test-two', 'two');
@@ -26,5 +27,4 @@ class CleanTempStorageCommandTest extends TestCase
         Storage::disk('temp')->assertMissing('test-two');
         Storage::disk('temp')->assertExists('test-three');
     }
-
 }

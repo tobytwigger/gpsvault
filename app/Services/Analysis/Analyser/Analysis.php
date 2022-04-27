@@ -9,7 +9,6 @@ use Illuminate\Contracts\Support\Jsonable;
 
 class Analysis implements Arrayable, Jsonable
 {
-
     private ?float $averageHeartrate = null;
 
     private ?float $maxHeartrate = null;
@@ -66,6 +65,7 @@ class Analysis implements Arrayable, Jsonable
     public function pushPoint(Point $point): Analysis
     {
         $this->points[] = $point;
+
         return $this;
     }
 
@@ -84,6 +84,7 @@ class Analysis implements Arrayable, Jsonable
     public function setDistance(?float $distance): Analysis
     {
         $this->distance = $distance;
+
         return $this;
     }
 
@@ -102,6 +103,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAverageSpeed(?float $averageSpeed): Analysis
     {
         $this->averageSpeed = $averageSpeed;
+
         return $this;
     }
 
@@ -120,6 +122,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAveragePace(?float $averagePace): Analysis
     {
         $this->averagePace = $averagePace;
+
         return $this;
     }
 
@@ -138,6 +141,7 @@ class Analysis implements Arrayable, Jsonable
     public function setMinAltitude(?float $minAltitude): Analysis
     {
         $this->minAltitude = $minAltitude;
+
         return $this;
     }
 
@@ -156,6 +160,7 @@ class Analysis implements Arrayable, Jsonable
     public function setMaxAltitude(?float $maxAltitude): Analysis
     {
         $this->maxAltitude = $maxAltitude;
+
         return $this;
     }
 
@@ -174,6 +179,7 @@ class Analysis implements Arrayable, Jsonable
     public function setCumulativeElevationGain(?float $cumulativeElevationGain): Analysis
     {
         $this->cumulativeElevationGain = $cumulativeElevationGain;
+
         return $this;
     }
 
@@ -192,6 +198,7 @@ class Analysis implements Arrayable, Jsonable
     public function setCumulativeElevationLoss(?float $cumulativeElevationLoss): Analysis
     {
         $this->cumulativeElevationLoss = $cumulativeElevationLoss;
+
         return $this;
     }
 
@@ -210,6 +217,7 @@ class Analysis implements Arrayable, Jsonable
     public function setStartedAt(?Carbon $startedAt): Analysis
     {
         $this->startedAt = $startedAt;
+
         return $this;
     }
 
@@ -228,6 +236,7 @@ class Analysis implements Arrayable, Jsonable
     public function setFinishedAt(?Carbon $finishedAt): Analysis
     {
         $this->finishedAt = $finishedAt;
+
         return $this;
     }
 
@@ -246,6 +255,7 @@ class Analysis implements Arrayable, Jsonable
     public function setDuration(?float $duration): Analysis
     {
         $this->duration = $duration;
+
         return $this;
     }
 
@@ -264,6 +274,7 @@ class Analysis implements Arrayable, Jsonable
     public function setPoints(array $points): Analysis
     {
         $this->points = $points;
+
         return $this;
     }
 
@@ -282,6 +293,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAverageHeartrate(?float $averageHeartrate): Analysis
     {
         $this->averageHeartrate = $averageHeartrate;
+
         return $this;
     }
 
@@ -300,6 +312,7 @@ class Analysis implements Arrayable, Jsonable
     public function setMaxHeartrate(?float $maxHeartrate): Analysis
     {
         $this->maxHeartrate = $maxHeartrate;
+
         return $this;
     }
 
@@ -318,6 +331,7 @@ class Analysis implements Arrayable, Jsonable
     public function setCalories(?float $calories): Analysis
     {
         $this->calories = $calories;
+
         return $this;
     }
 
@@ -336,6 +350,7 @@ class Analysis implements Arrayable, Jsonable
     public function setMovingTime(?float $movingTime): Analysis
     {
         $this->movingTime = $movingTime;
+
         return $this;
     }
 
@@ -354,6 +369,7 @@ class Analysis implements Arrayable, Jsonable
     public function setMaxSpeed(?float $maxSpeed): Analysis
     {
         $this->maxSpeed = $maxSpeed;
+
         return $this;
     }
 
@@ -372,6 +388,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAverageCadence(?float $averageCadence): Analysis
     {
         $this->averageCadence = $averageCadence;
+
         return $this;
     }
 
@@ -390,6 +407,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAverageTemp(?float $averageTemp): Analysis
     {
         $this->averageTemp = $averageTemp;
+
         return $this;
     }
 
@@ -408,6 +426,7 @@ class Analysis implements Arrayable, Jsonable
     public function setAverageWatts(?float $averageWatts): Analysis
     {
         $this->averageWatts = $averageWatts;
+
         return $this;
     }
 
@@ -426,6 +445,7 @@ class Analysis implements Arrayable, Jsonable
     public function setKilojoules(?float $kilojoules): Analysis
     {
         $this->kilojoules = $kilojoules;
+
         return $this;
     }
 
@@ -444,6 +464,7 @@ class Analysis implements Arrayable, Jsonable
     public function setStartLatitude(?float $startLatitude): Analysis
     {
         $this->startLatitude = $startLatitude;
+
         return $this;
     }
 
@@ -462,6 +483,7 @@ class Analysis implements Arrayable, Jsonable
     public function setStartLongitude(?float $startLongitude): Analysis
     {
         $this->startLongitude = $startLongitude;
+
         return $this;
     }
 
@@ -480,6 +502,7 @@ class Analysis implements Arrayable, Jsonable
     public function setEndLatitude(?float $endLatitude): Analysis
     {
         $this->endLatitude = $endLatitude;
+
         return $this;
     }
 
@@ -498,6 +521,7 @@ class Analysis implements Arrayable, Jsonable
     public function setEndLongitude(?float $endLongitude): Analysis
     {
         $this->endLongitude = $endLongitude;
+
         return $this;
     }
 
@@ -527,7 +551,7 @@ class Analysis implements Arrayable, Jsonable
             'start_longitude' => $this->getStartLongitude(),
             'end_latitude' => $this->getEndLatitude(),
             'end_longitude' => $this->getEndLongitude(),
-//            'points' => array_map(fn(Point $point) => $point->toArray(), $this->getPoints())
+            //            'points' => array_map(fn(Point $point) => $point->toArray(), $this->getPoints())
         ];
     }
 
@@ -535,6 +559,4 @@ class Analysis implements Arrayable, Jsonable
     {
         return json_encode($this->toArray());
     }
-
 }
-

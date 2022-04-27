@@ -5,8 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -24,17 +22,17 @@ class File extends Model
 
     protected static function booted()
     {
-        static::creating(function(File $file) {
-            if($file->user_id === null) {
+        static::creating(function (File $file) {
+            if ($file->user_id === null) {
                 $file->user_id = Auth::id();
             }
         });
-        static::creating(function(File $file) {
-            if($file->hash === null) {
+        static::creating(function (File $file) {
+            if ($file->hash === null) {
                 $file->hash = md5($file->getFileContents());
             }
         });
-        static::deleting(function(File $file) {
+        static::deleting(function (File $file) {
             Storage::disk($file->disk)->delete($file->path);
         });
     }
@@ -58,5 +56,4 @@ class File extends Model
     {
         return Storage::disk($this->disk)->download($this->path, $this->filename);
     }
-
 }

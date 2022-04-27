@@ -4,7 +4,6 @@ namespace App\Integrations\Dropbox\Tasks;
 
 use App\Integrations\Dropbox\Client\Dropbox;
 use App\Integrations\Dropbox\Models\DropboxToken;
-use App\Models\Activity;
 use App\Models\File;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
@@ -15,7 +14,6 @@ use Kunnu\Dropbox\Models\FileMetadata;
 
 class ImportNewActivities extends Task
 {
-
     public function description(): string
     {
         return 'Import any new activities from a specific folder in Dropbox.';
@@ -31,6 +29,7 @@ class ImportNewActivities extends Task
         if (!DropboxToken::where('user_id', $user->id)->exists()) {
             return 'Your account must be connected to Dropbox';
         }
+
         return null;
     }
 
@@ -43,16 +42,16 @@ class ImportNewActivities extends Task
 
         $fileMetadatas = $fileMetadatas->merge(
             $files->getItems()
-                ->filter(fn(FileMetadata $fileMetadata) => File::where('type', FileUploader::ACTIVITY_FILE)->where('filename', $fileMetadata->getName())->count() === 0)
-            ->values()
+                ->filter(fn (FileMetadata $fileMetadata) => File::where('type', FileUploader::ACTIVITY_FILE)->where('filename', $fileMetadata->getName())->count() === 0)
+                ->values()
         );
 
-        if($files->hasMoreItems()) {
+        if ($files->hasMoreItems()) {
             do {
                 $files = Dropbox::client($this->user())->listFolderContinue($files->getCursor());
                 $fileMetadatas = $fileMetadatas->merge(
                     $files->getItems()
-                        ->filter(fn(FileMetadata $fileMetadata) => File::where('type', FileUploader::ACTIVITY_FILE)->where('filename', $fileMetadata->getName())->count() === 0)
+                        ->filter(fn (FileMetadata $fileMetadata) => File::where('type', FileUploader::ACTIVITY_FILE)->where('filename', $fileMetadata->getName())->count() === 0)
                         ->values()
                 );
             } while ($files->hasMoreItems());
@@ -65,10 +64,13 @@ class ImportNewActivities extends Task
         $activities = collect();
 
         /** @var FileMetadata $fileMetadata */
-        foreach($fileMetadatas as $fileMetadata) {
+        foreach ($fileMetadatas as $fileMetadata) {
             $file = Upload::withContents(
                 Dropbox::client($this->user())
-                    ->download($fileMetadata->getPathLower())->getContents(), $fileMetadata->getName(), $this->user(), FileUploader::ACTIVITY_FILE
+                    ->download($fileMetadata->getPathLower())->getContents(),
+                $fileMetadata->getName(),
+                $this->user(),
+                FileUploader::ACTIVITY_FILE
             );
             $activities->push(
                 ActivityImporter::for($this->user())->withActivityFile($file)->import()
@@ -76,6 +78,5 @@ class ImportNewActivities extends Task
         }
 
         $this->succeed(sprintf('Imported %u activities.', $activities->count()));
-
     }
 }

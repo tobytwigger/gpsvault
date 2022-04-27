@@ -6,14 +6,10 @@ use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use phpGPX\phpGPX;
 
 class GpxParser implements ParserContract
 {
-
     public function read(File $file): Analysis
     {
         $gpx = new phpGPX();
@@ -40,6 +36,7 @@ class GpxParser implements ParserContract
 
         $analysis = new Analysis();
         $analysis->setPoints($points->all());
+
         return $analysis;
     }
 }

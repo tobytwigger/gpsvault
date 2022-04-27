@@ -10,7 +10,6 @@ use Kunnu\Dropbox\DropboxApp;
 
 class Dropbox
 {
-
     public static function client(User $user): DropboxInstance
     {
         $token = DropboxToken::where('user_id', $user->id)->orderBy('created_at', 'DESC')->first()
@@ -35,5 +34,4 @@ class Dropbox
             ['persistent_data_store' => app()->make(PersistentDataStore::class)]
         );
     }
-
 }

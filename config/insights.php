@@ -29,7 +29,7 @@ return [
     |
     | Supported: "default", "laravel", "symfony", "magento2", "drupal"
     |
-    */
+     */
 
     'preset' => 'laravel',
 
@@ -49,7 +49,7 @@ return [
     |
     | myide://open?url=file://%f&line=%l
     |
-    */
+     */
 
     'ide' => null,
 
@@ -62,7 +62,7 @@ return [
     | Insights. You can either add, remove or configure `Insights`. Keep in
     | mind that all added `Insights` must belong to a specific `Metric`.
     |
-    */
+     */
 
     'exclude' => [
         //  'path/to/directory-or-file'
@@ -102,14 +102,14 @@ return [
     | When a score is lower than the minimum level defined, then an error
     | code will be returned. This is optional and individually defined.
     |
-    */
+     */
 
     'requirements' => [
-//        'min-quality' => 0,
-//        'min-complexity' => 0,
-//        'min-architecture' => 0,
-//        'min-style' => 0,
-//        'disable-security-check' => false,
+        //        'min-quality' => 0,
+        //        'min-complexity' => 0,
+        //        'min-architecture' => 0,
+        //        'min-style' => 0,
+        //        'disable-security-check' => false,
     ],
 
     /*
@@ -121,7 +121,7 @@ return [
     | the analyse. This is optional, don't provide it and the tool will guess
     | the max core number available. This accept null value or integer > 0.
     |
-    */
+     */
 
     'threads' => null,
 

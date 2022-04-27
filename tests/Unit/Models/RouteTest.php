@@ -14,7 +14,8 @@ class RouteTest extends TestCase
 {
 
     /** @test */
-    public function the_user_id_is_automatically_set_on_creation_if_null(){
+    public function the_user_id_is_automatically_set_on_creation_if_null()
+    {
         $this->authenticated();
         $route = Route::factory()->make(['user_id' => null]);
         $route->save();
@@ -23,7 +24,8 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function cover_image_returns_the_preview_for_the_file(){
+    public function cover_image_returns_the_preview_for_the_file()
+    {
         $route = Route::factory()->create();
         $file = File::factory()->routeMedia()->create();
         $route->files()->attach($file);
@@ -32,13 +34,15 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function cover_image_returns_null_if_file_not_set(){
+    public function cover_image_returns_null_if_file_not_set()
+    {
         $route = Route::factory()->create();
         $this->assertNull($route->cover_image);
     }
 
     /** @test */
-    public function it_has_a_relationship_with_user(){
+    public function it_has_a_relationship_with_user()
+    {
         $user = User::factory()->create();
         $route = Route::factory()->create(['user_id' => $user]);
 
@@ -47,19 +51,21 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_relationship_with_files(){
+    public function it_has_a_relationship_with_files()
+    {
         $route = Route::factory()->create();
         $files = File::factory()->routeMedia()->count(5)->create();
         $route->files()->attach($files);
 
         $this->assertContainsOnlyInstancesOf(File::class, $route->files);
-        foreach($route->files as $file) {
+        foreach ($route->files as $file) {
             $this->assertTrue($files->shift()->is($file));
         }
     }
 
     /** @test */
-    public function it_appends_the_preferred_distance(){
+    public function it_appends_the_preferred_distance()
+    {
         $route3 = Route::factory()->create();
         Stats::factory()->route($route3)->create(['integration' => 'php', 'distance' => 95]);
         Stats::factory()->route($route3)->create(['integration' => 'strava', 'distance' => 50]);
@@ -72,7 +78,8 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_many_places(){
+    public function it_has_many_places()
+    {
         $route = Route::factory()->create();
 
         $place1 = Place::factory()->create();
@@ -85,5 +92,4 @@ class RouteTest extends TestCase
         $this->assertTrue($place1->is($route->places[0]));
         $this->assertTrue($place2->is($route->places[1]));
     }
-
 }

@@ -2,12 +2,10 @@
 
 namespace App\Settings;
 
-use FormSchema\Schema\Field;
 use Settings\Types\UserSetting;
 
 class DarkMode extends UserSetting
 {
-
     public function alias(): ?string
     {
         return 'dark_mode';

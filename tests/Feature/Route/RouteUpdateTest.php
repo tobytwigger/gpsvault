@@ -15,7 +15,8 @@ class RouteUpdateTest extends TestCase
 {
 
     /** @test */
-    public function a_route_can_be_updated(){
+    public function a_route_can_be_updated()
+    {
         $this->authenticated();
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
         Storage::fake('test-fake');
@@ -33,7 +34,8 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_redirects_to_show_the_updated_route(){
+    public function it_redirects_to_show_the_updated_route()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description']);
 
@@ -44,10 +46,14 @@ class RouteUpdateTest extends TestCase
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = call_user_func($value, $this->user);
         }
 
@@ -55,7 +61,7 @@ class RouteUpdateTest extends TestCase
 
         $response = $this->put(route('route.update', $route), [$key => $value]);
 
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -74,14 +80,15 @@ class RouteUpdateTest extends TestCase
             ['notes', Str::random(65536), 'The notes must not be greater than 65535 characters.'],
             ['notes', true, 'The notes must be a string.'],
             ['notes', 'This is a new notes', false],
-            ['file', fn() => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
+            ['file', fn () => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
             ['file', null, false],
             ['file', 'This is not a file', 'The file must be a file.']
         ];
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $route = Route::factory()->create(['name' => 'Old Name', 'description' => 'Old Description']);
 
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description'])
@@ -89,7 +96,8 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_can_only_update_your_own_route(){
+    public function you_can_only_update_your_own_route()
+    {
         $this->authenticated();
         $route = Route::factory()->create(['name' => 'Old Name', 'description' => 'Old Description']);
 
@@ -98,7 +106,8 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_analysis_job_if_a_file_is_given(){
+    public function it_fires_an_analysis_job_if_a_file_is_given()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -109,11 +118,12 @@ class RouteUpdateTest extends TestCase
             'file' => $file
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */
-    public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given(){
+    public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
 
@@ -124,7 +134,8 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_analysis_job_even_when_a_route_file_already_exists(){
+    public function it_fires_an_analysis_job_even_when_a_route_file_already_exists()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -136,6 +147,6 @@ class RouteUpdateTest extends TestCase
             'file' => $file
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
     }
 }

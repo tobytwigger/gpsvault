@@ -6,7 +6,6 @@ use App\Models\File;
 use App\Models\User;
 use App\Services\File\FileUploader;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FileFactory extends Factory
@@ -26,13 +25,13 @@ class FileFactory extends Factory
             'caption' => $this->faker->paragraph,
             'disk' => 'tests',
             'hash' => Str::random(32),
-            'user_id' => fn() => User::factory()
+            'user_id' => fn () => User::factory()
         ];
     }
 
     public function routeMedia()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
@@ -43,7 +42,7 @@ class FileFactory extends Factory
 
     public function activityMedia()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
@@ -54,7 +53,7 @@ class FileFactory extends Factory
 
     public function activityFile()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
@@ -65,8 +64,8 @@ class FileFactory extends Factory
 
     public function dartmoorDevilGpx()
     {
-        return $this->state(fn(array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevil') , storage_path('tests'), false), 'tests/'),
+        return $this->state(fn (array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevil'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -76,8 +75,8 @@ class FileFactory extends Factory
 
     public function dartmoorDevilFit()
     {
-        return $this->state(fn(array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevilFit') , storage_path('tests'), false), 'tests/'),
+        return $this->state(fn (array $attributes) => [
+            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevilFit'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.fit',
             'extension' => 'fit',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -87,7 +86,7 @@ class FileFactory extends Factory
 
     public function routeFile()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
@@ -98,7 +97,7 @@ class FileFactory extends Factory
 
     public function archive()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/zip'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.zip',
             'extension' => 'zip',
@@ -109,7 +108,7 @@ class FileFactory extends Factory
 
     public function activityPoints()
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/points'), storage_path('tests'), false), 'tests/'),
             'filename' => $this->faker->word . '.tar.gz',
             'extension' => 'tar.gz',

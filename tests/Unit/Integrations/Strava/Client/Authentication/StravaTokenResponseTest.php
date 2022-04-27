@@ -10,7 +10,8 @@ class StravaTokenResponseTest extends TestCase
 {
 
     /** @test */
-    public function it_can_be_created_with_values(){
+    public function it_can_be_created_with_values()
+    {
         $expiresAt = Carbon::now()->addHour();
 
         $response = StravaTokenResponse::create(
@@ -29,7 +30,8 @@ class StravaTokenResponseTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_created_with_setters(){
+    public function it_can_be_created_with_setters()
+    {
         $expiresAt = Carbon::now()->addHour();
 
         $response = new StravaTokenResponse();
@@ -53,5 +55,4 @@ class StravaTokenResponseTest extends TestCase
         $this->assertEquals('access-token', $response->getAccessToken());
         $this->assertEquals(10, $response->getAthleteId());
     }
-
 }

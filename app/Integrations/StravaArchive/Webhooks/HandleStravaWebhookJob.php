@@ -20,5 +20,4 @@ abstract class HandleStravaWebhookJob implements ShouldQueue
     }
 
     abstract public function handle();
-
 }

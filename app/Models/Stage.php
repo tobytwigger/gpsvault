@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
@@ -29,19 +28,19 @@ class Stage extends Model implements Sortable
 
     protected static function booted()
     {
-        static::deleted(function(Stage $stage) {
+        static::deleted(function (Stage $stage) {
             static::setNewOrder(
                 $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
             );
         });
 
-        static::updated(function(Stage $stage) {
+        static::updated(function (Stage $stage) {
             static::setNewOrder(
                 $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
             );
         });
 
-        static::saved(function(Stage $stage) {
+        static::saved(function (Stage $stage) {
             static::setNewOrder(
                 $stage->buildSortQuery()->ordered()->pluck($stage->getKeyName())
             );
@@ -74,5 +73,4 @@ class Stage extends Model implements Sortable
         $baseOrder->splice($stageNumber - 1, 0, $this->id);
         static::setNewOrder($baseOrder);
     }
-
 }

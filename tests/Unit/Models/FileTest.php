@@ -6,7 +6,6 @@ use App\Models\File;
 use App\Models\User;
 use App\Services\File\FileUploader;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
@@ -14,7 +13,8 @@ class FileTest extends TestCase
 {
 
     /** @test */
-    public function it_has_a_relationship_with_a_user(){
+    public function it_has_a_relationship_with_a_user()
+    {
         $user = User::factory()->create();
         $file = File::factory()->activityFile()->create(['user_id' => $user]);
 
@@ -23,7 +23,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function it_auto_assigns_the_user_id_on_creation(){
+    public function it_auto_assigns_the_user_id_on_creation()
+    {
         $this->authenticated();
         $file = File::factory()->activityFile()->make(['user_id' => null]);
         $file->save();
@@ -32,7 +33,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function it_hashes_the_file_contents_on_save(){
+    public function it_hashes_the_file_contents_on_save()
+    {
         Storage::disk('tests')->put('hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
@@ -49,7 +51,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_the_file_when_the_model_is_deleted(){
+    public function it_deletes_the_file_when_the_model_is_deleted()
+    {
         Storage::disk('test-fake')->put('hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
@@ -67,7 +70,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function getFullPath_returns_the_full_path_of_the_file_relative_to_the_disk(){
+    public function get_full_path_returns_the_full_path_of_the_file_relative_to_the_disk()
+    {
         Storage::disk('test-fake')->put('/tests/hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
@@ -83,7 +87,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function getFileContents_returns_the_contents_of_the_file(){
+    public function get_file_contents_returns_the_contents_of_the_file()
+    {
         Storage::disk('test-fake')->put('hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
@@ -99,7 +104,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function returnDownloadResponse_returns_a_download_response(){
+    public function return_download_response_returns_a_download_response()
+    {
         Storage::disk('test-fake')->put('hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
@@ -114,5 +120,4 @@ class FileTest extends TestCase
         $response = TestResponse::fromBaseResponse($file->returnDownloadResponse());
         $response->assertDownload('hashing.txt');
     }
-
 }

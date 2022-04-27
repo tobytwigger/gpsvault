@@ -2,7 +2,6 @@
 
 namespace App\Integrations\Strava;
 
-
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use App\Integrations\Strava\Client\Models\StravaClient;
@@ -11,10 +10,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 trait UsesStrava
 {
-
     public static function bootUsesStrava()
     {
-        static::deleting(function(User $user) {
+        static::deleting(function (User $user) {
             $user->stravaTokens()->delete();
         });
     }
@@ -41,7 +39,7 @@ trait UsesStrava
 
     public function availableClient(array $excluding = []): StravaClient
     {
-        if($this->can('manage-strava-clients')) {
+        if ($this->can('manage-strava-clients')) {
             $client = $this
                 ->ownedClients()
                 ->enabled()->withSpaces()
@@ -49,22 +47,22 @@ trait UsesStrava
                 ->excluding($excluding)
                 ->first()
                 ?? $this->sharedClients()->enabled()->withSpaces()->connected($this->id)->excluding($excluding)->first();
-            if($client) {
+            if ($client) {
                 return $client;
             }
         }
-        if($this->can('use-public-strava-clients')) {
+        if ($this->can('use-public-strava-clients')) {
             $client = StravaClient::public()->enabled()->withSpaces()->connected($this->id)->excluding($excluding)->first();
-            if($client) {
+            if ($client) {
                 return $client;
             }
         }
 
         $client = \App\Settings\StravaClient::getClientModelOrFail();
-        if(!$client->isConnected($this->id) || !$client->hasSpaces()) {
+        if (!$client->isConnected($this->id) || !$client->hasSpaces()) {
             throw new ClientNotAvailable('No available clients found.');
         }
+
         return $client;
     }
-
 }

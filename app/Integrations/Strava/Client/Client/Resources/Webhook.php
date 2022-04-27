@@ -7,7 +7,6 @@ use App\Integrations\Strava\Client\Models\StravaClient;
 
 class Webhook extends Resource
 {
-
     public function webhookExists(StravaClient $clientModel): bool
     {
         $response = $this->request->unauthenticatedRequest('GET', 'push_subscriptions', [
@@ -21,7 +20,7 @@ class Webhook extends Resource
         $content = $this->request->decodeResponse($response);
 
         $exists = true;
-        if(count($content) === 0) {
+        if (count($content) === 0) {
             $exists = false;
         }
 
@@ -41,6 +40,4 @@ class Webhook extends Resource
 
         return $this->request->decodeResponse($response);
     }
-
-
 }

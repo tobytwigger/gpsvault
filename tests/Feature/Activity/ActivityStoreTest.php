@@ -15,7 +15,8 @@ class ActivityStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_creates_an_activity_from_a_file(){
+    public function it_creates_an_activity_from_a_file()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -37,7 +38,8 @@ class ActivityStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_analysis_job(){
+    public function it_fires_an_analysis_job()
+    {
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -47,11 +49,12 @@ class ActivityStoreTest extends TestCase
             'file' => $file
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn(AnalyseFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */
-    public function it_redirects_to_show_the_new_activity(){
+    public function it_redirects_to_show_the_new_activity()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -65,7 +68,8 @@ class ActivityStoreTest extends TestCase
     }
 
     /** @test */
-    public function a_name_can_be_set(){
+    public function a_name_can_be_set()
+    {
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -79,21 +83,24 @@ class ActivityStoreTest extends TestCase
         $this->assertDatabaseHas('activities', [
             'name' => 'This is the activity name'
         ]);
-
     }
 
     /**
      * @test
      * @dataProvider validationDataProvider
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $error
      */
-    public function it_validates($key, $value, $error){
+    public function it_validates($key, $value, $error)
+    {
         $this->authenticated();
 
         Storage::fake('test-fake');
         $fakeFile = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), array_merge([$key => $value], $key === 'file' ? [] : ['file' => $fakeFile]));
-        if(!$error) {
+        if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
             $response->assertSessionHasErrors([$key => $error]);
@@ -112,7 +119,8 @@ class ActivityStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
@@ -122,5 +130,4 @@ class ActivityStoreTest extends TestCase
         ]);
         $response->assertRedirect(route('login'));
     }
-
 }
