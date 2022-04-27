@@ -1,8 +1,8 @@
 <template>
     <c-app-wrapper title="Your Activities" :header-action="true">
         <c-pagination-iterator :paginator="activities" item-key="id">
-            <template v-slot:default="{item}">
-                <c-activity-card :activity="item"></c-activity-card>
+            <template v-slot:default="{item, isFirst}">
+                <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
             </template>
         </c-pagination-iterator>
 
@@ -43,7 +43,7 @@ export default {
         activities: {
             required: true,
             type: Object
-        },
+        }
     }
 }
 </script>

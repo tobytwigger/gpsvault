@@ -53,7 +53,10 @@
             <v-btn
                 color="deep-purple lighten-2"
                 text
+                id="viewButton"
+                :data-intro="hints ? 'View more information about your activity by clicking here.' : null"
                 @click="$inertia.get(route('activity.show', activity.id))"
+                ref="viewButton"
             >
                 View
             </v-btn>
@@ -76,6 +79,11 @@ export default {
         activity: {
             required: true,
             type: Object
+        },
+        hints: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     methods: {

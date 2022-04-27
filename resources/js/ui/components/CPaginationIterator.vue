@@ -24,14 +24,14 @@
                     <slot name="prepend"></slot>
                 </v-col>
                 <v-col
-                    v-for="item in items"
+                    v-for="(item, index) in items"
                     :key="item[itemKey]"
                     cols="12"
                     xl="3"
                     md="4"
                     sm="6"
                 >
-                    <slot v-bind:item="item"></slot>
+                    <slot v-bind:item="item" v-bind:isFirst="index === 0"></slot>
                 </v-col>
             </v-row>
         </template>
