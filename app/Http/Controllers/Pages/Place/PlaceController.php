@@ -32,7 +32,7 @@ class PlaceController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|min:3|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
-            'type' => 'sometimes|in:food_drink,shops,amenities,tourist,accommodation,other',
+            'type' => 'sometimes|in:food_drink,shops,tourist,accommodation,other,toilets,water',
             'url' => 'sometimes|nullable|url',
             'phone_number' => 'sometimes|nullable|string',
             'email' => 'sometimes|nullable|email|max:255',
@@ -58,7 +58,7 @@ class PlaceController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|min:3|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
-            'type' => 'required|in:food_drink,shops,amenities,tourist,accommodation,other',
+            'type' => 'required|in:food_drink,shops,tourist,accommodation,other,toilets,water',
             'url' => 'sometimes|nullable|url',
             'phone_number' => 'sometimes|nullable|string',
             'email' => 'sometimes|nullable|email|max:255',

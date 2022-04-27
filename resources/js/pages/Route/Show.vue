@@ -90,7 +90,23 @@
 
                         <c-pagination-iterator :paginator="places" item-key="id">
                             <template v-slot:default="{item}">
-                                <c-place-card :place="item" :remove-from-route="true" @removeFromRoute="removeFromRoute"></c-place-card>
+                                <c-place-card :place="item">
+                                    <template v-slot:icons>
+                                        <v-tooltip bottom>
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-btn
+                                                    icon
+                                                    @click="removeFromRoute(item)"
+                                                    v-bind="attrs"
+                                                    v-on="on"
+                                                >
+                                                    <v-icon>mdi-minus</v-icon>
+                                                </v-btn>
+                                            </template>
+                                            Remove from route
+                                        </v-tooltip>
+                                    </template>
+                                </c-place-card>
                             </template>
                         </c-pagination-iterator>
                     </v-col>
@@ -101,25 +117,12 @@
                     align="center"
                     justify="center">
                     <v-col>
-                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute">
-<!--                                <template v-slot:activator="{trigger, showing}">-->
-<!--                                    <v-tooltip bottom>-->
-<!--                                        <template v-slot:activator="{ on, attrs }">-->
-<!--                                            <v-btn-->
-<!--                                                icon-->
-<!--                                                link-->
-<!--                                                @click="trigger"-->
-<!--                                                :disabled="showing"-->
-<!--                                                v-bind="attrs"-->
-<!--                                                v-on="on"-->
-<!--                                            >-->
-<!--                                                <v-icon>mdi-pencil</v-icon>-->
-<!--                                            </v-btn>-->
-<!--                                        </template>-->
-<!--                                        Edit-->
-<!--                                    </v-tooltip>-->
-<!--                                </template>-->
-
+                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute" title="Search for a place" button-text="Add to route">
+                            <template v-slot:activator="{trigger,showing}">
+                                <v-btn :disabled="showing" @click="trigger">
+                                    Find Places
+                                </v-btn>
+                            </template>
                         </c-place-search>
                     </v-col>
                 </v-row>
@@ -217,6 +220,7 @@ export default {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
         },
         addToRoute(place) {
+            console.log(place);
             this.$inertia.post(route('route.place.store', this.routeModel.id), {
                 place_id: place.id
             }, {

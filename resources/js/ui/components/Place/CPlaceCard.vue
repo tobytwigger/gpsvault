@@ -23,33 +23,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-tooltip bottom v-if="addToRoute">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        @click="$emit('addToRoute', place)"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                </template>
-                Add to route
-            </v-tooltip>
-
-            <v-tooltip bottom v-if="removeFromRoute">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        @click="$emit('removeFromRoute', place)"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-minus</v-icon>
-                    </v-btn>
-                </template>
-                Remove from route
-            </v-tooltip>
+            <slot name="icons" v-bind:place="place"></slot>
 
             <v-tooltip bottom v-if="place.url">
                 <template v-slot:activator="{ on, attrs }">
@@ -66,7 +40,7 @@
                 View Website
             </v-tooltip>
 
-            <v-tooltip bottom v-if="place.user_id === $page.props.user.id">
+            <v-tooltip bottom v-if="place.user_id === $page.props.user.id && edit">
                 <template v-slot:activator="{ on, attrs }">
                     <c-place-form :old-place="place" title="Edit place" button-text="Update">
                         <template v-slot:activator="{trigger,showing}">
@@ -85,8 +59,6 @@
                 </template>
                 Edit Place
             </v-tooltip>
-
-
 
 
         </v-card-actions>
@@ -108,15 +80,10 @@ export default {
             required: true,
             type: Object
         },
-        addToRoute: {
+        edit: {
             required: false,
             type: Boolean,
-            default: false
-        },
-        removeFromRoute: {
-            required: false,
-            type: Boolean,
-            default: false
+            default: true
         }
     },
     methods: {

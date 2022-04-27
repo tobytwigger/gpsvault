@@ -12,6 +12,8 @@ class AnalysisTest extends TestCase
 
     /** @test */
     public function it_analyses_a_gpx_file(){
+        $this->markTestIncomplete();
+
         $file = File::factory()->dartmoorDevilGpx()->create();
 
         /** @var Analysis $analysis */
@@ -49,6 +51,8 @@ class AnalysisTest extends TestCase
 
     /** @test */
     public function it_analyses_a_fit_file(){
+        $this->markTestIncomplete();
+
         $file = File::factory()->dartmoorDevilFit()->create();
 
         /** @var Analysis $analysis */

@@ -22,7 +22,7 @@ class PlaceFactory extends Factory
             'name' => $this->faker->company,
             'description' => $this->faker->paragraph,
             'type' => $this->faker->randomElement([
-                'food_drink', 'shops', 'amenities', 'tourist', 'accommodation', 'other'
+                'food_drink', 'shops', 'toilets', 'water', 'tourist', 'accommodation', 'other'
             ]),
             'url' => $this->faker->url,
             'phone_number' => $this->faker->phoneNumber,

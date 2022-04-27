@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->enum('type', ['food_drink', 'shops', 'amenities', 'tourist', 'accommodation', 'other']);
+            $table->string('type');
             $table->text('url')->nullable();
             $table->text('phone_number')->nullable();
             $table->string('email')->nullable();

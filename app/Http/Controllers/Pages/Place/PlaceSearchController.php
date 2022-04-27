@@ -15,13 +15,10 @@ class PlaceSearchController extends Controller
     {
         $request->validate([
             'exclude_route_id' => 'sometimes|nullable|numeric|exists:routes,id',
-            'bounds' => 'sometimes|array',
-            'bounds.southwest' => 'required_with:bounds|array',
-            'bounds.southwest.lat' => 'required_with:bounds|numeric|min:-90|max:90',
-            'bounds.southwest.lng' => 'required_with:bounds|numeric|min:-180|max:180',
-            'bounds.northeast' => 'required_with:bounds|array',
-            'bounds.northeast.lat' => 'required_with:bounds|numeric|min:-90|max:90',
-            'bounds.northeast.lng' => 'required_with:bounds|numeric|min:-180|max:180',
+            'southwest_lat' => 'required_with:southwest_lng,northeast_lat,northeast_lng|numeric|min:-90|max:90',
+            'southwest_lng' => 'required_with:southwest_lat,northeast_lat,northeast_lng|numeric|min:-180|max:180',
+            'northeast_lat' => 'required_with:southwest_lat,southwest_lng,northeast_lng|numeric|min:-90|max:90',
+            'northeast_lng' => 'required_with:southwest_lat,southwest_lng,northeast_lat|numeric|min:-180|max:180',
         ]);
 
         return Place::when(
@@ -30,11 +27,11 @@ class PlaceSearchController extends Controller
                     fn(Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
                 ))
             ->when(
-                $request->has('bounds'),
+                $request->has(['southwest_lat', 'southwest_lng', 'northeast_lat', 'northeast_lng']),
                 // longitude min, latitude min, long mx, lat max
                 fn(Builder $query) => $query->whereRaw(
                     'places.location && ST_MakeEnvelope(?, ?, ?, ?, 4326)', [
-                    $request->input('bounds.southwest.lng'), $request->input('bounds.southwest.lat'), $request->input('bounds.northeast.lng'), $request->input('bounds.northeast.lat'), ])
+                    $request->input('southwest_lng'), $request->input('southwest_lat'), $request->input('northeast_lng'), $request->input('northeast_lat'), ])
             )
             ->orderBy('name')
             ->paginate(request()->input('perPage', 8));

@@ -48,14 +48,12 @@ class PlaceSearchTest extends TestCase
         $route->places()->attach([$place2->id, $place5->id]);
 
         $response = $this->getJson(route('place.search', [
-            'bounds' => [
-                'southwest' => ['lng' => 49.893, 'lat' => -3.895], // In the channel below Plymouth
-                'northeast' => ['lng' => 52.3142, 'lat' => 1.0599] // Bury st edmunds
-            ]
+            'southwest_lng' => 49.893,
+            'southwest_lat' => -3.895,
+            'northeast_lng' => 52.3142,
+            'northeast_lat' => 1.0599,
         ]));
-        if($response->exception) {
-            dd($response->exception);
-        }
+
         $places = $response->decodeResponseJson()->json('data');
         $this->assertCount(3, $places);
 

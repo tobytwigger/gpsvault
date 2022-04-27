@@ -160,7 +160,8 @@ export default {
             types: [
                 {label: 'Food & Drink', value: 'food_drink'},
                 {label: 'Shops', value: 'shops'},
-                {label: 'Amenities', value: 'amenities'},
+                {label: 'Toilets', value: 'toilets'},
+                {label: 'Water', value: 'water'},
                 {label: 'Tourist', value: 'tourist'},
                 {label: 'Accommodation', value: 'accommodation'},
                 {label: 'Other', value: 'other'},
