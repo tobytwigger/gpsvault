@@ -25,3 +25,5 @@ jobs:
 
       - name: Build and deploy
         run: mkdocs gh-deploy --force --remote-branch build/documentation
+        env:
+          SITE_URL: 'https://tobytwigger.github.io/cycle-store'
