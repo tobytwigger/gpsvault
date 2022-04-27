@@ -12,7 +12,7 @@ class Place extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'name', 'description', 'type', 'url', 'phone_number', 'email', 'address', 'location', 'user_id'
+        'name', 'description', 'type', 'url', 'phone_number', 'email', 'address', 'location'
     ];
 
     protected $postgisFields = [
