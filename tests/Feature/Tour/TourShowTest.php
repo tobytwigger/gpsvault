@@ -18,13 +18,13 @@ class TourShowTest extends TestCase
         $this->get(route('tour.show', $tour))
             ->assertInertia(
                 fn (Assert $page) => $page
-            ->component('Tour/Show')
-            ->has(
-                'tour',
-                fn (Assert $page) => $page
-            ->where('id', $tour->id)
-            ->etc()
-            )
+                    ->component('Tour/Show')
+                    ->has(
+                        'tour',
+                        fn (Assert $page) => $page
+                    ->where('id', $tour->id)
+                    ->etc()
+                    )
             );
     }
 
