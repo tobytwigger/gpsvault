@@ -38,7 +38,7 @@ jobs:
         continue-on-error: true
 
       - name: Run tests
-        run: sail artisan test
+        run: ./vendor/bin/sail artisan test
 
       - name: Run phpinsights
-        run: php artisan insights --no-interaction --min-quality=65 --min-complexity=80 --min-architecture=75 --min-style=65
+        run: ./vendor/bin/sail artisan insights --no-interaction --min-quality=65 --min-complexity=80 --min-architecture=75 --min-style=65
