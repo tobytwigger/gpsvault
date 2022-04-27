@@ -1,10 +1,10 @@
-name: Test site
+name: Run CI Checks 🔎
 
 on:
   push:
 
 jobs:
-  phpunit:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
         continue-on-error: true
 
       - name: Run tests
-        run: ./artisan test
+        run: sail artisan test
 
       - name: Run phpinsights
         run: php artisan insights --no-interaction --min-quality=65 --min-complexity=80 --min-architecture=75 --min-style=65
