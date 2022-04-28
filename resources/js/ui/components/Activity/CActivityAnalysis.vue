@@ -151,12 +151,14 @@ export default {
         },
         loadRawChartData() {
             this.loadingChartData = true;
-            axios.get(route('stats.points', this.stats.id))
-                .then(response => {
-                    this.loadingChartData = false;
-                    this.rawChartData = response.data
-                })
-                .then(() => this.loadingChartData = false);
+            if(this.stats) {
+                axios.get(route('stats.points', this.stats.id))
+                    .then(response => {
+                        this.loadingChartData = false;
+                        this.rawChartData = response.data
+                    })
+                    .then(() => this.loadingChartData = false);
+            }
         }
     }
 }

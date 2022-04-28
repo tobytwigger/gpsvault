@@ -2,10 +2,7 @@
 
 namespace Tests\Feature\Backup;
 
-use App\Services\Sync\RunSyncTask;
-use App\Services\Sync\Sync;
-use App\Services\Sync\SyncTask;
-use App\Tasks\CreateBackupTask;
+use App\Jobs\CreateBackup;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
@@ -17,47 +14,21 @@ class BackupStoreTest extends TestCase
     {
         $this->authenticated();
 
-        Bus::fake([RunSyncTask::class]);
+        Bus::fake([CreateBackup::class]);
 
         $this->post(route('backup.store'));
 
-        Bus::assertDispatched(RunSyncTask::class, fn (RunSyncTask $job) => $job->task->taskId() === CreateBackupTask::id());
-        $this->assertDatabaseCount('syncs', 1);
+        Bus::assertDispatched(CreateBackup::class, fn (CreateBackup $job) => $job->user->id === $this->user->id);
     }
 
     /** @test */
     public function it_redirects_to_show_all_backups()
     {
         $this->authenticated();
-        Bus::fake([RunSyncTask::class]);
+        Bus::fake([CreateBackup::class]);
 
         $response = $this->post(route('backup.store'));
         $response->assertRedirect(route('backup.index'));
-    }
-
-    /** @test */
-    public function it_throws_an_exception_if_a_sync_exists_with_a_pending_backup_task()
-    {
-        $this->authenticated();
-        Bus::fake([RunSyncTask::class]);
-        $sync = Sync::factory()->create(['user_id' => $this->user->id]);
-        SyncTask::factory()->create(['sync_id' => $sync->id, 'task_id' => CreateBackupTask::id(), 'status' => 'queued']);
-
-        $response = $this->post(route('backup.store'));
-        $response->assertStatus(400);
-    }
-
-    /** @test */
-    public function it_passes_and_redirects_if_a_sync_exists_with_a_complete_backup_task()
-    {
-        $this->authenticated();
-        Bus::fake([RunSyncTask::class]);
-        $sync = Sync::factory()->create(['user_id' => $this->user->id]);
-        SyncTask::factory()->create(['sync_id' => $sync->id, 'task_id' => CreateBackupTask::id(), 'status' => 'cancelled']);
-
-        $response = $this->post(route('backup.store'));
-        $response->assertRedirect();
-        $this->assertDatabaseCount('syncs', 2);
     }
 
     /** @test */

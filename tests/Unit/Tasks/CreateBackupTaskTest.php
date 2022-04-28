@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Tasks;
 
+use App\Jobs\CreateBackup;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Route;
@@ -17,8 +18,6 @@ use Tests\Utils\TestsTasks;
 
 class CreateBackupTaskTest extends TestCase
 {
-    use TestsTasks;
-
     /** @test */
     public function it_creates_an_export_and_creates_a_file()
     {
@@ -55,21 +54,19 @@ class CreateBackupTaskTest extends TestCase
         $exporter->archive()->shouldBeCalled()->willReturn($file);
         ZipCreator::swap($exporter->reveal());
 
-        $task = $this->task(CreateBackupTask::class, $user);
-        $task->run();
-        $task->assertSuccessful();
+        CreateBackup::dispatch($user);
 
         $file->refresh();
         $this->assertEquals('Full backup 04/02/2022', $file->title);
         $this->assertEquals('Full backup taken at 04/02/2022 11:30:44', $file->caption);
 
-        $task->assertMessages([
-            'Collecting data to back up.',
-            'Added 5 activities.',
-            'Added 5 routes.',
-            'Added 5 tours.',
-            'Generating archive.',
-            'Generated full backup of your data.'
-        ]);
+//        $task->assertMessages([
+//            'Collecting data to back up.',
+//            'Added 5 activities.',
+//            'Added 5 routes.',
+//            'Added 5 tours.',
+//            'Generating archive.',
+//            'Generated full backup of your data.'
+//        ]);
     }
 }

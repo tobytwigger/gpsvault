@@ -36,8 +36,6 @@ class AppServiceProvider extends ServiceProvider
             return Storage::disk('s3');
         });
 
-        Task::registerTask(CreateBackupTask::class);
-
         Setting::register(new UnitSystem());
         Setting::register(new DarkMode());
         Setting::register(new StravaClient());

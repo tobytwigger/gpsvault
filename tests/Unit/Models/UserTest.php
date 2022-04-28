@@ -20,29 +20,13 @@ class UserTest extends TestCase
         $user->activities()->delete();
         $user->files()->delete();
 
-        $syncs = Sync::factory()->count(5)->create(['user_id' => $user->id]);
         $activities = Activity::factory()->count(5)->create(['user_id' => $user->id]);
 
-        $this->assertDatabaseCount('syncs', 5);
         $this->assertDatabaseCount('activities', 5);
 
         $user->delete();
 
-        $this->assertDatabaseCount('syncs', 0);
         $this->assertDatabaseCount('activities', 0);
-    }
-
-    /** @test */
-    public function it_has_a_relationship_to_syncs()
-    {
-        $user = User::factory()->create();
-        $syncs = Sync::factory()->count(5)->create(['user_id' => $user->id]);
-
-        $this->assertContainsOnlyInstancesOf(Sync::class, $user->syncs);
-        $retrievedSyncs = $user->syncs;
-        foreach ($syncs as $sync) {
-            $this->assertTrue($sync->is($retrievedSyncs->shift()));
-        }
     }
 
     /** @test */

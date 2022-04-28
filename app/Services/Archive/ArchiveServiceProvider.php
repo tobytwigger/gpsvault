@@ -20,7 +20,6 @@ class ArchiveServiceProvider extends ServiceProvider
     public function boot()
     {
         ResourceParser::withParser(ActivityParser::class);
-        ResourceParser::withParser(SyncParser::class);
         ResourceParser::withParser(UserParser::class);
         ResourceParser::withParser(RouteParser::class);
     }

@@ -74,25 +74,25 @@
             nav
             dense
         >
-            <v-list-group
-                :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"
-                no-action
-                prepend-icon="mdi-connection"
-            >
-                <template v-slot:activator>
-                    <v-list-item-content>
-                        <v-list-item-title>Integrations</v-list-item-title>
-                    </v-list-item-content>
-                </template>
+<!--            <v-list-group-->
+<!--                :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"-->
+<!--                no-action-->
+<!--                prepend-icon="mdi-connection"-->
+<!--            >-->
+<!--                <template v-slot:activator>-->
+<!--                    <v-list-item-content>-->
+<!--                        <v-list-item-title>Integrations</v-list-item-title>-->
+<!--                    </v-list-item-content>-->
+<!--                </template>-->
 
-                <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"
-                     data-intro="Manage the integration with Strava." :data-step="997">
-                    <v-list-item-title>Strava</v-list-item-title>
-                    <v-list-item-icon>
-                        <v-icon>mdi-arrow-right</v-icon>
-                    </v-list-item-icon>
-                </v-list-item>
-            </v-list-group>
+<!--                <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"-->
+<!--                     data-intro="Manage the integration with Strava." :data-step="997">-->
+<!--                    <v-list-item-title>Strava</v-list-item-title>-->
+<!--                    <v-list-item-icon>-->
+<!--                        <v-icon>mdi-arrow-right</v-icon>-->
+<!--                    </v-list-item-icon>-->
+<!--                </v-list-item>-->
+<!--            </v-list-group>-->
             <v-list-item :input-value="['backup.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backup.index'))"
                  data-intro="Create and download backups of all your data." :data-step="998">
                 <v-list-item-icon>

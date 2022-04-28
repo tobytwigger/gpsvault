@@ -29,12 +29,8 @@ use App\Integrations\Strava\Listeners\MarkActivityAsLoadingKudos;
 use App\Integrations\Strava\Listeners\MarkActivityAsLoadingPhotos;
 use App\Integrations\Strava\Tasks\SaveAllActivities;
 use App\Integrations\Strava\Tasks\StravaUpload;
-use App\Integrations\Strava\Tasks\SyncLocalActivities;
 use App\Services\Sync\Task;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class StravaServiceProvider extends ServiceProvider
@@ -47,7 +43,6 @@ class StravaServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Task::registerTask(SyncLocalActivities::class);
 //        $this->commands([
 //            ResetRateLimit::class,
 //            SetupWebhooks::class
