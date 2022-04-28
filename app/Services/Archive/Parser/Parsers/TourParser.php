@@ -2,7 +2,6 @@
 
 namespace App\Services\Archive\Parser\Parsers;
 
-use App\Models\File;
 use App\Models\Tour;
 use App\Services\Archive\Contracts\Parser;
 use App\Services\Archive\Parser\FileResource;
@@ -28,5 +27,4 @@ class TourParser implements Parser
 
         return $this->result();
     }
-
 }
