@@ -49,7 +49,6 @@
                         ></v-textarea>
 
                         <v-file-input
-                            v-if="oldRoute === null"
                             show-size
                             truncate-length="30"
                             v-model="form.file"
@@ -58,7 +57,7 @@
                             name="file"
                             @change="checkForDuplicateRoute"
                             label="Route File"
-                            hint="Upload the gpx file for the route."
+                            :hint="fileInputDescription"
                             :error="form.errors.hasOwnProperty('file')"
                             :error-messages="fileErrorMessages"
                         ></v-file-input>
@@ -133,6 +132,12 @@ export default {
                 return [this.duplicateMessage];
             }
             return this.form.errors.hasOwnProperty('file') ? [this.form.errors.file] : []
+        },
+        fileInputDescription() {
+            if(this.oldRoute) {
+                return 'Upload a new gpx file for the route.';
+            }
+            return 'Upload the gpx file for the route.';
         }
     },
     methods: {

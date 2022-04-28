@@ -85,7 +85,7 @@ class RouteController extends Controller
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
             'notes' => 'sometimes|nullable|string|max:65535',
-            'file' => 'sometimes|nullable|file'
+            'file' => ['sometimes', 'nullable', 'file']
         ]);
 
         $fileId = $route->file_id;

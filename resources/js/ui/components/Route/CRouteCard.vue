@@ -64,7 +64,10 @@ export default {
     methods: {
         convertDistance(value) {
             let converted = this.convert(value, 'distance');
-            return converted.value + converted.unit;
+            if(converted) {
+                return converted.value + converted.unit;
+            }
+            return 'No Distance';
         },
         toDateTime(value) {
             if (value === null) {
