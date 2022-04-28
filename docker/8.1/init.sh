@@ -1,17 +1,3 @@
-DO
-$do$
-BEGIN
-   IF EXISTS (
-      SELECT FROM pg_catalog.pg_roles
-      WHERE  rolname = 'sail') THEN
-
-      RAISE NOTICE 'Role "sail" already exists. Skipping.';
-   ELSE
-      CREATE ROLE sail LOGIN PASSWORD 'my_password';
-   END IF;
-END
-$do$;
-
 PGPASSWORD="${PGPASSWORD}" psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 CREATE DATABASE cycle_store_testing;
 CREATE DATABASE cycle_store_testing_test_1;
