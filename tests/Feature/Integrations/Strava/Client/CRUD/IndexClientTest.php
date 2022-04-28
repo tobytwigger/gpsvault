@@ -206,16 +206,16 @@ class IndexClientTest extends TestCase
                                     ->has(
                                         'shared_users.0',
                                         fn (Assert $page) => $page
-                                    ->where('id', $user1->id)
-                                    ->where('name', $user1->name)
-                                    ->where('email', $user1->email)
+                                            ->where('id', $user1->id)
+                                            ->where('name', $user1->name)
+                                            ->where('email', $user1->email)
                                     )
                                     ->has(
                                         'shared_users.1',
                                         fn (Assert $page) => $page
-                                    ->where('id', $user2->id)
-                                    ->where('name', $user2->name)
-                                    ->where('email', $user2->email)
+                                            ->where('id', $user2->id)
+                                            ->where('name', $user2->name)
+                                            ->where('email', $user2->email)
                                     )
                             )
                             ->etc()

@@ -22,7 +22,7 @@ jobs:
           args: --ignore-platform-reqs
 
       - name: Bring site up
-        run: ./vendor/bin/sail up -d
+        run: ./vendor/bin/sail up
 
       - name: Run php cs fixer
         run: ./vendor/bin/php-cs-fixer fix
