@@ -37,8 +37,11 @@ class CreateBackup implements ShouldQueue
     {
 //        $this->line('Collecting data to back up.');
         $zipCreator = ZipCreator::start($this->user);
+
+        /* User */
         $zipCreator->add($this->user);
 
+        /* Activity */
         $activityCount = 0;
         foreach (Activity::where('user_id', $this->user->id)->get() as $activity) {
             $zipCreator->add($activity);
@@ -46,6 +49,7 @@ class CreateBackup implements ShouldQueue
         }
 //        $this->line(sprintf('Added %u activities.', $activityCount));
 
+        /* Route */
         $routeCount = 0;
         foreach (Route::where('user_id', $this->user->id)->get() as $route) {
             $zipCreator->add($route);
@@ -53,6 +57,7 @@ class CreateBackup implements ShouldQueue
         }
 //        $this->line(sprintf('Added %u routes.', $routeCount));
 
+        /* Tour */
         $tourCount = 0;
         foreach (Tour::where('user_id', $this->user->id)->get() as $tour) {
             $zipCreator->add($tour);

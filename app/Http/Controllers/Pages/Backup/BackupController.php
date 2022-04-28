@@ -40,7 +40,7 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
-        CreateBackup::dispatch(Auth::user());
+        CreateBackup::dispatchSync(Auth::user());
 
         return redirect()->route('backup.index');
     }

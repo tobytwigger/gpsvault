@@ -4,6 +4,7 @@ namespace App\Services\Archive;
 
 use App\Services\Archive\Parser\Parsers\ActivityParser;
 use App\Services\Archive\Parser\Parsers\RouteParser;
+use App\Services\Archive\Parser\Parsers\TourParser;
 use App\Services\Archive\Parser\Parsers\UserParser;
 use App\Services\Archive\Parser\ResourceParser;
 use Illuminate\Support\ServiceProvider;
@@ -21,5 +22,6 @@ class ArchiveServiceProvider extends ServiceProvider
         ResourceParser::withParser(ActivityParser::class);
         ResourceParser::withParser(UserParser::class);
         ResourceParser::withParser(RouteParser::class);
+        ResourceParser::withParser(TourParser::class);
     }
 }

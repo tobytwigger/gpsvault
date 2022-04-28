@@ -29,6 +29,6 @@ class ResourceParser
             }
         }
 
-        throw new \Exception('Cannot export item of type [%s].', typeOf($item));
+        throw new \Exception(sprintf('Cannot export item of type [%s].', get_class($item)));
     }
 }
