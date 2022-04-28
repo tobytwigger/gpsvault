@@ -34,16 +34,16 @@ class ActivityShowTest extends TestCase
                             ->has(
                                 'stats.0',
                                 fn (Assert $page) => $page
-                            ->where('id', $stat1->id)
-                            ->where('integration', 'int1')
-                            ->etc()
+                                    ->where('id', $stat1->id)
+                                    ->where('integration', 'int1')
+                                    ->etc()
                             )
                             ->has(
                                 'stats.1',
                                 fn (Assert $page) => $page
-                            ->where('id', $stat2->id)
-                            ->where('integration', 'int2')
-                            ->etc()
+                                    ->where('id', $stat2->id)
+                                    ->where('integration', 'int2')
+                                    ->etc()
                             )
                             ->etc()
                     )
