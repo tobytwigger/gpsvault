@@ -4,7 +4,6 @@ namespace App\Services\Archive;
 
 use App\Services\Archive\Parser\Parsers\ActivityParser;
 use App\Services\Archive\Parser\Parsers\RouteParser;
-use App\Services\Archive\Parser\Parsers\SyncParser;
 use App\Services\Archive\Parser\Parsers\UserParser;
 use App\Services\Archive\Parser\ResourceParser;
 use Illuminate\Support\ServiceProvider;

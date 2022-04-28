@@ -10,11 +10,9 @@ use App\Models\Tour;
 use App\Models\User;
 use App\Services\Archive\ZipCreator;
 use App\Services\Archive\ZipCreatorFactory;
-use App\Tasks\CreateBackupTask;
 use Carbon\Carbon;
 use Prophecy\Argument;
 use Tests\TestCase;
-use Tests\Utils\TestsTasks;
 
 class CreateBackupTaskTest extends TestCase
 {

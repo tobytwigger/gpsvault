@@ -6,7 +6,6 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Models\Route;
 use App\Models\User;
-use App\Services\Sync\Sync;
 use Tests\TestCase;
 
 class UserTest extends TestCase

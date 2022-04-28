@@ -5,15 +5,12 @@ namespace App\Integrations\Strava\Jobs;
 use App\Integrations\Strava\Client\Import\ApiImport;
 use App\Integrations\Strava\Client\Strava;
 use App\Models\Activity;
-use App\Models\Stats;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Arr;
 
 class SyncLocalActivities implements ShouldQueue
 {
@@ -24,12 +21,10 @@ class SyncLocalActivities implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
      */
     public function __construct(User $user)
     {
         $this->user = $user;
-
     }
 
     /**
