@@ -23,7 +23,7 @@
         "laravel-echo": "^1.11.3",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.21",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "pusher-js": "^4.3",
         "sass": "~1.32",
         "sass-loader": "^12.4.0",
