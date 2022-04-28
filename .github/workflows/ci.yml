@@ -24,6 +24,16 @@ jobs:
       - name: Copy .env file
         run: cp .env.ci .env
 
+      # Pull the latest image to build, and avoid caching pull-only images.
+      # (docker pull is faster than caching in most cases.)
+      - run: docker-compose pull
+
+      # In this step, this action saves a list of existing images,
+      # the cache is created without them in the post run.
+      # It also restores the cache if it exists.
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
       - name: Bring site up
         run: ./vendor/bin/sail up -d
 
@@ -41,7 +51,7 @@ jobs:
         continue-on-error: true
 
       - name: Run tests
-        run: ./vendor/bin/sail artisan test
+        run: ./vendor/bin/sail artisan test --parallel
 
       - name: Run phpinsights
         run: ./vendor/bin/sail artisan insights --no-interaction --min-quality=65 --min-complexity=80 --min-architecture=75 --min-style=65
