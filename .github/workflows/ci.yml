@@ -21,6 +21,9 @@ jobs:
           dev: yes
           args: --ignore-platform-reqs
 
+      - name: Copy .env file
+        run: cp .env.ci .env
+
       - name: Bring site up
         run: ./vendor/bin/sail up
 
