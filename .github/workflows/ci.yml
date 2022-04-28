@@ -43,7 +43,10 @@ jobs:
         continue-on-error: true
 
       - name: Bring site up
-        run: ./vendor/bin/sail up
+        run: ./vendor/bin/sail up -d
+
+      - name: Compile js dependencies
+        run: ./vendor/bin/sail npm run dev
 
       - name: Run php cs fixer
         run: ./vendor/bin/php-cs-fixer fix
