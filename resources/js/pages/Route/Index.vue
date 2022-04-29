@@ -12,7 +12,7 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                                data-intro="You can add a new route by clicking here"
+                                data-hint="You can add a new route by clicking here"
                                 icon
                                 v-bind="attrs"
                                 v-on="on"

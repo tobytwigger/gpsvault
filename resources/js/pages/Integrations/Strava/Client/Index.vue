@@ -65,7 +65,7 @@
                     <c-strava-client-form title="Add new client" button-text="Create">
                         <template v-slot:activator="{trigger, showing}">
                             <v-btn
-                                data-intro="You can add a new client here"
+                                data-hint="You can add a new client here"
                                 @click="trigger"
                                 :disabled="showing"
                             >

@@ -1,10 +1,11 @@
 <template>
     <v-list two-line dense>
-        <v-list-item v-for="group in schema" :key="group.title">
+        <v-list-item v-for="(group, index) in schema" :key="group.title">
             <v-list-item-icon>
                 <v-tooltip left>
                     <template v-slot:activator="{ on, attrs }">
                         <v-icon
+                            :data-hint="index === 0 ? 'You can hover over these icons to see what data they represent.' : null"
                             v-bind="attrs"
                             v-on="on"
                             color="indigo">

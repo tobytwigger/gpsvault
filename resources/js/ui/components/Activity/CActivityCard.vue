@@ -54,7 +54,7 @@
                 color="deep-purple lighten-2"
                 text
                 id="viewButton"
-                :data-intro="hints ? 'View more information about your activity by clicking here.' : null"
+                :data-hint="hints ? 'View more information about your activity by clicking here.' : null"
                 @click="$inertia.get(route('activity.show', activity.id))"
                 ref="viewButton"
             >

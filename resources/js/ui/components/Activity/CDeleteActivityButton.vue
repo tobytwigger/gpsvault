@@ -11,6 +11,7 @@
                 v-on="on"
                 :loading="loading"
                 :disabled="loading"
+                data-hint="Delete this activity."
             >
                 <v-icon>mdi-delete</v-icon>
                 Delete Activity

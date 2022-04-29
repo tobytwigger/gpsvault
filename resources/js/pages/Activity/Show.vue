@@ -8,22 +8,22 @@
         >
             <v-tabs-slider></v-tabs-slider>
 
-            <v-tab href="#tab-summary">
+            <v-tab href="#tab-summary" data-hint="Shows general information about the activity.">
                 Summary
                 <v-icon>mdi-information</v-icon>
             </v-tab>
 
-            <v-tab href="#tab-analysis">
+            <v-tab href="#tab-analysis" data-hint="Dive into the data from your ride.">
                 Analysis
                 <v-icon>mdi-chart-areaspline-variant</v-icon>
             </v-tab>
 
-            <v-tab href="#tab-social">
+            <v-tab href="#tab-social" data-hint="See how people interacted with your ride.">
                 Social
                 <v-icon>mdi-account-group</v-icon>
             </v-tab>
 
-            <v-tab href="#tab-files">
+            <v-tab href="#tab-files" data-hint="Upload any photos, documents or other files associated with the ride.">
                 Files
                 <v-icon>mdi-file-document-multiple</v-icon>
             </v-tab>
@@ -120,6 +120,7 @@
                             color="secondary"
                             @click.stop="trigger"
                             :disabled="showing"
+                            data-hint="Add a new file or image by clicking here."
                         >
                             <v-icon>mdi-upload</v-icon>
                             Upload file
@@ -138,18 +139,18 @@
                 <v-list-item v-if="!activity.file_id">
                     <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
                 </v-list-item>
-                <v-list-item v-if="activity.file_id">
+                <v-list-item v-if="activity.file_id" data-hint="Download a gpx/fit file of this activity.">
                     <v-btn link :href="route('file.download', activity.file_id)">
                         Download activity file
                     </v-btn>
                 </v-list-item>
-                <v-list-item v-if="activity.file_id">
+                <v-list-item v-if="activity.file_id" data-hint="Download a zip file with all the information about this activity.">
                     <v-btn link :href="route('activity.download', activity.id)">
                         Download activity
                     </v-btn>
                 </v-list-item>
                 <v-list-item>
-                    <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update">
+                    <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update" data-hint="Edit this activity.">
                         <template v-slot:activator="{trigger,showing}">
                             <v-btn :disabled="showing" @click="trigger">
                                 Edit Activity
@@ -159,6 +160,7 @@
                 </v-list-item>
                 <v-list-item>
                     <v-select
+                        data-hint="Choose the source of the data we're displaying."
                         class="pt-2"
                         v-model="activeDataSource"
                         item-text="integration"
@@ -170,7 +172,7 @@
                     ></v-select>
                 </v-list-item>
                 <v-list-item>
-                    <a :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
+                    <a data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
                        v-if="activity.linked_to.indexOf('strava') !== -1"
                     >View on strava</a>
                 </v-list-item>

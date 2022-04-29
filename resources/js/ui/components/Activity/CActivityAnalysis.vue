@@ -2,7 +2,7 @@
     <div>
         <v-row v-if="hasStats">
             <v-col>
-                <c-stats v-model="selectedCharts" :selectable="true" :schema="statSchema">
+                <c-stats v-model="selectedCharts" :selectable="true" :schema="statSchema" data-hint="You can toggle the data below to show it in the graph." data-scroll-to="element">
                     <template v-slot:append="{selected, toggleStatGroup}">
                         <v-list-item>
                             <v-list-item-icon>
