@@ -4,7 +4,7 @@ namespace App\Services\Archive\Parser;
 
 use App\Models\File;
 
-class FileResource
+final class FileResource
 {
     private string $newDirectory;
 

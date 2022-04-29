@@ -59,7 +59,6 @@ jobs:
 
       - name: Run phpstan
         run: ./vendor/bin/phpstan analyze app
-        continue-on-error: true
 
       - name: Run tests
         run: ./vendor/bin/sail artisan test --parallel

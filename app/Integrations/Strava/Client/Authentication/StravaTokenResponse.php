@@ -14,6 +14,10 @@ class StravaTokenResponse
 
     private int $athleteId;
 
+    final public function __construct()
+    {
+    }
+
     /**
      * @return \DateTime
      */

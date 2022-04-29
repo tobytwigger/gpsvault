@@ -61,7 +61,7 @@
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-route-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-route-map>
+                        <c-route-map :places="places.data" v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-route-map>
                     </v-col>
                 </v-row>
             </v-tab-item>

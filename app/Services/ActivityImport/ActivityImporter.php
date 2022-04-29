@@ -16,7 +16,7 @@ class ActivityImporter
 
     private ActivityDetails $activityDetails;
 
-    public function __construct(?User $user = null)
+    final public function __construct(?User $user = null)
     {
         $this->user = $user ?? Auth::user();
         $this->activityDetails = new ActivityDetails();

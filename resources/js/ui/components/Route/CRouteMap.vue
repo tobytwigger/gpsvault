@@ -2,7 +2,7 @@
     <div>
         <div v-if="loading">Loading map</div>
         <div v-else-if="geojson === null">No route could be plotted</div>
-        <c-map :geojson="geojson" v-else></c-map>
+        <c-map :geojson="geojson" :markers="markers" v-else></c-map>
     </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
         stats: {
             required: true,
             type: Object
+        },
+        places: {
+            required: false,
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -28,7 +33,19 @@ export default {
             .then(response => this.geojson = response.data)
             .then(() => this.loading = false);
     },
-
+    computed: {
+        markers() {
+            return this.places.map(place => {
+                return {
+                    id: place.id,
+                    lat: place.location.coordinates[0],
+                    lng: place.location.coordinates[1],
+                    icon: place.type,
+                    title: place.name
+                }
+            })
+        }
+    }
 }
 </script>
 

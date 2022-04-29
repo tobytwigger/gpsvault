@@ -20,13 +20,22 @@
                 :geojson="geojson"
                 @ready="setMapBounds"></l-geo-json>
 
+            <l-marker v-for="marker in markers" :key="'marker-' + marker.id" :draggable="false" :ref="'marker-' + marker.id" :lat-lng="[marker.lng, marker.lat]">
+                <l-icon
+                    :icon-size="[32,32]"
+                    :icon-anchor="[32,32]"
+                    :icon-url="'/dist/images/leaflet/' + marker.icon + '.svg'"
+                />
+                <l-tooltip>{{ marker.title }}</l-tooltip>
+            </l-marker>
+
             <l-ruler :options="rulerOptions" />
         </l-map>
     </div>
 </template>
 
 <script>
-import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers } from "vue2-leaflet";
+import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers, LMarker, LTooltip, LIcon } from "vue2-leaflet";
 import LControlFullscreen from 'vue2-leaflet-fullscreen';
 import LRuler from "vue2-leaflet-ruler";
 
@@ -39,12 +48,20 @@ export default {
         LControlLayers,
         LControl,
         LControlFullscreen,
-        LRuler
+        LRuler,
+        LMarker,
+        LTooltip,
+        LIcon
     },
     props: {
         geojson: {
             type: Object,
             required: true
+        },
+        markers: {
+            type: Array,
+            required: false,
+            default: () => []
         }
     },
     data() {
