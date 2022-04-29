@@ -19,7 +19,7 @@ class BackupIndexTest extends TestCase
         $backups[1]->created_at = Carbon::now()->subDays(2);
         $backups[2]->created_at = Carbon::now()->subDays(1);
         $backups[3]->created_at = Carbon::now()->subDays(11);
-        $backups[4]->created_at = Carbon::now()->subDays(4);
+        $backups[4]->created_at = Carbon::now()->subDays(4)->subMinute(1);
         $backups->map->save();
 
         $this->get(route('backup.index'))
