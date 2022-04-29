@@ -5,12 +5,11 @@
         <c-app-nav-bar title="Cycle Store" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
 
         <v-main >
-            <v-container style="background-color: #f3f4f6; height: 100%" fluid>
+            <v-container style="height: 100%" fluid>
                 <v-row align="start">
                     <v-col>
                         <v-toolbar
                             class="mt-2 mx-2"
-                            color="white"
                         >
                             <v-spacer></v-spacer>
 
@@ -27,19 +26,19 @@
                         <slot name="content">
                             <v-row v-if="actionSidebar">
                                 <v-col cols="12" lg="8" xl="10">
-                                    <v-sheet color="white" elevation="3" rounded width="100%">
+                                    <v-sheet elevation="3" rounded width="100%">
                                         <slot></slot>
                                     </v-sheet>
                                 </v-col>
                                 <v-col cols="12" md="4" xl="2" class="d-flex justify-lg-center">
-                                    <v-sheet color="white" elevation="3" rounded>
+                                    <v-sheet elevation="3" rounded>
                                         <slot name="sidebar"></slot>
                                     </v-sheet>
                                 </v-col>
                             </v-row>
                             <v-row v-else>
                                 <v-col cols="12">
-                                    <v-sheet color="white" elevation="3" rounded width="100%">
+                                    <v-sheet elevation="3" rounded width="100%">
                                         <slot></slot>
                                     </v-sheet>
                                 </v-col>
