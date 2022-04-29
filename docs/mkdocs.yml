@@ -1,7 +1,17 @@
 site_name: Cycle Store
 site_url: !ENV SITE_URL
 nav:
-  - Home: 'index.md'
+  - Introduction: index.md
+  - Activity:
+    - Adding an Activity: activity/adding.md
+    - Viewing an Activity: activity/viewing.md
+  - Route:
+      - Planning a new route: route/adding.md
+      - Viewing a route: route/viewing.md
+      - Visiting places: route/places.md
+      - Multi-day routes: route/multi-day.md
+  - Backup:
+      - Backing up your data: backup/adding.md
 theme:
   name: material
 plugins:
