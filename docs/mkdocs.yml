@@ -1,5 +1,7 @@
 site_name: Cycle Store
 site_url: !ENV SITE_URL
+repo_url: https://github.com/tobytwigger/cycle-store
+edit_uri: edit/develop/docs/docs/
 nav:
   - Introduction: index.md
   - Activity:
@@ -12,9 +14,16 @@ nav:
       - Multi-day routes: route/multi-day.md
   - Backup:
       - Backing up your data: backup/adding.md
+  - Developers:
+      - Getting Started: developers/get-started.md
 theme:
   name: material
+  features:
+    - search.suggest
+    - search.share
+  icon:
+    repo: fontawesome/brands/github
 plugins:
   - search
-  #  - with-pdf
   - git-authors
+  - git-revision-date
