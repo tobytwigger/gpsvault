@@ -12,18 +12,18 @@ class Place extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'name', 'description', 'type', 'url', 'phone_number', 'email', 'address', 'location'
+        'name', 'description', 'type', 'url', 'phone_number', 'email', 'address', 'location',
     ];
 
     protected $postgisFields = [
-        'location'
+        'location',
     ];
 
     protected $postgisTypes = [
         'location' => [
             'geomtype' => 'geography',
-            'srid' => 4326
-        ]
+            'srid' => 4326,
+        ],
     ];
 
     protected static function booted()

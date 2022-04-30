@@ -35,8 +35,8 @@ class GeoJsonTest extends TestCase
         $response->assertJson([
             'type' => 'LineString',
             'coordinates' => [
-                [50,1],[51,2],[52,3],[53,4]
-            ]
+                [50,1],[51,2],[52,3],[53,4],
+            ],
         ]);
     }
 
@@ -73,7 +73,7 @@ class GeoJsonTest extends TestCase
         $response = $this->getJson(route('stats.geojson', $stats));
         $this->assertEquals(json_encode([
             'type' => 'LineString',
-            'coordinates' => []
+            'coordinates' => [],
         ]), $response->content());
     }
 }

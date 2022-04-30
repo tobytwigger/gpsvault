@@ -7,20 +7,21 @@ use App\Models\Place;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class PlaceController extends Controller
 {
     public function index()
     {
         return Inertia::render('Place/Index', [
-            'places' => Place::orderBy('name')->paginate(request()->input('perPage', 8))
+            'places' => Place::orderBy('name')->paginate(request()->input('perPage', 8)),
         ]);
     }
 
     public function show(Place $place)
     {
         return Inertia::render('Place/Show', [
-            'place' => $place
+            'place' => $place,
         ]);
     }
 
@@ -41,9 +42,8 @@ class PlaceController extends Controller
             'location.lng' => 'required_with:location|numeric|min:-180|max:180',
         ]);
 
-
         if (array_key_exists('location', $validated)) {
-            $validated['location'] = new \MStaack\LaravelPostgis\Geometries\Point($validated['location']['lat'], $validated['location']['lng']);
+            $validated['location'] = new Point($validated['location']['lat'], $validated['location']['lng']);
         }
 
         $place->fill($validated);
@@ -67,8 +67,7 @@ class PlaceController extends Controller
             'location.lng' => 'required|nullable|numeric|min:-180|max:180',
         ]);
 
-
-        $validated['location'] = new \MStaack\LaravelPostgis\Geometries\Point($validated['location']['lat'], $validated['location']['lng']);
+        $validated['location'] = new Point($validated['location']['lat'], $validated['location']['lng']);
 
         $place = Place::create($validated);
 

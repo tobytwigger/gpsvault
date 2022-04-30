@@ -144,8 +144,8 @@ return [
         'tcx' => 'text/plain',
         'gpx' => 'text/xml',
         'json' => [
-            'gz' => 'application/gzip'
-        ]
+            'gz' => 'application/gzip',
+        ],
     ],
 
     'providers' => [
@@ -195,7 +195,7 @@ return [
         \App\Integrations\Strava\StravaServiceProvider::class,
         \App\Services\Archive\ArchiveServiceProvider::class,
         //        \App\Integrations\Dropbox\DropboxServiceProvider::class,
-        \App\Services\Geocoding\GeocodingServiceProvider::class
+        \App\Services\Geocoding\GeocodingServiceProvider::class,
 
     ],
 

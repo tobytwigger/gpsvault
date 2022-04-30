@@ -7,7 +7,9 @@ use App\Http\Requests\StoreRouteRequest;
 use App\Models\Route;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -28,15 +30,15 @@ class RouteController extends Controller
         return Inertia::render('Route/Index', [
             'routes' => Auth::user()->routes()
                 ->orderBy('updated_at', 'DESC')
-                ->paginate(request()->input('perPage', 8))
+                ->paginate(request()->input('perPage', 8)),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRouteRequest $request
+     * @return Response
      */
     public function store(StoreRouteRequest $request)
     {
@@ -48,7 +50,7 @@ class RouteController extends Controller
         $route = Route::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
-            'file_id' => $fileId
+            'file_id' => $fileId,
         ]);
 
         if ($request->has('file') && $request->file('file') !== null) {
@@ -61,23 +63,23 @@ class RouteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Route  $route
+     * @param Route $route
      * @return \Inertia\Response
      */
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
             'routeModel' => $route->load(['files', 'stats']),
-            'places' => $route->places()->paginate(request()->input('perPage', 8))
+            'places' => $route->places()->paginate(request()->input('perPage', 8)),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Route  $route
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param Route $route
+     * @return RedirectResponse
      */
     public function update(Request $request, Route $route)
     {
@@ -85,7 +87,7 @@ class RouteController extends Controller
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
             'notes' => 'sometimes|nullable|string|max:65535',
-            'file' => ['sometimes', 'nullable', 'file']
+            'file' => ['sometimes', 'nullable', 'file'],
         ]);
 
         $fileId = $route->file_id;
@@ -109,8 +111,8 @@ class RouteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Route  $route
-     * @return \Illuminate\Http\Response
+     * @param Route $route
+     * @return Response
      */
     public function destroy(Route $route)
     {

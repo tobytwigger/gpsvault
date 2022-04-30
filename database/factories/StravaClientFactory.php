@@ -28,14 +28,14 @@ class StravaClientFactory extends Factory
             'used_15_min_calls' => 0,
             'used_daily_calls' => 0,
             'limit_15_min' => 100,
-            'limit_daily' => 1000
+            'limit_daily' => 1000,
         ];
     }
 
     public function full()
     {
         return $this->state(fn ($attributes) => [
-            'used_15_min_calls' => 100
+            'used_15_min_calls' => 100,
         ]);
     }
 }

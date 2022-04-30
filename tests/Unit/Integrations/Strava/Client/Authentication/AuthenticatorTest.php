@@ -85,16 +85,16 @@ class AuthenticatorTest extends TestCase
         $user->setAdditionalData('strava_athlete_id', 12345);
 
         $token = StravaToken::factory()->create([
-            'strava_client_id' => $client->id, 'access_token' => 'my-token', 'user_id' => $user->id, 'refresh_token' => 'my-refresh-token', 'expires_at' => Carbon::now()->subDay()]);
+            'strava_client_id' => $client->id, 'access_token' => 'my-token', 'user_id' => $user->id, 'refresh_token' => 'my-refresh-token', 'expires_at' => Carbon::now()->subDay(), ]);
         $expiresAt = Carbon::now()->addDay();
 
         $guzzleClient = $this->prophesize(Client::class);
         $guzzleClient->request('post', 'https://www.strava.com/oauth/token', [
             'query' => [
-                'client_id' => 'my-client-id', 'client_secret' => 'my-client-secret', 'refresh_token' => 'my-refresh-token', 'grant_type' => 'refresh_token'
-            ]
+                'client_id' => 'my-client-id', 'client_secret' => 'my-client-secret', 'refresh_token' => 'my-refresh-token', 'grant_type' => 'refresh_token',
+            ],
         ])->shouldBeCalled()->willReturn(new Response(200, [], json_encode([
-            'expires_at' => $expiresAt->unix(), 'expires_in' => 500, 'refresh_token' => 'new-refresh-token', 'access_token' => 'new-access-token'
+            'expires_at' => $expiresAt->unix(), 'expires_in' => 500, 'refresh_token' => 'new-refresh-token', 'access_token' => 'new-access-token',
         ])));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
         $this->assertEquals('new-access-token', $authenticator->getAuthToken($client));
@@ -118,7 +118,7 @@ class AuthenticatorTest extends TestCase
 
         $guzzleClient = $this->prophesize(Client::class);
         $guzzleClient->request('post', 'https://www.strava.com/oauth/token', Argument::type('array'))->shouldBeCalled()->willReturn(new Response(200, [], json_encode([
-            'expires_at' => Carbon::now()->addDay()->unix(), 'expires_in' => 500, 'refresh_token' => 'new-refresh-token', 'access_token' => 'new-access-token'
+            'expires_at' => Carbon::now()->addDay()->unix(), 'expires_in' => 500, 'refresh_token' => 'new-refresh-token', 'access_token' => 'new-access-token',
         ])));
         $authenticator = new Authenticator($user, $guzzleClient->reveal());
         $authenticator->getAuthToken($client);
@@ -139,14 +139,14 @@ class AuthenticatorTest extends TestCase
                 'client_id' => $client->client_id,
                 'client_secret' => $client->client_secret,
                 'code' => '12345-code',
-                'grant_type' => 'authorization_code'
-            ]
+                'grant_type' => 'authorization_code',
+            ],
         ])->shouldBeCalled()->willReturn(new Response(200, [], json_encode([
             'expires_at' => $expiresAt->unix(),
             'expires_in' => 500,
             'refresh_token' => 'new-refresh-token',
             'access_token' => 'new-access-token',
-            'athlete' => ['id' => 12345]
+            'athlete' => ['id' => 12345],
         ])));
 
         $authenticator = new Authenticator($user, $guzzleClient->reveal());

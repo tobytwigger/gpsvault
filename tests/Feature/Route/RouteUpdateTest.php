@@ -25,7 +25,7 @@ class RouteUpdateTest extends TestCase
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => null]);
 
         $this->assertDatabaseHas('routes', [
-            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes'
+            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
         ]);
     }
 
@@ -42,7 +42,7 @@ class RouteUpdateTest extends TestCase
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => $file]);
 
         $this->assertDatabaseHas('routes', [
-            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes'
+            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
         ]);
 
         $this->assertNotNull($route->refresh()->file_id);
@@ -62,7 +62,7 @@ class RouteUpdateTest extends TestCase
         $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => $file2]);
 
         $this->assertDatabaseHas('routes', [
-            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes'
+            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
         ]);
 
         $this->assertNotEquals($file1->id, $route->refresh()->file_id);
@@ -117,7 +117,7 @@ class RouteUpdateTest extends TestCase
             ['notes', 'This is a new notes', false],
             ['file', fn () => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
             ['file', null, false],
-            ['file', 'This is not a file', 'The file must be a file.']
+            ['file', 'This is not a file', 'The file must be a file.'],
         ];
     }
 
@@ -150,7 +150,7 @@ class RouteUpdateTest extends TestCase
 
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $response = $this->put(route('route.update', $route), [
-            'file' => $file
+            'file' => $file,
         ]);
 
         Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
@@ -179,7 +179,7 @@ class RouteUpdateTest extends TestCase
 
         $route = Route::factory()->create(['user_id' => $this->user->id, 'file_id' => $oldFile->id]);
         $response = $this->put(route('route.update', $route), [
-            'file' => $file
+            'file' => $file,
         ]);
 
         Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');

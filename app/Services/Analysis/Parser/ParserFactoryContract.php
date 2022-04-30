@@ -5,6 +5,7 @@ namespace App\Services\Analysis\Parser;
 use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Parsers\ParserContract;
+use Closure;
 
 interface ParserFactoryContract
 {
@@ -12,5 +13,5 @@ interface ParserFactoryContract
 
     public function parser(string $type): ParserContract;
 
-    public function registerCustomParser(string $type, \Closure $creator);
+    public function registerCustomParser(string $type, Closure $creator);
 }

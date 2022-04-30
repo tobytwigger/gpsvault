@@ -172,7 +172,7 @@ class ActivityTest extends TestCase
         $user = User::factory()->create();
 
         $apiData = [
-            'id' => 12345
+            'id' => 12345,
         ];
 
         $importer = new Activity();
@@ -200,7 +200,7 @@ class ActivityTest extends TestCase
 
         $apiData = [
             'id' => 12345,
-            'distance' => 5000.0
+            'distance' => 5000.0,
         ];
 
         $importer = new Activity();
@@ -221,7 +221,7 @@ class ActivityTest extends TestCase
 
         $apiData = [
             'id' => 12345,
-            'distance' => 6000
+            'distance' => 6000,
         ];
 
         $importer = new Activity();
@@ -242,7 +242,7 @@ class ActivityTest extends TestCase
 
         $apiData = [
             'id' => 12345,
-            'distance' => 6000.0
+            'distance' => 6000.0,
         ];
 
         $importer = new Activity();

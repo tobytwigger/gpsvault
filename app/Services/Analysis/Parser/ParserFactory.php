@@ -8,6 +8,8 @@ use App\Services\Analysis\Parser\Parsers\FitParser;
 use App\Services\Analysis\Parser\Parsers\GpxParser;
 use App\Services\Analysis\Parser\Parsers\ParserContract;
 use App\Services\Analysis\Parser\Parsers\TcxParser;
+use Closure;
+use Exception;
 
 class ParserFactory implements ParserFactoryContract
 {
@@ -29,10 +31,10 @@ class ParserFactory implements ParserFactoryContract
             return $this->{$method}();
         }
 
-        throw new \Exception(sprintf('Cannot parse files of type [%s]', $type));
+        throw new Exception(sprintf('Cannot parse files of type [%s]', $type));
     }
 
-    public function registerCustomParser(string $type, \Closure $creator)
+    public function registerCustomParser(string $type, Closure $creator)
     {
         $this->custom[$type] = $creator;
     }

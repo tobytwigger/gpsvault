@@ -13,7 +13,6 @@ class LoadStravaActivity extends StravaActivityBaseJob
 
     /**
      * Execute the job.
-     *
      */
     public function handle(Strava $strava)
     {
@@ -26,7 +25,8 @@ class LoadStravaActivity extends StravaActivityBaseJob
             $this->activity->description = PHP_EOL . PHP_EOL . 'Imported from Strava: ' . PHP_EOL . $stravaActivity['description'];
         }
 
-        if ($stats = $this->activity->statsFrom('strava')->first()) {
+        $stats = $this->activity->statsFrom('strava')->first();
+        if ($stats) {
             $stats->average_heartrate = $stravaActivity['average_heartrate'] ?? null;
             $stats->max_heartrate = $stravaActivity['max_heartrate'] ?? null;
             $stats->calories = $stravaActivity['calories'] ?? null;

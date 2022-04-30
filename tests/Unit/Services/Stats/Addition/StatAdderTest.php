@@ -123,7 +123,7 @@ class StatAdderTest extends TestCase
             'start_latitude' => $stat1->start_latitude,
             'start_longitude' => $stat1->start_longitude,
             'end_latitude' => $stat3->end_latitude,
-            'end_longitude' => $stat3->end_longitude
+            'end_longitude' => $stat3->end_longitude,
         ], $adder->toArray());
     }
 }

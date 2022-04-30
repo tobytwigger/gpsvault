@@ -5,7 +5,7 @@ namespace App\Integrations\Strava\Client\Exceptions;
 use Exception;
 use Throwable;
 
-class ClientNotAvailable extends Exception
+class StravaRateLimited extends Exception
 {
     public function __construct($message = 'Strava rate limit exceeded. Please try again later.', $code = 429, ?Throwable $previous = null)
     {

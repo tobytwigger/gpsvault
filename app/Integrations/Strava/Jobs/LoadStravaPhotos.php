@@ -9,7 +9,6 @@ class LoadStravaPhotos extends StravaActivityBaseJob
 {
     /**
      * Execute the job.
-     *
      */
     public function handle(Strava $strava)
     {

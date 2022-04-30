@@ -30,7 +30,7 @@ class StageUpdateTest extends TestCase
             'is_rest_day' => false,
             'tour_id' => $tour->id,
             'route_id' => $route->id,
-            'activity_id' => $activity->id
+            'activity_id' => $activity->id,
         ]);
 
         $response = $this->put(route('tour.stage.update', [$tour, $stage]), [
@@ -39,7 +39,7 @@ class StageUpdateTest extends TestCase
             'date' => Carbon::now()->addDays(2)->format('Y-m-d'),
             'is_rest_day' => true,
             'route_id' => $route2->id,
-            'activity_id' => $activity2->id
+            'activity_id' => $activity2->id,
         ]);
 
         $this->assertDatabaseHas('stages', [
@@ -48,7 +48,7 @@ class StageUpdateTest extends TestCase
             'date' => Carbon::now()->addDays(2)->format('Y-m-d 00:00:00'),
             'is_rest_day' => true,
             'route_id' => $route2->id,
-            'activity_id' => $activity2->id
+            'activity_id' => $activity2->id,
         ]);
     }
 
@@ -211,7 +211,7 @@ class StageUpdateTest extends TestCase
             ['activity_id', fn () => Activity::factory()->create()->id, 'The selected activity id is invalid.'],
             ['activity_id', fn ($user) => Activity::factory()->create(['user_id' => $user->id])->id, false],
             ['stage_number', 0, 'The stage number must be at least 1.'],
-            ['stage_number', 'not-a-number', 'The stage number must be an integer.']
+            ['stage_number', 'not-a-number', 'The stage number must be an integer.'],
         ];
     }
 }

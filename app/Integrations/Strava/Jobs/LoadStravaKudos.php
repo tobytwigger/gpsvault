@@ -9,7 +9,6 @@ class LoadStravaKudos extends StravaActivityBaseJob
 {
     /**
      * Execute the job.
-     *
      */
     public function handle(Strava $strava)
     {
@@ -31,7 +30,7 @@ class LoadStravaKudos extends StravaActivityBaseJob
         StravaKudos::updateOrCreate([
             'first_name' => $kudos['firstname'],
             'last_name' => $kudos['lastname'],
-            'activity_id' => $this->activity->id
+            'activity_id' => $this->activity->id,
         ], []);
     }
 }

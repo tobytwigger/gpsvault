@@ -4,7 +4,7 @@ namespace App\Services\Archive\Parser;
 
 use App\Models\File;
 
-final class FileResource
+class FileResource
 {
     private string $newDirectory;
 
@@ -12,7 +12,7 @@ final class FileResource
 
     private File $file;
 
-    public function __construct(File $file)
+    final public function __construct(File $file)
     {
         $this->file = $file;
     }
@@ -46,16 +46,15 @@ final class FileResource
     }
 
     /**
-     * @return string|null
+     * @return string
      */
     public function getNewDirectory(): string
     {
-        // TODO Get the archive path from the file type
         return $this->newDirectory ?? dirname($this->getPath());
     }
 
     /**
-     * @param string|null $newDirectory
+     * @param string $newDirectory
      * @return FileResource
      */
     public function setNewDirectory(string $newDirectory): FileResource

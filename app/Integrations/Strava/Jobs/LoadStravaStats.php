@@ -4,21 +4,21 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Services\Analysis\Parser\Point;
+use Exception;
 
 class LoadStravaStats extends StravaActivityBaseJob
 {
     /**
      * Execute the job.
-     *
      */
     public function handle(Strava $strava)
     {
         if ($this->activity->started_at === null) {
-            throw new \Exception('The activity must have a start date to retrieve stats from Strava');
+            throw new Exception('The activity must have a start date to retrieve stats from Strava');
         }
         $strava->setUserId($this->activity->user_id);
         $activityStreams = $strava->client($this->stravaClientModel)->getActivityStream($this->activity->getAdditionalData('strava_id'));
-        $timeData = $activityStreams['time'] ?? throw new \Exception('No time stream was returned from Strava');
+        $timeData = $activityStreams['time'] ?? throw new Exception('No time stream was returned from Strava');
 
         $points = [];
         foreach ($timeData['data'] ?? [] as $index => $timeDelta) {
@@ -35,7 +35,8 @@ class LoadStravaStats extends StravaActivityBaseJob
             $points[] = $point;
         }
 
-        if ($stats = $this->activity->statsFrom('strava')->first()) {
+        $stats = $this->activity->statsFrom('strava')->first();
+        if ($stats) {
             $stats->waypoints()->delete();
 
             foreach (collect($points)->chunk(1000) as $chunkedPoints) {

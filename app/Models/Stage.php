@@ -12,18 +12,18 @@ class Stage extends Model implements Sortable
     use HasFactory, SortableTrait;
 
     protected $fillable = [
-        'name', 'description', 'date', 'is_rest_day', 'tour_id', 'route_id', 'activity_id', 'stage_number'
+        'name', 'description', 'date', 'is_rest_day', 'tour_id', 'route_id', 'activity_id', 'stage_number',
     ];
 
     protected $sortable = [
         'order_column_name' => 'stage_number',
-        'sort_when_creating' => true
+        'sort_when_creating' => true,
     ];
 
     protected $casts = [
         'stage_number' => 'integer',
         'date' => 'date',
-        'is_rest_day' => 'boolean'
+        'is_rest_day' => 'boolean',
     ];
 
     protected static function booted()

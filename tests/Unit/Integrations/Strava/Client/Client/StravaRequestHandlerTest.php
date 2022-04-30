@@ -101,7 +101,7 @@ class StravaRequestHandlerTest extends TestCase
             'limit_15_min' => 101,
             'used_15_min_calls' => 50,
             'limit_daily' => 1001,
-            'used_daily_calls' => 148
+            'used_daily_calls' => 148,
         ]);
     }
 
@@ -147,7 +147,7 @@ class StravaRequestHandlerTest extends TestCase
             'limit_15_min' => 101,
             'used_15_min_calls' => 50,
             'limit_daily' => 1001,
-            'used_daily_calls' => 148
+            'used_daily_calls' => 148,
         ]);
     }
 
@@ -194,7 +194,7 @@ class StravaRequestHandlerTest extends TestCase
             'limit_15_min' => 101,
             'used_15_min_calls' => 50,
             'limit_daily' => 1001,
-            'used_daily_calls' => 148
+            'used_daily_calls' => 148,
         ]);
     }
 
@@ -247,14 +247,14 @@ class StravaRequestHandlerTest extends TestCase
             'limit_15_min' => 101,
             'used_15_min_calls' => 50,
             'limit_daily' => 1001,
-            'used_daily_calls' => 148
+            'used_daily_calls' => 148,
         ]);
         $this->assertDatabaseHas('strava_clients', [
             'id' => $client3->id,
             'limit_15_min' => 1011,
             'used_15_min_calls' => 501,
             'limit_daily' => 10011,
-            'used_daily_calls' => 1481
+            'used_daily_calls' => 1481,
         ]);
     }
 
@@ -313,14 +313,14 @@ class StravaRequestHandlerTest extends TestCase
             'limit_15_min' => 1012,
             'used_15_min_calls' => 502,
             'limit_daily' => 10012,
-            'used_daily_calls' => 1482
+            'used_daily_calls' => 1482,
         ]);
         $this->assertDatabaseHas('strava_clients', [
             'id' => $client3->id,
             'limit_15_min' => 1011,
             'used_15_min_calls' => 501,
             'limit_daily' => 10011,
-            'used_daily_calls' => 1481
+            'used_daily_calls' => 1481,
         ]);
     }
 

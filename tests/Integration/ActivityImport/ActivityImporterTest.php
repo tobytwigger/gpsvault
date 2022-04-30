@@ -80,7 +80,7 @@ class ActivityImporterTest extends TestCase
             'test-single' => 'hello',
             'test-single-two' => 'hello-two',
             'test' => ['one', 'two'],
-            'test-two' => ['three', 'four']
+            'test-two' => ['three', 'four'],
         ], $activity->getAllAdditionalData()->toArray());
 
         $activity = ActivityImporter::update($activity)
@@ -93,7 +93,7 @@ class ActivityImporterTest extends TestCase
                 'test-single' => 'hello',
                 'test-single-two' => 'hello-three',
                 'test' => ['one', 'two'],
-                'test-two' => ['three', 'four', 'five', 'six']
+                'test-two' => ['three', 'four', 'five', 'six'],
             ],
             $activity->getAllAdditionalData()->toArray()
         );
@@ -115,7 +115,7 @@ class ActivityImporterTest extends TestCase
             'test-single' => 'hello',
             'test-single-two' => 'hello-two',
             'test' => ['one', 'two'],
-            'test-two' => ['three', 'four']
+            'test-two' => ['three', 'four'],
         ], $activity->getAllAdditionalData()->toArray());
 
         $activity = ActivityImporter::update($activity)
@@ -127,7 +127,7 @@ class ActivityImporterTest extends TestCase
         $this->assertEquals(
             [
                 'test-single' => 'hello',
-                'test' => 'one'
+                'test' => 'one',
             ],
             $activity->getAllAdditionalData()->toArray()
         );

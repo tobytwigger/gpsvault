@@ -15,12 +15,12 @@ class TourStoreTest extends TestCase
         $this->authenticated();
 
         $response = $this->post(route('tour.store'), [
-            'name' => 'Some name'
+            'name' => 'Some name',
         ]);
 
         $this->assertDatabaseCount('tours', 1);
         $this->assertDatabaseHas('tours', [
-            'name' => 'Some name'
+            'name' => 'Some name',
         ]);
     }
 
@@ -30,7 +30,7 @@ class TourStoreTest extends TestCase
         $this->authenticated();
 
         $response = $this->post(route('tour.store'), [
-            'name' => 'Some name'
+            'name' => 'Some name',
         ]);
 
         $this->assertDatabaseCount('tours', 1);
@@ -62,7 +62,7 @@ class TourStoreTest extends TestCase
         return [
             ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
             ['name', null, 'The name field is required.'],
-            ['name', 'This is a valid name', false]
+            ['name', 'This is a valid name', false],
         ];
     }
 
@@ -70,7 +70,7 @@ class TourStoreTest extends TestCase
     public function you_must_be_authenticated()
     {
         $response = $this->post(route('tour.store'), [
-            'name' => 'This is the tour name'
+            'name' => 'This is the tour name',
         ]);
         $response->assertRedirect(route('login'));
     }

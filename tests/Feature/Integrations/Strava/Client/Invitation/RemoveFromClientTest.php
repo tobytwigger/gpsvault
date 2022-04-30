@@ -61,7 +61,7 @@ class RemoveFromClientTest extends TestCase
         $this->assertCount(4, $client->sharedUsers()->get());
 
         $response = $this->delete(route('strava.client.remove', $client), [
-            'user_id' => $users[1]->id
+            'user_id' => $users[1]->id,
         ]);
 
         $response->assertRedirect(route('strava.client.index'));
@@ -78,10 +78,10 @@ class RemoveFromClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->delete(route('strava.client.remove', $client), [
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
         $response->assertSessionHasErrors([
-            'user_id' => 'The selected user id is invalid.'
+            'user_id' => 'The selected user id is invalid.',
         ]);
     }
 
@@ -94,7 +94,7 @@ class RemoveFromClientTest extends TestCase
 
         $response = $this->delete(route('strava.client.remove', $client));
         $response->assertSessionHasErrors([
-            'user_id' => 'The user id field is required.'
+            'user_id' => 'The user id field is required.',
         ]);
     }
 
@@ -107,7 +107,7 @@ class RemoveFromClientTest extends TestCase
 
         $response = $this->delete(route('strava.client.remove', $client), ['user_id' => 'this-isnt-an-int']);
         $response->assertSessionHasErrors([
-            'user_id' => 'The user id must be an integer.'
+            'user_id' => 'The user id must be an integer.',
         ]);
     }
 }

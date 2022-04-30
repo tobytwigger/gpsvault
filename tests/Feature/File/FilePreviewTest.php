@@ -24,7 +24,7 @@ class FilePreviewTest extends TestCase
             'filename' => 'filename.jpeg',
             'mimetype' => 'text/plain',
             'extension' => 'txt',
-            'type' => FileUploader::ACTIVITY_MEDIA
+            'type' => FileUploader::ACTIVITY_MEDIA,
         ]);
         $response = $this->get(route('file.preview', $file));
 

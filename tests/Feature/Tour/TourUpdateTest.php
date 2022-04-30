@@ -18,7 +18,7 @@ class TourUpdateTest extends TestCase
         $response = $this->put(route('tour.update', $tour), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'New Notes']);
 
         $this->assertDatabaseHas('tours', [
-            'id' => $tour->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'New Notes'
+            'id' => $tour->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'New Notes',
         ]);
     }
 

@@ -14,7 +14,7 @@ class PlaceRouteController extends Controller
     public function store(Request $request, Route $route)
     {
         $request->validate([
-            'place_id' => 'required|numeric|exists:places,id'
+            'place_id' => 'required|numeric|exists:places,id',
         ]);
 
         abort_if($route->user_id !== Auth::id(), 403, 'You do not own this route.');
@@ -22,7 +22,7 @@ class PlaceRouteController extends Controller
 
         PlaceRoute::create([
             'place_id' => $request->input('place_id'),
-            'route_id' => $route->id
+            'route_id' => $route->id,
         ]);
 
         return redirect()->route('route.show', $route);
@@ -35,7 +35,7 @@ class PlaceRouteController extends Controller
 
         PlaceRoute::where([
             'route_id' => $route->id,
-            'place_id' => $place->id
+            'place_id' => $place->id,
         ])->delete();
 
         return redirect()->route('route.show', $route);

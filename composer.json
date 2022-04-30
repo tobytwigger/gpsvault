@@ -1,10 +1,10 @@
 {
-    "name": "laravel/laravel",
+    "name": "tobytwigger/cycle-store",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Cycle Store.",
     "keywords": [
-        "framework",
-        "laravel"
+        "cycling",
+        "analysis"
     ],
     "license": "MIT",
     "require": {

@@ -131,7 +131,7 @@ class StravaTokenTest extends TestCase
             'expires_at' => $expiresAt->subHour(),
             'user_id' => $this->user->id,
             'disabled' => false,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
         $token->updateFromStravaTokenResponse($stravaTokenResponse);
 

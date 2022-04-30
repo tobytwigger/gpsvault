@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Strava\Jobs;
 
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimitedException;
+use App\Integrations\Strava\Client\Exceptions\StravaRateLimited;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\Activity;
 use Carbon\Carbon;
@@ -11,6 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class StravaActivityBaseJob implements ShouldQueue
 {
@@ -24,7 +25,6 @@ class StravaActivityBaseJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
      */
     public function __construct(Activity $activity)
     {
@@ -38,9 +38,9 @@ class StravaActivityBaseJob implements ShouldQueue
         return now()->addDays(3);
     }
 
-    public function failed(\Throwable $e)
+    public function failed(Throwable $e)
     {
-        if ($e instanceof StravaRateLimitedException) {
+        if ($e instanceof StravaRateLimited) {
             $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
                 ->seconds(0);
 

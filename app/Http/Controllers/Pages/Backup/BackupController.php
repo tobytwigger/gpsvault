@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Jobs\CreateBackup;
 use App\Models\File;
 use App\Services\File\FileUploader;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -28,15 +30,15 @@ class BackupController extends Controller
             'backups' => File::where('type', FileUploader::ARCHIVE)
                 ->where('user_id', Auth::id())
                 ->orderBy('created_at', 'DESC')
-                ->paginate(request()->input('perPage', 8))
+                ->paginate(request()->input('perPage', 8)),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -49,9 +51,9 @@ class BackupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @param File $file
+     * @return RedirectResponse
      */
     public function update(Request $request, File $file)
     {
@@ -71,8 +73,8 @@ class BackupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @param File $file
+     * @return RedirectResponse
      */
     public function destroy(File $file)
     {

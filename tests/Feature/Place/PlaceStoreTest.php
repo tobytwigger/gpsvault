@@ -19,7 +19,7 @@ class PlaceStoreTest extends TestCase
             'phone_number' => '01234567890',
             'email' => 'test@example.com',
             'address' => 'Testville, TO21 3TE',
-            'user_id' => $this->user?->id
+            'user_id' => $this->user?->id,
         ], $withoutLocation ? [] : ['location' => ['lat' => -0.7, 'lng' => 52.0]], $overrides);
     }
 

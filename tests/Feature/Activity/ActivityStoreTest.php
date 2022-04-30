@@ -22,18 +22,18 @@ class ActivityStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file
+            'file' => $file,
         ]);
 
         $this->assertDatabaseCount('activities', 1);
 
         $this->assertDatabaseHas('files', [
             'filename' => 'filename.gpx',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
         $file = File::where('filename', 'filename.gpx')->firstOrFail();
         $this->assertDatabaseHas('activities', [
-            'file_id' => $file->id
+            'file_id' => $file->id,
         ]);
     }
 
@@ -46,7 +46,7 @@ class ActivityStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file
+            'file' => $file,
         ]);
 
         Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
@@ -60,7 +60,7 @@ class ActivityStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file
+            'file' => $file,
         ]);
 
         $this->assertDatabaseCount('activities', 1);
@@ -76,12 +76,12 @@ class ActivityStoreTest extends TestCase
 
         $response = $this->post(route('activity.store'), [
             'file' => $file,
-            'name' => 'This is the activity name'
+            'name' => 'This is the activity name',
         ]);
 
         $this->assertDatabaseCount('activities', 1);
         $this->assertDatabaseHas('activities', [
-            'name' => 'This is the activity name'
+            'name' => 'This is the activity name',
         ]);
     }
 
@@ -114,7 +114,7 @@ class ActivityStoreTest extends TestCase
             ['name', null, false],
             ['name', 'This is a valid namne', false],
             ['file', null, 'The file field is required.'],
-            ['file', 'This is not a file', 'The file must be a file.']
+            ['file', 'This is not a file', 'The file must be a file.'],
         ];
     }
 
@@ -126,7 +126,7 @@ class ActivityStoreTest extends TestCase
 
         $response = $this->post(route('activity.store'), [
             'file' => $file,
-            'name' => 'This is the activity name'
+            'name' => 'This is the activity name',
         ]);
         $response->assertRedirect(route('login'));
     }

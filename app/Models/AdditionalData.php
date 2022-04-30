@@ -10,7 +10,7 @@ class AdditionalData extends Model
     use HasFactory;
 
     protected $fillable = [
-        'activity_id', 'key', 'value'
+        'activity_id', 'key', 'value',
     ];
 
     public function getValueAttribute($value)

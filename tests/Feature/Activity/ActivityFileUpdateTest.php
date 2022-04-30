@@ -78,13 +78,13 @@ class ActivityFileUpdateTest extends TestCase
 
         $response = $this->put(route('activity.file.update', [$activity, $file]), [
             'title' => 'My Title New',
-            'caption' => 'This is my full caption new'
+            'caption' => 'This is my full caption new',
         ]);
         $response->assertRedirect();
 
         $this->assertDatabaseCount('files', 1);
         $this->assertDatabaseHas('files', [
-            'title' => 'My Title New', 'caption' => 'This is my full caption new'
+            'title' => 'My Title New', 'caption' => 'This is my full caption new',
         ]);
     }
 
@@ -98,7 +98,7 @@ class ActivityFileUpdateTest extends TestCase
 
         $response = $this->put(route('activity.file.update', [$activity, $file]), [
             'title' => 'My Title New',
-            'caption' => 'This is my full caption new'
+            'caption' => 'This is my full caption new',
         ]);
         $response->assertRedirect(route('activity.show', $activity));
     }

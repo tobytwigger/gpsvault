@@ -25,7 +25,7 @@ class SyncLocalActivitiesTest extends TestCase
             ['id' => 2],
         ]);
         $stravaActivityClient->getActivities(2)->willReturn([
-            ['id' => 3]
+            ['id' => 3],
         ]);
         $stravaActivityClient->getActivities(3)->willReturn([]);
         $stravaActivityClient->getActivities(4)->shouldNotBeCalled();
@@ -53,7 +53,7 @@ class SyncLocalActivitiesTest extends TestCase
             ['id' => 2],
         ]);
         $stravaActivityClient->getActivities(2)->willReturn([
-            ['id' => 3]
+            ['id' => 3],
         ]);
         $stravaActivityClient->getActivities(3)->willReturn([]);
         $stravaActivityClient->getActivities(4)->shouldNotBeCalled();

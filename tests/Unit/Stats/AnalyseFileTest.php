@@ -37,7 +37,7 @@ class AnalyseFileTest extends TestCase
     public function it_creates_stats_for_an_activity()
     {
         $activity = Activity::factory()->create([
-            'file_id' => File::factory()->routeFile()->create()->id
+            'file_id' => File::factory()->routeFile()->create()->id,
         ]);
 
         $job = new AnalyseFile($activity);
@@ -45,7 +45,7 @@ class AnalyseFileTest extends TestCase
 
         $this->assertDatabaseHas('stats', [
             'stats_id' => $activity->id,
-            'stats_type' => Activity::class
+            'stats_type' => Activity::class,
         ]);
     }
 
@@ -53,7 +53,7 @@ class AnalyseFileTest extends TestCase
     public function it_creates_stats_for_a_route()
     {
         $route = Route::factory()->create([
-            'file_id' => File::factory()->routeFile()->create()->id
+            'file_id' => File::factory()->routeFile()->create()->id,
         ]);
 
         $job = new AnalyseFile($route);
@@ -61,7 +61,7 @@ class AnalyseFileTest extends TestCase
 
         $this->assertDatabaseHas('stats', [
             'stats_id' => $route->id,
-            'stats_type' => Route::class
+            'stats_type' => Route::class,
         ]);
     }
 

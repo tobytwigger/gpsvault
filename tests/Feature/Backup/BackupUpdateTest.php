@@ -18,7 +18,7 @@ class BackupUpdateTest extends TestCase
         $response = $this->put(route('backup.update', $backup), ['title' => 'New Name', 'caption' => 'New Description']);
 
         $this->assertDatabaseHas('files', [
-            'id' => $backup->id, 'title' => 'New Name', 'caption' => 'New Description'
+            'id' => $backup->id, 'title' => 'New Name', 'caption' => 'New Description',
         ]);
     }
 
@@ -61,7 +61,7 @@ class BackupUpdateTest extends TestCase
             ['title', 'This is a new title', false],
             ['caption', Str::random(65536), 'The caption must not be greater than 65535 characters.'],
             ['caption', true, 'The caption must be a string.'],
-            ['caption', 'This is a new caption', false]
+            ['caption', 'This is a new caption', false],
         ];
     }
 

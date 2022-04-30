@@ -11,7 +11,7 @@ class GeocoderRateLimiting implements Geocoder
 
     private Repository $cache;
 
-    const CACHE_KEY = 'nominatim-usage';
+    public const CACHE_KEY = 'nominatim-usage';
 
     public function __construct(Geocoder $geocoder, Repository $cache)
     {
@@ -21,7 +21,7 @@ class GeocoderRateLimiting implements Geocoder
 
     public function getUsage(): int
     {
-        return $this->cache->get(static::CACHE_KEY, 0);
+        return $this->cache->get(self::CACHE_KEY, 0);
     }
 
     public function isRateLimited(): bool
@@ -32,7 +32,7 @@ class GeocoderRateLimiting implements Geocoder
     private function markAttempt()
     {
         $usage = $this->getUsage() + 1;
-        $this->cache->put(static::CACHE_KEY, $usage, 1);
+        $this->cache->put(self::CACHE_KEY, $usage, 1);
     }
 
     public function getPlaceSummaryFromPosition(float $latitude, float $longitude): ?string

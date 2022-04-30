@@ -203,7 +203,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null
      */
     public function getStartedAt(): ?Carbon
     {
@@ -211,7 +211,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @param Carbon $startedAt
+     * @param Carbon|null $startedAt
      * @return Analysis
      */
     public function setStartedAt(?Carbon $startedAt): Analysis
@@ -222,7 +222,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null
      */
     public function getFinishedAt(): ?Carbon
     {
@@ -230,7 +230,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @param Carbon $finishedAt
+     * @param Carbon|null $finishedAt
      * @return Analysis
      */
     public function setFinishedAt(?Carbon $finishedAt): Analysis
@@ -241,7 +241,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getDuration(): ?float
     {
@@ -249,7 +249,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @param float $duration
+     * @param float|null $duration
      * @return Analysis
      */
     public function setDuration(?float $duration): Analysis

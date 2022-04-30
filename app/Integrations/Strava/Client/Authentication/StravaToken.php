@@ -18,12 +18,12 @@ class StravaToken extends Model
     protected $casts = [
         'expires_at' => 'datetime',
         'access_token' => 'encrypted',
-        'refresh_token' => 'encrypted'
+        'refresh_token' => 'encrypted',
     ];
 
     protected $hidden = [
         'access_token',
-        'refresh_token'
+        'refresh_token',
     ];
 
     protected $fillable = ['user_id', 'strava_client_id', 'access_token', 'refresh_token', 'expires_at', 'disabled'];

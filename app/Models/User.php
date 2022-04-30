@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Integrations\Dropbox\Models\DropboxToken;
 use App\Integrations\Strava\UsesStrava;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +20,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var string[]
+     * @var array<string>
      */
     protected $fillable = [
         'name',

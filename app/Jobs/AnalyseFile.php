@@ -25,7 +25,6 @@ class AnalyseFile implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
      */
     public function __construct(Activity|Route $model)
     {
@@ -42,7 +41,6 @@ class AnalyseFile implements ShouldQueue
 
     /**
      * Execute the job.
-     *
      */
     public function handle()
     {
@@ -109,7 +107,7 @@ class AnalyseFile implements ShouldQueue
     public function middleware()
     {
         return [
-            (new WithoutOverlapping('FileAnalyser'))
+            (new WithoutOverlapping('FileAnalyser')),
         ];
     }
 }

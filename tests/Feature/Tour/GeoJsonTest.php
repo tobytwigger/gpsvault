@@ -47,8 +47,8 @@ class GeoJsonTest extends TestCase
             'coordinates' => [
                 [50,1],[51,2],[52,3],[53,4],
                 [54,5],[55,6],[56,7],[57,8],
-                [58,9],[59,10]
-            ]
+                [58,9],[59,10],
+            ],
         ]);
     }
 
@@ -82,7 +82,7 @@ class GeoJsonTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'type' => 'LineString',
-            'coordinates' => []
+            'coordinates' => [],
         ]);
     }
 
@@ -109,8 +109,8 @@ class GeoJsonTest extends TestCase
             'coordinates' => [
                 [50,1],[51,2],[52,3],[53,4],
                 [54,5],[55,6],[56,7],[57,8],
-                [58,9],[59,10]
-            ]
+                [58,9],[59,10],
+            ],
         ]);
     }
 }

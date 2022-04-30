@@ -23,7 +23,7 @@ class TourFactory extends Factory
             'description' => $this->faker->paragraph,
             'notes' => $this->faker->paragraph,
             'marked_as_started_at' => null,
-            'marked_as_finished_at' => null
+            'marked_as_finished_at' => null,
         ];
     }
 }

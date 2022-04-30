@@ -47,7 +47,7 @@ class ActivityFileStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.file.store', $activity), [
-            'files' => [$file]
+            'files' => [$file],
         ]);
         $response->assertRedirect();
 
@@ -66,7 +66,7 @@ class ActivityFileStoreTest extends TestCase
         $file3 = UploadedFile::fake()->create('filename3.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.file.store', $activity), [
-            'files' => [$file1, $file2, $file3]
+            'files' => [$file1, $file2, $file3],
         ]);
         $response->assertRedirect();
 
@@ -84,13 +84,13 @@ class ActivityFileStoreTest extends TestCase
         $response = $this->post(route('activity.file.store', $activity), [
             'files' => [$file],
             'title' => 'My Title',
-            'caption' => 'This is my full caption'
+            'caption' => 'This is my full caption',
         ]);
         $response->assertRedirect();
 
         $this->assertDatabaseCount('files', 1);
         $this->assertDatabaseHas('files', [
-            'title' => 'My Title', 'caption' => 'This is my full caption'
+            'title' => 'My Title', 'caption' => 'This is my full caption',
         ]);
     }
 
@@ -107,7 +107,7 @@ class ActivityFileStoreTest extends TestCase
         $response = $this->post(route('activity.file.store', $activity), [
             'files' => [$file1, $file2, $file3],
             'title' => 'My Title',
-            'caption' => 'This is my full caption'
+            'caption' => 'This is my full caption',
         ]);
         $response->assertRedirect();
 
@@ -126,7 +126,7 @@ class ActivityFileStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.file.store', $activity), [
-            'files' => [$file]
+            'files' => [$file],
         ]);
         $response->assertRedirect(route('activity.show', $activity));
     }

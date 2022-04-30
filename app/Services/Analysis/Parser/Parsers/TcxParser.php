@@ -8,6 +8,7 @@ use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Waddle\Parsers\TCXParser as BaseParser;
+use Waddle\TrackPoint;
 
 class TcxParser implements ParserContract
 {
@@ -20,21 +21,11 @@ class TcxParser implements ParserContract
         $averages = [
             'avg_heart_rate' => [],
             'max_heart_rate' => null,
-            'avg_cadence' => []
+            'avg_cadence' => [],
         ];
         foreach ($file->getLaps() as $lap) {
             foreach ($lap->getTrackPoints() as $trackPoint) {
-                $points->push(
-                    (new Point())
-                        ->setCadence($trackPoint->getCadence())
-                        ->setElevation($trackPoint->getAltitude())
-                        ->setHeartRate($trackPoint->getHeartRate())
-                        ->setLatitude($trackPoint->getPosition('lat'))
-                        ->setLongitude($trackPoint->getPosition('lon'))
-                        ->setSpeed($trackPoint->getSpeed())
-                        ->setCalories($trackPoint->getCalories())
-                        ->setTime(Carbon::createFromTimestamp($trackPoint->getTime('U')))
-                );
+                $points->push($this->createPoint($trackPoint));
                 $averages['avg_heart_rate'][] = $lap->getAvgHeartRate();
                 if ($averages['max_heart_rate'] === null || $lap->getMaxHeartRate() > $averages['max_heart_rate']) {
                     $averages['max_heart_rate'] = $lap->getMaxHeartRate();
@@ -58,5 +49,18 @@ class TcxParser implements ParserContract
         $analysis->setAveragePace(CarbonInterval::createFromFormat('H:i:s', $file->getAveragePacePerKilometre())->totalMinutes * 0.06);
 
         return $analysis;
+    }
+
+    private function createPoint(TrackPoint $trackPoint): Point
+    {
+        return (new Point())
+            ->setCadence($trackPoint->getCadence())
+            ->setElevation($trackPoint->getAltitude())
+            ->setHeartRate($trackPoint->getHeartRate())
+            ->setLatitude($trackPoint->getPosition('lat'))
+            ->setLongitude($trackPoint->getPosition('lon'))
+            ->setSpeed($trackPoint->getSpeed())
+            ->setCalories($trackPoint->getCalories())
+            ->setTime(Carbon::createFromTimestamp($trackPoint->getTime('U')));
     }
 }

@@ -1,0 +1,1237 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Actions/Fortify/CreateNewUser.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Validation\\\\Validator\\:\\:validateWithBag\\(\\)\\.$#"
+			count: 1
+			path: app/Actions/Fortify/UpdateUserPassword.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Validation\\\\Validator\\:\\:validateWithBag\\(\\)\\.$#"
+			count: 1
+			path: app/Actions/Fortify/UpdateUserProfileInformation.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/AnalyseActivityFiles.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/AnalyseActivityFiles.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/GrantPermissions.php
+
+		-
+			message: "#^Call to an undefined static method Spatie\\\\Permission\\\\Models\\\\Permission\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/InstallPermissions.php
+
+		-
+			message: "#^Call to an undefined static method Spatie\\\\Permission\\\\Models\\\\Permission\\:\\:whereNotIn\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/InstallPermissions.php
+
+		-
+			message: "#^Access to an undefined property Spatie\\\\Permission\\\\Contracts\\\\Permission\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Console/Commands/RevokePermissions.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/RevokePermissions.php
+
+		-
+			message: "#^Call to an undefined static method Spatie\\\\Permission\\\\Models\\\\Permission\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Console/Commands/RevokePermissions.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Exceptions/ActivityDuplicate.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:activities\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Activity/ActivityController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Activity/ActivityDuplicateController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$caption\\.$#"
+			count: 3
+			path: app/Http/Controllers/Pages/Activity/ActivityFileController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Activity/ActivityFileController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$title\\.$#"
+			count: 3
+			path: app/Http/Controllers/Pages/Activity/ActivityFileController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Activity/ActivitySearchController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$caption\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Backup/BackupController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$title\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Backup/BackupController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\File\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Backup/BackupController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$mimetype\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/File/FilePreviewController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Place\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Place\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Place\\:\\:orderBy\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Place\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Place/PlaceRouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Place/PlaceRouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Place/PlaceRouteController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\PlaceRoute\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceRouteController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\PlaceRoute\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceRouteController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Place\\:\\:when\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Place/PlaceSearchController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$public\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/PublicRouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$description\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$file_id\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$name\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$notes\\.$#"
+			count: 2
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:routes\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Route\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Route\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteDuplicateController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$caption\\.$#"
+			count: 3
+			path: app/Http/Controllers/Pages/Route/RouteFileController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 4
+			path: app/Http/Controllers/Pages/Route/RouteFileController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$title\\.$#"
+			count: 3
+			path: app/Http/Controllers/Pages/Route/RouteFileController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$file_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteFileController.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Models\\\\Route\\:\\:whereHas\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteFileController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Route\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Route/RouteSearchController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stage\\:\\:\\$tour_id\\.$#"
+			count: 4
+			path: app/Http/Controllers/Pages/Stage/StageController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$id\\.$#"
+			count: 3
+			path: app/Http/Controllers/Pages/Stage/StageController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stage/StageController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stage\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stage/StageController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$model\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stats/GeoJsonController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Waypoint\\:\\:\\$latitude\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stats/GeoJsonController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Waypoint\\:\\:\\$longitude\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stats/GeoJsonController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$model\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Stats/StatsPointsController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$stages\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/GeoJsonController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Waypoint\\:\\:\\$latitude\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/GeoJsonController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Waypoint\\:\\:\\$longitude\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/GeoJsonController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Tour\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/TourController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Tour\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/TourController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$stages\\.$#"
+			count: 1
+			path: app/Http/Controllers/Pages/Tour/TourPointsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:getDirectPermissions\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Middleware/HandleInertiaRequests.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$refresh_token\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/Authenticator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$client_id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Client/Authentication/Authenticator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$client_secret\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Client/Authentication/Authenticator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/Authenticator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/Authenticator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$access_token\\.$#"
+			count: 3
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$disabled\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$expires_at\\.$#"
+			count: 4
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$refresh_token\\.$#"
+			count: 3
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$strava_client_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Authentication\\\\StravaToken\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Authentication/StravaToken.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$client_id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Client/Client/Resources/Webhook.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$client_secret\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Client/Client/Resources/Webhook.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$webhook_verify_token\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/Resources/Webhook.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/StravaRequestHandler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$limit_15_min\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/StravaRequestHandler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$limit_daily\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/StravaRequestHandler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$used_15_min_calls\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/StravaRequestHandler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$used_daily_calls\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Client/StravaRequestHandler.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$average_cadence\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$average_speed\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$average_temp\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$average_watts\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$distance\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$duration\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$elevation_gain\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_latitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_longitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$kilojoules\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$max_altitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$max_speed\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$min_altitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$moving_time\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_latitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_longitude\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$started_at\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:whereAdditionalData\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Import/Resources/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$invitation_link_uuid\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$limit_15_min\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$limit_daily\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$used_15_min_calls\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$used_daily_calls\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$webhook_verify_token\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property Linkeys\\\\UrlSigner\\\\Models\\\\Link\\:\\:\\$expiry\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:forUser\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Client/Models/StravaClient.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$id\\.$#"
+			count: 4
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientAuthController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:setAdditionalData\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientAuthController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:stravaClients\\(\\)\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientAuthController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:stravaTokens\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientAuthController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:ownedClients\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:sharedClients\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:public\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$enabled\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientEnabledController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientEnabledController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientInvitationController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$invitation_link_uuid\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientInvitationController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$user_id\\.$#"
+			count: 4
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientInvitationController.php
+
+		-
+			message: "#^Call to an undefined static method Linkeys\\\\UrlSigner\\\\Facade\\\\UrlSigner\\:\\:generate\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientInvitationController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$public\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientVisibilityController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Integrations/Strava/Http/Controllers/Client/ClientVisibilityController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Client\\\\StravaClient\\:\\:getActivity\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Strava\\:\\:setUserId\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stats\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaActivity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaComments.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaComments.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Client\\\\StravaClient\\:\\:getComments\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaComments.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Strava\\:\\:setUserId\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaComments.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Models\\\\StravaComment\\:\\:updateOrCreate\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaComments.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaKudos.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaKudos.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Client\\\\StravaClient\\:\\:getKudos\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaKudos.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Strava\\:\\:setUserId\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaKudos.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Models\\\\StravaKudos\\:\\:updateOrCreate\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaKudos.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaPhotos.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Client\\\\StravaClient\\:\\:getPhotos\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaPhotos.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Strava\\:\\:setUserId\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaPhotos.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$started_at\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaStats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaStats.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Client\\\\StravaClient\\:\\:getActivityStream\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaStats.php
+
+		-
+			message: "#^Call to an undefined method App\\\\Integrations\\\\Strava\\\\Client\\\\Strava\\:\\:setUserId\\(\\)\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/LoadStravaStats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Jobs/StravaActivityBaseJob.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Models\\\\StravaComment\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Models/StravaComment.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Models\\\\StravaComment\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Models/StravaComment.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Models\\\\StravaKudos\\:\\:\\$first_name\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Models/StravaKudos.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Integrations\\\\Strava\\\\Models\\\\StravaKudos\\:\\:\\$last_name\\.$#"
+			count: 1
+			path: app/Integrations/Strava/Models/StravaKudos.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\|App\\\\Models\\\\Route\\:\\:\\$file\\.$#"
+			count: 1
+			path: app/Jobs/AnalyseFile.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\|App\\\\Models\\\\Route\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Jobs/AnalyseFile.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stats\\:\\:updateOrCreate\\(\\)\\.$#"
+			count: 1
+			path: app/Jobs/AnalyseFile.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Services\\\\Analysis\\\\Analyser\\\\Analyser\\:\\:analyse\\(\\)\\.$#"
+			count: 1
+			path: app/Jobs/AnalyseFile.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$caption\\.$#"
+			count: 1
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$title\\.$#"
+			count: 1
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 3
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Route\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Tour\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Jobs/CreateBackup.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$linked_to\\.$#"
+			count: 2
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$stats_id\\.$#"
+			count: 2
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:\\$value\\.$#"
+			count: 2
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:delete\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:orderByPreference\\(\\)\\.$#"
+			count: 2
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stats\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Activity.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$disk\\.$#"
+			count: 4
+			path: app/Models/File.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$filename\\.$#"
+			count: 1
+			path: app/Models/File.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$hash\\.$#"
+			count: 1
+			path: app/Models/File.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$path\\.$#"
+			count: 4
+			path: app/Models/File.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Models/File.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:download\\(\\)\\.$#"
+			count: 1
+			path: app/Models/File.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:path\\(\\)\\.$#"
+			count: 1
+			path: app/Models/File.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Place\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Models/Place.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Models/Route.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Models/Route.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$notes\\.$#"
+			count: 1
+			path: app/Models/Route.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$user_id\\.$#"
+			count: 2
+			path: app/Models/Route.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$stats_id\\.$#"
+			count: 2
+			path: app/Models/Route.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:orderByPreference\\(\\)\\.$#"
+			count: 2
+			path: app/Models/Route.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Route.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stats\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Route.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stage\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Models/Stage.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stage\\:\\:\\$tour_id\\.$#"
+			count: 1
+			path: app/Models/Stage.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_latitude\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_longitude\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_latitude\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_longitude\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:\\$value\\.$#"
+			count: 2
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:orderByPreference\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\DB\\:\\:getTablePrefix\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Stats.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$stages\\.$#"
+			count: 1
+			path: app/Models/Tour.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: app/Models/Tour.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:ordered\\(\\)\\.$#"
+			count: 1
+			path: app/Models/Tour.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 5
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$tokens\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:\\$value\\.$#"
+			count: 2
+			path: app/Models/User.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:forUser\\(\\)\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:public\\(\\)\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Waypoint\\:\\:\\$points\\.$#"
+			count: 2
+			path: app/Models/Waypoint.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user_id\\.$#"
+			count: 5
+			path: app/Policies/ActivityPolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 5
+			path: app/Policies/ActivityPolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$user_id\\.$#"
+			count: 5
+			path: app/Policies/FilePolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 5
+			path: app/Policies/FilePolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$user_id\\.$#"
+			count: 5
+			path: app/Policies/RoutePolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 5
+			path: app/Policies/RoutePolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Tour\\:\\:\\$user_id\\.$#"
+			count: 5
+			path: app/Policies/TourPolicy.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 5
+			path: app/Policies/TourPolicy.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Providers/FortifyServiceProvider.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$description\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$file\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$linked_to\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$name\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\AdditionalData\\:\\:\\$key\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/ActivityImport/ActivityImporter.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Services\\\\Analysis\\\\Analyser\\\\Analyser\\:\\:registerAnalyser\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Analysis/AnalysisServiceProvider.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$extension\\.$#"
+			count: 1
+			path: app/Services/Analysis/Parser/ParserFactory.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Services/Archive/Parser/FileResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$path\\.$#"
+			count: 1
+			path: app/Services/Archive/Parser/FileResource.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/ActivityParser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$extension\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/ActivityParser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/ActivityParser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$extension\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/RouteParser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/RouteParser.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/Archive/Parser/Parsers/RouteParser.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:path\\(\\)\\.$#"
+			count: 2
+			path: app/Services/Archive/TempZipCreator.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 2
+			path: app/Services/File/FileUploader.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:update\\(\\)\\.$#"
+			count: 1
+			path: app/Services/File/FileUploader.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\File\\:\\:create\\(\\)\\.$#"
+			count: 2
+			path: app/Services/File/FileUploader.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_latitude\\.$#"
+			count: 1
+			path: app/Services/Stats/Addition/StatAdder.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$end_longitude\\.$#"
+			count: 1
+			path: app/Services/Stats/Addition/StatAdder.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_latitude\\.$#"
+			count: 1
+			path: app/Services/Stats/Addition/StatAdder.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_longitude\\.$#"
+			count: 1
+			path: app/Services/Stats/Addition/StatAdder.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:can\\(\\)\\.$#"
+			count: 1
+			path: app/Settings/BruitAPIKey.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:can\\(\\)\\.$#"
+			count: 1
+			path: app/Settings/StravaClient.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Integrations\\\\Strava\\\\Client\\\\Models\\\\StravaClient\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
+			path: app/Settings/StravaClient.php
+

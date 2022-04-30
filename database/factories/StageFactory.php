@@ -33,21 +33,21 @@ class StageFactory extends Factory
     public function tour(Tour $tour)
     {
         return $this->state(fn (array $attributes) => [
-            'tour_id' => $tour->id
+            'tour_id' => $tour->id,
         ]);
     }
 
     public function route(Route $route)
     {
         return $this->state(fn (array $attributes) => [
-            'route_id' => $route->id
+            'route_id' => $route->id,
         ]);
     }
 
     public function activity(Activity $activity)
     {
         return $this->state(fn (array $attributes) => [
-            'activity_id' => $activity->id
+            'activity_id' => $activity->id,
         ]);
     }
 }

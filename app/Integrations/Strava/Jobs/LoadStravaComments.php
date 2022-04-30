@@ -10,7 +10,6 @@ class LoadStravaComments extends StravaActivityBaseJob
 {
     /**
      * Execute the job.
-     *
      */
     public function handle(Strava $strava)
     {
@@ -36,7 +35,7 @@ class LoadStravaComments extends StravaActivityBaseJob
                 'last_name' => $comment['athlete']['lastname'],
                 'activity_id' => $this->activity->id,
                 'text' => $comment['text'],
-                'posted_at' => Carbon::make($comment['created_at'])
+                'posted_at' => Carbon::make($comment['created_at']),
             ]
         );
     }

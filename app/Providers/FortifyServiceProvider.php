@@ -16,7 +16,6 @@ class FortifyServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
-     *
      */
     public function register()
     {
@@ -24,7 +23,6 @@ class FortifyServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
      */
     public function boot()
     {

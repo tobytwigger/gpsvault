@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Pages\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -25,24 +27,24 @@ class TourController extends Controller
         return Inertia::render('Tour/Index', [
             'tours' => Tour::where('user_id', Auth::id())
                 ->orderBy('created_at', 'DESC')
-                ->paginate($request->input('perPage', 8))
+                ->paginate($request->input('perPage', 8)),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255'
+            'name' => 'required|string|max:255',
         ]);
 
         $tour = Tour::create([
-            'name' => $request->input('name')
+            'name' => $request->input('name'),
         ]);
 
         return redirect()->route('tour.show', $tour);
@@ -51,22 +53,22 @@ class TourController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Tour $tour
      * @return \Inertia\Response
      */
     public function show(Tour $tour)
     {
         return Inertia::render('Tour/Show', [
-            'tour' => $tour->load(['stages', 'stages.route'])->append(['stats', 'human_started_at', 'human_ended_at'])
+            'tour' => $tour->load(['stages', 'stages.route'])->append(['stats', 'human_started_at', 'human_ended_at']),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Tour $tour
+     * @return Response
      */
     public function update(Request $request, Tour $tour)
     {
@@ -85,8 +87,8 @@ class TourController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Tour $tour
+     * @return Response
      */
     public function destroy(Tour $tour)
     {

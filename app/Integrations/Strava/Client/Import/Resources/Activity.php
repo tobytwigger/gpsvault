@@ -55,7 +55,7 @@ class Activity
 
     private function createActivity(array $activityData, User $user): ActivityModel
     {
-        $this->status = static::CREATED;
+        $this->status = self::CREATED;
 
         $activity = ActivityImporter::for($user)
             ->withName(data_get($activityData, 'name'))
@@ -69,7 +69,7 @@ class Activity
             ->setAdditionalData('strava_achievement_count', $this->getIntegerData($activityData, 'achievement_count'))
             ->import();
 
-        $stats = $this->fillStats($activityData, new Stats(['stats_id' => $activity->id, 'stats_type' => get_class($activity)]))->save();
+        $this->fillStats($activityData, new Stats(['stats_id' => $activity->id, 'stats_type' => $activity::class]))->save();
 
         LoadStravaActivity::dispatch($activity);
         LoadStravaStats::dispatch($activity);
@@ -121,7 +121,7 @@ class Activity
             $updated[] = 'details';
         }
 
-        $stats = $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => get_class($existingActivity)]));
+        $stats = $this->fillStats($activityData, $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => $existingActivity::class]));
         if (
             collect($stats->toArray())
                 ->filter(fn ($value, $key) => array_key_exists($key, $activityData) && $activityData[$key] !== $value)
@@ -146,13 +146,12 @@ class Activity
             LoadStravaPhotos::dispatch($existingActivity);
         }
 
-
         $jobs = [
             'photos' => LoadStravaPhotos::class,
             'comments' => LoadStravaComments::class,
             'kudos' => LoadStravaKudos::class,
             'details' => LoadStravaActivity::class,
-            'stats' => LoadStravaStats::class
+            'stats' => LoadStravaStats::class,
         ];
         foreach ($updated as $updatedProperty) {
             if (array_key_exists($updatedProperty, $jobs)) {
@@ -160,7 +159,7 @@ class Activity
             }
         }
         if (count($updated) > 0) {
-            $this->status = static::UPDATED;
+            $this->status = self::UPDATED;
         }
 
         return $existingActivity;

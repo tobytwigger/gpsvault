@@ -6,7 +6,8 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/tests',
         __DIR__ . '/database',
         __DIR__ . '/config',
-        __DIR__ . '/routes'
+        __DIR__ . '/routes',
+        __DIR__ . '/deploy.php'
     ]);
 
 return (new PhpCsFixer\Config())
@@ -129,6 +130,9 @@ return (new PhpCsFixer\Config())
         'single_quote' => true,
 
         // Use null coalescing operator ?? where possible. Requires PHP >= 7.0.
-        'ternary_to_null_coalescing' => true
+        'ternary_to_null_coalescing' => true,
+
+        // Multi-line arrays must have a trailing comma.
+        'trailing_comma_in_multiline' => ['elements' => ['arrays']]
   ])
   ->setFinder($finder);

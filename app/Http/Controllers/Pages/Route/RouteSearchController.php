@@ -12,7 +12,7 @@ class RouteSearchController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'query' => 'sometimes|nullable|string|min:1|max:255'
+            'query' => 'sometimes|nullable|string|min:1|max:255',
         ]);
 
         if ($request->has('query') && $request->input('query')) {

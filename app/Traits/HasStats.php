@@ -7,6 +7,7 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -67,7 +68,7 @@ trait HasStats
     public function analyse()
     {
         if (!$this->hasFile()) {
-            throw new \Exception('No file exists on this model');
+            throw new Exception('No file exists on this model');
         }
         dispatch(new AnalyseFile($this));
     }
@@ -90,7 +91,7 @@ trait HasStats
                 if (!$b->{$stat}) {
                     return 1;
                 }
-                if ($a->{$stat} == $b->{$stat}) {
+                if ($a->{$stat} === $b->{$stat}) {
                     return 0;
                 }
 

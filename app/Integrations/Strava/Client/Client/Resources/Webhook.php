@@ -13,9 +13,8 @@ class Webhook extends Resource
             'json' => [
                 'client_id' => $clientModel->client_id,
                 'client_secret' => $clientModel->client_secret,
-            ]
+            ],
         ]);
-
 
         $content = $this->request->decodeResponse($response);
 
@@ -34,8 +33,8 @@ class Webhook extends Resource
                 'client_id' => $clientModel->client_id,
                 'client_secret' => $clientModel->client_secret,
                 'callback_url' => route('strava.webhook.verify', ['client' => $clientModel]),
-                'verify_token' => $clientModel->webhook_verify_token
-            ]
+                'verify_token' => $clientModel->webhook_verify_token,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);

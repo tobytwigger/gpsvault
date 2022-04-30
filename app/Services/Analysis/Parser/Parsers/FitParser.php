@@ -21,7 +21,7 @@ class FitParser implements ParserContract
             [
                 'input_is_data' => true,
                 'fix_data' => ['all'],
-                'units' => 'metric'
+                'units' => 'metric',
             ]
         );
         $points = collect();

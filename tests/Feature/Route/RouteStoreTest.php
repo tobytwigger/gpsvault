@@ -22,18 +22,18 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test'
+            'file' => $file, 'name' => 'Test',
         ]);
 
         $this->assertDatabaseCount('routes', 1);
 
         $this->assertDatabaseHas('files', [
             'filename' => 'filename.gpx',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
         $file = File::where('filename', 'filename.gpx')->firstOrFail();
         $this->assertDatabaseHas('routes', [
-            'file_id' => $file->id
+            'file_id' => $file->id,
         ]);
     }
 
@@ -45,7 +45,7 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test'
+            'file' => $file, 'name' => 'Test',
         ]);
 
         $this->assertDatabaseCount('routes', 1);
@@ -59,13 +59,13 @@ class RouteStoreTest extends TestCase
 
         $response = $this->post(route('route.store'), [
             'name' => 'This is the route name',
-            'description' => 'A route description'
+            'description' => 'A route description',
         ]);
 
         $this->assertDatabaseCount('routes', 1);
         $this->assertDatabaseHas('routes', [
             'name' => 'This is the route name',
-            'description' => 'A route description'
+            'description' => 'A route description',
         ]);
     }
 
@@ -104,7 +104,7 @@ class RouteStoreTest extends TestCase
             ['description', 'This is a valid namne', false],
             ['file', fn () => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
             ['file', null, false],
-            ['file', 'This is not a file', 'The file must be a file.']
+            ['file', 'This is not a file', 'The file must be a file.'],
         ];
     }
 
@@ -116,7 +116,7 @@ class RouteStoreTest extends TestCase
 
         $response = $this->post(route('route.store'), [
             'file' => $file,
-            'name' => 'This is the route name'
+            'name' => 'This is the route name',
         ]);
         $response->assertRedirect(route('login'));
     }
@@ -130,7 +130,7 @@ class RouteStoreTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test'
+            'file' => $file, 'name' => 'Test',
         ]);
 
         Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');

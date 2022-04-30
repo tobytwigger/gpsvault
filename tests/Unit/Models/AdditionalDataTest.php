@@ -32,7 +32,7 @@ class AdditionalDataTest extends TestCase
             [['some' => 'array']],
             [['another', 'array']],
             [null],
-            [false]
+            [false],
         ];
     }
 }

@@ -22,7 +22,7 @@ class StageController extends Controller
         if ($tour->user_id !== Auth::id()) {
             throw new AuthorizationException(null, 403);
         }
-        $stage = Stage::create([
+        Stage::create([
             'tour_id' => $tour->id,
         ]);
 
@@ -40,7 +40,7 @@ class StageController extends Controller
             'is_rest_day' => 'sometimes|boolean',
             'route_id' => ['sometimes', 'nullable', 'integer', Rule::exists('routes', 'id')->where(fn ($query) => $query->where('user_id', Auth::id()))],
             'activity_id' => ['sometimes', 'nullable', 'integer', Rule::exists('activities', 'id')->where(fn ($query) => $query->where('user_id', Auth::id()))],
-            'stage_number' => 'sometimes|integer|min:1'
+            'stage_number' => 'sometimes|integer|min:1',
         ]);
 
         $stage->fill($validated);

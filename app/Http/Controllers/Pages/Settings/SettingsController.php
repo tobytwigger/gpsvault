@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pages\Settings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Jenssegers\Agent\Agent;
@@ -26,13 +27,12 @@ class SettingsController extends Controller
         $request->validate([
             '*' => [
                 app(ArrayKeyIsValidSettingKeyRule::class),
-                app(SettingValueIsValidRule::class)
-            ]
+                app(SettingValueIsValidRule::class),
+            ],
         ]);
 
         foreach ($request->all() as $key => $value) {
             Setting::setValue($key, $value);
-            $settings[$key] = $value;
         }
 
         return redirect()->route('settings.index');
@@ -41,8 +41,8 @@ class SettingsController extends Controller
     /**
      * Get the current sessions.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Support\Collection
+     * @param Request $request
+     * @return Collection
      */
     protected function sessions(Request $request)
     {
@@ -75,7 +75,7 @@ class SettingsController extends Controller
      * Create a new agent instance from the given session.
      *
      * @param  mixed  $session
-     * @return \Jenssegers\Agent\Agent
+     * @return Agent
      */
     protected function createAgent($session)
     {

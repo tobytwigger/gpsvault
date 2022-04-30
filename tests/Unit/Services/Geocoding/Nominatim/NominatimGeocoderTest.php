@@ -25,7 +25,7 @@ class NominatimGeocoderTest extends TestCase
         $nominatim = $this->prophesize(Nominatim::class);
         $nominatim->newReverse()->willReturn($reverse->reveal());
         $nominatim->find(Argument::any())->willReturn([
-            'address' => $address
+            'address' => $address,
         ]);
 
         $this->app->instance('nominatim', $nominatim->reveal());

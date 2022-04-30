@@ -54,7 +54,7 @@ return [
             'ignore_exceptions' => false,
         ],
         'larabug' => [
-            'driver' => 'larabug'
+            'driver' => 'larabug',
         ],
         'single' => [
             'driver' => 'single',

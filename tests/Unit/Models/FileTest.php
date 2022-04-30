@@ -44,7 +44,7 @@ class FileTest extends TestCase
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
             'disk' => 'tests',
-            'hash' => null
+            'hash' => null,
         ]);
 
         $this->assertEquals($hash, $file->hash);
@@ -61,7 +61,7 @@ class FileTest extends TestCase
             'extension' => 'txt',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
 
         Storage::disk('test-fake')->assertExists('hashing.txt');
@@ -80,7 +80,7 @@ class FileTest extends TestCase
             'extension' => 'txt',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
 
         $this->assertEquals(Storage::disk('test-fake')->path('/tests/hashing.txt'), $file->fullPath());
@@ -97,7 +97,7 @@ class FileTest extends TestCase
             'extension' => 'txt',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
 
         $this->assertEquals('abc123', $file->getFileContents());
@@ -114,7 +114,7 @@ class FileTest extends TestCase
             'extension' => 'txt',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
-            'disk' => 'test-fake'
+            'disk' => 'test-fake',
         ]);
 
         $response = TestResponse::fromBaseResponse($file->returnDownloadResponse());

@@ -33,7 +33,7 @@ abstract class TestCase extends BaseTestCase
             [realpath(__DIR__ . '/../resources/js/pages')],
         ));
         config()->set('filesystems.disks.tests', [
-            'driver' => 'local', 'root' => storage_path('tests')
+            'driver' => 'local', 'root' => storage_path('tests'),
         ]);
         Storage::fake('test-fake');
     }

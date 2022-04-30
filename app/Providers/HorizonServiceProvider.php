@@ -10,7 +10,6 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
      */
     public function boot()
     {
@@ -27,14 +26,13 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
      * Register the Horizon gate.
      *
      * This gate determines who can access Horizon in non-local environments.
-     *
      */
     protected function gate()
     {
         Gate::define('viewHorizon', function ($user) {
             return in_array($user->email, [
                 'toby@linkeys.app',
-                'tobytwigger1@gmail.com'
+                'tobytwigger1@gmail.com',
             ]);
         });
     }

@@ -20,7 +20,7 @@ class ActivityParser implements Parser
 
     /**
      * @param Activity $item
-     * @return FileResource[]
+     * @return ParseResult
      */
     public function parse($item): ParseResult
     {

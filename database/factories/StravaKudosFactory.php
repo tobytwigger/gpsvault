@@ -20,7 +20,7 @@ class StravaKudosFactory extends Factory
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
-            'activity_id' => fn () => Activity::factory()
+            'activity_id' => fn () => Activity::factory(),
         ];
     }
 }

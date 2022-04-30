@@ -12,7 +12,7 @@ class StravaKudos extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name', 'last_name', 'activity_id'
+        'first_name', 'last_name', 'activity_id',
     ];
 
     protected $appends = ['name'];

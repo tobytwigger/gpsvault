@@ -23,7 +23,7 @@ class StravaCommentsFactory extends Factory
             'last_name' => $this->faker->lastName,
             'text' => $this->faker->paragraph,
             'posted_at' => $this->faker->dateTimeBetween('-1 year', '-1 hour'),
-            'activity_id' => fn () => Activity::factory()
+            'activity_id' => fn () => Activity::factory(),
         ];
     }
 }

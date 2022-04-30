@@ -13,18 +13,18 @@ class Tour extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'marked_as_started_at', 'marked_as_finished_at'
+        'name', 'description', 'notes', 'marked_as_started_at', 'marked_as_finished_at',
     ];
 
     protected $casts = [
         'marked_as_started_at' => 'datetime',
-        'marked_as_finished_at' => 'datetime'
+        'marked_as_finished_at' => 'datetime',
     ];
 
     protected $appends = [
         'distance', 'elevation_gain',
         'human_started_at',
-        'human_ended_at'
+        'human_ended_at',
     ];
 
     protected static function booted()
@@ -45,8 +45,11 @@ class Tour extends Model
     {
         $adder = new StatAdder();
         foreach ($this->stages as $stage) {
-            if ($stage->route_id && $stat = $stage->route->stats()->orderByPreference()->first()) {
-                $adder->push($stat);
+            if($stage->route_id) {
+                $stat = $stage->route->stats()->orderByPreference()->first();
+                if($stat) {
+                    $adder->push($stat);
+                }
             }
         }
 

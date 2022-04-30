@@ -13,15 +13,15 @@ class Route extends Model
     use HasFactory, HasStats, Searchable;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'file_id', 'public'
+        'name', 'description', 'notes', 'file_id', 'public',
     ];
 
     protected $appends = [
-        'cover_image', 'distance'
+        'cover_image', 'distance',
     ];
 
     protected $casts = [
-        'public' => 'boolean'
+        'public' => 'boolean',
     ];
 
     public function toSearchableArray()
@@ -30,7 +30,7 @@ class Route extends Model
             'name' => $this->name,
             'description' => $this->description,
             'notes' => $this->notes,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
         ];
     }
 

@@ -28,7 +28,7 @@ class SyncTaskFactory extends Factory
             'messages' => [],
             'percentage' => 0,
             'started_at' => $startedAt,
-            'finished_at' => $startedAt->add(\DateInterval::createFromDateString(sprintf('%u seconds', $this->faker->numberBetween(1, 120))))
+            'finished_at' => $startedAt->add(\DateInterval::createFromDateString(sprintf('%u seconds', $this->faker->numberBetween(1, 120)))),
         ];
     }
 }

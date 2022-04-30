@@ -14,7 +14,7 @@ class IndexClientTest extends TestCase
     {
         $this->get(route('strava.client.index', [
             $responseAttribute . '_per_page' => 5,
-            $responseAttribute . '_page' => 2
+            $responseAttribute . '_page' => 2,
         ]))->assertInertia(
             fn (Assert $page) => $page
                 ->component('Integrations/Strava/Client/Index')
@@ -33,7 +33,7 @@ class IndexClientTest extends TestCase
 
         $this->get(route('strava.client.index', [
             $responseAttribute . '_per_page' => 3,
-            $responseAttribute . '_page' => 4
+            $responseAttribute . '_page' => 4,
         ]))->assertInertia(
             fn (Assert $page) => $page
                 ->component('Integrations/Strava/Client/Index')
@@ -113,7 +113,7 @@ class IndexClientTest extends TestCase
         $this->get(route('strava.client.index', [
             'owned_per_page' => 5, 'owned_page' => 2,
             'shared_per_page' => 4, 'shared_page' => 3,
-            'public_per_page' => 3, 'public_page' => 5
+            'public_per_page' => 3, 'public_page' => 5,
         ]))->assertInertia(
             fn (Assert $page) => $page
                 ->component('Integrations/Strava/Client/Index')
@@ -170,7 +170,7 @@ class IndexClientTest extends TestCase
         $this->get(route('strava.client.index', [
             'owned_per_page' => 1, 'owned_page' => 1,
             'shared_per_page' => 1, 'shared_page' => 1,
-            'public_per_page' => 1, 'public_page' => 1
+            'public_per_page' => 1, 'public_page' => 1,
         ]))
             ->assertInertia(
                 fn (Assert $page) => $page

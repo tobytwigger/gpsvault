@@ -32,7 +32,8 @@ class PlaceSearchController extends Controller
                 fn (Builder $query) => $query->whereRaw(
                     'places.location && ST_MakeEnvelope(?, ?, ?, ?, 4326)',
                     [
-                        $request->input('southwest_lng'), $request->input('southwest_lat'), $request->input('northeast_lng'), $request->input('northeast_lat'), ]
+                        $request->input('southwest_lng'), $request->input('southwest_lat'), $request->input('northeast_lng'), $request->input('northeast_lat'),
+                    ]
                 )
             )
             ->orderBy('name')

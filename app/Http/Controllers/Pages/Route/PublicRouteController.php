@@ -13,7 +13,7 @@ class PublicRouteController extends Controller
         abort_if($route->public !== true, 403, 'This route is not public');
 
         return Inertia::render('Route/Public', [
-            'routeModel' => $route->load('stats')
+            'routeModel' => $route->load('stats'),
         ]);
     }
 }

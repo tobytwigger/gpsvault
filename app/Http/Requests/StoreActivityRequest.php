@@ -25,7 +25,7 @@ class StoreActivityRequest extends FormRequest
     {
         return [
             'file' => 'required|file',
-            'name' => 'sometimes|nullable|max:255'
+            'name' => 'sometimes|nullable|max:255',
         ];
     }
 }

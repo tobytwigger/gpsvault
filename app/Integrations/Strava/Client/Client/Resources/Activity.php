@@ -10,8 +10,8 @@ class Activity extends Resource
     {
         $response = $this->request->request('GET', 'activities/' . $activityId, [
             'query' => [
-                'include_all_efforts' => true
-            ]
+                'include_all_efforts' => true,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);
@@ -22,8 +22,8 @@ class Activity extends Resource
         $response = $this->request->request('GET', 'athlete/activities', [
             'query' =>  [
                 'page' => $page,
-                'per_page' => 50
-            ]
+                'per_page' => 50,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);
@@ -33,8 +33,8 @@ class Activity extends Resource
     {
         $response = $this->request->request('GET', 'activities/' . $activityId . '/photos', [
             'query' => [
-                'photo_source' => true
-            ]
+                'photo_source' => true,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);
@@ -45,8 +45,8 @@ class Activity extends Resource
         $response = $this->request->request('GET', 'activities/' . $activityId . '/comments', [
             'query' => [
                 'page' => $page,
-                'per_page' => 200
-            ]
+                'per_page' => 200,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);
@@ -57,8 +57,8 @@ class Activity extends Resource
         $response = $this->request->request('GET', 'activities/' . $activityId . '/kudos', [
             'query' => [
                 'page' => $page,
-                'per_page' => 200
-            ]
+                'per_page' => 200,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);
@@ -69,8 +69,8 @@ class Activity extends Resource
         $response = $this->request->request('GET', 'activities/' . $activityId . '/streams', [
             'query' => [
                 'keys' => 'time,altitude,heartrate,cadence,watts,temp,moving,latlng,distance,velocity_smooth',
-                'key_by_type' => false
-            ]
+                'key_by_type' => false,
+            ],
         ]);
 
         return $this->request->decodeResponse($response);

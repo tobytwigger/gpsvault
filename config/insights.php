@@ -51,7 +51,7 @@ return [
     |
      */
 
-    'ide' => null,
+    'ide' => 'phpstorm',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,6 +85,22 @@ return [
         PropertyTypeHintSniff::class,
         ReturnTypeHintSniff::class,
         UselessFunctionDocCommentSniff::class,
+        \PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
+        \PHP_CodeSniffer\Standards\Generic\Sniffs\WhiteSpace\ArbitraryParenthesesSpacingSniff::class,
+        \SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
+        \PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer::class,
+        \PhpCsFixer\Fixer\FunctionNotation\FunctionDeclarationFixer::class,
+        \PhpCsFixer\Fixer\ClassNotation\NoBlankLinesAfterClassOpeningFixer::class,
+        \PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer::class,
+        \PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer::class,
+        \SlevomatCodingStandard\Sniffs\Files\LineLengthSniff::class,
+        \PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff::class,
+        \SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff::class,
+        \SlevomatCodingStandard\Sniffs\ControlStructures\DisallowShortTernaryOperatorSniff::class,
+        \SlevomatCodingStandard\Sniffs\ControlStructures\DisallowEmptySniff::class,
+        \NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
+        \SlevomatCodingStandard\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
+        \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff::class
     ],
 
     'config' => [

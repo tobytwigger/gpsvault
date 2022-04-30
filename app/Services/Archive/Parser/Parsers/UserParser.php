@@ -4,7 +4,6 @@ namespace App\Services\Archive\Parser\Parsers;
 
 use App\Models\User;
 use App\Services\Archive\Contracts\Parser;
-use App\Services\Archive\Parser\FileResource;
 use App\Services\Archive\ParseResult;
 use App\Services\Archive\Traits\CreatesParseResult;
 
@@ -19,7 +18,7 @@ class UserParser implements Parser
 
     /**
      * @param User $item
-     * @return FileResource[]
+     * @return ParseResult
      */
     public function parse($item): ParseResult
     {

@@ -18,7 +18,7 @@ class ActivityUpdateTest extends TestCase
         $response = $this->put(route('activity.update', $activity), ['name' => 'New Name', 'description' => 'New Description']);
 
         $this->assertDatabaseHas('activities', [
-            'id' => $activity->id, 'name' => 'New Name', 'description' => 'New Description'
+            'id' => $activity->id, 'name' => 'New Name', 'description' => 'New Description',
         ]);
     }
 
@@ -61,7 +61,7 @@ class ActivityUpdateTest extends TestCase
             ['name', 'This is a new name', false],
             ['description', Str::random(65536), 'The description must not be greater than 65535 characters.'],
             ['description', true, 'The description must be a string.'],
-            ['description', 'This is a new description', false]
+            ['description', 'This is a new description', false],
         ];
     }
 

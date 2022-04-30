@@ -18,7 +18,7 @@ class ImportFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fn () => User::factory()
+            'user_id' => fn () => User::factory(),
         ];
     }
 }

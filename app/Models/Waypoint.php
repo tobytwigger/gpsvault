@@ -12,14 +12,14 @@ class Waypoint extends Model
     protected $table = 'waypoints';
 
     protected $postgisFields = [
-        'points'
+        'points',
     ];
 
     protected $postgisTypes = [
         'points' => [
             'geomtype' => 'geography',
-            'srid' => 4326
-        ]
+            'srid' => 4326,
+        ],
     ];
 
     protected $fillable = [
@@ -34,7 +34,7 @@ class Waypoint extends Model
         'battery',
         'calories',
         'cumulative_distance',
-        'stats_id'
+        'stats_id',
     ];
 
     protected $casts = [

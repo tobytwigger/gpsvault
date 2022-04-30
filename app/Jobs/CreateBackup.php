@@ -22,7 +22,6 @@ class CreateBackup implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
      */
     public function __construct(User $user)
     {
@@ -31,7 +30,6 @@ class CreateBackup implements ShouldQueue
 
     /**
      * Execute the job.
-     *
      */
     public function handle()
     {
@@ -42,26 +40,26 @@ class CreateBackup implements ShouldQueue
         $zipCreator->add($this->user);
 
         /* Activity */
-        $activityCount = 0;
+//        $activityCount = 0;
         foreach (Activity::where('user_id', $this->user->id)->get() as $activity) {
             $zipCreator->add($activity);
-            $activityCount++;
+//            $activityCount++;
         }
 //        $this->line(sprintf('Added %u activities.', $activityCount));
 
         /* Route */
-        $routeCount = 0;
+//        $routeCount = 0;
         foreach (Route::where('user_id', $this->user->id)->get() as $route) {
             $zipCreator->add($route);
-            $routeCount++;
+//            $routeCount++;
         }
 //        $this->line(sprintf('Added %u routes.', $routeCount));
 
         /* Tour */
-        $tourCount = 0;
+//        $tourCount = 0;
         foreach (Tour::where('user_id', $this->user->id)->get() as $tour) {
             $zipCreator->add($tour);
-            $tourCount++;
+//            $tourCount++;
         }
 //        $this->line(sprintf('Added %u tours.', $tourCount));
 

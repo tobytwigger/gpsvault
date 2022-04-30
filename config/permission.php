@@ -164,6 +164,6 @@ return [
         'manage-strava-clients',
         'use-public-strava-clients',
         'viewWebSocketsDashboard',
-        'manage-bruit-key'
-    ]
+        'manage-bruit-key',
+    ],
 ];

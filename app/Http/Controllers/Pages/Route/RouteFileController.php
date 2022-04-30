@@ -42,7 +42,7 @@ class RouteFileController extends Controller
             'files' => 'required|array|min:1',
             'files.*' => 'file|max:10000',
             'title' => 'sometimes|nullable|string|max:255',
-            'caption' => 'sometimes|nullable|string|max:65535'
+            'caption' => 'sometimes|nullable|string|max:65535',
         ]);
 
         $files = collect($request->file('files', []))
@@ -67,7 +67,7 @@ class RouteFileController extends Controller
 
         $request->validate([
             'title' => 'sometimes|nullable|string|max:255',
-            'caption' => 'sometimes|nullable|string|max:65535'
+            'caption' => 'sometimes|nullable|string|max:65535',
         ]);
 
         $file->title = $request->get('title', $file->title);

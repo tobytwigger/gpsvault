@@ -7,6 +7,7 @@ use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Linkeys\UrlSigner\Facade\UrlSigner;
 use Linkeys\UrlSigner\Models\Link;
 
 class ClientInvitationController extends Controller
@@ -15,7 +16,7 @@ class ClientInvitationController extends Controller
     {
         abort_if($client->user_id !== Auth::id(), 403, 'You can only invite users to a client you own.');
 
-        $link = \Linkeys\UrlSigner\Facade\UrlSigner::generate(
+        $link = UrlSigner::generate(
             route('strava.client.accept', ['client' => $client->id]),
             ['client_id' => $client->id],
             '+24 hours'
@@ -49,8 +50,8 @@ class ClientInvitationController extends Controller
                     ->whereIn(
                         'id',
                         $client->sharedUsers()->get()->pluck('id')->toArray()
-                    )
-            ]
+                    ),
+            ],
         ]);
 
         $client->sharedUsers()->detach($request->input('user_id'));

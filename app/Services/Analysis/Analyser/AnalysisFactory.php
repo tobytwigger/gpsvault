@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Services\Analysis\Analyser\Analysers\AnalyserContract;
 use App\Services\Analysis\Analyser\Analysers\DummyAnalyser;
 use App\Services\Analysis\Parser\Parser;
+use Closure;
 
 class AnalysisFactory implements AnalysisFactoryContract
 {
@@ -26,7 +27,7 @@ class AnalysisFactory implements AnalysisFactoryContract
         return $analyser->analyse($analysis);
     }
 
-    private function getChain(?\Closure $filter = null): AnalyserContract
+    private function getChain(?Closure $filter = null): AnalyserContract
     {
         $analysers = collect($this->analysers)
             ->map(fn (string $class) => app($class))
@@ -37,7 +38,8 @@ class AnalysisFactory implements AnalysisFactoryContract
             return new DummyAnalyser();
         }
 
-        for ($i = 0; $i < ($analysers->count() - 1); $i++) {
+        $count = $analysers->count();
+        for ($i = 0; $i < $count - 1; $i++) {
             $analysers[$i]->setNext($analysers[$i + 1]);
         }
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static ZipCreatorFactory start(?User $user = null)
+ * @method static ZipCreatorFactory add($item)
  */
 class ZipCreator extends Facade
 {

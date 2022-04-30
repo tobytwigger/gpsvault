@@ -23,7 +23,7 @@ class RouteFactory extends Factory
             'notes' => $this->faker->paragraph,
             'public' => false,
             'file_id' => null,
-            'user_id' => fn () => User::factory()
+            'user_id' => fn () => User::factory(),
         ];
     }
 }

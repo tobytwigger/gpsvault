@@ -20,7 +20,7 @@ class RouteParser implements Parser
 
     /**
      * @param Route $item
-     * @return FileResource[]
+     * @return ParseResult
      */
     public function parse($item): ParseResult
     {

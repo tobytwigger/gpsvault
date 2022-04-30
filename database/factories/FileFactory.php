@@ -25,7 +25,7 @@ class FileFactory extends Factory
             'caption' => $this->faker->paragraph,
             'disk' => 'tests',
             'hash' => Str::random(32),
-            'user_id' => fn () => User::factory()
+            'user_id' => fn () => User::factory(),
         ];
     }
 
@@ -36,7 +36,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::ROUTE_MEDIA,
-            'mimetype' => 'image/jpeg'
+            'mimetype' => 'image/jpeg',
         ]);
     }
 
@@ -47,7 +47,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::ACTIVITY_MEDIA,
-            'mimetype' => 'image/jpeg'
+            'mimetype' => 'image/jpeg',
         ]);
     }
 
@@ -58,7 +58,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
-            'mimetype' => 'application/xml+gpx'
+            'mimetype' => 'application/xml+gpx',
         ]);
     }
 
@@ -69,7 +69,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
-            'mimetype' => 'application/xml+gpx'
+            'mimetype' => 'application/xml+gpx',
         ]);
     }
 
@@ -80,7 +80,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.fit',
             'extension' => 'fit',
             'type' => FileUploader::ACTIVITY_FILE,
-            'mimetype' => 'application/xml+gpx'
+            'mimetype' => 'application/xml+gpx',
         ]);
     }
 
@@ -91,7 +91,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ROUTE_FILE,
-            'mimetype' => 'application/xml+gpx'
+            'mimetype' => 'application/xml+gpx',
         ]);
     }
 
@@ -102,7 +102,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.zip',
             'extension' => 'zip',
             'type' => FileUploader::ARCHIVE,
-            'mimetype' => 'application/zip'
+            'mimetype' => 'application/zip',
         ]);
     }
 
@@ -113,7 +113,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.tar.gz',
             'extension' => 'tar.gz',
             'type' => FileUploader::ACTIVITY_FILE_POINT_JSON,
-            'mimetype' => 'application/gzip'
+            'mimetype' => 'application/gzip',
         ]);
     }
 }

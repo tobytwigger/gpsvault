@@ -3,8 +3,9 @@
 namespace App\Exceptions;
 
 use App\Models\Activity;
+use Exception;
 
-class ActivityDuplicate extends \Exception
+class ActivityDuplicate extends Exception
 {
     public Activity $activity;
 

@@ -22,7 +22,7 @@ class SyncFactory extends Factory
         return [
             'user_id' => User::factory(),
             'started_at' => $startedAt,
-            'finished_at' => $startedAt->add(\DateInterval::createFromDateString(sprintf('%u seconds', $this->faker->numberBetween(1, 120))))
+            'finished_at' => $startedAt->add(\DateInterval::createFromDateString(sprintf('%u seconds', $this->faker->numberBetween(1, 120)))),
         ];
     }
 }

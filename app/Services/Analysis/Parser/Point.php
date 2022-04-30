@@ -57,7 +57,7 @@ class Point implements Arrayable, Jsonable
     private ?float $speed = null;
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getLatitude(): ?float
     {
@@ -84,7 +84,7 @@ class Point implements Arrayable, Jsonable
     }
 
     /**
-     * @param float $latitude
+     * @param float|null $latitude
      * @return Point
      */
     public function setLatitude(?float $latitude): Point
@@ -95,7 +95,7 @@ class Point implements Arrayable, Jsonable
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getLongitude(): ?float
     {
@@ -103,7 +103,7 @@ class Point implements Arrayable, Jsonable
     }
 
     /**
-     * @param float $longitude
+     * @param float|null $longitude
      * @return Point
      */
     public function setLongitude(?float $longitude): Point
@@ -133,7 +133,7 @@ class Point implements Arrayable, Jsonable
     }
 
     /**
-     * @return Carbon
+     * @return Carbon|null
      */
     public function getTime(): ?Carbon
     {
@@ -141,7 +141,7 @@ class Point implements Arrayable, Jsonable
     }
 
     /**
-     * @param Carbon $time
+     * @param Carbon|null $time
      * @return Point
      */
     public function setTime(?Carbon $time): Point
@@ -298,7 +298,7 @@ class Point implements Arrayable, Jsonable
             'grade' => $this->getGrade(),
             'battery' => $this->getBattery(),
             'calories' => $this->getCalories(),
-            'cumulative_distance' => $this->getCumulativeDistance()
+            'cumulative_distance' => $this->getCumulativeDistance(),
         ]);
     }
 

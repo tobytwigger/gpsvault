@@ -20,7 +20,7 @@ class AdditionalDataFactory extends Factory
             'key' => $this->faker->word,
             'value' => $this->faker->word,
             'additional_data_type' => null,
-            'additional_data_id' => null
+            'additional_data_id' => null,
         ];
     }
 }

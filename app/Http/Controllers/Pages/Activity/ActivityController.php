@@ -9,6 +9,8 @@ use App\Models\Activity;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -29,15 +31,15 @@ class ActivityController extends Controller
         return Inertia::render('Activity/Index', [
             'activities' => Auth::user()->activities()
                 ->orderByStat('started_at')
-                ->paginate(request()->input('perPage', 8))
+                ->paginate(request()->input('perPage', 8)),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreActivityRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param StoreActivityRequest $request
+     * @return RedirectResponse
      */
     public function store(StoreActivityRequest $request)
     {
@@ -56,22 +58,22 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Activity  $activity
+     * @param Activity $activity
      * @return \Inertia\Response
      */
     public function show(Activity $activity)
     {
         return Inertia::render('Activity/Show', [
-            'activity' => $activity->load(['files', 'stats'])
+            'activity' => $activity->load(['files', 'stats']),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateActivityRequest  $request
-     * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\RedirectResponse
+     * @param UpdateActivityRequest $request
+     * @param Activity $activity
+     * @return RedirectResponse
      */
     public function update(UpdateActivityRequest $request, Activity $activity, FileUploader $fileUploader)
     {
@@ -90,8 +92,8 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Activity  $activity
-     * @return \Illuminate\Http\Response
+     * @param Activity $activity
+     * @return Response
      */
     public function destroy(Activity $activity)
     {

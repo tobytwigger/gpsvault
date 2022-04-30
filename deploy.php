@@ -1,4 +1,5 @@
 <?php
+
 namespace Deployer;
 
 require 'recipe/laravel.php';
@@ -38,7 +39,7 @@ task('deploy', [
     'artisan:config:cache',
     'artisan:event:cache',
     'artisan:optimize',
-    'deploy:publish'
+    'deploy:publish',
 ]);
 
 task('assets:compile', function() {

@@ -142,7 +142,7 @@ class StravaClientTest extends TestCase
             'used_15_min_calls' => 50,
             'used_daily_calls' => 250,
             'limit_daily' => 1000,
-            'limit_15_min' => 100
+            'limit_15_min' => 100,
         ]);
         $this->assertTrue($client->hasSpaces());
     }
@@ -154,7 +154,7 @@ class StravaClientTest extends TestCase
             'used_15_min_calls' => 90,
             'used_daily_calls' => 250,
             'limit_daily' => 1000,
-            'limit_15_min' => 50
+            'limit_15_min' => 50,
         ]);
         $this->assertFalse($client->hasSpaces());
     }
@@ -166,7 +166,7 @@ class StravaClientTest extends TestCase
             'used_15_min_calls' => 200,
             'used_daily_calls' => 855,
             'limit_daily' => 800,
-            'limit_15_min' => 500
+            'limit_15_min' => 500,
         ]);
         $this->assertFalse($client->hasSpaces());
     }
@@ -178,7 +178,7 @@ class StravaClientTest extends TestCase
             'used_15_min_calls' => 200,
             'used_daily_calls' => 855,
             'limit_daily' => 800,
-            'limit_15_min' => 50
+            'limit_15_min' => 50,
         ]);
         $this->assertFalse($client->hasSpaces());
     }

@@ -9,7 +9,7 @@ class StatAdder
 {
 
     /**
-     * @var Collection|Stats[]
+     * @var Collection|array<Stats>
      */
     private Collection $stats;
 

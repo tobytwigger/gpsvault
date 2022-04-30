@@ -13,11 +13,11 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash',
     ];
 
     protected $casts = [
-        'user_id' => 'integer'
+        'user_id' => 'integer',
     ];
 
     protected static function booted()

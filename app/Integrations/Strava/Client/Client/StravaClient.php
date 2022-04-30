@@ -22,7 +22,7 @@ class StravaClient
     {
         return app($class, [
             'user' => $this->user,
-            'request' => $this->requestHandler
+            'request' => $this->requestHandler,
         ]);
     }
 

@@ -52,7 +52,7 @@ class StatsFactory extends Factory
 
         return $this->state(fn (array $attributes) => [
             'stats_id' => $activity->id,
-            'stats_type' => Activity::class
+            'stats_type' => Activity::class,
         ]);
     }
 
@@ -62,7 +62,7 @@ class StatsFactory extends Factory
 
         return $this->state(fn (array $attributes) => [
             'stats_id' => $route->id,
-            'stats_type' => Route::class
+            'stats_type' => Route::class,
         ]);
     }
 }

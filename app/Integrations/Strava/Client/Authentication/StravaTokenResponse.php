@@ -2,9 +2,11 @@
 
 namespace App\Integrations\Strava\Client\Authentication;
 
+use DateTime;
+
 class StravaTokenResponse
 {
-    private \DateTime $expiresAt;
+    private DateTime $expiresAt;
 
     private int $expiresIn;
 
@@ -19,17 +21,17 @@ class StravaTokenResponse
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getExpiresAt(): \DateTime
+    public function getExpiresAt(): DateTime
     {
         return $this->expiresAt;
     }
 
     /**
-     * @param \DateTime $expiresAt
+     * @param DateTime $expiresAt
      */
-    public function setExpiresAt(\DateTime $expiresAt): void
+    public function setExpiresAt(DateTime $expiresAt): void
     {
         $this->expiresAt = $expiresAt;
     }
@@ -102,7 +104,7 @@ class StravaTokenResponse
     }
 
     public static function create(
-        \DateTime $expiresAt,
+        DateTime $expiresAt,
         int $expiresIn,
         string $refreshToken,
         string $accessToken,

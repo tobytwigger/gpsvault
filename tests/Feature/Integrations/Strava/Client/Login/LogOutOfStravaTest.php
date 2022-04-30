@@ -75,7 +75,7 @@ class LogOutOfStravaTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
         StravaToken::factory()->count(2)->create([
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
         StravaToken::factory()->count(2)->create(['user_id' => $this->user->id]);
         StravaToken::factory()->count(2)->create(['strava_client_id' => $client->id]);
@@ -94,7 +94,7 @@ class LogOutOfStravaTest extends TestCase
         $client->sharedUsers()->attach($this->user->id);
         StravaToken::factory()->create([
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));
@@ -111,7 +111,7 @@ class LogOutOfStravaTest extends TestCase
         $client = StravaClient::factory()->create(['public' => true]);
         StravaToken::factory()->create([
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));

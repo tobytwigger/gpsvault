@@ -8,9 +8,10 @@ use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
 
-final class Stats extends Model
+class Stats extends Model
 {
     use HasFactory, HasAdditionalData;
 
@@ -96,14 +97,19 @@ final class Stats extends Model
         'end_longitude' => 'float',
         'max_heartrate' => 'float',
         'average_heartrate' => 'float',
-        'calories' => 'float'
+        'calories' => 'float',
     ];
+
+    final public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     protected static function booted()
     {
     }
 
-    public function model(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function model(): MorphTo
     {
         return $this->morphTo('stats');
     }

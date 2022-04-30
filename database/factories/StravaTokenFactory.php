@@ -30,7 +30,7 @@ class StravaTokenFactory extends Factory
             'access_token' => Str::random(15),
             'user_id' => fn () => User::factory(),
             'strava_client_id' => fn () => StravaClient::factory(),
-            'disabled' => false
+            'disabled' => false,
         ];
     }
 }

@@ -22,7 +22,7 @@ class ActivityFactory extends Factory
             'description' => $this->faker->paragraph,
             'file_id' => null,
             'linked_to' => [],
-            'user_id' => fn () => User::factory()
+            'user_id' => fn () => User::factory(),
         ];
     }
 }

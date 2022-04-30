@@ -63,7 +63,7 @@ class LogIntoStravaTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
         StravaToken::factory()->count(2)->create([
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
 
         $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
@@ -99,7 +99,7 @@ class LogIntoStravaTest extends TestCase
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
         $token = StravaToken::where('user_id', $this->user->id)->where('strava_client_id', $client->id)->firstOrFail();
         $this->assertEquals('refresh-token', $token->refresh_token);
@@ -136,7 +136,7 @@ class LogIntoStravaTest extends TestCase
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
         $token = StravaToken::where('user_id', $this->user->id)->where('strava_client_id', $client->id)->firstOrFail();
         $this->assertEquals('refresh-token', $token->refresh_token);
@@ -172,7 +172,7 @@ class LogIntoStravaTest extends TestCase
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
-            'strava_client_id' => $client->id
+            'strava_client_id' => $client->id,
         ]);
         $token = StravaToken::where('user_id', $this->user->id)->where('strava_client_id', $client->id)->firstOrFail();
         $this->assertEquals('refresh-token', $token->refresh_token);

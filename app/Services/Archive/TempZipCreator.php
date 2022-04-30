@@ -9,6 +9,7 @@ use App\Services\File\Upload;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PhpZip\ZipFile;
 
 class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
 {
@@ -22,7 +23,7 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
         $fullPath = dirname(Storage::disk('temp')->path(sprintf('zip_creator/%s/archive/test.txt', $rand)));
         $archivePath = sprintf('%s/result.zip', $fullPath);
 
-        $zipFile = new \PhpZip\ZipFile();
+        $zipFile = new ZipFile();
         foreach ($files as $file) {
             $zipFile->addFile($file);
         }

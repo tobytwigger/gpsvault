@@ -45,7 +45,7 @@ trait HasAdditionalData
         );
     }
 
-    public function getAdditionalData(string $key = null, mixed $default = null)
+    public function getAdditionalData(?string $key = null, mixed $default = null)
     {
         if ($key === null) {
             return $this->getAllAdditionalData();
@@ -58,7 +58,8 @@ trait HasAdditionalData
                 ->value;
             if ($result->count() > 1) {
                 return $result;
-            } elseif ($result->count() === 1) {
+            }
+            if ($result->count() === 1) {
                 return $result->first();
             }
         }

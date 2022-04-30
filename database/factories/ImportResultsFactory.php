@@ -22,7 +22,7 @@ class ImportResultsFactory extends Factory
             'message' => $this->faker->paragraph,
             'success' => $this->faker->boolean,
             'data' => null,
-            'import_id' => fn () => Import::factory()
+            'import_id' => fn () => Import::factory(),
         ];
     }
 }

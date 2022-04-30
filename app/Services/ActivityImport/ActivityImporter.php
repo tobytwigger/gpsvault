@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\AdditionalData;
 use App\Models\File;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityImporter
@@ -149,7 +150,7 @@ class ActivityImporter
             'description' => $this->activityDetails->getDescription(),
             'linked_to' => $this->activityDetails->getLinkedTo(),
             'file_id' => $this->activityDetails->getActivityFile()?->id,
-            'user_id' => $this->user?->id ?? Auth::id() ?? throw new \Exception('A user could not be found to run the import against')
+            'user_id' => $this->user?->id ?? Auth::id() ?? throw new Exception('A user could not be found to run the import against'),
         ]);
         $activity->save();
         $activity->files()->sync(collect($this->activityDetails->getMedia())->pluck('id'));

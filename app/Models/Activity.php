@@ -17,15 +17,15 @@ class Activity extends Model
     use HasFactory, HasAdditionalData, HasStats, Searchable;
 
     protected $fillable = [
-        'name', 'description', 'file_id', 'linked_to', 'user_id'
+        'name', 'description', 'file_id', 'linked_to', 'user_id',
     ];
 
     protected $with = [
-        'stravaComments', 'stravaKudos'
+        'stravaComments', 'stravaKudos',
     ];
 
     protected $appends = [
-        'cover_image', 'distance', 'started_at'
+        'cover_image', 'distance', 'started_at',
     ];
 
     protected $casts = [
@@ -38,7 +38,7 @@ class Activity extends Model
         return [
             'name' => $this->name,
             'description' => $this->description,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
         ];
     }
 

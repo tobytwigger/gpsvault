@@ -5,6 +5,7 @@ namespace App\Integrations\Strava\Client\Models;
 use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Models\User;
 use Database\Factories\StravaClientFactory;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,18 +22,18 @@ class StravaClient extends Model
         'client_id',
         'client_secret',
         'name',
-        'description'
+        'description',
     ];
 
     protected $hidden = [
-        'client_id', 'client_secret'
+        'client_id', 'client_secret',
     ];
 
     protected $appends = [
         'is_connected',
         'invitation_link',
         'invitation_link_expired',
-        'invitation_link_expires_at'
+        'invitation_link_expires_at',
     ];
 
     protected $casts = [
@@ -46,7 +47,7 @@ class StravaClient extends Model
         'pending_calls' => 'integer',
         'invitation_link_expires_at' => 'datetime',
         'enabled' => 'boolean',
-        'public' => 'boolean'
+        'public' => 'boolean',
     ];
 
     protected static function booted()
@@ -142,7 +143,7 @@ class StravaClient extends Model
         return $this->getInvitationLink()?->getFullUrl();
     }
 
-    public function getInvitationLinkExpiresAtAttribute(): ?\DateTimeInterface
+    public function getInvitationLinkExpiresAtAttribute(): ?DateTimeInterface
     {
         return $this->getInvitationLink()?->expiry;
     }

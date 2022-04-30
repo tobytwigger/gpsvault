@@ -12,12 +12,12 @@ class StravaComment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'first_name', 'last_name', 'activity_id', 'text', 'posted_at', 'strava_id'
+        'first_name', 'last_name', 'activity_id', 'text', 'posted_at', 'strava_id',
     ];
 
     protected $casts = [
         'posted_at' => 'datetime',
-        'strava_id' => 'integer'
+        'strava_id' => 'integer',
     ];
 
     protected $appends = ['name'];

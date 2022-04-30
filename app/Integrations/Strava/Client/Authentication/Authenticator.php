@@ -5,6 +5,7 @@ namespace App\Integrations\Strava\Client\Authentication;
 use App\Integrations\Strava\Client\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Validation\UnauthorizedException;
 
@@ -39,8 +40,8 @@ class Authenticator
                 'client_id' => $client->client_id,
                 'client_secret' => $client->client_secret,
                 'refresh_token' => $token->refresh_token,
-                'grant_type' => 'refresh_token'
-            ]
+                'grant_type' => 'refresh_token',
+            ],
         ]);
 
         $credentials = json_decode(
@@ -53,7 +54,7 @@ class Authenticator
             (int) $credentials['expires_in'],
             (string) $credentials['refresh_token'],
             (string) $credentials['access_token'],
-            $this->user->getAdditionalData('strava_athlete_id') ?? throw new \Exception(sprintf('Athlete ID not set for user %u.', $this->user->id))
+            $this->user->getAdditionalData('strava_athlete_id') ?? throw new Exception(sprintf('Athlete ID not set for user %u.', $this->user->id))
         );
 
         $token->updateFromStravaTokenResponse($stravaToken);
@@ -68,8 +69,8 @@ class Authenticator
                 'client_id' => $stravaClient->client_id,
                 'client_secret' => $stravaClient->client_secret,
                 'code' => $code,
-                'grant_type' => 'authorization_code'
-            ]
+                'grant_type' => 'authorization_code',
+            ],
         ]);
 
         $credentials = json_decode(

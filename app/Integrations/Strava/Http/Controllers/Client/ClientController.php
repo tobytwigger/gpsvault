@@ -25,8 +25,8 @@ class ClientController extends Controller
                 'created_at' => $client->created_at->toIso8601String(),
                 'updated_at' => $client->updated_at->toIso8601String(),
                 'shared_users' => $client->sharedUsers->map(fn (User $user) => [
-                    'id' => $user->id, 'name' => $user->name, 'email' => $user->email
-                ])
+                    'id' => $user->id, 'name' => $user->name, 'email' => $user->email,
+                ]),
             ]);
             $ownedClients->offsetSet($index, $client);
         }

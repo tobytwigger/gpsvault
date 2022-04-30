@@ -19,7 +19,7 @@ class PlaceUpdateTest extends TestCase
             'phone_number' => '01234567890',
             'email' => 'test@example.com',
             'address' => 'Testville, TO21 3TE',
-            'user_id' => $this->user?->id
+            'user_id' => $this->user?->id,
         ], $withoutLocation ? [] : ['location' => ['lat' => -0.7, 'lng' => 52.0]], $overrides);
     }
 
@@ -66,7 +66,7 @@ class PlaceUpdateTest extends TestCase
         $place = Place::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->patch(route('place.update', $place), [
-            'location' => ['lat' => -0.9, 'lng' => 51.3]
+            'location' => ['lat' => -0.9, 'lng' => 51.3],
         ]);
         $response->assertRedirect();
         $response->assertSessionHasNoErrors();
@@ -85,7 +85,7 @@ class PlaceUpdateTest extends TestCase
 
         $response = $this->patch(route('place.update', $place), [
             'name' => 'This is the name',
-            'description' => 'A new description'
+            'description' => 'A new description',
         ]);
         $response->assertStatus(403);
 

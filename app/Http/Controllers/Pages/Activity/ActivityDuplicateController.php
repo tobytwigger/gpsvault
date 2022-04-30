@@ -16,7 +16,7 @@ class ActivityDuplicateController extends Controller
         $this->authorize('create', Activity::class);
 
         $request->validate([
-            'hash' => 'required|string'
+            'hash' => 'required|string',
         ]);
         $activity = Activity::where('user_id', Auth::id())->whereHas(
             'file',
@@ -26,7 +26,7 @@ class ActivityDuplicateController extends Controller
         return [
             'is_duplicate' => $activity !== null,
             'file' => $activity?->file,
-            'activity' => $activity
+            'activity' => $activity,
         ];
     }
 }

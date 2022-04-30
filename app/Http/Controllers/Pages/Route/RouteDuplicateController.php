@@ -16,7 +16,7 @@ class RouteDuplicateController extends Controller
         $this->authorize('create', Route::class);
 
         $request->validate([
-            'hash' => 'required|string'
+            'hash' => 'required|string',
         ]);
         $route = Route::where('user_id', Auth::id())->whereHas(
             'file',
@@ -26,7 +26,7 @@ class RouteDuplicateController extends Controller
         return [
             'is_duplicate' => $route !== null,
             'file' => $route?->file,
-            'route' => $route
+            'route' => $route,
         ];
     }
 }

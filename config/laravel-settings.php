@@ -13,7 +13,7 @@ return [
      */
     'cache' => [
         // How long, in seconds, to cache a setting value for.
-        'ttl' => 3600
+        'ttl' => 3600,
     ],
 
     /*
@@ -21,7 +21,7 @@ return [
      */
     'encryption' => [
         // Should all settings be encrypted by default? This can be overridden on each individual setting.
-        'default' => false
+        'default' => false,
     ],
 
     /*
@@ -70,8 +70,8 @@ return [
             // What should we prefix the URL with?
             'prefix' => 'api/elbowspace/settings',
             // Any middleware to apply to the routes
-            'middleware' => []
-        ]
+            'middleware' => [],
+        ],
     ],
 
     /*
@@ -83,8 +83,8 @@ return [
             'unit_system',
             'dark_mode',
             'stats_order_preference',
-            'bruit_api_key'
-        ]
-    ]
+            'bruit_api_key',
+        ],
+    ],
 
 ];
