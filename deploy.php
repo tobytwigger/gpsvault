@@ -42,23 +42,23 @@ task('deploy', [
     'deploy:publish',
 ]);
 
-task('assets:compile', function() {
+task('assets:compile', function () {
     runLocally('npm install');
     runLocally('npm run prod');
 });
 
-task('assets:upload', function() {
+task('assets:upload', function () {
     upload('public/dist', '{{release_path}}/public');
     upload('public/mix-manifest.json', '{{release_path}}/public');
 });
 
-task('docs:compile', function() {
+task('docs:compile', function () {
     runLocally('source docs/venv/bin/activate');
     runLocally('SITE_URL=https://cycle.linkeys.app mkdocs build --config-file docs/mkdocs.yml --clean');
     runLocally('deactivate');
 });
 
-task('docs:upload', function() {
+task('docs:upload', function () {
     upload('public/docs/site', '{{release_path}}/docs');
 });
 
@@ -69,7 +69,7 @@ after('deploy:failed', 'deploy:unlock');
 //after('deploy:success', function() {
 //    run('php {{release_path}}/artisan websockets:restart');
 //});
-after('deploy:success', function() {
+after('deploy:success', function () {
     run('sudo supervisorctl restart all');
     run('sudo apachectl graceful');
 });

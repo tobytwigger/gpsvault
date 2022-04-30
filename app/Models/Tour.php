@@ -45,9 +45,9 @@ class Tour extends Model
     {
         $adder = new StatAdder();
         foreach ($this->stages as $stage) {
-            if($stage->route_id) {
+            if ($stage->route_id) {
                 $stat = $stage->route->stats()->orderByPreference()->first();
-                if($stat) {
+                if ($stat) {
                     $adder->push($stat);
                 }
             }

@@ -100,7 +100,7 @@ return [
         \SlevomatCodingStandard\Sniffs\ControlStructures\DisallowEmptySniff::class,
         \NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
         \SlevomatCodingStandard\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
-        \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff::class
+        \PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\UselessOverridingMethodSniff::class,
     ],
 
     'config' => [

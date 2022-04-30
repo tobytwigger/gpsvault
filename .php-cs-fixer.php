@@ -6,7 +6,9 @@ $finder = PhpCsFixer\Finder::create()
         __DIR__ . '/tests',
         __DIR__ . '/database',
         __DIR__ . '/config',
-        __DIR__ . '/routes',
+        __DIR__ . '/routes'
+    ])
+    ->append([
         __DIR__ . '/deploy.php'
     ]);
 
