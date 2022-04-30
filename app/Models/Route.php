@@ -14,18 +14,18 @@ class Route extends Model
     use HasFactory, HasStats, Searchable, PostgisTrait;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation', 'linestring'
+        'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation', 'linestring',
     ];
 
     protected $postgisFields = [
-        'linestring'
+        'linestring',
     ];
 
     protected $postgisTypes = [
         'linestring' => [
             'geomtype' => 'geography',
-            'srid' => 4326
-        ]
+            'srid' => 4326,
+        ],
     ];
 
     protected $appends = [

@@ -11,7 +11,7 @@ class RoutePoint extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'order', 'place_id', 'location', 'route_id'
+        'order', 'place_id', 'location', 'route_id',
     ];
 
     protected $postgisFields = [

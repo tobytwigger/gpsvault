@@ -17,7 +17,7 @@ class RouteDataFactory extends Factory
     public function definition()
     {
         return [
-            //
+            
         ];
     }
 }
