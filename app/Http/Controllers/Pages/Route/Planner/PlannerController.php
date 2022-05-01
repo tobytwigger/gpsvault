@@ -10,11 +10,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
-use Nette\NotImplementedException;
 
 class PlannerController extends Controller
 {
-
     public function create()
     {
         return Inertia::render('Route/Planner');

@@ -86,5 +86,4 @@ class Route extends Model
     {
         return $this->hasMany(RoutePoint::class);
     }
-
 }

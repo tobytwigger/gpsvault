@@ -17,7 +17,7 @@ class RoutePointFactory extends Factory
     public function definition()
     {
         return [
-            //
+            
         ];
     }
 }

@@ -11,18 +11,18 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation', 'route_id'
+        'linestring', 'distance', 'elevation', 'route_id',
     ];
 
     protected $postgisFields = [
-        'linestring'
+        'linestring',
     ];
 
     protected $postgisTypes = [
         'linestring' => [
             'geomtype' => 'geography',
-            'srid' => 4326
-        ]
+            'srid' => 4326,
+        ],
     ];
 
     public function route()

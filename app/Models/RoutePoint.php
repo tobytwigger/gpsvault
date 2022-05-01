@@ -13,7 +13,7 @@ class RoutePoint extends Model implements Sortable
     use HasFactory, PostgisTrait, SortableTrait;
 
     protected $fillable = [
-        'order', 'place_id', 'location', 'route_id'
+        'order', 'place_id', 'location', 'route_id',
     ];
 
     protected $sortable = [
