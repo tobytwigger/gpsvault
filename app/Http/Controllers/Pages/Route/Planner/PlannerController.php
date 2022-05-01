@@ -8,7 +8,6 @@ use Inertia\Inertia;
 
 class PlannerController extends Controller
 {
-
     public function create()
     {
         return Inertia::render('Route/Planner');
@@ -17,8 +16,7 @@ class PlannerController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Planner', [
-            'route' => $route
+            'route' => $route,
         ]);
     }
-
 }
