@@ -11,7 +11,8 @@ class PlannerStoreTest extends TestCase
 {
 
     /** @test */
-    public function it_adds_a_route_data(){
+    public function it_adds_a_route_data()
+    {
         $this->authenticated();
 
         $response = $this->post(route('planner.store', [
@@ -25,13 +26,13 @@ class PlannerStoreTest extends TestCase
             'points' => [
                 ['lat' => 55, 'lng' => 22],
                 ['lat' => 57, 'lng' => 20],
-            ]
+            ],
         ]));
 
         $response->assertRedirect();
 
         $this->assertDatabaseHas('routes', [
-            'name' => 'My Route'
+            'name' => 'My Route',
         ]);
         $route = Route::firstOrFail();
         $routePath = $route->routePaths()->firstOrFail();
@@ -45,5 +46,4 @@ class PlannerStoreTest extends TestCase
         $this->assertEquals(new Point(55, 22), $routePoints[0]->location);
         $this->assertEquals(new Point(57, 20), $routePoints[1]->location);
     }
-
 }
