@@ -21,7 +21,7 @@ class PlannerController extends Controller
     public function edit(Route $route)
     {
         return Inertia::render('Route/Planner', [
-            'routeModel' => $route->load(['routePoints'])->append('path')
+            'routeModel' => $route->load(['routePoints'])->append('path'),
         ]);
     }
 
@@ -41,19 +41,19 @@ class PlannerController extends Controller
         ]);
 
         $route = Route::create([
-            'name' => $request->input('name')
+            'name' => $request->input('name'),
         ]);
 
         RoutePath::create([
             'route_id' => $route->id,
             'distance' => $request->input('distance'),
-            'linestring' => new LineString(array_map(fn(array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson')))
+            'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson'))),
         ]);
 
-        foreach($request->input('points') as $point) {
+        foreach ($request->input('points') as $point) {
             RoutePoint::create([
                 'location' => new Point($point['lat'], $point['lng']),
-                'route_id' => $route->id
+                'route_id' => $route->id,
             ]);
         }
 
@@ -77,17 +77,16 @@ class PlannerController extends Controller
         RoutePath::create([
             'route_id' => $route->id,
             'distance' => $request->input('distance'),
-            'linestring' => new LineString(array_map(fn(array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson')))
+            'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson'))),
         ]);
 
-        foreach($request->input('points') as $point) {
+        foreach ($request->input('points') as $point) {
             RoutePoint::create([
                 'location' => new Point($point['lat'], $point['lng']),
-                'route_id' => $route->id
+                'route_id' => $route->id,
             ]);
         }
 
         return redirect()->route('planner.edit', $route);
     }
-
 }
