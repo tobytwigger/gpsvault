@@ -55,7 +55,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     /* Route Planner */
     Route::get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
+    Route::post('/route/planner/save', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'store'])->name('planner.store');
     Route::get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
+    Route::patch('/route/planner/save/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'update'])->name('planner.update');
 
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);

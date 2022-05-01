@@ -137,7 +137,8 @@ export default {
             // });
             let options = {
                 routeWhileDragging: true,
-                plan: plan
+                plan: plan,
+                show: false
             };
             let control = L.Routing.control(options);
 

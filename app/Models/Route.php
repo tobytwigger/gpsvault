@@ -72,12 +72,17 @@ class Route extends Model
             ->using(PlaceRoute::class);
     }
 
+    public function getPathAttribute()
+    {
+        return $this->routePaths()->latest()->first();
+    }
+
     public function routePaths()
     {
         return $this->hasMany(RoutePath::class);
     }
 
-    public function routePoint()
+    public function routePoints()
     {
         return $this->hasMany(RoutePoint::class);
     }

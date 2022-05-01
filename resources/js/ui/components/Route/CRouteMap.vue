@@ -13,25 +13,29 @@ export default {
     components: {CMap},
     props: {
         stats: {
-            required: true,
+            required: false,
             type: Object
         },
         places: {
             required: false,
             type: Array,
             default: () => []
+        },
+        geojson: {
+            required: false,
+            type: Object
         }
     },
     data() {
         return {
-            loading: true,
-            geojson: null
+            loading: false,
+            // geojson: null
         }
     },
     mounted() {
-        axios.get(route('stats.geojson', this.stats.id))
-            .then(response => this.geojson = response.data)
-            .then(() => this.loading = false);
+        // axios.get(route('stats.geojson', this.stats.id))
+        //     .then(response => this.geojson = response.data)
+        //     .then(() => this.loading = false);
     },
     computed: {
         markers() {

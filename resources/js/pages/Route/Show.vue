@@ -50,18 +50,18 @@
                         </v-row>
                         <v-row>
                             <v-col class="px-8 pt-8">
-                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
+<!--                                TODO-->
+<!--                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>-->
                             </v-col>
                         </v-row>
                     </v-col>
                     <v-col>
-                        <c-stats v-if="this.stats" :schema="statSchema" :limit="4"></c-stats>
-                        <div v-else>No stats available</div>
+                        <span v-if="routeModel.distance">Distance: {{routeModel.distance}}m.</span>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-route-map :places="places.data" v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-route-map>
+                        <c-route-map :places="places.data" :geojson="routePath"></c-route-map>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -149,25 +149,18 @@
                     </v-btn>
                 </v-list-item>
                 <v-list-item>
+                    <v-btn link :href="route('planner.edit', routeModel.id)">
+                        Edit Route
+                    </v-btn>
+                </v-list-item>
+                <v-list-item>
                     <c-route-form :old-route="routeModel" title="Edit route" button-text="Update">
                         <template v-slot:activator="{trigger,showing}">
                             <v-btn :disabled="showing" @click="trigger">
-                                Edit Route
+                                Edit Route Metadata
                             </v-btn>
                         </template>
                     </c-route-form>
-                </v-list-item>
-                <v-list-item>
-                    <v-select
-                        class="pt-2"
-                        v-model="activeDataSource"
-                        item-text="integration"
-                        item-value="integration"
-                        :items="allStats"
-                        hint="Choose which data sets to show"
-                        label="Data Source"
-                        dense
-                    ></v-select>
                 </v-list-item>
             </v-list>
         </template>
@@ -179,8 +172,6 @@ import moment from 'moment';
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CRouteFileFormDialog from 'ui/components/Route/CRouteFileFormDialog';
 import CManageRouteMedia from 'ui/components/Route/CManageRouteMedia';
-import stats from 'ui/mixins/stats';
-import CStats from 'ui/components/CStats';
 import CRouteMap from 'ui/components/Route/CRouteMap';
 import CRouteForm from 'ui/components/Route/CRouteForm';
 import CDeleteRouteButton from 'ui/components/Route/CDeleteRouteButton';
@@ -198,7 +189,7 @@ export default {
         CPaginationIterator,
         CActivityLocationSummary,
         CUploadRouteFileButton,
-        CDeleteRouteButton, CRouteForm, CRouteMap, CStats, CManageRouteMedia, CRouteFileFormDialog, CAppWrapper},
+        CDeleteRouteButton, CRouteForm, CRouteMap, CManageRouteMedia, CRouteFileFormDialog, CAppWrapper},
     props: {
         routeModel: {
             required: true,
@@ -209,7 +200,6 @@ export default {
             type: Object
         }
     },
-    mixins: [stats],
     data() {
         return {
             tab: 'tab-summary'
@@ -234,11 +224,14 @@ export default {
         }
     },
     computed: {
-        allStats() {
-            return this.routeModel.stats;
-        },
         pageTitle() {
             return this.routeModel.name ?? 'New Route';
+        },
+        routePath() {
+            return {
+                type: 'LineString',
+                coordinates: this.routeModel.path.linestring.map(c => [c.coordinates[0], c.coordinates[1]])
+            }
         }
     }
 }
