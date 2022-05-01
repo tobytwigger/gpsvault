@@ -111,7 +111,7 @@
 <script>
 import CPaginationIterator from '../CPaginationIterator';
 import CPlaceCard from './CPlaceCard';
-import CMarkerSelector from '../CMarkerSelector';
+import CMarkerSelector from '../Map/CMarkerSelector';
 
 export default {
     name: "CPlaceSearch",

@@ -61,7 +61,7 @@ class RouteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource.\
      *
      * @param Route $route
      * @return \Inertia\Response

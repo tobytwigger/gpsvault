@@ -42,7 +42,7 @@
                             id="notes"
                             v-model="form.notes"
                             label="Notes"
-                            hint="A notes for the route"
+                            hint="Notes for the route"
                             name="notes"
                             :error="form.errors.hasOwnProperty('notes')"
                             :error-messages="form.errors.hasOwnProperty('notes') ? [form.errors.notes] : []"

@@ -53,6 +53,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
     Route::post('/route/file/duplicate', [\App\Http\Controllers\Pages\Route\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
 
+    /* Route Planner */
+    Route::get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
+    Route::get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
+
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);
     Route::post('backups/sync/{sync}/cancel', [\App\Http\Controllers\Pages\Backup\CancelBackupController::class, 'cancel'])->name('backup.sync.cancel');

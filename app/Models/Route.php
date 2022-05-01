@@ -71,4 +71,15 @@ class Route extends Model
         return $this->belongsToMany(Place::class)
             ->using(PlaceRoute::class);
     }
+
+    public function routePaths()
+    {
+        return $this->hasMany(RoutePath::class);
+    }
+
+    public function routePoint()
+    {
+        return $this->hasMany(RoutePoint::class);
+    }
+
 }
