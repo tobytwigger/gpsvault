@@ -23,6 +23,7 @@ import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers, LMarker } from "v
 import L from 'leaflet';
 import Routing from 'leaflet-routing-machine';
 import LControlFullscreen from 'vue2-leaflet-fullscreen';
+import {clone} from 'lodash';
 
 export default {
     name: "CRoutePlanner",
@@ -68,7 +69,9 @@ export default {
     methods: {
         updateWaypoints(points) {
             this.$emit('update:routePoints', points);
-            this.routeControl.setWaypoints(points);
+            // if(this.routePoints !== points) {
+            //     this.routeControl.setWaypoints(points);
+            // }
         },
         setStart(startPoint) {
             let points = this.routePoints;
@@ -84,18 +87,10 @@ export default {
             this.$refs.map.mapObject.setView([52.025612, -0.801140]);
             this.addRouting();
             this.routeControl.on('routeselected', (e) => {
-                console.log(e);
                 this.$emit('update:geojson', {coordinates: e.route.coordinates});
-            })
+            });
             this.routeControl.on('routingstart', () => this.isRouting = true);
             this.routeControl.on('routesfound routingerror', () => this.isRouting = false);
-            // this.$refs.map.mapObject.on('click', (e) => {
-            //     if (this.routePoints.length === 0) {
-            //         this.setStart({lat: e.latlng.lat, lng: e.latlng.lng});
-            //     } else {
-            //         this.setEnd({lat: e.latlng.lat, lng: e.latlng.lng});
-            //     }
-            // })
 
             function createButton(label, container) {
                 var btn = L.DomUtil.create('button', '', container);
@@ -127,14 +122,13 @@ export default {
 
         },
         addRouting() {
+            // TODO Pass in clone here OR don't set waypponts manually
             let plan = L.Routing.plan(this.routePoints);
-            // plan.on('waypointsspliced', (e) => {
-            //     if(e.nRemoved !== this.routePoints.length) {
-            //         let points = this.routePoints;
-            //         points.splice(e.index, e.nRemoved, e.added);
-            //         // this.updateWaypoints(points);
-            //     }
-            // });
+            plan.on('waypointsspliced', (e) => {
+                let points = clone(this.routePoints);
+                points.splice(e.index, e.nRemoved, {lat: e.added[0].latLng.lat, lng: e.added[0].latLng.lng});
+                this.updateWaypoints(points);
+            });
             let options = {
                 routeWhileDragging: true,
                 plan: plan,

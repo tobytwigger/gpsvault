@@ -41,7 +41,6 @@
 
 -->
         <c-route-planner
-            @waypointSpliced=""
             :geojson.sync="geojson"
             :routePoints.sync="routePoints"
         ></c-route-planner>
