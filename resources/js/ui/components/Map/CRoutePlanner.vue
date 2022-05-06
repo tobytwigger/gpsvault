@@ -124,11 +124,15 @@ export default {
         },
         addRouting() {
             let plan = L.Routing.plan(this.routePoints);
+            let router = L.Routing.osrmv1({
+                profile: 'bike'
+            })
             plan.on('waypointsspliced', (e) => this.updateWaypoints(this.routeControl.getWaypoints().map(w => w.latLng).filter(l => l !== null)));
             let options = {
                 routeWhileDragging: true,
                 plan: plan,
-                show: false
+                show: false,
+                router: router
             };
             let control = L.Routing.control(options);
 
