@@ -21,3 +21,4 @@ public/mix-manifest.json
 storage/tests/*
 !storage/tests/.gitkeep
 docs/venv
+docs/site
