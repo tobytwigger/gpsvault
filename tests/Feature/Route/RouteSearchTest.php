@@ -23,6 +23,7 @@ class RouteSearchTest extends TestCase
         $routes->map->save();
 
         $response = $this->getJson(route('route.search', ['query' => null]));
+        $response->assertOk();
         $response->assertJsonCount(5);
         $json = $response->decodeResponseJson();
 

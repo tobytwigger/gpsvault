@@ -53,9 +53,12 @@ task('assets:upload', function () {
 });
 
 task('docs:compile', function () {
+    if(!file_exists('docs/venv')) {
+        runLocally('python3 -m venv docs/venv');
+    }
     runLocally('source docs/venv/bin/activate');
+    runLocally('pip install -r docs/requirements.txt');
     runLocally('SITE_URL=https://cycle.linkeys.app mkdocs build --config-file docs/mkdocs.yml --clean');
-    runLocally('deactivate');
 });
 
 task('docs:upload', function () {

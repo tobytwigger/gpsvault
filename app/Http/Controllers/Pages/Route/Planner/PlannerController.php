@@ -33,7 +33,6 @@ class PlannerController extends Controller
             'geojson.*' => 'required|array',
             'geojson.*.lat' => 'required|numeric|min:-90|max:90',
             'geojson.*.lng' => 'required|numeric|min:-180|max:180',
-            'distance' => 'numeric|min:0',
             'points' => 'required|array',
             'points.*' => 'required|array',
             'points.*.lat' => 'required|numeric|min:-90|max:90',

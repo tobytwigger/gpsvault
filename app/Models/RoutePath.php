@@ -14,6 +14,11 @@ class RoutePath extends Model
         'linestring', 'distance', 'elevation', 'route_id',
     ];
 
+    protected $casts = [
+        'distance' => 'float',
+        'elevation' => 'float'
+    ];
+
     protected $postgisFields = [
         'linestring',
     ];

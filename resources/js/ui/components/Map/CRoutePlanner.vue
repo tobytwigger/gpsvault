@@ -74,14 +74,14 @@ export default {
             // }
         },
         setStart(startPoint) {
-            let points = this.routePoints;
+            let points = clone(this.routePoints);
             points.unshift(startPoint)
-            this.updateWaypoints(points);
+            this.routeControl.setWaypoints(points);
         },
         setEnd(endPoint) {
-            let points = this.routePoints;
+            let points = clone(this.routePoints);
             points.push(endPoint)
-            this.updateWaypoints(points);
+            this.routeControl.setWaypoints(points);
         },
         onMapReady() {
             this.$refs.map.mapObject.setView([52.025612, -0.801140]);
@@ -105,6 +105,7 @@ export default {
                     destBtn = createButton('Finish here', container);
 
                 L.DomEvent.on(startBtn, 'click', () => {
+                    console.log('Starting');
                     this.setStart({lat: e.latlng.lat, lng: e.latlng.lng});
                     this.$refs.map.mapObject.closePopup();
                 });
@@ -122,13 +123,8 @@ export default {
 
         },
         addRouting() {
-            // TODO Pass in clone here OR don't set waypponts manually
             let plan = L.Routing.plan(this.routePoints);
-            plan.on('waypointsspliced', (e) => {
-                let points = clone(this.routePoints);
-                points.splice(e.index, e.nRemoved, {lat: e.added[0].latLng.lat, lng: e.added[0].latLng.lng});
-                this.updateWaypoints(points);
-            });
+            plan.on('waypointsspliced', (e) => this.updateWaypoints(this.routeControl.getWaypoints().map(w => w.latLng).filter(l => l !== null)));
             let options = {
                 routeWhileDragging: true,
                 plan: plan,

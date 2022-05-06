@@ -10,14 +10,14 @@ use Laravel\Scout\Searchable;
 
 class Route extends Model
 {
-    use HasFactory, HasStats, Searchable;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'name', 'description', 'notes', 'file_id', 'public',
     ];
 
     protected $appends = [
-        'cover_image', 'distance',
+        'cover_image', 'path',
     ];
 
     protected $casts = [
@@ -66,6 +66,11 @@ class Route extends Model
         return $this->belongsToMany(File::class);
     }
 
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
+
     public function places()
     {
         return $this->belongsToMany(Place::class)
@@ -75,6 +80,11 @@ class Route extends Model
     public function getPathAttribute()
     {
         return $this->routePaths()->latest()->first();
+    }
+
+    public function mainPath()
+    {
+        return $this->routePaths()->latest()->limit(1);
     }
 
     public function routePaths()

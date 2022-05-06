@@ -30,6 +30,7 @@ class RouteController extends Controller
         return Inertia::render('Route/Index', [
             'routes' => Auth::user()->routes()
                 ->orderBy('updated_at', 'DESC')
+                ->with('mainPath')
                 ->paginate(request()->input('perPage', 8)),
         ]);
     }
@@ -54,7 +55,7 @@ class RouteController extends Controller
         ]);
 
         if ($request->has('file') && $request->file('file') !== null) {
-            $route->analyse();
+//            $route->analyse();
         }
 
         return redirect()->route('route.show', $route);
@@ -69,7 +70,7 @@ class RouteController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'routeModel' => $route->load(['files', 'stats'])->append('path'),
+            'routeModel' => $route->load(['files'])->append('path'),
             'places' => $route->places()->paginate(request()->input('perPage', 8)),
         ]);
     }
@@ -98,11 +99,11 @@ class RouteController extends Controller
         $route->name = $request->input('name', $route->name);
         $route->description = $request->input('description', $route->description);
         $route->notes = $request->input('notes', $route->notes);
-        $route->file_id = $fileId;
+//        $route->file_id = $fileId;
         $route->save();
 
         if ($request->has('file') && $request->file('file') !== null) {
-            $route->analyse();
+//            $route->analyse();
         }
 
         return redirect()->route('route.show', $route);

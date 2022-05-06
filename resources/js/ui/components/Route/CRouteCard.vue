@@ -28,7 +28,7 @@
                 <v-icon left>
                     mdi-ruler
                 </v-icon>
-                {{ convertDistance(routeModel.distance) }}
+                {{ routeDistance }}
             </v-chip>
         </v-card-text>
 
@@ -61,20 +61,16 @@ export default {
             type: Object
         }
     },
-    methods: {
-        convertDistance(value) {
-            let converted = this.convert(value, 'distance');
-            if(converted) {
-                return converted.value + converted.unit;
+    computed: {
+        routeDistance() {
+            if(this.routeModel.main_path && this.routeModel.main_path.length > 0) {
+                let converted = this.convert(this.routeModel.main_path[0].distance, 'distance');
+                if(converted) {
+                    return converted.value + converted.unit;
+                }
             }
             return 'No Distance';
-        },
-        toDateTime(value) {
-            if (value === null) {
-                return 'No Date';
-            }
-            return moment(value).format('DD/MM/YYYY');
-        },
+        }
     }
 }
 </script>

@@ -12,6 +12,8 @@ class RouteDuplicateTest extends TestCase
     /** @test */
     public function it_identifies_if_a_file_is_not_a_duplicate()
     {
+        $this->markTestSkipped('Feature removed awaiting a refactor to use the new route paths.');
+
         $this->authenticated();
 
         $response = $this->postJson(route('route.file.duplicate'), ['hash' => '123']);
@@ -22,6 +24,8 @@ class RouteDuplicateTest extends TestCase
     /** @test */
     public function it_identifies_if_the_file_is_a_duplicate()
     {
+        $this->markTestSkipped('Feature removed awaiting a refactor to use the new route paths.');
+
         $this->authenticated();
 
         $file = File::factory()->routeFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);
@@ -34,6 +38,8 @@ class RouteDuplicateTest extends TestCase
     /** @test */
     public function it_returns_which_file_and_route_is_the_duplicate()
     {
+        $this->markTestSkipped('Feature removed awaiting a refactor to use the new route paths.');
+
         $this->authenticated();
 
         $file = File::factory()->routeFile()->create(['user_id' => $this->user->id, 'hash' => 'duplicatedhash']);

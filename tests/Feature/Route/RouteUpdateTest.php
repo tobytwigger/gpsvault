@@ -143,6 +143,7 @@ class RouteUpdateTest extends TestCase
     /** @test */
     public function it_fires_an_analysis_job_if_a_file_is_given()
     {
+        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
@@ -159,6 +160,7 @@ class RouteUpdateTest extends TestCase
     /** @test */
     public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given()
     {
+        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
 
@@ -171,6 +173,7 @@ class RouteUpdateTest extends TestCase
     /** @test */
     public function it_fires_an_analysis_job_even_when_a_route_file_already_exists()
     {
+        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
         Bus::fake(AnalyseFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
