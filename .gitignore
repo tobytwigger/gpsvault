@@ -22,3 +22,5 @@ storage/tests/*
 !storage/tests/.gitkeep
 docs/venv
 docs/site
+docker/valhalla/*
+!docker/valhalla/custom_files/.gitkeep

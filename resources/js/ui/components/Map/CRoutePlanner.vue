@@ -20,8 +20,9 @@
 
 <script>
 import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers, LMarker } from "vue2-leaflet";
-import L from 'leaflet';
 import Routing from 'leaflet-routing-machine';
+import Valhalla from 'lrm-valhalla';
+
 import LControlFullscreen from 'vue2-leaflet-fullscreen';
 import {clone} from 'lodash';
 
@@ -124,15 +125,21 @@ export default {
         },
         addRouting() {
             let plan = L.Routing.plan(this.routePoints);
-            let router = L.Routing.osrmv1({
-                profile: 'bike'
-            })
+            let router = new Valhalla('mapzen-xxxxxx', 'bicycle', {
+                costing:'bicycle',
+            }, {
+                serviceUrl: 'http://localhost:8003/',
+                timeout: 30 * 1000,
+                transitmode: 'bicycle'
+            });
+
             plan.on('waypointsspliced', (e) => this.updateWaypoints(this.routeControl.getWaypoints().map(w => w.latLng).filter(l => l !== null)));
             let options = {
                 routeWhileDragging: true,
                 plan: plan,
                 show: false,
-                router: router
+                router: router,
+                // formatter: new L.Routing.mapzenFormatter()
             };
             let control = L.Routing.control(options);
 

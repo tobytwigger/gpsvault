@@ -92,13 +92,13 @@ services:
         networks:
             - sail
     valhalla:
-        image: 'gisops/valhalla:latest'
+        image: 'ghcr.io/gis-ops/docker-valhalla/valhalla:latest'
         ports:
-            - '8002:8002'
+            - '${FORWARD_VALHALLA_PORT:-8002}:8002'
         volumes:
             - ./docker/valhalla/custom_files:/custom_files
         environment:
-            tile_urls: 'https://download.geofabrik.de/europe/great-britain-latest.osm.pbf' # Add as many (space-separated) URLs as you like, e.g. https://download.geofabrik.de/europe/andorra-latest.osm.pbf
+            tile_urls: 'http://download.geofabrik.de/europe/great-britain/england/buckinghamshire-latest.osm.pbf' # Add as many (space-separated) URLs as you like, e.g. https://download.geofabrik.de/europe/andorra-latest.osm.pbf
             use_tiles_ignore_pbf: 'False' # True uses a local tile.tar file and skips building. Default False.
             force_rebuild: 'False' # True forces a rebuild of the routing tiles. Default False.
             build_elevation: 'True' # True downloads elevation tiles which are covering the routing graph. Force will do the same, but first delete any existing elevation tiles. Default False.
