@@ -19,7 +19,7 @@ add('writable_dirs', []);
 host('cycle.linkeys.app')
     ->setSshMultiplexing(true)
     ->set('remote_user', 'ubuntu')
-    ->set('branch', 'develop')
+    ->set('branch', '44/route-planner')
     ->set('deploy_path', '/var/www/cycle.linkeys.app');
 
 // Tasks
@@ -29,8 +29,6 @@ task('deploy', [
     'deploy:vendors',
     'assets:compile',
     'assets:upload',
-    'docs:compile',
-    'docs:upload',
     'artisan:migrate',
     'artisan:storage:link',
     'artisan:cache:clear',
@@ -50,19 +48,6 @@ task('assets:compile', function () {
 task('assets:upload', function () {
     upload('public/dist', '{{release_path}}/public');
     upload('public/mix-manifest.json', '{{release_path}}/public');
-});
-
-task('docs:compile', function () {
-    if(!file_exists('docs/venv')) {
-        runLocally('python3 -m venv docs/venv');
-    }
-    runLocally('source docs/venv/bin/activate');
-    runLocally('pip install -r docs/requirements.txt');
-    runLocally('SITE_URL=https://cycle.linkeys.app mkdocs build --config-file docs/mkdocs.yml --clean');
-});
-
-task('docs:upload', function () {
-    upload('public/docs/site', '{{release_path}}/docs');
 });
 
 after('deploy:failed', 'deploy:unlock');
