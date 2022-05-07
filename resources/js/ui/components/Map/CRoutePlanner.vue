@@ -128,7 +128,7 @@ export default {
             let router = new Valhalla('mapzen-xxxxxx', 'bicycle', {
                 costing:'bicycle',
             }, {
-                serviceUrl: 'http://localhost:8003/',
+                serviceUrl: 'https://valhalla1.openstreetmap.de/',
                 timeout: 30 * 1000,
                 transitmode: 'bicycle'
             });
