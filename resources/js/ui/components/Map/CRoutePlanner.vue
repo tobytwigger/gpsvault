@@ -42,7 +42,7 @@ export default {
             required: false,
             type: Array,
             default: () => []
-        },
+        }
     },
     data() {
         return {
@@ -88,7 +88,10 @@ export default {
             this.$refs.map.mapObject.setView([52.025612, -0.801140]);
             this.addRouting();
             this.routeControl.on('routeselected', (e) => {
+                console.log(e);
                 this.$emit('update:geojson', {coordinates: e.route.coordinates});
+                this.$emit('update:distance', (e.route.summary.totalDistance * 1000))
+                this.$emit('update:time', (e.route.summary.totalTime * 1000))
             });
             this.routeControl.on('routingstart', () => this.isRouting = true);
             this.routeControl.on('routesfound routingerror', () => this.isRouting = false);

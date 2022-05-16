@@ -42,6 +42,8 @@
 -->
         <c-route-planner
             :geojson.sync="geojson"
+            :distance.sync="distance"
+            :time.sync="time"
             :routePoints.sync="routePoints"
         ></c-route-planner>
 
@@ -66,7 +68,9 @@ export default {
     data() {
         return {
             routePoints: [],
-            geojson: null
+            geojson: null,
+            distance: 0,
+            time: 0
         }
     },
     methods: {
@@ -78,7 +82,7 @@ export default {
                         return {lat: r.lat, lng: r.lng}
                     })
                 })
-            } else {
+            } else if(this.geojson) {
                 this.$inertia.post(route('planner.store'), {
                     name: 'New Route',
                     'geojson': this.geojson.coordinates,
