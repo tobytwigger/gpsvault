@@ -5,7 +5,6 @@ namespace Tests\Unit\Stats;
 use App\Jobs\AnalyseFile;
 use App\Models\Activity;
 use App\Models\File;
-use App\Models\Route;
 use Tests\TestCase;
 
 class AnalyseFileTest extends TestCase

@@ -21,8 +21,8 @@ class RouteUpdateTest extends TestCase
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
         Storage::fake('test-fake');
 
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes', 'file_id' => null]);
-        $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => null]);
+        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes']);
+        $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes']);
 
         $this->assertDatabaseHas('routes', [
             'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
@@ -30,42 +30,9 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_file_can_be_added()
-    {
-        $this->authenticated();
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
-        Storage::fake('test-fake');
+    public function a_file_can_be_uploaded(){
+        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
 
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes', 'file_id' => null]);
-        $this->assertNull($route->file_id);
-
-        $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => $file]);
-
-        $this->assertDatabaseHas('routes', [
-            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
-        ]);
-
-        $this->assertNotNull($route->refresh()->file_id);
-    }
-
-    /** @test */
-    public function a_file_can_be_replaced()
-    {
-        $this->authenticated();
-        $file1 = File::factory()->routeFile()->create();
-        $file2 = UploadedFile::fake()->create('filename2.gpx', 58, 'application/gpx+xml');
-        Storage::fake('test-fake');
-
-        $route = Route::factory()->create(['user_id' => $this->user->id, 'name' => 'Old Name', 'description' => 'Old Description', 'notes' => 'Old Notes', 'file_id' => $file1->id]);
-        $this->assertEquals($file1->id, $route->file_id);
-
-        $response = $this->put(route('route.update', $route), ['name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes', 'file' => $file2]);
-
-        $this->assertDatabaseHas('routes', [
-            'id' => $route->id, 'name' => 'New Name', 'description' => 'New Description', 'notes' => 'Updated Notes',
-        ]);
-
-        $this->assertNotEquals($file1->id, $route->refresh()->file_id);
     }
 
     /** @test */

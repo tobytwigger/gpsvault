@@ -54,7 +54,7 @@ class PlannerController extends Controller
             'geojson.*' => 'required|array',
             'geojson.*.lat' => 'required|numeric|min:-90|max:90',
             'geojson.*.lng' => 'required|numeric|min:-180|max:180',
-            'distance' => 'numeric|min:0',
+            'distance' => 'required|numeric|min:0',
             'points' => 'required|array',
             'points.*' => 'required|array',
             'points.*.lat' => 'required|numeric|min:-90|max:90',
@@ -70,7 +70,8 @@ class PlannerController extends Controller
     {
         $path = RoutePath::create([
             'route_id' => $route->id,
-            'distance' => $request->input('distance'),
+            'distance' => $request->input('distance', 0),
+            'elevation_gain' => $request->input('elevation', 0),
             'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson'))),
         ]);
 

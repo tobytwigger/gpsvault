@@ -4,7 +4,6 @@ namespace Tests\Feature\Route;
 
 use App\Models\File;
 use App\Models\Route;
-use App\Models\Stats;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -16,8 +15,6 @@ class RouteShowTest extends TestCase
     {
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $stat1 = Stats::factory()->route($route)->create(['integration' => 'int1']);
-        $stat2 = Stats::factory()->route($route)->create(['integration' => 'int2']);
         $files = File::factory()->routeMedia()->count(5)->create();
         $route->files()->sync($files);
 
@@ -30,21 +27,6 @@ class RouteShowTest extends TestCase
                         fn (Assert $page) => $page
                             ->where('id', $route->id)
                             ->has('files', 5)
-                            ->has('stats', 2)
-                            ->has(
-                                'stats.0',
-                                fn (Assert $page) => $page
-                                    ->where('id', $stat1->id)
-                                    ->where('integration', 'int1')
-                                    ->etc()
-                            )
-                            ->has(
-                                'stats.1',
-                                fn (Assert $page) => $page
-                                    ->where('id', $stat2->id)
-                                    ->where('integration', 'int2')
-                                    ->etc()
-                            )
                             ->etc()
                     )
             );

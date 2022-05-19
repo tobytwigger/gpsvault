@@ -3,25 +3,24 @@
 namespace Tests\Feature\Tour;
 
 use App\Models\Route;
+use App\Models\RoutePath;
 use App\Models\Stage;
-use App\Models\Stats;
 use App\Models\Tour;
 use App\Models\User;
 use App\Services\Analysis\Parser\Point;
+use MStaack\LaravelPostgis\Geometries\LineString;
 use Tests\TestCase;
 
 class GeoJsonTest extends TestCase
 {
     private function createNewRoute(array $coords)
     {
-        $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $stats = Stats::factory()->route($route)->create();
-
         $points = array_map(fn (array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
-
-        $stats->waypoints()->createMany(collect($points)->map(fn (Point $point) => [
-            'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-        ]));
+        $route = Route::factory()
+            ->has(RoutePath::factory()->state([
+                'linestring' => new LineString($points),
+            ]))
+            ->create(['user_id' => $this->user->id]);
 
         return $route;
     }
