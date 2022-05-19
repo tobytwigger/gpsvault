@@ -42,7 +42,7 @@ export default {
             required: false,
             type: Array,
             default: () => []
-        },
+        }
     },
     data() {
         return {
@@ -88,25 +88,20 @@ export default {
             this.$refs.map.mapObject.setView([52.025612, -0.801140]);
             this.addRouting();
             this.routeControl.on('routeselected', (e) => {
+                console.log(e);
                 this.$emit('update:geojson', {coordinates: e.route.coordinates});
+                this.$emit('update:distance', (e.route.summary.totalDistance * 1000))
+                this.$emit('update:time', (e.route.summary.totalTime * 1000))
             });
             this.routeControl.on('routingstart', () => this.isRouting = true);
             this.routeControl.on('routesfound routingerror', () => this.isRouting = false);
 
-            function createButton(label, container) {
-                var btn = L.DomUtil.create('button', '', container);
-                btn.setAttribute('type', 'button');
-                btn.innerHTML = label;
-                return btn;
-            }
-
             this.$refs.map.mapObject.on('click', (e) => {
                 var container = L.DomUtil.create('div'),
-                    startBtn = createButton('Start here', container),
-                    destBtn = createButton('Finish here', container);
+                    startBtn = this.createButton('Start here', container),
+                    destBtn = this.createButton('Finish here', container);
 
                 L.DomEvent.on(startBtn, 'click', () => {
-                    console.log('Starting');
                     this.setStart({lat: e.latlng.lat, lng: e.latlng.lng});
                     this.$refs.map.mapObject.closePopup();
                 });
@@ -124,7 +119,27 @@ export default {
 
         },
         addRouting() {
-            let plan = L.Routing.plan(this.routePoints);
+            let self = this;
+            let plan = L.Routing.plan(this.routePoints, {
+                createMarker: function(i, wp) {
+                    let marker = L.marker(wp.latLng, {
+                        draggable: true
+                    });
+
+                    let container = L.DomUtil.create('div'),
+                        removingButton = self.createButton('Remove', container);
+
+                    L.DomEvent.on(removingButton, 'click', (e) => {
+                        let points = clone(self.routePoints);
+                        points.splice(i, 1);
+                        self.routeControl.setWaypoints(points);
+                        marker.closePopup();
+                    });
+
+                    marker.bindPopup(container);
+                    return marker;
+                },
+            });
             let router = new Valhalla('mapzen-xxxxxx', 'bicycle', {
                 costing:'bicycle',
             }, {
@@ -145,6 +160,12 @@ export default {
 
             control.addTo(this.$refs.map.mapObject);
             this.routeControl = control;
+        },
+        createButton(label, container) {
+            var btn = L.DomUtil.create('button', '', container);
+            btn.setAttribute('type', 'button');
+            btn.innerHTML = label;
+            return btn;
         }
     }
 }
