@@ -16,7 +16,7 @@ return new class() extends Migration {
             $table->unsignedBigInteger('order');
             $table->unsignedBigInteger('place_id')->nullable();
             $table->point('location')->nullable();
-            $table->unsignedBigInteger('route_id');
+            $table->unsignedBigInteger('route_path_id');
             $table->timestamps();
         });
     }

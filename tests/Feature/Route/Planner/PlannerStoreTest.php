@@ -44,5 +44,4 @@ class PlannerStoreTest extends TestCase
         $this->assertEquals(new Point(55, 22), $routePoints[0]->location);
         $this->assertEquals(new Point(57, 20), $routePoints[1]->location);
     }
-
 }

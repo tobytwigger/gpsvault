@@ -73,7 +73,9 @@ export default {
         save() {
             if(this.routeModel) {
                 this.$inertia.patch(route('planner.update', this.routeModel.id), {
-                    'geojson': this.geojson.coordinates,
+                    'geojson': this.geojson.coordinates.map(c => {
+                        return {lat: c[0], lng: c[1]};
+                    }),
                     'points': this.routePoints.map(r => {
                         return {lat: r.lat, lng: r.lng}
                     })
@@ -81,7 +83,9 @@ export default {
             } else {
                 this.$inertia.post(route('planner.store'), {
                     name: 'New Route',
-                    'geojson': this.geojson.coordinates,
+                    'geojson': this.geojson.coordinates.map(c => {
+                        return {lat: c[0], lng: c[1]};
+                    }),
                     'points': this.routePoints.map(r => {
                         return {lat: r.lat, lng: r.lng}
                     })

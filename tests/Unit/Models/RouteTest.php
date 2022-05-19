@@ -5,9 +5,7 @@ namespace Tests\Unit\Models;
 use App\Models\File;
 use App\Models\Place;
 use App\Models\Route;
-use App\Models\Stats;
 use App\Models\User;
-use App\Settings\StatsOrder;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
@@ -64,20 +62,6 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_appends_the_preferred_distance()
-    {
-        $route3 = Route::factory()->create();
-        Stats::factory()->route($route3)->create(['integration' => 'php', 'distance' => 95]);
-        Stats::factory()->route($route3)->create(['integration' => 'strava', 'distance' => 50]);
-
-        StatsOrder::setDefaultValue(['php', 'strava']);
-        $this->assertEquals(95, $route3->distance);
-
-        StatsOrder::setDefaultValue(['strava', 'php']);
-        $this->assertEquals(50, $route3->distance);
-    }
-
-    /** @test */
     public function it_has_many_places()
     {
         $route = Route::factory()->create();
@@ -91,5 +75,10 @@ class RouteTest extends TestCase
         $this->assertCount(2, $route->places);
         $this->assertTrue($place1->is($route->places[0]));
         $this->assertTrue($place2->is($route->places[1]));
+    }
+
+    /** @test */
+    public function it_has_a_relationship_with_paths()
+    {
     }
 }

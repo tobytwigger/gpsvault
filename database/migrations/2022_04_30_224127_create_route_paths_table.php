@@ -13,9 +13,9 @@ return new class() extends Migration {
     {
         Schema::create('route_paths', function (Blueprint $table) {
             $table->id();
-            $table->lineString('linestring')->nullable();
-            $table->float('distance')->nullable();
-            $table->float('elevation_gain')->nullable();
+            $table->lineString('linestring');
+            $table->float('distance');
+            $table->float('elevation_gain');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
         });

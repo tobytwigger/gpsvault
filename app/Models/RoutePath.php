@@ -5,7 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use MStaack\LaravelPostgis\Geometries\LineString;
 
+/**
+ * @property LineString $linestring The linestring representing the route
+ */
 class RoutePath extends Model
 {
     use HasFactory, PostgisTrait;
@@ -16,7 +20,7 @@ class RoutePath extends Model
 
     protected $casts = [
         'distance' => 'float',
-        'elevation' => 'float'
+        'elevation' => 'float',
     ];
 
     protected $postgisFields = [
@@ -29,6 +33,11 @@ class RoutePath extends Model
             'srid' => 4326,
         ],
     ];
+
+    public function routePoints()
+    {
+        return $this->hasMany(RoutePoint::class);
+    }
 
     public function route()
     {

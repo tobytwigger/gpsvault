@@ -3,10 +3,12 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Route;
+use App\Models\RoutePath;
 use App\Models\Stage;
-use App\Models\Stats;
 use App\Models\Tour;
 use App\Services\Geocoding\Geocoder;
+use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
 
 class TourTest extends TestCase
@@ -56,13 +58,14 @@ class TourTest extends TestCase
     public function it_appends_the_distance()
     {
         $tour = Tour::factory()->create();
-        $route1 = Route::factory()->create();
+        $route1 = Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['distance' => 50000])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-        $route2 = Route::factory()->create();
+        $route2 = Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['distance' => 79333])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000]);
-        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333]);
 
         $this->assertEquals(129333, $tour->distance);
     }
@@ -71,51 +74,31 @@ class TourTest extends TestCase
     public function it_appends_the_elevation_gain()
     {
         $tour = Tour::factory()->create();
-        $route1 = Route::factory()->create();
+        $route1 = Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['elevation_gain' => 1000])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-        $route2 = Route::factory()->create();
+        $route2 =         Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['elevation_gain' => 500])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['elevation_gain' => 1000]);
-        $stat2 = Stats::factory()->route($route2)->create(['elevation_gain' => 500]);
 
         $this->assertEquals(1500, $tour->elevation_gain);
-    }
-
-    /** @test */
-    public function the_stats_can_be_loaded()
-    {
-        $tour = Tour::factory()->create();
-        $route1 = Route::factory()->create();
-        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-        $route2 = Route::factory()->create();
-        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000, 'elevation_gain' => 1000, 'start_latitude' => 1, 'start_longitude' => 2]);
-        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333, 'elevation_gain' => 500, 'end_latitude' => 3, 'end_longitude' => 4]);
-
-        $this->assertEquals([
-            'distance' => 129333,
-            'elevation_gain' => 1500,
-            'start_latitude' => 1,
-            'start_longitude' => 2,
-            'end_latitude' => 3,
-            'end_longitude' => 4,
-        ], $tour->stats);
     }
 
     /** @test */
     public function it_appends_the_distance_and_ignores_any_stages_without_a_route()
     {
         $tour = Tour::factory()->create();
-        $route1 = Route::factory()->create();
+        $route1 = Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['distance' => 50000])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-        $route2 = Route::factory()->create();
+        $route2 = Route::factory()->has(
+            RoutePath::factory()->state(fn ($attributes) => ['distance' => 79333])
+        )->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => null]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['distance' => 50000]);
-        $stat2 = Stats::factory()->route($route2)->create(['distance' => 79333]);
 
         $this->assertEquals(129333, $tour->distance);
     }
@@ -133,14 +116,14 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => 1, 'start_longitude' => 51]);
-        $stat1 = Stats::factory()->route($route2)->create(['end_latitude' => 2, 'end_longitude' => 54]);
+        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])]);
+        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53), new Point(2, 52)])]);
 
         $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
     }
 
     /** @test */
-    public function human_started_at_returns_null_if_stats_have_start_latitude_or_longitude_as_null()
+    public function human_started_at_returns_null_if_no_stages_have_a_path()
     {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
@@ -148,32 +131,18 @@ class TourTest extends TestCase
 
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
+        $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => null, 'start_longitude' => null]);
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
         $this->assertNull($tour->human_started_at);
-
-        $stat1->start_latitude = 1;
-        $stat1->save();
-        $this->assertNull($tour->refresh()->human_started_at);
-
-        $stat1->start_longitude = 51;
-        $stat1->start_latitude = null;
-        $stat1->save();
-        $this->assertNull($tour->refresh()->human_started_at);
-
-        $stat1->start_latitude = 1;
-        $stat1->save();
-
-        $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
     }
 
     /** @test */
     public function human_ended_at_returns_the_ended_at_attribute_from_geocoder()
     {
         $geocoder = $this->prophesize(Geocoder::class);
-        $geocoder->getPlaceSummaryFromPosition(2, 54)->willReturn('Oxford, UK');
+        $geocoder->getPlaceSummaryFromPosition(4, 54)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
 
         $tour = Tour::factory()->create();
@@ -182,14 +151,14 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        $stat1 = Stats::factory()->route($route1)->create(['start_latitude' => 1, 'start_longitude' => 51]);
-        $stat1 = Stats::factory()->route($route2)->create(['end_latitude' => 2, 'end_longitude' => 54]);
+        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])]);
+        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53), new Point(4, 54)])]);
 
-        $this->assertEquals('Oxford, UK', $tour->human_ended_at);
+        $this->assertEquals('Milton Keynes, UK', $tour->human_ended_at);
     }
 
     /** @test */
-    public function human_ended_at_returns_null_if_stats_have_end_latitude_or_longitude_as_null()
+    public function human_ended_at_returns_null_if_no_stages_have_a_path()
     {
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
@@ -197,23 +166,27 @@ class TourTest extends TestCase
 
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->create();
+        $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
-
-        $stat1 = Stats::factory()->route($route1)->create(['end_latitude' => null, 'end_longitude' => null]);
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
         $this->assertNull($tour->human_ended_at);
+    }
 
-        $stat1->end_latitude = 1;
-        $stat1->save();
-        $this->assertNull($tour->refresh()->human_ended_at);
+    /** @test */
+    public function human_ended_at_uses_the_latest_stage_with_a_route_path()
+    {
+        $geocoder = $this->prophesize(Geocoder::class);
+        $geocoder->getPlaceSummaryFromPosition(2, 52)->willReturn('Milton Keynes, UK');
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
 
-        $stat1->end_longitude = 51;
-        $stat1->end_latitude = null;
-        $stat1->save();
-        $this->assertNull($tour->refresh()->human_ended_at);
-
-        $stat1->end_latitude = 1;
-        $stat1->save();
+        $tour = Tour::factory()->create();
+        $route1 = Route::factory()->has(
+            RoutePath::factory()->state(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])])
+        )->create();
+        $route2 = Route::factory()->create();
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);
+        Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
         $this->assertEquals('Milton Keynes, UK', $tour->human_ended_at);
     }

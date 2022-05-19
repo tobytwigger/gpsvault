@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Traits\HasStats;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -79,7 +78,7 @@ class Route extends Model
 
     public function getPathAttribute()
     {
-        return $this->routePaths()->latest()->first();
+        return $this->routePaths()->latest()->with('routePoints')->first();
     }
 
     public function mainPath()
@@ -95,5 +94,10 @@ class Route extends Model
     public function routePoints()
     {
         return $this->hasMany(RoutePoint::class);
+    }
+
+    public function stage()
+    {
+        return $this->hasOne(Stage::class);
     }
 }
