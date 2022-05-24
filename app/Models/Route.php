@@ -12,7 +12,7 @@ class Route extends Model
     use HasFactory, Searchable;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'file_id', 'public',
+        'name', 'description', 'notes', 'public',
     ];
 
     protected $appends = [

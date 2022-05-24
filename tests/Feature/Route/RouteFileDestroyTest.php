@@ -69,19 +69,6 @@ class RouteFileDestroyTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file()
-    {
-        $this->authenticated();
-        $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
-        $route->file_id = $file->id;
-        Model::withoutEvents(fn () => $route->save());
-
-        $response = $this->delete(route('route.file.destroy', [$route, $file]), []);
-        $response->assertStatus(404);
-    }
-
-    /** @test */
     public function you_must_be_authenticated()
     {
         $route = Route::factory()->create();

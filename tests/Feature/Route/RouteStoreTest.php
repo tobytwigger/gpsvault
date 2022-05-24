@@ -17,6 +17,7 @@ class RouteStoreTest extends TestCase
     /** @test */
     public function it_creates_an_route_from_a_file()
     {
+        $this->markTestIncomplete('Waiting on route file uploading to be complete.');
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
