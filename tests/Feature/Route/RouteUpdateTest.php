@@ -30,9 +30,9 @@ class RouteUpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_file_can_be_uploaded(){
+    public function a_file_can_be_uploaded()
+    {
         $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-
     }
 
     /** @test */

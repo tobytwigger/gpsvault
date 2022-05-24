@@ -7,15 +7,16 @@ use App\Models\RoutePath;
 use App\Models\Stage;
 use App\Models\Tour;
 use App\Models\User;
-use App\Services\Analysis\Parser\Point;
 use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
 
 class GeoJsonTest extends TestCase
 {
     private function createNewRoute(array $coords)
     {
-        $points = array_map(fn (array $coord) => (new Point())->setLatitude($coord[0])->setLongitude($coord[1]), $coords);
+        $points = array_map(fn (array $coord) => (new Point($coord[0], $coord[1])), $coords);
+
         $route = Route::factory()
             ->has(RoutePath::factory()->state([
                 'linestring' => new LineString($points),

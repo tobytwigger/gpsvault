@@ -67,7 +67,9 @@ class Tour extends Model
 
     public function getHumanStartedAtAttribute()
     {
-        $path = $this->stages()->whereNotNull('route_id')->firstOrFail()->route?->path;
+        $path = $this->stages()
+            ->whereHas('route.routePaths')
+            ->first()?->route?->path;
         if ($path && $path->linestring->count() > 1) {
             $point = Arr::first($path->linestring->getPoints());
 

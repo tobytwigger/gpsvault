@@ -39,7 +39,7 @@ class PlannerStoreTest extends TestCase
             new Point(55, 22), new Point(56, 21), new Point(57, 20),
         ]), $routePath->linestring);
 
-        $routePoints = $route->routePoints()->get();
+        $routePoints = $route->path->routePoints()->get();
         $this->assertCount(2, $routePoints);
         $this->assertEquals(new Point(55, 22), $routePoints[0]->location);
         $this->assertEquals(new Point(57, 20), $routePoints[1]->location);

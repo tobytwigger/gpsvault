@@ -80,5 +80,6 @@ class RouteTest extends TestCase
     /** @test */
     public function it_has_a_relationship_with_paths()
     {
+        $this->markTestIncomplete();
     }
 }

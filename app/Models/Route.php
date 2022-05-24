@@ -91,11 +91,6 @@ class Route extends Model
         return $this->hasMany(RoutePath::class);
     }
 
-    public function routePoints()
-    {
-        return $this->hasMany(RoutePoint::class);
-    }
-
     public function stage()
     {
         return $this->hasOne(Stage::class);
