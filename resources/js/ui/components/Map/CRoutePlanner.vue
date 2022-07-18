@@ -91,7 +91,7 @@ export default {
                 console.log(e);
                 this.$emit('update:geojson', {coordinates: e.route.coordinates});
                 this.$emit('update:distance', (e.route.summary.totalDistance * 1000))
-                this.$emit('update:time', (e.route.summary.totalTime * 1000))
+                this.$emit('update:time', (e.route.summary.totalTime))
             });
             this.routeControl.on('routingstart', () => this.isRouting = true);
             this.routeControl.on('routesfound routingerror', () => this.isRouting = false);
