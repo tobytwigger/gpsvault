@@ -6,13 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Searchable;
+use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Route extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, HasStats, Searchable, PostgisTrait;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'public',
+        'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation', 'linestring',
+    ];
+
+    protected $postgisFields = [
+        'linestring',
+    ];
+
+    protected $postgisTypes = [
+        'linestring' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
     ];
 
     protected $appends = [
