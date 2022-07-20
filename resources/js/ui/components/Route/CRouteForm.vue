@@ -53,9 +53,7 @@
                             truncate-length="30"
                             v-model="form.file"
                             id="file"
-                            :loading="checkingDuplicate"
                             name="file"
-                            @change="checkForDuplicateRoute"
                             label="Route File"
                             :hint="fileInputDescription"
                             :error="form.errors.hasOwnProperty('file')"
@@ -88,11 +86,9 @@
 </template>
 
 <script>
-import duplicateRouteChecker from '../../mixins/duplicateRouteChecker';
 
 export default {
     name: "CRouteForm",
-    mixins: [duplicateRouteChecker],
     props: {
         oldRoute: {
             required: false,
@@ -128,9 +124,6 @@ export default {
             return this.form.file;
         },
         fileErrorMessages() {
-            if(this.duplicateMessage) {
-                return [this.duplicateMessage];
-            }
             return this.form.errors.hasOwnProperty('file') ? [this.form.errors.file] : []
         },
         fileInputDescription() {
@@ -155,7 +148,6 @@ export default {
                     : route('route.store'),
                 {
                     onSuccess: () => {
-                        this.duplicateRoute = null;
                         this.form.reset();
                         this.updateFromOldRoute();
                         this.showDialog = false;

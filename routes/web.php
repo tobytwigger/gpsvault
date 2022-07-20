@@ -50,7 +50,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Route\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
         Route::resource('file', \App\Http\Controllers\Pages\Route\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
     });
-    Route::post('/route/file/duplicate', [\App\Http\Controllers\Pages\Route\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
 
     /* Route Planner */
     Route::get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
