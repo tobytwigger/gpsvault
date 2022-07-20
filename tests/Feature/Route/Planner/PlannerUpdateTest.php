@@ -4,24 +4,24 @@ namespace Feature\Route\Planner;
 
 use App\Models\Place;
 use App\Models\Route;
+use App\Models\RoutePath;
 use App\Models\RoutePoint;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\TestCase;
 
-class PlannerStoreTest extends TestCase
+class PlannerUpdateTest extends TestCase
 {
 
     /** @test */
-    public function it_adds_a_route_data()
+    public function it_updates_route_data()
     {
         $this->authenticated();
 
-        $response = $this->post(route('planner.store', [
+        $route = Route::factory()->has(RoutePath::factory())->create(['user_id' => $this->user->id]);
+
+        $response = $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
                 ['lat' => 55, 'lng' => 22],
@@ -32,72 +32,67 @@ class PlannerStoreTest extends TestCase
                 ['lat' => 55, 'lng' => 22],
                 ['lat' => 57, 'lng' => 20],
             ],
-        ]));
+        ]);
 
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('routes', [
-            'name' => 'My Route',
-        ]);
-        $route = Route::firstOrFail();
-        $routePath = $route->routePaths()->firstOrFail();
+        $routePath = $route->mainPath()->orderBy('id', 'desc')->first();
+
         $this->assertEquals(new LineString([
             new Point(55, 22), new Point(56, 21), new Point(57, 20),
         ]), $routePath->linestring);
 
-        $routePoints = $route->path->routePoints()->get();
+        $routePoints = $routePath->routePoints()->get();
         $this->assertCount(2, $routePoints);
         $this->assertEquals(new Point(55, 22), $routePoints[0]->location);
         $this->assertEquals(new Point(57, 20), $routePoints[1]->location);
     }
 
     /** @test */
-    public function it_stores_the_waypoints_of_a_route()
+    public function it_updates_the_waypoints_of_a_route()
     {
         $this->authenticated();
 
         $place = Place::factory()->create();
-        $response = $this->post(route('planner.store', [
-            'name' => 'My Route',
+        $route = Route::factory()->has(RoutePath::factory())->create(['user_id' => $this->user->id]);
+        $path = RoutePath::factory()->create(['route_id' => $route->id]);
+        $point = RoutePoint::factory()->create(['route_path_id' => $path]);
+
+        $response = $this->patch(route('planner.update', $route), [
             'geojson' => [
                 ['lat' => 55, 'lng' => 22],
                 ['lat' => 56, 'lng' => 21],
-                ['lat' => 57, 'lng' => 20],
             ],
             'points' => [
-                ['lat' => 55, 'lng' => 25],
-                ['lat' => 57, 'lng' => 26, 'place_id' => $place->id],
+                ['lat' => 55, 'lng' => 25, 'place_id' => $place->id],
+                ['lat' => 57, 'lng' => 26],
             ],
-        ]));
+        ]);
 
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('routes', [
-            'name' => 'My Route',
-        ]);
-        $route = Route::firstOrFail();
-        $points = $route->path->routePoints;
+        $routePath = $route->mainPath()->orderBy('id', 'desc')->first();
+        $routePoints = $routePath->routePoints()->get();
 
-        $this->assertCount(2, $points);
-        $this->assertContainsOnlyInstancesOf(RoutePoint::class, $points);
+        $this->assertCount(2, $routePoints);
+        $this->assertEquals(new Point(55, 25), $routePoints[0]->location);
+        $this->assertEquals(new Point(57, 26), $routePoints[1]->location);
 
-        $this->assertEquals(new Point(55, 25), $points[0]->location);
-        $this->assertEquals(new Point(57, 26), $points[1]->location);
-        $this->assertNull($points[0]->place_id);
-        $this->assertEquals($place->id, $points[1]->place_id);
+        $response->assertRedirect();
     }
 
     /** @test */
     public function it_redirects_to_edit_the_new_route_path()
     {
         $this->authenticated();
+        $route = Route::factory()->create(['user_id' => $this->user->id]);
 
-        $this->post(route('planner.store', [
+        $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
                 ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
             ]
-        ]))
+        ])
             ->assertRedirect(route('planner.edit', Route::first()->id));
     }
 
@@ -129,7 +124,9 @@ class PlannerStoreTest extends TestCase
                 ['lat' => 57, 'lng' => 20],
             ]];
 
-        $response = $this->post(route('planner.store'), array_merge($default, [$key => $value]));
+        $route = Route::factory()->create(['user_id' => $this->user->id]);
+
+        $response = $this->patch(route('planner.update', $route), array_merge($default, [$key => $value]));
 
         if (!$error) {
             $response->assertSessionMissing($returnedOverrideKey);
@@ -142,9 +139,6 @@ class PlannerStoreTest extends TestCase
     public function validationDataProvider(): array
     {
         return [
-            ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
-            ['name', null, 'The name field is required.'],
-            ['name', 'This is a valid namne', false],
             ['geojson', 'This is not an array', 'The geojson must be an array.'],
             ['geojson', [['lat' => 50, 'lng' => 20]], 'The geojson must have at least 2 items.'],
             ['geojson', [['lat' => 50, 'lng' => 20], ['lat' => 'not a number', 'lng' => 20]], 'The geojson.1.lat must be a number.', 'geojson.1.lat'],
@@ -163,6 +157,8 @@ class PlannerStoreTest extends TestCase
             ['points', [['lat' => 2, 'lng' => -181], ['lat' => 20, 'lng' => 20]], 'The points.0.lng must be at least -180.', 'points.0.lng'],
             ['points', [['lat' => 2, 'lng' => 181], ['lat' => 20, 'lng' => 20]], 'The points.0.lng must not be greater than 180.', 'points.0.lng'],
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => 500]], 'The selected points.0.place_id is invalid.', 'points.0.place_id'],
+            ['points', [['lat' => 50, 'lng' => 20, 'place_id' => 500, 'id' => 5000]], 'The selected points.0.place_id is invalid.', 'points.0.place_id'],
+            ['points', [['lat' => 50, 'lng' => 20, 'id' => 5000]], 'The selected points.0.id is invalid.', 'points.0.id'],
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => null]], false],
             ['points', fn() => ['lat' => 50, 'lng' => 20, 'place_id' => Place::factory()->create()->id], false],
         ];
@@ -172,13 +168,27 @@ class PlannerStoreTest extends TestCase
     /** @test */
     public function you_must_be_authenticated()
     {
-        $this->post(route('planner.store', [
+        $route = Route::factory()->create();
+
+        $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
                 ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
             ]
-        ]))->assertRedirect(route('login'));
+        ])->assertRedirect(route('login'));
     }
 
+    /** @test */
+    public function you_can_only_update_your_own_routes(){
+        $this->authenticated();
+        $route = Route::factory()->create();
+
+        $this->patch(route('planner.update', $route), [
+            'name' => 'My Route',
+            'geojson' => [
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
+            ]
+        ])->assertStatus(403);
+    }
 
 }
