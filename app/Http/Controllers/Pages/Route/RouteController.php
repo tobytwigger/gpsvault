@@ -55,7 +55,7 @@ class RouteController extends Controller
         ]);
 
         if ($request->has('file') && $request->file('file') !== null) {
-//            $route->analyse();
+            $route->analyse();
         }
 
         return redirect()->route('route.show', $route);

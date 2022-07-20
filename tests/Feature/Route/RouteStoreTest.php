@@ -2,7 +2,8 @@
 
 namespace Tests\Feature\Route;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
+use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
 use Illuminate\Http\UploadedFile;
@@ -17,7 +18,8 @@ class RouteStoreTest extends TestCase
     /** @test */
     public function it_creates_an_route_from_a_file()
     {
-        $this->markTestIncomplete('Waiting on route file uploading to be complete.');
+        Bus::fake([AnalyseRouteFile::class]);
+
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -41,6 +43,8 @@ class RouteStoreTest extends TestCase
     /** @test */
     public function it_redirects_to_show_the_new_route()
     {
+        Bus::fake([AnalyseRouteFile::class]);
+
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -123,10 +127,10 @@ class RouteStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_fires_an_analysis_job_if_a_file_is_given()
+    public function it_dispatches_the_analysis_job()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseFile::class);
+        Bus::fake();
+
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -135,32 +139,30 @@ class RouteStoreTest extends TestCase
             'file' => $file, 'name' => 'Test',
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */
     public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseFile::class);
+        Bus::fake(AnalyseRouteFile::class);
         $this->authenticated();
 
         $response = $this->post(route('route.store'), ['name' => 'Test']);
 
-        Bus::assertNotDispatched(AnalyseFile::class);
+        Bus::assertNotDispatched(AnalyseRouteFile::class);
     }
 
     /** @test */
     public function it_does_not_fire_an_analysis_job_if_a_name_is_not_given()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseFile::class);
+        Bus::fake(AnalyseRouteFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
 
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
         $response = $this->post(route('route.store'), ['file' => $file]);
 
-        Bus::assertNotDispatched(AnalyseFile::class);
+        Bus::assertNotDispatched(AnalyseRouteFile::class);
     }
 }

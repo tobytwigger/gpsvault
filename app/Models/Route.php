@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\AnalyseRouteFile;
 use App\Traits\HasStats;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -87,6 +88,11 @@ class Route extends Model
     {
         return $this->belongsToMany(Place::class)
             ->using(PlaceRoute::class);
+    }
+
+    public function analyse()
+    {
+        dispatch(new AnalyseRouteFile($this));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Stats;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
 use App\Models\File;
 use Tests\TestCase;
@@ -17,7 +17,7 @@ class AnalyseFileTest extends TestCase
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Activity ' . $activity->id . ' does not have a model associated with it.');
 
-        $job = new AnalyseFile($activity);
+        $job = new AnalyseActivityFile($activity);
         $job->handle();
     }
 
@@ -28,7 +28,7 @@ class AnalyseFileTest extends TestCase
             'file_id' => File::factory()->routeFile()->create()->id,
         ]);
 
-        $job = new AnalyseFile($activity);
+        $job = new AnalyseActivityFile($activity);
         $job->handle();
 
         $this->assertDatabaseHas('stats', [

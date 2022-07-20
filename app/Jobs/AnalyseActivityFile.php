@@ -15,7 +15,7 @@ use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AnalyseFile implements ShouldQueue
+class AnalyseActivityFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,20 +32,13 @@ class AnalyseFile implements ShouldQueue
         $this->model = $model;
     }
 
-    private function getModelName()
-    {
-        return $this->model instanceof Activity
-            ? 'Activity'
-            : 'Route';
-    }
-
     /**
      * Execute the job.
      */
     public function handle()
     {
         if (!$this->model->hasFile()) {
-            throw new NotFoundHttpException(sprintf('%s %u does not have a model associated with it.', $this->getModelName(), $this->model->id));
+            throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
         }
         $analysis = Analyser::analyse($this->model->file);
 

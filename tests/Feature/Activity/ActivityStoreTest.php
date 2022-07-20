@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Activity;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
@@ -40,7 +40,7 @@ class ActivityStoreTest extends TestCase
     /** @test */
     public function it_fires_an_analysis_job()
     {
-        Bus::fake(AnalyseFile::class);
+        Bus::fake(AnalyseActivityFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -49,7 +49,7 @@ class ActivityStoreTest extends TestCase
             'file' => $file,
         ]);
 
-        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */

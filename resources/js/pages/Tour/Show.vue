@@ -49,11 +49,6 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col>
-                        <c-stats :schema="statSchema"></c-stats>
-<!--                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>-->
-<!--                        <div v-else>No stats available</div>-->
-                    </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
@@ -104,16 +99,12 @@ import CStageCard from 'ui/components/Stage/CStageCard';
 import CTourMap from 'ui/components/Tour/CTourMap';
 import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
 import CTourForm from '../../ui/components/Tour/CTourForm';
-import CStats from '../../ui/components/CStats';
-import stats from '../../ui/mixins/stats';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 
 export default {
     name: "Show",
-    mixins: [stats],
     components: {
         CActivityLocationSummary,
-        CStats,
         CTourForm,
         CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
     props: {
@@ -137,13 +128,6 @@ export default {
                     this.stageForm.reset();
                 }
             });
-        }
-    },
-    computed: {
-        allStats() {
-            return [
-                this.tour.stats
-            ]
         }
     }
 }
