@@ -99,11 +99,11 @@ class RouteController extends Controller
         $route->name = $request->input('name', $route->name);
         $route->description = $request->input('description', $route->description);
         $route->notes = $request->input('notes', $route->notes);
-//        $route->file_id = $fileId;
+        $route->file_id = $fileId;
         $route->save();
 
         if ($request->has('file') && $request->file('file') !== null) {
-//            $route->analyse();
+            $route->analyse();
         }
 
         return redirect()->route('route.show', $route);

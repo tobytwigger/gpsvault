@@ -46,7 +46,7 @@ class Tour extends Model
         $distance = 0;
         foreach ($this->stages as $stage) {
             if ($stage->route_id && $stage->route->path?->distance) {
-                $distance = $distance + $stage->route->path->distance;
+                $distance += $stage->route->path->distance;
             }
         }
 
@@ -58,7 +58,7 @@ class Tour extends Model
         $elevation = 0;
         foreach ($this->stages as $stage) {
             if ($stage->route_id && $stage->route?->path->elevation_gain) {
-                $elevation = $elevation + $stage->route->path->elevation_gain;
+                $elevation += $stage->route->path->elevation_gain;
             }
         }
 

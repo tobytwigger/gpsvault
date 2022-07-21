@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Route;
 
-use App\Jobs\AnalyseActivityFile;
+use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
 use Illuminate\Http\UploadedFile;
@@ -110,8 +110,7 @@ class RouteUpdateTest extends TestCase
     /** @test */
     public function it_fires_an_analysis_job_if_a_file_is_given()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseActivityFile::class);
+        Bus::fake(AnalyseRouteFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
         $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
@@ -121,27 +120,25 @@ class RouteUpdateTest extends TestCase
             'file' => $file,
         ]);
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
     }
 
     /** @test */
     public function it_does_not_fire_an_analysis_job_if_a_file_is_not_given()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseActivityFile::class);
+        Bus::fake(AnalyseRouteFile::class);
         $this->authenticated();
 
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $response = $this->put(route('route.update', $route));
 
-        Bus::assertNotDispatched(AnalyseActivityFile::class);
+        Bus::assertNotDispatched(AnalyseRouteFile::class);
     }
 
     /** @test */
     public function it_fires_an_analysis_job_even_when_a_route_file_already_exists()
     {
-        $this->markTestSkipped('Waiting for rewrite of route file uploads.');
-        Bus::fake(AnalyseActivityFile::class);
+        Bus::fake(AnalyseRouteFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
         $oldFile = File::factory()->activityFile()->create(['filename' => 'old.gpx']);
@@ -152,6 +149,6 @@ class RouteUpdateTest extends TestCase
             'file' => $file,
         ]);
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model instanceof Route && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
     }
 }

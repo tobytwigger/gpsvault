@@ -93,9 +93,8 @@ class PlannerController extends Controller
                 'location' => new Point($point['lat'], $point['lng']),
                 'place_id' => $point['place_id'] ?? null
             ];
-            if(isset($point['id'])) {
-                // TODO Copy across point metadata to the new point here, then override it if changed.
-            }
+            // If $point['id'] is set we can populate the new point with data from the given point ID.
+
             $path->routePoints()->create($attributes);
 
         }
