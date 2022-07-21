@@ -12,9 +12,9 @@ return new class() extends Migration {
     public function up()
     {
         Schema::table('routes', function (Blueprint $table) {
-            $table->lineString('linestring')->nullable();
-            $table->float('distance')->nullable();
-            $table->float('elevation_gain')->nullable();
+            $table->dropColumn('linestring');
+            $table->dropColumn('distance');
+            $table->dropColumn('elevation_gain');
         });
     }
 
@@ -25,9 +25,9 @@ return new class() extends Migration {
     public function down()
     {
         Schema::table('routes', function (Blueprint $table) {
-            $table->dropColumn('linestring');
-            $table->dropColumn('distance');
-            $table->dropColumn('elevation_gain');
+            $table->lineString('linestring')->nullable();
+            $table->float('distance')->nullable();
+            $table->float('elevation_gain')->nullable();
         });
     }
 };
