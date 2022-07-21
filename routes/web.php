@@ -27,7 +27,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Tours */
     Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
     Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
-    Route::get('/tour/{tour}/points', [\App\Http\Controllers\Pages\Tour\TourPointsController::class, 'show'])->name('tour.points');
     Route::get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
 
     /* Places */
@@ -51,7 +50,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Route\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
         Route::resource('file', \App\Http\Controllers\Pages\Route\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
     });
-    Route::post('/route/file/duplicate', [\App\Http\Controllers\Pages\Route\RouteDuplicateController::class, 'index'])->name('route.file.duplicate');
+
+    /* Route Planner */
+    Route::get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
+    Route::post('/route/planner/save', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'store'])->name('planner.store');
+    Route::get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
+    Route::patch('/route/planner/save/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'update'])->name('planner.update');
 
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);

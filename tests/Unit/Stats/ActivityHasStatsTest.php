@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Stats;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
@@ -62,12 +62,12 @@ class ActivityHasStatsTest extends TestCase
     /** @test */
     public function the_analyse_file_job_can_be_dispatched()
     {
-        Bus::fake(AnalyseFile::class);
+        Bus::fake(AnalyseActivityFile::class);
 
         $activity = Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
         $activity->analyse();
 
-        Bus::assertDispatched(AnalyseFile::class, fn (AnalyseFile $job) => $activity->is($job->model));
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $activity->is($job->model));
     }
 
     /** @test */

@@ -36,10 +36,9 @@ import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CPlaceCard from 'ui/components/Place/CPlaceCard';
 import CPlaceForm from 'ui/components/Place/CPlaceForm';
 import CPaginationIterator from 'ui/components/CPaginationIterator';
-import CLocationInput from '../../ui/components/CLocationInput';
 export default {
     name: "Index",
-    components: {CLocationInput, CPaginationIterator, CPlaceForm, CPlaceCard, CAppWrapper},
+    components: {CPaginationIterator, CPlaceForm, CPlaceCard, CAppWrapper},
     props: {
         places: {
             required: true,

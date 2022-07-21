@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
@@ -70,7 +70,7 @@ trait HasStats
         if (!$this->hasFile()) {
             throw new Exception('No file exists on this model');
         }
-        dispatch(new AnalyseFile($this));
+        dispatch(new AnalyseActivityFile($this));
     }
 
     /**

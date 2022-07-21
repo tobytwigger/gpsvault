@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Services\Geocoding\Geocoder;
-use App\Services\Stats\Addition\StatAdder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class Tour extends Model
@@ -36,61 +36,60 @@ class Tour extends Model
         });
     }
 
-    public function stages()
+    public function stages(string $orderDirection = 'asc')
     {
-        return $this->hasMany(Stage::class)->ordered();
-    }
-
-    private function getStatAdder(): StatAdder
-    {
-        $adder = new StatAdder();
-        foreach ($this->stages as $stage) {
-            if ($stage->route_id) {
-                $stat = $stage->route->stats()->orderByPreference()->first();
-                if ($stat) {
-                    $adder->push($stat);
-                }
-            }
-        }
-
-        return $adder;
-    }
-
-    public function getStatsAttribute()
-    {
-        return $this->getStatAdder()->toArray();
+        return $this->hasMany(Stage::class)->ordered($orderDirection);
     }
 
     public function getDistanceAttribute()
     {
-        return $this->getStatAdder()->distance();
+        $distance = 0;
+        foreach ($this->stages as $stage) {
+            if ($stage->route_id && $stage->route->path?->distance) {
+                $distance = $distance + $stage->route->path->distance;
+            }
+        }
+
+        return $distance;
     }
 
     public function getElevationGainAttribute()
     {
-        return $this->getStatAdder()->elevationGain();
+        $elevation = 0;
+        foreach ($this->stages as $stage) {
+            if ($stage->route_id && $stage->route?->path->elevation_gain) {
+                $elevation = $elevation + $stage->route->path->elevation_gain;
+            }
+        }
+
+        return $elevation;
     }
 
     public function getHumanStartedAtAttribute()
     {
-        $latitude = $this->getStatAdder()->startLatitude();
-        $longitude = $this->getStatAdder()->startLongitude();
-        if ($latitude === null || $longitude === null) {
-            return null;
+        $path = $this->stages()
+            ->whereHas('route.routePaths')
+            ->first()?->route?->path;
+        if ($path && $path->linestring->count() > 1) {
+            $point = Arr::first($path->linestring->getPoints());
+
+            return app(Geocoder::class)->getPlaceSummaryFromPosition($point->getLat(), $point->getLng());
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
+        return null;
     }
 
     public function getHumanEndedAtAttribute()
     {
-        $latitude = $this->getStatAdder()->endLatitude();
-        $longitude = $this->getStatAdder()->endLongitude();
+        $path = $this->stages('desc')
+            ->whereHas('route.routePaths')
+            ->first()?->route?->path;
+        if ($path && $path->linestring->count() > 1) {
+            $point = Arr::last($path->linestring->getPoints());
 
-        if ($latitude === null || $longitude === null) {
-            return null;
+            return app(Geocoder::class)->getPlaceSummaryFromPosition($point->getLat(), $point->getLng());
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($latitude, $longitude);
+        return null;
     }
 }

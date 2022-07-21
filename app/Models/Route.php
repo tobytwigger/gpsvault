@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\AnalyseRouteFile;
 use App\Traits\HasStats;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +30,7 @@ class Route extends Model
     ];
 
     protected $appends = [
-        'cover_image', 'distance',
+        'cover_image', 'path',
     ];
 
     protected $casts = [
@@ -78,9 +79,49 @@ class Route extends Model
         return $this->belongsToMany(File::class);
     }
 
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
+
     public function places()
     {
         return $this->belongsToMany(Place::class)
             ->using(PlaceRoute::class);
+    }
+
+    public function analyse()
+    {
+        dispatch(new AnalyseRouteFile($this));
+    }
+
+    /**
+     * Get the latest route path along with its points
+     *
+     * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|object|null
+     */
+    public function getPathAttribute()
+    {
+        return $this->routePaths()->latest()->with('routePoints')->first();
+    }
+
+    /**
+     * Get the latest route path as a query.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function mainPath()
+    {
+        return $this->routePaths()->latest()->limit(1);
+    }
+
+    public function routePaths()
+    {
+        return $this->hasMany(RoutePath::class);
+    }
+
+    public function stage()
+    {
+        return $this->hasOne(Stage::class);
     }
 }

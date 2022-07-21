@@ -125,7 +125,7 @@
 
 <script>
 
-import CLocationInput from '../CLocationInput';
+import CLocationInput from '../Map/CLocationInput';
 export default {
     name: "CPlaceForm",
     components: {CLocationInput},

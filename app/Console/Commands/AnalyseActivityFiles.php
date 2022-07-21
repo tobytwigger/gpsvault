@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\AnalyseFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
@@ -41,7 +41,7 @@ class AnalyseActivityFiles extends Command
         $count = 0;
         $activities = $this->argument('activity') ? Arr::wrap(Activity::findOrFail($this->argument('activity'))) : Activity::get();
         foreach ($activities as $activity) {
-            AnalyseFile::dispatch($activity);
+            AnalyseActivityFile::dispatch($activity);
             $count++;
         }
         $this->line(sprintf('Set %u activities for analysis.', $count));

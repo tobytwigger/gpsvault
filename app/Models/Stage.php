@@ -57,6 +57,11 @@ class Stage extends Model implements Sortable
         return $this->belongsTo(Route::class);
     }
 
+//    public function routePath()
+//    {
+//        return $this->hasManyThrough(RoutePath::class, Route::class);
+//    }
+
     public function activity()
     {
         return $this->belongsTo(Activity::class);

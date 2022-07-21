@@ -5,13 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class RoutePoint extends Model
+class RoutePoint extends Model implements Sortable
 {
-    use HasFactory, PostgisTrait;
+    use HasFactory, PostgisTrait, SortableTrait;
 
     protected $fillable = [
-        'order', 'place_id', 'location', 'route_id',
+        'order', 'place_id', 'location', 'route_path_id',
+    ];
+
+    protected $sortable = [
+        'order_column_name' => 'order',
+        'sort_when_creating' => true,
     ];
 
     protected $postgisFields = [
@@ -25,9 +32,9 @@ class RoutePoint extends Model
         ],
     ];
 
-    public function route()
+    public function routePath()
     {
-        return $this->belongsTo(Route::class);
+        return $this->belongsTo(RoutePath::class);
     }
 
     public function place()

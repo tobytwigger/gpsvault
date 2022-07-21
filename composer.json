@@ -18,7 +18,7 @@
         "deployer/deployer": "^7.0",
         "doctrine/dbal": "^3.2",
         "duckfusion/waddle": "^1.1",
-        "elbowspaceuk/laravel-settings": "dev-develop",
+        "tobytwigger/laravel-settings": "^1.0.5",
         "friendsofphp/php-cs-fixer": "^3.8",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0",

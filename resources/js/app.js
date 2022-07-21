@@ -3,8 +3,10 @@ import { InertiaProgress } from '@inertiajs/progress';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import vuetify from './plugins/vuetify';
 import Vue from 'vue';
+import L from 'leaflet';
+window.L = L;
 
-import Settings from '@elbowspaceuk/laravel-settings-vue/dist/index';
+import Settings from '@tobytwigger/laravel-settings-vue/dist/index';
 
 require('./bootstrap');
 import { applyPolyfills, defineCustomElements } from '@bruit/component/loader';

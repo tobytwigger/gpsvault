@@ -11,12 +11,12 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('route_points', function (Blueprint $table) {
+        Schema::create('route_paths', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order');
-            $table->unsignedBigInteger('place_id')->nullable();
-            $table->point('location')->nullable();
-            $table->unsignedBigInteger('route_path_id');
+            $table->lineString('linestring');
+            $table->float('distance');
+            $table->float('elevation_gain');
+            $table->unsignedBigInteger('route_id');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('route_points');
+        Schema::dropIfExists('route_paths');
     }
 };

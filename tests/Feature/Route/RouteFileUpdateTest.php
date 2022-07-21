@@ -56,19 +56,6 @@ class RouteFileUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_a_404_if_the_file_does_not_belong_to_the_route_as_a_media_file()
-    {
-        $this->authenticated();
-        $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
-        $route->file_id = $file->id;
-        Model::withoutEvents(fn () => $route->save());
-
-        $response = $this->put(route('route.file.update', [$route, $file]), []);
-        $response->assertStatus(404);
-    }
-
-    /** @test */
     public function the_title_and_caption_can_be_updated()
     {
         $this->authenticated();

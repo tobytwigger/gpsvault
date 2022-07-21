@@ -7,25 +7,40 @@
         </c-pagination-iterator>
 
         <template #headerActions>
-            <c-route-form title="Add new route" button-text="Create">
+            <c-route-form title="Upload a Route" button-text="Upload">
                 <template v-slot:activator="{trigger, showing}">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                                data-hint="You can add a new route by clicking here"
+                                data-hint="You can upload a route file here."
                                 icon
                                 v-bind="attrs"
                                 v-on="on"
                                 @click="trigger"
                                 :disabled="showing"
                             >
-                                <v-icon>mdi-plus</v-icon>
+                                <v-icon>mdi-upload</v-icon>
                             </v-btn>
                         </template>
-                        <span>Add route</span>
+                        <span>Upload route</span>
                     </v-tooltip>
                 </template>
             </c-route-form>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        data-hint="You can add a new route by clicking here"
+                        icon
+                        :href="route('planner.create')"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </template>
+                <span>Add route</span>
+            </v-tooltip>
 
         </template>
     </c-app-wrapper>
@@ -36,6 +51,7 @@ import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CPaginationIterator from 'ui/components/CPaginationIterator';
 import CRouteCard from 'ui/components/Route/CRouteCard';
 import CRouteForm from 'ui/components/Route/CRouteForm';
+
 export default {
     name: "Index",
     components: {CRouteForm, CRouteCard, CPaginationIterator, CAppWrapper},

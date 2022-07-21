@@ -3,7 +3,6 @@
 namespace Tests\Feature\Route;
 
 use App\Models\Route;
-use App\Models\Stats;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
@@ -14,8 +13,6 @@ class PublicRouteShowTest extends TestCase
     public function it_shows_the_route()
     {
         $route = Route::factory()->create(['public' => true]);
-        $stat1 = Stats::factory()->route($route)->create(['integration' => 'int1']);
-        $stat2 = Stats::factory()->route($route)->create(['integration' => 'int2']);
 
         $this->get(route('route.public', $route))
             ->assertInertia(
@@ -25,21 +22,6 @@ class PublicRouteShowTest extends TestCase
                         'routeModel',
                         fn (Assert $page) => $page
                             ->where('id', $route->id)
-                            ->has('stats', 2)
-                            ->has(
-                                'stats.0',
-                                fn (Assert $page) => $page
-                                    ->where('id', $stat1->id)
-                                    ->where('integration', 'int1')
-                                    ->etc()
-                            )
-                            ->has(
-                                'stats.1',
-                                fn (Assert $page) => $page
-                                    ->where('id', $stat2->id)
-                                    ->where('integration', 'int2')
-                                    ->etc()
-                            )
                             ->etc()
                     )
             );

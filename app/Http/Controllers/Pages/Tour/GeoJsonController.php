@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Pages\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tour;
-use App\Models\Waypoint;
-use Location\Coordinate;
-use Location\Formatter\Polyline\GeoJSON;
-use Location\Polyline;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class GeoJsonController extends Controller
 {
@@ -15,21 +12,15 @@ class GeoJsonController extends Controller
     {
         $this->authorize('view', $tour);
 
-        $polyline = new Polyline();
-        foreach ($tour->stages as $stage) {
-            if ($stage->route_id) {
-                $points = $stage->route->stats()
-                    ->orderByPreference()
-                    ->first()
-                    ?->waypoints()
-                    ->whereNotNull('points')
-                    ->get()
-                    ->map(fn (Waypoint $waypoint) => new Coordinate($waypoint->latitude, $waypoint->longitude));
+        $points = [];
 
-                $polyline->addPoints($points->all());
-            }
+        foreach ($tour->stages()->whereHas('route.routePaths')->get() as $stage) {
+            $points = array_merge($points, $stage->route->path->linestring->getPoints());
         }
 
-        return $polyline->format(new GeoJSON());
+        return [
+            'type' => 'LineString',
+            'coordinates' => collect($points)->map(fn (Point $point) => [$point->getLng(), $point->getLat()]),
+        ];
     }
 }

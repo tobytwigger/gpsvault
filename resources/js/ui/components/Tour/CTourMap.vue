@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import CMap from '../CMap';
+import CMap from '../Map/CMap';
 export default {
     name: "CTourMap",
     components: {CMap},
