@@ -22,19 +22,19 @@ class StravaServiceProvider extends ServiceProvider
 //        ]);
 //        if(config('strava.enable_detail_fetching', true)) {
 
-            // Load segments and additional stats for an activity
+        // Load segments and additional stats for an activity
 //            Event::listen(StravaActivityUpdated::class, MarkActivityAsLoadingDetails::class);
 //            Event::listen(StravaActivityUpdated::class, IndexStravaActivity::class);
 
-            // Load comments for an activity
+        // Load comments for an activity
 //            Event::listen(StravaActivityCommentsUpdated::class, MarkActivityAsLoadingComments::class);
 //            Event::listen(StravaActivityCommentsUpdated::class, IndexStravaActivityComments::class);
 
-            // Load kudos for an activity
+        // Load kudos for an activity
 //            Event::listen(StravaActivityKudosUpdated::class, MarkActivityAsLoadingKudos::class);
 //            Event::listen(StravaActivityKudosUpdated::class, IndexStravaActivityKudos::class);
 
-            // Load photos for an activity
+        // Load photos for an activity
 //            Event::listen(StravaActivityPhotosUpdated::class, MarkActivityAsLoadingPhotos::class);
 //            Event::listen(StravaActivityPhotosUpdated::class, IndexStravaActivityPhotos::class);
 //        }

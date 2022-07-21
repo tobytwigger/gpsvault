@@ -44,7 +44,7 @@ class AnalyseRouteFile implements ShouldQueue
 
         $linestring = new LineString(
             collect($analysis->getPoints())
-                ->map(fn(Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude()))
+                ->map(fn (Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude()))
                 ->all()
         );
 

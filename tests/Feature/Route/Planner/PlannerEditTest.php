@@ -24,12 +24,14 @@ class PlannerEditTest extends TestCase
 
         $this->get(route('planner.edit', $route->id))->assertInertia(fn (Assert $page) =>
             $page->component('Route/Planner')
-                ->has('routeModel', fn (Assert $page) => $page
-                    ->where('id', $route->id)
-                    ->where('description', $route->description)
-                    ->where('notes', $route->notes)
-                    ->where('user_id', $this->user->id)
-                    ->etc()
+                ->has(
+                    'routeModel',
+                    fn (Assert $page) => $page
+                ->where('id', $route->id)
+                ->where('description', $route->description)
+                ->where('notes', $route->notes)
+                ->where('user_id', $this->user->id)
+                ->etc()
                 ));
     }
 
@@ -42,5 +44,4 @@ class PlannerEditTest extends TestCase
 
         $this->get(route('planner.edit', $route->id))->assertStatus(403);
     }
-
 }

@@ -96,7 +96,7 @@ class Route extends Model
     }
 
     /**
-     * Get the latest route path along with its points
+     * Get the latest route path along with its points.
      *
      * @return Model|\Illuminate\Database\Eloquent\Relations\HasMany|object|null
      */

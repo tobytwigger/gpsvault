@@ -6,7 +6,6 @@ use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\RoutePoint;
-use Illuminate\Support\Str;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
@@ -90,8 +89,8 @@ class PlannerUpdateTest extends TestCase
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
-            ]
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+            ],
         ])
             ->assertRedirect(route('planner.edit', Route::first()->id));
     }
@@ -103,6 +102,7 @@ class PlannerUpdateTest extends TestCase
      * @param mixed $key
      * @param mixed $value
      * @param mixed $error
+     * @param null|mixed $returnedOverrideKey
      */
     public function it_validates($key, $value, $error, $returnedOverrideKey = null)
     {
@@ -122,7 +122,7 @@ class PlannerUpdateTest extends TestCase
             'points' => [
                 ['lat' => 55, 'lng' => 22],
                 ['lat' => 57, 'lng' => 20],
-            ]];
+            ], ];
 
         $route = Route::factory()->create(['user_id' => $this->user->id]);
 
@@ -133,7 +133,6 @@ class PlannerUpdateTest extends TestCase
         } else {
             $response->assertSessionHasErrors([$returnedOverrideKey => $error]);
         }
-
     }
 
     public function validationDataProvider(): array
@@ -160,7 +159,7 @@ class PlannerUpdateTest extends TestCase
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => 500, 'id' => 5000]], 'The selected points.0.place_id is invalid.', 'points.0.place_id'],
             ['points', [['lat' => 50, 'lng' => 20, 'id' => 5000]], 'The selected points.0.id is invalid.', 'points.0.id'],
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => null]], false],
-            ['points', fn() => ['lat' => 50, 'lng' => 20, 'place_id' => Place::factory()->create()->id], false],
+            ['points', fn () => ['lat' => 50, 'lng' => 20, 'place_id' => Place::factory()->create()->id], false],
         ];
     }
 
@@ -173,22 +172,22 @@ class PlannerUpdateTest extends TestCase
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
-            ]
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+            ],
         ])->assertRedirect(route('login'));
     }
 
     /** @test */
-    public function you_can_only_update_your_own_routes(){
+    public function you_can_only_update_your_own_routes()
+    {
         $this->authenticated();
         $route = Route::factory()->create();
 
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
-            ]
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+            ],
         ])->assertStatus(403);
     }
-
 }

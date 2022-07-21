@@ -4,7 +4,6 @@ namespace Tests\Feature\Route;
 
 use App\Models\File;
 use App\Models\Route;
-use Illuminate\Database\Eloquent\Model;
 use Tests\TestCase;
 
 class RouteFileDestroyTest extends TestCase

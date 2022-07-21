@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Route;
 
-use App\Jobs\AnalyseActivityFile;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Pages\Route\Planner;
 use App\Http\Controllers\Controller;
 use App\Models\Route;
 use App\Models\RoutePath;
-use App\Models\RoutePoint;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use MStaack\LaravelPostgis\Geometries\LineString;
@@ -59,7 +58,7 @@ class PlannerController extends Controller
         foreach ($request->input('points', []) as $point) {
             $path->routePoints()->create([
                 'location' => new Point($point['lat'], $point['lng']),
-                'place_id' => $point['place_id'] ?? null
+                'place_id' => $point['place_id'] ?? null,
             ]);
         }
 
@@ -91,15 +90,13 @@ class PlannerController extends Controller
         foreach ($request->input('points', []) as $point) {
             $attributes = [
                 'location' => new Point($point['lat'], $point['lng']),
-                'place_id' => $point['place_id'] ?? null
+                'place_id' => $point['place_id'] ?? null,
             ];
             // If $point['id'] is set we can populate the new point with data from the given point ID.
 
             $path->routePoints()->create($attributes);
-
         }
 
         return redirect()->route('planner.edit', $route);
     }
-
 }

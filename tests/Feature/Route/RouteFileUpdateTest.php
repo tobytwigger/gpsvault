@@ -4,7 +4,6 @@ namespace Feature\Route;
 
 use App\Models\File;
 use App\Models\Route;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 

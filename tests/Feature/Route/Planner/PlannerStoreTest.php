@@ -5,12 +5,9 @@ namespace Feature\Route\Planner;
 use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePoint;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
-use PHPUnit\Framework\ExpectationFailedException;
 use Tests\TestCase;
 
 class PlannerStoreTest extends TestCase
@@ -95,8 +92,8 @@ class PlannerStoreTest extends TestCase
         $this->post(route('planner.store', [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
-            ]
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+            ],
         ]))
             ->assertRedirect(route('planner.edit', Route::first()->id));
     }
@@ -108,6 +105,7 @@ class PlannerStoreTest extends TestCase
      * @param mixed $key
      * @param mixed $value
      * @param mixed $error
+     * @param null|mixed $returnedOverrideKey
      */
     public function it_validates($key, $value, $error, $returnedOverrideKey = null)
     {
@@ -127,7 +125,7 @@ class PlannerStoreTest extends TestCase
             'points' => [
                 ['lat' => 55, 'lng' => 22],
                 ['lat' => 57, 'lng' => 20],
-            ]];
+            ], ];
 
         $response = $this->post(route('planner.store'), array_merge($default, [$key => $value]));
 
@@ -136,7 +134,6 @@ class PlannerStoreTest extends TestCase
         } else {
             $response->assertSessionHasErrors([$returnedOverrideKey => $error]);
         }
-
     }
 
     public function validationDataProvider(): array
@@ -164,7 +161,7 @@ class PlannerStoreTest extends TestCase
             ['points', [['lat' => 2, 'lng' => 181], ['lat' => 20, 'lng' => 20]], 'The points.0.lng must not be greater than 180.', 'points.0.lng'],
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => 500]], 'The selected points.0.place_id is invalid.', 'points.0.place_id'],
             ['points', [['lat' => 50, 'lng' => 20, 'place_id' => null]], false],
-            ['points', fn() => ['lat' => 50, 'lng' => 20, 'place_id' => Place::factory()->create()->id], false],
+            ['points', fn () => ['lat' => 50, 'lng' => 20, 'place_id' => Place::factory()->create()->id], false],
         ];
     }
 
@@ -175,10 +172,8 @@ class PlannerStoreTest extends TestCase
         $this->post(route('planner.store', [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21]
-            ]
+                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+            ],
         ]))->assertRedirect(route('login'));
     }
-
-
 }

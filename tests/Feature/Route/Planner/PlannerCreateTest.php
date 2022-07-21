@@ -21,5 +21,4 @@ class PlannerCreateTest extends TestCase
 
         $this->get(route('planner.create'))->assertInertia(fn (Assert $page) => $page->component('Route/Planner'));
     }
-
 }
