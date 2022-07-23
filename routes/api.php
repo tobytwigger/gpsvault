@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+Route::post('/token', [\App\Http\Controllers\Auth\SanctumAuthController::class, 'login']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
