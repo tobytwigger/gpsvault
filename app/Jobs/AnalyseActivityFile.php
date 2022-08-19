@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Activity;
 use App\Models\Route;
 use App\Models\Stats;
+use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Parser\Point;
 use Illuminate\Bus\Queueable;
@@ -13,11 +14,13 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Auth;
+use JobStatus\Trackable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseActivityFile implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     public Activity|Route $model;
 
@@ -30,6 +33,27 @@ class AnalyseActivityFile implements ShouldQueue
     {
         $this->queue = 'stats';
         $this->model = $model;
+    }
+
+    public static function canSeeTracking(User $user = null, array $tags = []): bool
+    {
+        $activity = Activity::findOrFail($tags['activityId'] ?? null);
+        if($user !== null && $activity->user_id === $user->id) {
+            return true;
+        }
+        return false;
+    }
+
+    public function tags(): array
+    {
+        return [
+            'activityId' => $this->model->id,
+        ];
+    }
+
+    public function alias(): string
+    {
+        return 'analyse-activity';
     }
 
     /**

@@ -1,135 +1,158 @@
 <template>
     <c-app-wrapper :title="activity.name" :action-sidebar="true">
-        <v-tabs
-            v-model="tab"
-            centered
-            grow
-            icons-and-text
-        >
-            <v-tabs-slider></v-tabs-slider>
+        <job-status job-alias="analyse-activity" :tags="{activityId: activity.id}">
+            <template v-slot:loading>
+                Loading...
+            </template>
+            <template v-slot:empty>
+                Empty
+            </template>
+            <template v-slot:error>
+                Error
+            </template>
+            <template v-slot:default="{status, lastMessage, complete, cancel, signal}">
+                <div v-if="complete">
+                    <v-tabs
+                        v-model="tab"
+                        centered
+                        grow
+                        icons-and-text
+                    >
+                        <v-tabs-slider></v-tabs-slider>
 
-            <v-tab href="#tab-summary" data-hint="Shows general information about the activity.">
-                Summary
-                <v-icon>mdi-information</v-icon>
-            </v-tab>
+                        <v-tab href="#tab-summary" data-hint="Shows general information about the activity.">
+                            Summary
+                            <v-icon>mdi-information</v-icon>
+                        </v-tab>
 
-            <v-tab href="#tab-analysis" data-hint="Dive into the data from your ride.">
-                Analysis
-                <v-icon>mdi-chart-areaspline-variant</v-icon>
-            </v-tab>
+                        <v-tab href="#tab-analysis" data-hint="Dive into the data from your ride.">
+                            Analysis
+                            <v-icon>mdi-chart-areaspline-variant</v-icon>
+                        </v-tab>
 
-            <v-tab href="#tab-social" data-hint="See how people interacted with your ride.">
-                Social
-                <v-icon>mdi-account-group</v-icon>
-            </v-tab>
+                        <v-tab href="#tab-social" data-hint="See how people interacted with your ride.">
+                            Social
+                            <v-icon>mdi-account-group</v-icon>
+                        </v-tab>
 
-            <v-tab href="#tab-files" data-hint="Upload any photos, documents or other files associated with the ride.">
-                Files
-                <v-icon>mdi-file-document-multiple</v-icon>
-            </v-tab>
-        </v-tabs>
+                        <v-tab href="#tab-files" data-hint="Upload any photos, documents or other files associated with the ride.">
+                            Files
+                            <v-icon>mdi-file-document-multiple</v-icon>
+                        </v-tab>
+                    </v-tabs>
 
-        <v-tabs-items v-model="tab">
-            <v-tab-item value="tab-summary">
-                <v-row>
-                    <v-col>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="activity.description">
-                                    {{ activity.description }}
-                                </div>
-                                <div v-else>
-                                    No description
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row v-if="startedAt">
-                            <v-col>
-                                <v-chip class="ma-2">
-                                    <v-icon>mdi-map-marker</v-icon>
-                                    {{ startedAt.value }}
-                                </v-chip>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8">
-                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col>
-                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
-                        <div v-else>No stats available</div>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col class="pa-8">
-                        <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-            <v-tab-item value="tab-analysis">
-                <c-activity-analysis :activity="activity"></c-activity-analysis>
-            </v-tab-item>
-            <v-tab-item value="tab-social">
-                <v-row>
-                    <v-col v-if="hasKudos">
-                        <v-list>
-                            <v-subheader>Kudos
-                                <v-badge :value="kudosCount" :content="kudosCount" inline></v-badge>
-                            </v-subheader>
+                    <v-tabs-items v-model="tab">
+                        <v-tab-item value="tab-summary">
+                            <v-row>
+                                <v-col>
+                                    <v-row>
+                                        <v-col class="px-8 pt-8">
+                                            <div v-if="activity.description">
+                                                {{ activity.description }}
+                                            </div>
+                                            <div v-else>
+                                                No description
+                                            </div>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row v-if="startedAt">
+                                        <v-col>
+                                            <v-chip class="ma-2">
+                                                <v-icon>mdi-map-marker</v-icon>
+                                                {{ startedAt.value }}
+                                            </v-chip>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col class="px-8">
+                                            <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
+                                        </v-col>
+                                    </v-row>
+                                </v-col>
+                                <v-col>
+                                    <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
+                                    <div v-else>No stats available</div>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col class="pa-8">
+                                    <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
+                                </v-col>
+                            </v-row>
+                        </v-tab-item>
+                        <v-tab-item value="tab-analysis">
+                            <c-activity-analysis :activity="activity"></c-activity-analysis>
+                        </v-tab-item>
+                        <v-tab-item value="tab-social">
+                            <v-row>
+                                <v-col v-if="hasKudos">
+                                    <v-list>
+                                        <v-subheader>Kudos
+                                            <v-badge :value="kudosCount" :content="kudosCount" inline></v-badge>
+                                        </v-subheader>
 
-                            <v-list-item v-for="k in kudos" :key="k.id">
-                                <v-list-item-content>
-                                    <v-list-item-title>{{ k.name }}</v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </v-col>
-                    <v-col>
-                        <v-list two-line v-if="hasComments">
-                            <v-subheader>Comments
-                                <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
-                            </v-subheader>
+                                        <v-list-item v-for="k in kudos" :key="k.id">
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{ k.name }}</v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-col>
+                                <v-col>
+                                    <v-list two-line v-if="hasComments">
+                                        <v-subheader>Comments
+                                            <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
+                                        </v-subheader>
 
-                            <template v-for="comment in comments">
-                                <v-list-item
-                                    :key="comment.id"
-                                >
-                                    <v-list-item-content>
-                                        <v-list-item-title>{{ comment.name }}</v-list-item-title>
-                                        <v-list-item-subtitle>
-                                            <span class="text--primary">{{formatDateTime(comment.posted_at)}}</span>
-                                            &mdash; {{comment.text}} </v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </template>
-                        </v-list>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-            <v-tab-item value="tab-files">
-                <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
-                    <template v-slot:activator="{trigger,showing}">
-                        <v-btn
-                            color="secondary"
-                            @click.stop="trigger"
-                            :disabled="showing"
-                            data-hint="Add a new file or image by clicking here."
-                        >
-                            <v-icon>mdi-upload</v-icon>
-                            Upload file
-                        </v-btn>
-                    </template>
-                </c-file-form-dialog>
-                <c-manage-activity-media :activity="activity"></c-manage-activity-media>
-            </v-tab-item>
-        </v-tabs-items>
+                                        <template v-for="comment in comments">
+                                            <v-list-item
+                                                :key="comment.id"
+                                            >
+                                                <v-list-item-content>
+                                                    <v-list-item-title>{{ comment.name }}</v-list-item-title>
+                                                    <v-list-item-subtitle>
+                                                        <span class="text--primary">{{formatDateTime(comment.posted_at)}}</span>
+                                                        &mdash; {{comment.text}} </v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </template>
+                                    </v-list>
+                                </v-col>
+                            </v-row>
+                        </v-tab-item>
+                        <v-tab-item value="tab-files">
+                            <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
+                                <template v-slot:activator="{trigger,showing}">
+                                    <v-btn
+                                        color="secondary"
+                                        @click.stop="trigger"
+                                        :disabled="showing"
+                                        data-hint="Add a new file or image by clicking here."
+                                    >
+                                        <v-icon>mdi-upload</v-icon>
+                                        Upload file
+                                    </v-btn>
+                                </template>
+                            </c-file-form-dialog>
+                            <c-manage-activity-media :activity="activity"></c-manage-activity-media>
+                        </v-tab-item>
+                    </v-tabs-items>
+                </div>
+                <div v-else>
+                    <p>Status: {{status}}</p>
+                    <p>Last Message: {{lastMessage}}</p>
+                    <p>Complete? {{complete ? 'Yes' : 'No'}}</p>
+                    <button @click="cancel()">Cancel</button>
+                    <button @click="signal('mysignal')">Signal</button>
+                </div>
+            </template>
+        </job-status>
+
 
         <template #sidebar>
             <v-list>
