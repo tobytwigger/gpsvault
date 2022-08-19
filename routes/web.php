@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessPodcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +13,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+
+Route::post('/podcast',function() {
+    ProcessPodcast::dispatch(true)->delay(now()->addSeconds(1));
+});
+
+Route::post('/podcast/fake',function() {
+    ProcessPodcast::dispatch(false)->delay(now()->addSeconds(1));
+});
+Route::post('/podcast/reset', fn() => \JobStatus\Models\JobStatus::all()->each(fn(\JobStatus\Models\JobStatus $jobStatus) => $jobStatus->delete()));
 
 /* Public */
 Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'welcome'])->name('welcome');
