@@ -10,7 +10,6 @@ use Illuminate\Validation\ValidationException;
 
 class SanctumAuthController extends Controller
 {
-
     public function login(Request $request)
     {
         $request->validate([
@@ -29,5 +28,4 @@ class SanctumAuthController extends Controller
 
         return $user->createToken($request->device_name)->plainTextToken;
     }
-
 }

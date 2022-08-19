@@ -27,11 +27,11 @@ class PlannerEditTest extends TestCase
                 ->has(
                     'routeModel',
                     fn (Assert $page) => $page
-                ->where('id', $route->id)
-                ->where('description', $route->description)
-                ->where('notes', $route->notes)
-                ->where('user_id', $this->user->id)
-                ->etc()
+                        ->where('id', $route->id)
+                        ->where('description', $route->description)
+                        ->where('notes', $route->notes)
+                        ->where('user_id', $this->user->id)
+                        ->etc()
                 ));
     }
 
