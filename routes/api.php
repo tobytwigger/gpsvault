@@ -20,4 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('activity', \App\Http\Controllers\Api\ActivityController::class);
+
+Route::middleware('auth:sanctum')->as('api.')->group(function() {
+    Route::apiResource('activity', \App\Http\Controllers\Api\ActivityController::class);
+});
+
