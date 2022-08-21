@@ -19,3 +19,5 @@ Route::post('/token', [\App\Http\Controllers\Auth\SanctumAuthController::class, 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('activity', \App\Http\Controllers\Api\ActivityController::class);
