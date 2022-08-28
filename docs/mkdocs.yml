@@ -16,6 +16,9 @@ nav:
       - Backing up your data: backup/adding.md
   - Developers:
       - Getting Started: developers/get-started.md
+      - Activities: developers/activities.md
+      - Analysis: developers/analysis.md
+      - Routes: developers/routes.md
 theme:
   name: material
   features:

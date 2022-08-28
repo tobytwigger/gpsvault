@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Tasks;
+namespace Tests\Unit\Jobs;
 
 use App\Jobs\CreateBackup;
 use App\Models\Activity;
@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use Prophecy\Argument;
 use Tests\TestCase;
 
-class CreateBackupTaskTest extends TestCase
+class CreateBackupTest extends TestCase
 {
     /** @test */
     public function it_creates_an_export_and_creates_a_file()

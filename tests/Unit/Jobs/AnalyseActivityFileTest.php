@@ -4,7 +4,7 @@ namespace Unit\Jobs;
 
 use PHPUnit\Framework\TestCase;
 
-class AnalyseRouteFileTest extends TestCase
+class AnalyseActivityFileTest extends TestCase
 {
 
     /** @test */
