@@ -8,7 +8,7 @@ use App\Models\Route;
 use App\Models\User;
 use Tests\TestCase;
 
-class RouteTest extends TestCase
+class RoutePathTest extends TestCase
 {
 
     /** @test */
