@@ -12,7 +12,7 @@ class AnalysisTest extends TestCase
     /** @test */
     public function it_analyses_a_gpx_file()
     {
-        $this->markTestIncomplete('Simplify to only give raw data and retest');
+        $this->markTestIncomplete('Simplify to only give raw data and retest. Test both s3 and local disks');
 
         $file = File::factory()->dartmoorDevilGpx()->create();
 

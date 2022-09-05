@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use phpGPX\phpGPX;
 
 class GpxParser implements ParserContract
@@ -13,7 +14,12 @@ class GpxParser implements ParserContract
     public function read(File $file): Analysis
     {
         $gpx = new phpGPX();
-        $file = $gpx->load($file->fullPath());
+        if($file->disk === 's3') {
+            $path = Storage::put(tempnam(sys_get_temp_dir()), $file->getFileContents());
+            $file = $gpx->load($path);
+        } else {
+            $file = $gpx->load($file->fullPath());
+        }
         $points = collect();
 
         foreach ($file->tracks as $track) {
