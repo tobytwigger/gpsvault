@@ -18,6 +18,7 @@ class GpxParser implements ParserContract
             $localPath = tempnam(sys_get_temp_dir(), 'gpx_parser');
             Storage::put($localPath, $file->getFileContents());
             $file = $gpx->load($localPath);
+            Storage::delete($localPath);
         } else {
             $file = $gpx->load($file->fullPath());
         }
