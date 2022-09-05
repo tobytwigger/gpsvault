@@ -83,7 +83,6 @@ return [
             'unit_system',
             'dark_mode',
             'stats_order_preference',
-            'bruit_api_key',
         ],
     ],
 

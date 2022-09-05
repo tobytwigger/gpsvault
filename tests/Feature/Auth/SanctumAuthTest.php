@@ -12,5 +12,6 @@ class SanctumAuthTest extends TestCase
     /** @test */
     public function unfinished()
     {
+        $this->markTestSkipped();
     }
 }

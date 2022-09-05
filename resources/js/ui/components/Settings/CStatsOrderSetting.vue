@@ -43,7 +43,7 @@ export default {
                 stats_order_preference: this.$setting.stats_order_preference
             }),
             sources: {
-                php: {text: 'Cycle Store', value: 'php', description: 'Our own analysis of your activities.'},
+                php: {text: 'GPS Vault', value: 'php', description: 'Our own analysis of your activities.'},
                 strava: {text: 'Strava', value: 'strava', description: 'Analysis done by Strava.'},
             }
         }

@@ -64,6 +64,7 @@ class AnalyseActivityFile implements ShouldQueue
         if (!$this->model->hasFile()) {
             throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
         }
+
         $analysis = Analyser::analyse($this->model->file);
 
         $stats = Stats::updateOrCreate(

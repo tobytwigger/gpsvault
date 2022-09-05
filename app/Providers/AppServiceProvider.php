@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Settings\BruitAPIKey;
 use App\Settings\DarkMode;
 use App\Settings\StatsOrder;
 use App\Settings\StravaClient;
@@ -36,6 +35,5 @@ class AppServiceProvider extends ServiceProvider
         Setting::register(new DarkMode());
         Setting::register(new StravaClient());
         Setting::register(new StatsOrder());
-        Setting::register(new BruitAPIKey());
     }
 }

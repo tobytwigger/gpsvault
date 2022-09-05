@@ -3,7 +3,7 @@
     <v-app-bar app clipped-left>
         <v-spacer></v-spacer>
 
-        <v-toolbar-title>Cycle Store - {{title}}</v-toolbar-title>
+        <v-toolbar-title>GPS Vault - {{title}}</v-toolbar-title>
 
         <v-spacer></v-spacer>
 

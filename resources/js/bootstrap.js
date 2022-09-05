@@ -41,7 +41,7 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: 'cycle-store',
+    key: 'gps-vault',
     wsHost: window.location.hostname,
     wsPort: 6001,
     wssPort: 6001,

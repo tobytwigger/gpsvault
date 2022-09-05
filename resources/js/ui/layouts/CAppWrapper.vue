@@ -2,7 +2,7 @@
     <c-base-page :title="title">
         <c-sidebar v-model="showingSidebar"></c-sidebar>
 
-        <c-app-nav-bar title="Cycle Store" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
+        <c-app-nav-bar title="GPS Vault" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
 
         <v-main >
             <v-container style="height: 100%" fluid>
