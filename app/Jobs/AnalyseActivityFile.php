@@ -62,11 +62,15 @@ class AnalyseActivityFile implements ShouldQueue
     public function handle()
     {
         if (!$this->model->hasFile()) {
+            $this->errorMessage(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
             throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
         }
 
+        $this->line('Starting analysis');
         $analysis = Analyser::analyse($this->model->file);
+        $this->successMessage('Analysis finished');
 
+        $this->line('Saving data');
         $stats = Stats::updateOrCreate(
             ['integration' => 'php', 'stats_id' => $this->model->id, 'stats_type' => get_class($this->model)],
             [
@@ -99,13 +103,20 @@ class AnalyseActivityFile implements ShouldQueue
         );
 
         $this->savePoints($stats, $analysis->getPoints());
+
+        $this->successMessage('Saved data');
+
     }
 
     private function savePoints(Stats $stats, array $points)
     {
         $stats->waypoints()->delete();
 
-        foreach (collect($points)->chunk(1000) as $chunkedPoints) {
+        $waypoints = collect($points)->chunk(1000);
+        $percentage = 0;
+        $increase = 100 / $waypoints->count();
+
+        foreach ($waypoints as $chunkedPoints) {
             $stats->waypoints()->createMany($chunkedPoints->map(fn (Point $point) => [
                 'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
                 'elevation' => $point->getElevation(),
@@ -119,6 +130,8 @@ class AnalyseActivityFile implements ShouldQueue
                 'calories' => $point->getCalories(),
                 'cumulative_distance' => $point->getCumulativeDistance(),
             ]));
+            $percentage += $increase;
+            $this->percentage($percentage);
         }
     }
 
