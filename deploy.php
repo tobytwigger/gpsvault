@@ -60,7 +60,4 @@ after('deploy:failed', 'deploy:unlock');
 //after('deploy:success', function() {
 //    run('php {{release_path}}/artisan websockets:restart');
 //});
-after('deploy:success', function () {
-    run(artisan('horizon:terminate'));
-//    run('sudo apachectl graceful');
-});
+after('deploy:success', artisan('horizon:terminate'));
