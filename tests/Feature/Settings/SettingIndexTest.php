@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class SettingIndexTest extends TestCase
 {
-
     /** @test */
     public function it_loads_the_right_component()
     {

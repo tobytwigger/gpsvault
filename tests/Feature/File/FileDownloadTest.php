@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class FileDownloadTest extends TestCase
 {
-
     /** @test */
     public function it_downloads_a_file()
     {

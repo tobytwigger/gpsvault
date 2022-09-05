@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ResetRateLimitTest extends TestCase
 {
-
     /** @test */
     public function it_resets_the_15_minute_limit()
     {

@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class GeoJsonTest extends TestCase
 {
-
     /** @test */
     public function you_get_a_list_of_points()
     {

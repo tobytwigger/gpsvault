@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class TourShowTest extends TestCase
 {
-
     /** @test */
     public function it_shows_the_tour()
     {

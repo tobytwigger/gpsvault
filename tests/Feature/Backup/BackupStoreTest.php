@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class BackupStoreTest extends TestCase
 {
-
     /** @test */
     public function it_creates_a_sync_with_a_backup_task()
     {

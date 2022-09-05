@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ActivityDuplicateTest extends TestCase
 {
-
     /** @test */
     public function it_identifies_if_a_file_is_not_a_duplicate()
     {

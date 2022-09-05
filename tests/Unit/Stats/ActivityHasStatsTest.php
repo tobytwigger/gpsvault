@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class ActivityHasStatsTest extends TestCase
 {
-
     /** @test */
     public function stats_can_be_attached_to_an_activity()
     {

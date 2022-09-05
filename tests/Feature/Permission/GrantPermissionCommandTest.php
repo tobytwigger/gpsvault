@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class GrantPermissionCommandTest extends TestCase
 {
-
     /** @test */
     public function it_gives_the_user_a_permission()
     {

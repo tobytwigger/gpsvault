@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class TourIndexTest extends TestCase
 {
-
     /** @test */
     public function index_loads_tours_ordered_by_date()
     {

@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class AnalyseActivityFilesCommandTest extends TestCase
 {
-
     /** @test */
     public function it_fires_an_analysis_job_for_the_given_activity()
     {

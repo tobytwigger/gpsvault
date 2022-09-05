@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ClientNotAvailableTest extends TestCase
 {
-
     /** @test */
     public function it_sets_the_message_and_code()
     {

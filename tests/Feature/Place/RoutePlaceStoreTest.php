@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RoutePlaceStoreTest extends TestCase
 {
-
     /** @test */
     public function it_attaches_the_route_place()
     {

@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class GeocoderCacheTest extends TestCase
 {
-
     /** @test */
     public function it_returns_the_cached_version_if_in_cache()
     {

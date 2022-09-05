@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class StageStoreTest extends TestCase
 {
-
     /** @test */
     public function it_creates_a_stage_and_shows_the_tour()
     {

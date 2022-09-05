@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class RouteFileStoreTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_403_if_you_do_not_own_the_route()
     {

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class AcceptInvitationTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_link_is_invalid()
     {

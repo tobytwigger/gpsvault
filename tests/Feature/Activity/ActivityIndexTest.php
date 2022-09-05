@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class ActivityIndexTest extends TestCase
 {
-
     /** @test */
     public function index_loads_activities_ordered_by_date()
     {

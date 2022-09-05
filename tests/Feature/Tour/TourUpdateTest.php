@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class TourUpdateTest extends TestCase
 {
-
     /** @test */
     public function an_tour_can_be_updated()
     {

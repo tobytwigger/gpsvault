@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ActivityDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_the_activity()
     {

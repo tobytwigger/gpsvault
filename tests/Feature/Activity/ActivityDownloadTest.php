@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class ActivityDownloadTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_403_if_you_download_an_activity_that_isnt_yours()
     {

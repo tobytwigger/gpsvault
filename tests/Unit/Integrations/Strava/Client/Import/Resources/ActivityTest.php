@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class ActivityTest extends TestCase
 {
-
     /** @test */
     public function it_creates_a_new_activity()
     {

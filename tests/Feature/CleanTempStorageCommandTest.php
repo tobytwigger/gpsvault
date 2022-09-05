@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class CleanTempStorageCommandTest extends TestCase
 {
-
     /** @test */
     public function it_removes_everything_older_than_12_hours()
     {

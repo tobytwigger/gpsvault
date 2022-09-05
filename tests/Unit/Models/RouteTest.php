@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class RouteTest extends TestCase
 {
-
     /** @test */
     public function the_user_id_is_automatically_set_on_creation_if_null()
     {
@@ -89,7 +88,7 @@ class RouteTest extends TestCase
 
         $this->assertContainsOnlyInstancesOf(RoutePath::class, $foundPaths);
 
-        foreach($paths as $path) {
+        foreach ($paths as $path) {
             $this->assertTrue($path->is($foundPaths->shift()));
         }
     }

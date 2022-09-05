@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class BackupIndexTest extends TestCase
 {
-
     /** @test */
     public function index_loads_backups_ordered_by_date()
     {

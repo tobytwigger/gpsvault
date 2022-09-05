@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_related_models_on_delete()
     {

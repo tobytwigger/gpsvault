@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RouteFileDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_the_route_file()
     {

@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class StageUpdateTest extends TestCase
 {
-
     /** @test */
     public function it_updates_a_stage_and_shows_the_tour()
     {

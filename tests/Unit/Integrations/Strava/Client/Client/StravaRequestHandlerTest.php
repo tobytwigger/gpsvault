@@ -16,7 +16,6 @@ use Tests\TestCase;
 
 class StravaRequestHandlerTest extends TestCase
 {
-
     /** @test */
     public function unauthenticated_request_makes_a_request()
     {

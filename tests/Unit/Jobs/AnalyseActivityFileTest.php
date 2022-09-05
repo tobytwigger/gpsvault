@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class AnalyseActivityFileTest extends TestCase
 {
-
     /** @test */
     public function it_throws_an_exception_if_an_activity_is_missing_a_file()
     {
@@ -51,7 +50,7 @@ class AnalyseActivityFileTest extends TestCase
         ]);
 
         $analyser = $this->prophesize(AnalysisFactoryContract::class);
-        $analyser->analyse(Argument::that(fn($arg) => $file->is($arg)))->shouldBeCalled()->willReturn($analysisResult);
+        $analyser->analyse(Argument::that(fn ($arg) => $file->is($arg)))->shouldBeCalled()->willReturn($analysisResult);
         $this->app->instance(AnalysisFactoryContract::class, $analyser->reveal());
         Analyser::swap($analyser->reveal());
 
@@ -64,7 +63,5 @@ class AnalyseActivityFileTest extends TestCase
         ]);
 
         $this->markTestIncomplete('Need to map the stats further');
-
     }
-
 }

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ActivityUpdateTest extends TestCase
 {
-
     /** @test */
     public function an_activity_can_be_updated()
     {

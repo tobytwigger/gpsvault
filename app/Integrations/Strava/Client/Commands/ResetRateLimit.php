@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 
 class ResetRateLimit extends Command
 {
-
     /**
      * The name and signature of the console command.
      *

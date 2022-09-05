@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class StatAdderTest extends TestCase
 {
-
     /** @test */
     public function it_adds_the_distance_of_many_stats()
     {

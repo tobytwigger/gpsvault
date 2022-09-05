@@ -6,7 +6,6 @@ use Tests\TestCase;
 
 class LoadStravaActivityTest extends TestCase
 {
-
     /** @test */
     public function incomplete()
     {
