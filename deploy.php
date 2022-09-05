@@ -61,6 +61,6 @@ after('deploy:failed', 'deploy:unlock');
 //    run('php {{release_path}}/artisan websockets:restart');
 //});
 after('deploy:success', function () {
-//    run('sudo supervisorctl restart all');
+    run(artisan('horizon:terminate'));
 //    run('sudo apachectl graceful');
 });

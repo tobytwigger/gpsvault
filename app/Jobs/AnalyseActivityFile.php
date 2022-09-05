@@ -114,7 +114,7 @@ class AnalyseActivityFile implements ShouldQueue
 
         $waypoints = collect($points)->chunk(1000);
         $percentage = 0;
-        $increase = 100 / $waypoints->count();
+        $increase = 100 / ($waypoints->count() < 1 ? 1 : $waypoints->count());
 
         foreach ($waypoints as $chunkedPoints) {
             $stats->waypoints()->createMany($chunkedPoints->map(fn (Point $point) => [
