@@ -27,6 +27,7 @@ host('gpsvault.co.uk')
 task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
+    'horizon:publish',
     'assets:compile',
     'assets:upload',
     'artisan:migrate',
@@ -39,6 +40,8 @@ task('deploy', [
     'artisan:optimize',
     'deploy:publish',
 ]);
+
+task('horizon:publish', artisan('horizon:publish'));
 
 task('assets:compile', function () {
     runLocally('npm install');
