@@ -3,16 +3,14 @@
 namespace App\Models;
 
 use App\Jobs\AnalyseRouteFile;
-use App\Traits\HasStats;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Searchable;
-use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Route extends Model
 {
-    use HasFactory, HasStats, Searchable;
+    use HasFactory, Searchable;
 
     protected $fillable = [
         'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation',

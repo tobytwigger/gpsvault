@@ -66,7 +66,7 @@ class ActivityHasStatsTest extends TestCase
         $activity = Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
         $activity->analyse();
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $activity->is($job->model));
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $activity->is($job->activity));
     }
 
     /** @test */

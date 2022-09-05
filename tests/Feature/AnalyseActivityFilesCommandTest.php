@@ -22,7 +22,7 @@ class AnalyseActivityFilesCommandTest extends TestCase
             ->expectsOutput('Set 1 activities for analysis.')
             ->assertSuccessful();
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model->is($activity));
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->activity->is($activity));
     }
 
     /** @test */
@@ -38,7 +38,7 @@ class AnalyseActivityFilesCommandTest extends TestCase
 
         Bus::assertDispatchedTimes(AnalyseActivityFile::class, 10);
         foreach ($activities as $activity) {
-            Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model->is($activity));
+            Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->activity->is($activity));
         }
     }
 }

@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : [],
+            'bruit_api_key' => config('services.bruit.key')
         ]);
     }
 }

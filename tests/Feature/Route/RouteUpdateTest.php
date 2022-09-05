@@ -119,7 +119,7 @@ class RouteUpdateTest extends TestCase
             'file' => $file,
         ]);
 
-        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->route->file->filename === 'filename.gpx');
     }
 
     /** @test */
@@ -148,6 +148,6 @@ class RouteUpdateTest extends TestCase
             'file' => $file,
         ]);
 
-        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->route->file->filename === 'filename.gpx');
     }
 }

@@ -9,7 +9,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point as PostgisPoint;
@@ -19,17 +18,17 @@ class AnalyseRouteFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public Route $model;
+    public Route $route;
 
     public $tries = 3;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Route $model)
+    public function __construct(Route $route)
     {
         $this->queue = 'stats';
-        $this->model = $model;
+        $this->route = $route;
     }
 
     /**
@@ -37,10 +36,10 @@ class AnalyseRouteFile implements ShouldQueue
      */
     public function handle()
     {
-        if (!$this->model->hasFile()) {
-            throw new NotFoundHttpException(sprintf('Route %u does not have a model associated with it.', $this->model->id));
+        if ($this->route->file_id === null) {
+            throw new NotFoundHttpException(sprintf('Route %u does not have a file associated with it.', $this->route->id));
         }
-        $analysis = Analyser::analyse($this->model->file);
+        $analysis = Analyser::analyse($this->route->file);
 
         $linestring = new LineString(
             collect($analysis->getPoints())
@@ -48,17 +47,10 @@ class AnalyseRouteFile implements ShouldQueue
                 ->all()
         );
 
-        $this->model->routePaths()->create([
+        $this->route->routePaths()->create([
             'linestring' => $linestring,
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
         ]);
-    }
-
-    public function middleware()
-    {
-        return [
-            (new WithoutOverlapping('RouteAnalyser')),
-        ];
     }
 }

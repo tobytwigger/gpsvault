@@ -61,7 +61,7 @@
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-route-map :places="places.data" :geojson="routePath"></c-route-map>
+                        <c-route-map :places="places.data" v-if="routePath" :geojson="routePath"></c-route-map>
                     </v-col>
                 </v-row>
             </v-tab-item>
@@ -225,13 +225,16 @@ export default {
     },
     computed: {
         pageTitle() {
-            return this.routeModel.name ?? 'New Route';
+            return this.routeModel?.name ?? 'New Route';
         },
         routePath() {
-            return {
-                type: 'LineString',
-                coordinates: this.routeModel.path.linestring.map(c => [c.coordinates[0], c.coordinates[1]])
+            if(this.routeModel.path) {
+                return {
+                    type: 'LineString',
+                    coordinates: this.routeModel.path.linestring.map(c => [c.coordinates[0], c.coordinates[1]])
+                }
             }
+            return null;
         }
     }
 }

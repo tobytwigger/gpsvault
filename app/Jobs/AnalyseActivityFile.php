@@ -11,7 +11,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use JobStatus\Trackable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,17 +19,17 @@ class AnalyseActivityFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
-    public Activity $model;
+    public Activity $activity;
 
     public $tries = 3;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Activity $model)
+    public function __construct(Activity $activity)
     {
         $this->queue = 'stats';
-        $this->model = $model;
+        $this->activity = $activity;
     }
 
     public static function canSeeTracking(User $user = null, array $tags = []): bool
@@ -46,7 +45,7 @@ class AnalyseActivityFile implements ShouldQueue
     public function tags(): array
     {
         return [
-            'activityId' => $this->model->id,
+            'activityId' => $this->activity->id,
         ];
     }
 
@@ -60,19 +59,19 @@ class AnalyseActivityFile implements ShouldQueue
      */
     public function handle()
     {
-        if (!$this->model->hasFile()) {
-            $this->errorMessage(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
+        if (!$this->activity->hasFile()) {
+            $this->errorMessage(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
 
-            throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
+            throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
         }
 
         $this->line('Starting analysis');
-        $analysis = Analyser::analyse($this->model->file);
+        $analysis = Analyser::analyse($this->activity->file);
         $this->successMessage('Analysis finished');
 
         $this->line('Saving data');
         $stats = Stats::updateOrCreate(
-            ['integration' => 'php', 'stats_id' => $this->model->id, 'stats_type' => get_class($this->model)],
+            ['integration' => 'php', 'stats_id' => $this->activity->id, 'stats_type' => get_class($this->activity)],
             [
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),

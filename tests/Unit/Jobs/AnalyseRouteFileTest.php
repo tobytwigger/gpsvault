@@ -20,7 +20,7 @@ class AnalyseRouteFileTest extends TestCase
     {
         $route = Route::factory()->create(['file_id' => null]);
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Route ' . $route->id . ' does not have a model associated with it.');
+        $this->expectExceptionMessage('Route ' . $route->id . ' does not have a file associated with it.');
 
         $job = new AnalyseRouteFile($route);
         $job->handle();

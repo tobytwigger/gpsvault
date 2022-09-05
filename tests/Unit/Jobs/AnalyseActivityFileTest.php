@@ -18,10 +18,9 @@ class AnalyseActivityFileTest extends TestCase
     {
         $activity = Activity::factory()->create(['file_id' => null]);
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Activity ' . $activity->id . ' does not have a model associated with it.');
+        $this->expectExceptionMessage('Activity ' . $activity->id . ' does not have a file associated with it.');
 
-        $job = new AnalyseActivityFile($activity);
-        $job->handle();
+        dispatch_sync(new AnalyseActivityFile($activity));
     }
 
     /** @test */
@@ -31,8 +30,7 @@ class AnalyseActivityFileTest extends TestCase
             'file_id' => File::factory()->routeFile()->create()->id,
         ]);
 
-        $job = new AnalyseActivityFile($activity);
-        $job->handle();
+        dispatch_sync(new AnalyseActivityFile($activity));
 
         $this->assertDatabaseHas('stats', [
             'stats_id' => $activity->id,
@@ -54,8 +52,7 @@ class AnalyseActivityFileTest extends TestCase
         $this->app->instance(AnalysisFactoryContract::class, $analyser->reveal());
         Analyser::swap($analyser->reveal());
 
-        $job = new AnalyseActivityFile($activity);
-        $job->handle();
+        dispatch_sync(new AnalyseActivityFile($activity));
 
         $this->assertDatabaseHas('stats', [
             'stats_id' => $activity->id,
