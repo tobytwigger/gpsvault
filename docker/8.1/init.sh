@@ -1,3 +1,5 @@
+CREATE USER sail;
+
 PGPASSWORD="${PGPASSWORD}" psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
 CREATE DATABASE cycle_store_testing;
 CREATE DATABASE cycle_store_testing_test_1;
