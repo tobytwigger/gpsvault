@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class ActivityStoreTest extends TestCase
 {
-
     /** @test */
     public function it_creates_an_activity_from_a_file()
     {

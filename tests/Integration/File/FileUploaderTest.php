@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class FileUploaderTest extends TestCase
 {
-
     /** @test */
     public function it_saves_a_file_with_contents()
     {

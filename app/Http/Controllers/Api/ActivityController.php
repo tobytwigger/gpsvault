@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +28,7 @@ class ActivityController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -40,7 +39,7 @@ class ActivityController extends Controller
      */
     public function show(ActivityController $activity)
     {
-        //
+        
     }
 
     /**
@@ -52,7 +51,7 @@ class ActivityController extends Controller
      */
     public function update(Request $request, ActivityController $activity)
     {
-        //
+        
     }
 
     /**
@@ -63,6 +62,6 @@ class ActivityController extends Controller
      */
     public function destroy(ActivityController $activity)
     {
-        //
+        
     }
 }

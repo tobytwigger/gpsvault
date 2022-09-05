@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class PlannerCreateTest extends TestCase
 {
-
     /** @test */
     public function you_must_be_authenticated()
     {

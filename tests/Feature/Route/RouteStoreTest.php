@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class RouteStoreTest extends TestCase
 {
-
     /** @test */
     public function it_creates_an_route_from_a_file()
     {

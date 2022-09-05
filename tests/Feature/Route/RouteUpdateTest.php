@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class RouteUpdateTest extends TestCase
 {
-
     /** @test */
     public function a_route_can_be_updated()
     {

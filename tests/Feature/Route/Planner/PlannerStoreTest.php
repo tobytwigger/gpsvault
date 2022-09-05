@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class PlannerStoreTest extends TestCase
 {
-
     /** @test */
     public function it_adds_a_route_data()
     {

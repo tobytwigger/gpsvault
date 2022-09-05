@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class InstallPermissionCommandTest extends TestCase
 {
-
     /** @test */
     public function it_installs_all_permissions()
     {

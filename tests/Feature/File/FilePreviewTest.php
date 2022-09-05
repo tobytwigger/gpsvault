@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class FilePreviewTest extends TestCase
 {
-
     /** @test */
     public function it_previews_a_file()
     {

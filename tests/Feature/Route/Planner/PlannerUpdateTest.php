@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class PlannerUpdateTest extends TestCase
 {
-
     /** @test */
     public function it_updates_route_data()
     {

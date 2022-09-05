@@ -14,7 +14,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 use JobStatus\Trackable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -38,9 +37,10 @@ class AnalyseActivityFile implements ShouldQueue
     public static function canSeeTracking(User $user = null, array $tags = []): bool
     {
         $activity = Activity::findOrFail($tags['activityId'] ?? null);
-        if($user !== null && $activity->user_id === $user->id) {
+        if ($user !== null && $activity->user_id === $user->id) {
             return true;
         }
+
         return false;
     }
 

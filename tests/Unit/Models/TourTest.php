@@ -13,7 +13,6 @@ use Tests\TestCase;
 
 class TourTest extends TestCase
 {
-
     /** @test */
     public function it_has_a_relationship_to_stages()
     {

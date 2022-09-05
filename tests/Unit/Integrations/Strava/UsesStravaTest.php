@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class UsesStravaTest extends TestCase
 {
-
     /** @test */
     public function strava_tokens_are_deleted_on_user_delete()
     {

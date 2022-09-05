@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class PlaceIndexTest extends TestCase
 {
-
     /** @test */
     public function index_loads_places_ordered_by_name()
     {

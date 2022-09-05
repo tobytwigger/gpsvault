@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class SettingStoreTest extends TestCase
 {
-
     /** @test */
     public function dark_mode_can_be_updated()
     {
@@ -124,5 +123,4 @@ class SettingStoreTest extends TestCase
         $this->get(route('settings.store'))
             ->assertRedirect(route('login'));
     }
-
 }

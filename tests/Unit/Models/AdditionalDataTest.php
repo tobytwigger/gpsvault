@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class AdditionalDataTest extends TestCase
 {
-
     /**
      * @test
      * @dataProvider storableData

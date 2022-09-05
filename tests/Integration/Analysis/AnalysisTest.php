@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class AnalysisTest extends TestCase
 {
-
     /** @test */
     public function it_analyses_a_gpx_file()
     {

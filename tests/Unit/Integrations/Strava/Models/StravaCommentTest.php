@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class StravaCommentTest extends TestCase
 {
-
     /** @test */
     public function it_has_a_name_attribute()
     {

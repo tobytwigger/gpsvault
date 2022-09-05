@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class PlaceTest extends TestCase
 {
-
     /** @test */
     public function it_has_many_routes()
     {

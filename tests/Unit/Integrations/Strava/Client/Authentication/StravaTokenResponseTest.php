@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class StravaTokenResponseTest extends TestCase
 {
-
     /** @test */
     public function it_can_be_created_with_values()
     {

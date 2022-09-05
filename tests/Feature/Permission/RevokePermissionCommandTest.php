@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class RevokePermissionCommandTest extends TestCase
 {
-
     /** @test */
     public function it_removes_a_permission_from_a_user()
     {

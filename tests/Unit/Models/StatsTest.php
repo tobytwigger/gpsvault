@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class StatsTest extends TestCase
 {
-
     /** @test */
     public function it_has_a_relationship_to_a_model()
     {

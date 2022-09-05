@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class RouteShowTest extends TestCase
 {
-
     /** @test */
     public function it_shows_the_route()
     {

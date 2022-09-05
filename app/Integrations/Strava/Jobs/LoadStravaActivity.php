@@ -10,7 +10,6 @@ use Illuminate\Support\Arr;
 
 class LoadStravaActivity extends StravaActivityBaseJob
 {
-
     /**
      * Execute the job.
      */

@@ -6,7 +6,6 @@ use App\Services\Analysis\Analyser\Analysis;
 
 class TimesAndDurations extends AnalyserContract
 {
-
     /**
      * @param Analysis $analysis
      * @return Analysis

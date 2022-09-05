@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ApiImportTest extends TestCase
 {
-
     /** @test */
     public function it_loads_an_activity_importer()
     {

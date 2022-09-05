@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class StravaClientTest extends TestCase
 {
-
     /** @test */
     public function it_creates_an_activity_handler()
     {

@@ -10,12 +10,12 @@ use Tests\TestCase;
 
 class RoutePathTest extends TestCase
 {
-
     /** @test */
-    public function it_can_be_saved_and_retrieved_in_the_database(){
+    public function it_can_be_saved_and_retrieved_in_the_database()
+    {
         $route = Route::factory()->create();
 
-        $linestring = new LineString([new Point(1, 2), new Point(3,4), new Point(5,6)]);
+        $linestring = new LineString([new Point(1, 2), new Point(3, 4), new Point(5, 6)]);
         $routePath = RoutePath::factory()->create([
             'linestring' => $linestring,
             'distance' => 20.58,
@@ -34,12 +34,14 @@ class RoutePathTest extends TestCase
     }
 
     /** @test */
-    public function it_has_many_points(){
+    public function it_has_many_points()
+    {
         $this->markTestSkipped('Many-to-many route paths needed');
     }
 
     /** @test */
-    public function it_belongs_to_a_route(){
+    public function it_belongs_to_a_route()
+    {
         $route = Route::factory()->create();
 
         $routePath = RoutePath::factory()->create([
@@ -48,5 +50,4 @@ class RoutePathTest extends TestCase
 
         $this->assertTrue($route->is($routePath->route));
     }
-
 }

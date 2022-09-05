@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class StravaOverviewTest extends TestCase
 {
-
     /** @test */
     public function it_loads_the_inertia_component()
     {

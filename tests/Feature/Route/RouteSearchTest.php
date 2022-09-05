@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RouteSearchTest extends TestCase
 {
-
     /** @test */
     public function it_returns_all_routes_sorted_by_updated_at_when_no_query_given()
     {

@@ -6,7 +6,6 @@ use Tests\TestCase;
 
 class DocumentationTest extends TestCase
 {
-
     /** @test */
     public function it_redirects_you_to_the_docs_site()
     {

@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class DashboardIndexTest extends TestCase
 {
-
     /** @test */
     public function it_returns_the_dashboard_component()
     {

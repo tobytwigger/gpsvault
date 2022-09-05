@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class LeaveClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {

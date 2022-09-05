@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class RouteIndexTest extends TestCase
 {
-
     /** @test */
     public function index_loads_routes_ordered_by_date()
     {

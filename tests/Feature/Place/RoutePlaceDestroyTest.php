@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RoutePlaceDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_detaches_the_route_place()
     {
