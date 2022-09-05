@@ -26,30 +26,33 @@ jobs:
         with:
           node-version: '14'
 
+      - name: Install npm dependencies
+        run: npm ci
+
       - name: Install PHP dependencies
         uses: php-actions/composer@v6
         with:
           dev: no
           args: --ignore-platform-reqs
 
-#      - name: Configure SSH
-#        env:
-#          SSH_KEY: ${{ secrets.PRIVATE_KEY }}
-#          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
-#          SSH_HOST: uni-truths.com
-#          SSH_USER: root
-#        run: |
-#          mkdir -p ~/.ssh/
-#          echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
-#          echo "$SSH_KEY" > ~/.ssh/unitruths_key.key
-#          chmod 600 ~/.ssh/unitruths_key.key
-#          cat >>~/.ssh/config <<END
-#           Host uni-truths.com
-#             HostName 88.99.226.20
-#             User root
-#             IdentityFile ~/.ssh/unitruths_key.key
-#             StrictHostKeyChecking no
-#          END
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.PRIVATE_KEY }}
+          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+          SSH_HOST: uni-truths.com
+          SSH_USER: root
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          echo "$SSH_KEY" > ~/.ssh/unitruths_key.key
+          chmod 600 ~/.ssh/unitruths_key.key
+          cat >>~/.ssh/config <<END
+           Host uni-truths.com
+             HostName 88.99.226.20
+             User root
+             IdentityFile ~/.ssh/unitruths_key.key
+             StrictHostKeyChecking no
+          END
 
       - name: Deploy
         uses: deployphp/action@v1
