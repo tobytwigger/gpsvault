@@ -15,7 +15,11 @@ class MaxSpeed extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        return $analysis->setMaxSpeed(round($this->maxSpeed, 2));
+        if ($this->maxSpeed) {
+            return $analysis->setMaxSpeed(round($this->maxSpeed, 2));
+        }
+
+        return $analysis;
     }
 
     public function processPoint(Point $point): void
