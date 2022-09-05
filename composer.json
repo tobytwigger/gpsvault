@@ -11,13 +11,6 @@
         "php": "^8.1",
         "ext-curl": "*",
         "ext-zlib": "*",
-        "ext-pgsql": "*",
-        "ext-sqlite3": "*",
-        "ext-gd": "*",
-        "ext-mbstring": "*",
-        "ext-bcmath": "*",
-        "ext-zip": "*",
-        "ext-xml": "*",
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "barryvdh/laravel-debugbar": "^3.6",
         "beyondcode/laravel-websockets": "^1.12",
@@ -54,7 +47,7 @@
         "spatie/eloquent-sortable": "^4.0",
         "spatie/laravel-permission": "^5.4",
         "tightenco/ziggy": "^1.0",
-        "twigger/laravel-job-status": "^1.0.1",
+        "twigger/laravel-job-status": "^1.0.2",
         "tobytwigger/laravel-settings": "^1.0.5"
     },
     "require-dev": {
