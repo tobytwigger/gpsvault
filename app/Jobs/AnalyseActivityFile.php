@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Activity;
-use App\Models\Route;
 use App\Models\Stats;
 use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
@@ -14,7 +13,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use JobStatus\Trackable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -64,6 +62,7 @@ class AnalyseActivityFile implements ShouldQueue
     {
         if (!$this->model->hasFile()) {
             $this->errorMessage(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
+
             throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
         }
 
@@ -106,7 +105,6 @@ class AnalyseActivityFile implements ShouldQueue
         $this->savePoints($stats, $analysis->getPoints());
 
         $this->successMessage('Saved data');
-
     }
 
     private function savePoints(Stats $stats, array $points)
@@ -136,10 +134,10 @@ class AnalyseActivityFile implements ShouldQueue
         }
     }
 
-    public function middleware()
-    {
-        return [
-            (new WithoutOverlapping('FileAnalyser')),
-        ];
-    }
+//    public function middleware()
+//    {
+//        return [
+//            (new WithoutOverlapping('FileAnalyser')),
+//        ];
+//    }
 }
