@@ -12,21 +12,10 @@ use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Route extends Model
 {
-    use HasFactory, HasStats, Searchable, PostgisTrait;
+    use HasFactory, HasStats, Searchable;
 
     protected $fillable = [
-        'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation', 'linestring',
-    ];
-
-    protected $postgisFields = [
-        'linestring',
-    ];
-
-    protected $postgisTypes = [
-        'linestring' => [
-            'geomtype' => 'geography',
-            'srid' => 4326,
-        ],
+        'name', 'description', 'notes', 'file_id', 'public', 'distance', 'elevation',
     ];
 
     protected $appends = [
