@@ -8,7 +8,7 @@ require 'contrib/php-fpm.php';
 // Config
 
 set('keep_releases', 3);
-set('repository', 'git@github.com:tobytwigger/cycle-store');
+set('repository', 'git@github.com:tobytwigger/gpsvault');
 
 add('shared_files', []);
 add('shared_dirs', []);
@@ -16,11 +16,11 @@ add('writable_dirs', []);
 
 // Hosts
 
-host('cycle.linkeys.app')
+host('gpsvault.co.uk')
     ->setSshMultiplexing(true)
     ->set('remote_user', 'ubuntu')
     ->set('branch', 'develop')
-    ->set('deploy_path', '/var/www/cycle.linkeys.app');
+    ->set('deploy_path', '/var/www/gpsvault');
 
 // Tasks
 
