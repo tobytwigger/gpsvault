@@ -14,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use JobStatus\Trackable;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,14 +22,14 @@ class AnalyseActivityFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
-    public Activity|Route $model;
+    public Activity $model;
 
     public $tries = 3;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Activity|Route $model)
+    public function __construct(Activity $model)
     {
         $this->queue = 'stats';
         $this->model = $model;
