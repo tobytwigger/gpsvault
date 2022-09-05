@@ -14,7 +14,7 @@ class GpxParser implements ParserContract
     public function read(File $file): Analysis
     {
         $gpx = new phpGPX();
-        if($file->disk === 's3') {
+        if ($file->disk === 's3') {
             $path = Storage::put(tempnam(sys_get_temp_dir()), $file->getFileContents());
             $file = $gpx->load($path);
         } else {
