@@ -24,8 +24,8 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
         $archivePath = sprintf('%s/result.zip', $fullPath);
 
         $zipFile = new ZipFile();
-        foreach ($files as $file) {
-            $zipFile->addFile($file);
+        foreach ($files as $newName => $file) {
+            $zipFile->addFile($file, $newName);
         }
         $zipFile->saveAsFile($archivePath);
 
