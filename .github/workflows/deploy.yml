@@ -3,7 +3,7 @@ name: Deploy site
 on:
   push:
     branches:
-      - master
+      - main
 
 # It is important to specify "concurrency" for the workflow,
 # to prevent concurrency between different deploys.
@@ -21,11 +21,35 @@ jobs:
         with:
           php-version: '8.1'
 
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Install PHP dependencies
         uses: php-actions/composer@v6
         with:
           dev: no
           args: --ignore-platform-reqs
+
+#      - name: Configure SSH
+#        env:
+#          SSH_KEY: ${{ secrets.PRIVATE_KEY }}
+#          KNOWN_HOSTS: ${{ secrets.KNOWN_HOSTS }}
+#          SSH_HOST: uni-truths.com
+#          SSH_USER: root
+#        run: |
+#          mkdir -p ~/.ssh/
+#          echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+#          echo "$SSH_KEY" > ~/.ssh/unitruths_key.key
+#          chmod 600 ~/.ssh/unitruths_key.key
+#          cat >>~/.ssh/config <<END
+#           Host uni-truths.com
+#             HostName 88.99.226.20
+#             User root
+#             IdentityFile ~/.ssh/unitruths_key.key
+#             StrictHostKeyChecking no
+#          END
 
       - name: Deploy
         uses: deployphp/action@v1
