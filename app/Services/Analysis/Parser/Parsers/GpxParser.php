@@ -8,6 +8,7 @@ use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use phpGPX\phpGPX;
+use Ramsey\Uuid\Uuid;
 
 class GpxParser implements ParserContract
 {
@@ -15,9 +16,9 @@ class GpxParser implements ParserContract
     {
         $gpx = new phpGPX();
         if ($file->disk === 's3') {
-            $localPath = tempnam(sys_get_temp_dir(), 'gpx_parser');
-            Storage::put($localPath, $file->getFileContents());
-            $file = $gpx->load($localPath);
+            $localPath = Uuid::getFactory()->uuid4();
+            Storage::disk('local')->put($localPath, $file->getFileContents());
+            $file = $gpx->load(Storage::disk('local')->path($localPath));
             Storage::delete($localPath);
         } else {
             $file = $gpx->load($file->fullPath());
