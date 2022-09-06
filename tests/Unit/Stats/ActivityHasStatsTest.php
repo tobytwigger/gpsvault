@@ -82,7 +82,6 @@ class ActivityHasStatsTest extends TestCase
         $this->assertTrue($ownStats->is($activity->statsFrom('php')->first()));
         $this->assertInstanceOf(Stats::class, $activity->statsFrom('strava')->first());
         $this->assertTrue($stravaStats->is($activity->statsFrom('strava')->first()));
-        LineString::
     }
 
     /** @test */
