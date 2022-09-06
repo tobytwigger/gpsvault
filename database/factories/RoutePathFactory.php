@@ -23,6 +23,7 @@ class RoutePathFactory extends Factory
             'linestring' => new LineString(collect()->range(1, 6)->map(fn () => new Point($this->faker->latitude, $this->faker->longitude))->all()),
             'distance' => $this->faker->randomFloat(),
             'elevation_gain' => $this->faker->randomFloat(),
+            'complete_in_seconds' => $this->faker->randomFloat(),
             'route_id' => Route::factory(),
         ];
     }

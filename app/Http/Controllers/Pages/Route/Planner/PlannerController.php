@@ -42,6 +42,9 @@ class PlannerController extends Controller
             'points.*.lat' => 'required|numeric|min:-90|max:90',
             'points.*.lng' => 'required|numeric|min:-180|max:180',
             'points.*.place_id' => 'sometimes|nullable|numeric|exists:places,id',
+            'distance' => 'sometimes|nullable|numeric|min:0',
+            'elevation' => 'sometimes|nullable|numeric',
+            'complete_in_seconds' => 'sometimes|nullable|numeric|min:0',
         ]);
 
         $route = Route::create([
@@ -51,13 +54,14 @@ class PlannerController extends Controller
         $path = RoutePath::create([
             'route_id' => $route->id,
             'distance' => $request->input('distance', 0),
+            'complete_in_seconds' => $request->input('complete_in_seconds', 0),
             'elevation_gain' => $request->input('elevation', 0),
-            'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng']), $request->input('geojson'))),
+            'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng'], $point['alt']), $request->input('geojson'))),
         ]);
 
         foreach ($request->input('points', []) as $point) {
             $path->routePoints()->create([
-                'location' => new Point($point['lat'], $point['lng']),
+                'location' => new Point($point['lat'], $point['lng'], $point['alt'] ?? 0),
                 'place_id' => $point['place_id'] ?? null,
             ]);
         }

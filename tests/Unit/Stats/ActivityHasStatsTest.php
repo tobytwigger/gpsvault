@@ -7,6 +7,7 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
 use Illuminate\Support\Facades\Bus;
+use MStaack\LaravelPostgis\Geometries\LineString;
 use Tests\TestCase;
 
 class ActivityHasStatsTest extends TestCase
@@ -81,6 +82,7 @@ class ActivityHasStatsTest extends TestCase
         $this->assertTrue($ownStats->is($activity->statsFrom('php')->first()));
         $this->assertInstanceOf(Stats::class, $activity->statsFrom('strava')->first());
         $this->assertTrue($stravaStats->is($activity->statsFrom('strava')->first()));
+        LineString::
     }
 
     /** @test */

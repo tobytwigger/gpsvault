@@ -13,9 +13,10 @@ return new class() extends Migration {
     {
         Schema::create('route_paths', function (Blueprint $table) {
             $table->id();
-            $table->lineString('linestring');
+            $table->addColumn('linestringz', 'linestring', ['geomtype' => 'GEOGRAPHY', 'srid' => '4326']);
             $table->float('distance');
             $table->float('elevation_gain');
+            $table->float('complete_in_seconds');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
         });

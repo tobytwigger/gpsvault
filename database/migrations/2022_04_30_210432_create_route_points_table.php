@@ -15,7 +15,7 @@ return new class() extends Migration {
             $table->id();
             $table->unsignedBigInteger('order');
             $table->unsignedBigInteger('place_id')->nullable();
-            $table->point('location')->nullable();
+            $table->addColumn('pointz', 'location', ['geomtype' => 'GEOGRAPHY', 'srid' => '4326']);
             $table->unsignedBigInteger('route_path_id');
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ namespace Unit\Jobs;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
+use App\Models\RoutePath;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Analyser\AnalysisFactoryContract;
@@ -52,8 +53,8 @@ class AnalyseRouteFileTest extends TestCase
             ->setDistance(500.88)
             ->setCumulativeElevationGain(10.4)
             ->setPoints([
-                (new Point())->setLatitude(1)->setLongitude(2),
-                (new Point())->setLatitude(3)->setLongitude(4),
+                (new Point())->setLatitude(1)->setLongitude(2)->setElevation(10.2),
+                (new Point())->setLatitude(3)->setLongitude(4)->setElevation(10.4),
             ]);
 
         $file = File::factory()->routeFile()->create();
@@ -75,8 +76,13 @@ class AnalyseRouteFileTest extends TestCase
             'elevation_gain' => 10.4,
         ]);
 
+        $routePoints = $route->path->routePoints;
+
+        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(1, 2, 10.2)), $routePoints->shift()->location);
+        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(3, 4, 10.4)), $routePoints->shift()->location);
+
         $this->assertEquals(
-            new LineString([new \MStaack\LaravelPostgis\Geometries\Point(1, 2), new \MStaack\LaravelPostgis\Geometries\Point(3, 4)]),
+            new LineString([new \MStaack\LaravelPostgis\Geometries\Point(1, 2, 10.2), new \MStaack\LaravelPostgis\Geometries\Point(3, 4, 10.4)]),
             $route->path->linestring
         );
     }
