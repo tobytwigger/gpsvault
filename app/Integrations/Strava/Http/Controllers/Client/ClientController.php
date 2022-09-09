@@ -48,7 +48,6 @@ class ClientController extends Controller
                 'used_daily_calls' => $client->used_daily_calls,
                 'limit_15_min' => $client->limit_15_min,
                 'limit_daily' => $client->limit_daily,
-                'pending_calls' => $client->pending_calls,
                 'is_connected' => $client->is_connected,
             ];
             $sharedClients->offsetSet($index, $client);
@@ -69,7 +68,6 @@ class ClientController extends Controller
                 'used_daily_calls' => $client->used_daily_calls,
                 'limit_15_min' => $client->limit_15_min,
                 'limit_daily' => $client->limit_daily,
-                'pending_calls' => $client->pending_calls,
                 'is_connected' => $client->is_connected,
             ];
             $publicClients->offsetSet($index, $client);
