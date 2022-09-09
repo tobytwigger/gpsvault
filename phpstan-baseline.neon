@@ -63,6 +63,56 @@ parameters:
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:activities\\(\\)\\.$#"
 			count: 1
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Api\\\\ActivityController\\:\\:destroy\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Api\\\\ActivityController\\:\\:show\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Api\\\\ActivityController\\:\\:store\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^Method App\\\\Http\\\\Controllers\\\\Api\\\\ActivityController\\:\\:update\\(\\) should return Illuminate\\\\Http\\\\Response but return statement is missing\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$activity with type App\\\\Models\\\\Activity is incompatible with native type App\\\\Http\\\\Controllers\\\\Api\\\\ActivityController\\.$#"
+			count: 3
+			path: app/Http/Controllers/Api/ActivityController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$device_name\\.$#"
+			count: 1
+			path: app/Http/Controllers/Auth/SanctumAuthController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$email\\.$#"
+			count: 1
+			path: app/Http/Controllers/Auth/SanctumAuthController.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Http\\\\Request\\:\\:\\$password\\.$#"
+			count: 1
+			path: app/Http/Controllers/Auth/SanctumAuthController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Http/Controllers/Auth/SanctumAuthController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:activities\\(\\)\\.$#"
+			count: 1
 			path: app/Http/Controllers/Pages/Activity/ActivityController.php
 
 		-
@@ -771,13 +821,23 @@ parameters:
 			path: app/Integrations/Strava/Models/StravaKudos.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\|App\\\\Models\\\\Route\\:\\:\\$file\\.$#"
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$file\\.$#"
 			count: 1
 			path: app/Jobs/AnalyseActivityFile.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\|App\\\\Models\\\\Route\\:\\:\\$id\\.$#"
-			count: 2
+			message: "#^Access to an undefined property App\\\\Models\\\\Activity\\:\\:\\$id\\.$#"
+			count: 4
+			path: app/Jobs/AnalyseActivityFile.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\User\\:\\:\\$id\\.$#"
+			count: 1
+			path: app/Jobs/AnalyseActivityFile.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\Activity\\:\\:findOrFail\\(\\)\\.$#"
+			count: 1
 			path: app/Jobs/AnalyseActivityFile.php
 
 		-
@@ -792,6 +852,11 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$file\\.$#"
+			count: 1
+			path: app/Jobs/AnalyseRouteFile.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$file_id\\.$#"
 			count: 1
 			path: app/Jobs/AnalyseRouteFile.php
 
@@ -943,26 +1008,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property App\\\\Models\\\\Route\\:\\:\\$user_id\\.$#"
 			count: 2
-			path: app/Models/Route.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$stats_id\\.$#"
-			count: 2
-			path: app/Models/Route.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:orderByPreference\\(\\)\\.$#"
-			count: 2
-			path: app/Models/Route.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:where\\(\\)\\.$#"
-			count: 1
-			path: app/Models/Route.php
-
-		-
-			message: "#^Call to an undefined static method App\\\\Models\\\\Stats\\:\\:where\\(\\)\\.$#"
-			count: 1
 			path: app/Models/Route.php
 
 		-
@@ -1151,6 +1196,16 @@ parameters:
 			path: app/Services/Analysis/Parser/ParserFactory.php
 
 		-
+			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$disk\\.$#"
+			count: 1
+			path: app/Services/Analysis/Parser/Parsers/GpxParser.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Filesystem\\\\Filesystem\\:\\:path\\(\\)\\.$#"
+			count: 1
+			path: app/Services/Analysis/Parser/Parsers/GpxParser.php
+
+		-
 			message: "#^Access to an undefined property App\\\\Models\\\\File\\:\\:\\$id\\.$#"
 			count: 1
 			path: app/Services/Archive/Parser/FileResource.php
@@ -1229,11 +1284,6 @@ parameters:
 			message: "#^Access to an undefined property App\\\\Models\\\\Stats\\:\\:\\$start_longitude\\.$#"
 			count: 1
 			path: app/Services/Stats/Addition/StatAdder.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:can\\(\\)\\.$#"
-			count: 1
-			path: app/Settings/BruitAPIKey.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable\\:\\:can\\(\\)\\.$#"

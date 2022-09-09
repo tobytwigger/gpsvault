@@ -20,7 +20,7 @@ class PageIncomplete
         if(App::isProduction()) {
             return response('', 503);
         }
-        
+
         return $next($request);
     }
 }
