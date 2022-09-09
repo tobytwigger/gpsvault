@@ -22,9 +22,9 @@ class PlannerUpdateTest extends TestCase
         $response = $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22],
-                ['lat' => 56, 'lng' => 21],
-                ['lat' => 57, 'lng' => 20],
+                ['lat' => 55, 'lng' => 22, 'alt' => 56],
+                ['lat' => 56, 'lng' => 21, 'alt' => 58],
+                ['lat' => 57, 'lng' => 20, 'alt' => 60],
             ],
             'points' => [
                 ['lat' => 55, 'lng' => 22],
@@ -37,7 +37,7 @@ class PlannerUpdateTest extends TestCase
         $routePath = $route->mainPath()->orderBy('id', 'desc')->first();
 
         $this->assertEquals(new LineString([
-            new Point(55, 22), new Point(56, 21), new Point(57, 20),
+            new Point(55, 22, 56), new Point(56, 21, 58), new Point(57, 20, 60),
         ]), $routePath->linestring);
 
         $routePoints = $routePath->routePoints()->get();
@@ -58,8 +58,8 @@ class PlannerUpdateTest extends TestCase
 
         $response = $this->patch(route('planner.update', $route), [
             'geojson' => [
-                ['lat' => 55, 'lng' => 22],
-                ['lat' => 56, 'lng' => 21],
+                ['lat' => 55, 'lng' => 22, 'alt' => 10],
+                ['lat' => 56, 'lng' => 21, 'alt' => 11],
             ],
             'points' => [
                 ['lat' => 55, 'lng' => 25, 'place_id' => $place->id],
@@ -88,7 +88,7 @@ class PlannerUpdateTest extends TestCase
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+                ['lat' => 55, 'lng' => 22, 'alt' => 10], ['lat' => 56, 'lng' => 21, 'alt' => 11],
             ],
         ])
             ->assertRedirect(route('planner.edit', Route::first()->id));
@@ -115,8 +115,8 @@ class PlannerUpdateTest extends TestCase
         $default = [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22],
-                ['lat' => 56, 'lng' => 21],
+                ['lat' => 55, 'lng' => 22, 'alt' => 11],
+                ['lat' => 56, 'lng' => 21, 'alt' => 12],
             ],
             'points' => [
                 ['lat' => 55, 'lng' => 22],
@@ -138,15 +138,17 @@ class PlannerUpdateTest extends TestCase
     {
         return [
             ['geojson', 'This is not an array', 'The geojson must be an array.'],
-            ['geojson', [['lat' => 50, 'lng' => 20]], 'The geojson must have at least 2 items.'],
-            ['geojson', [['lat' => 50, 'lng' => 20], ['lat' => 'not a number', 'lng' => 20]], 'The geojson.1.lat must be a number.', 'geojson.1.lat'],
-            ['geojson', [['lat' => 50, 'lng' => 20], ['lat' => 50, 'lng' => 'not a number']], 'The geojson.1.lng must be a number.', 'geojson.1.lng'],
-            ['geojson', [['lat' => null, 'lng' => 20], ['lat' => 10, 'lng' => 20]], 'The geojson.0.lat field is required.', 'geojson.0.lat'],
-            ['geojson', [['lat' => 50, 'lng' => null], ['lat' => 20, 'lng' => 20]], 'The geojson.0.lng field is required.', 'geojson.0.lng'],
-            ['geojson', [['lat' => -91, 'lng' => 20], ['lat' => 20, 'lng' => 20]], 'The geojson.0.lat must be at least -90.', 'geojson.0.lat'],
-            ['geojson', [['lat' => 91, 'lng' => 20], ['lat' => 20, 'lng' => 20]], 'The geojson.0.lat must not be greater than 90.', 'geojson.0.lat'],
-            ['geojson', [['lat' => 2, 'lng' => -181], ['lat' => 20, 'lng' => 20]], 'The geojson.0.lng must be at least -180.', 'geojson.0.lng'],
-            ['geojson', [['lat' => 2, 'lng' => 181], ['lat' => 20, 'lng' => 20]], 'The geojson.0.lng must not be greater than 180.', 'geojson.0.lng'],
+            ['geojson', [['lat' => 50, 'lng' => 20, 'alt' => 11]], 'The geojson must have at least 2 items.'],
+            ['geojson', [['lat' => 50, 'lng' => 20, 'alt' => 11], ['lat' => 'not a number', 'lng' => 20, 'alt' => 11]], 'The geojson.1.lat must be a number.', 'geojson.1.lat'],
+            ['geojson', [['lat' => 50, 'lng' => 20, 'alt' => 11], ['lat' => 50, 'lng' => 'not a number', 'alt' => 11]], 'The geojson.1.lng must be a number.', 'geojson.1.lng'],
+            ['geojson', [['lat' => null, 'lng' => 20, 'alt' => 11], ['lat' => 10, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lat field is required.', 'geojson.0.lat'],
+            ['geojson', [['lat' => 50, 'lng' => null, 'alt' => 11], ['lat' => 20, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lng field is required.', 'geojson.0.lng'],
+            ['geojson', [['lat' => -91, 'lng' => 20, 'alt' => 11], ['lat' => 20, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lat must be at least -90.', 'geojson.0.lat'],
+            ['geojson', [['lat' => 91, 'lng' => 20, 'alt' => 11], ['lat' => 20, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lat must not be greater than 90.', 'geojson.0.lat'],
+            ['geojson', [['lat' => 2, 'lng' => -181, 'alt' => 11], ['lat' => 20, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lng must be at least -180.', 'geojson.0.lng'],
+            ['geojson', [['lat' => 2, 'lng' => 181, 'alt' => 11], ['lat' => 20, 'lng' => 20, 'alt' => 11]], 'The geojson.0.lng must not be greater than 180.', 'geojson.0.lng'],
+            ['geojson', [['lat' => 50, 'lng' => 20, 'alt' => 'not a number'], ['lat' => 50, 'lng' => 22, 'alt' => 20]], 'The geojson.0.alt must be a number.', 'geojson.0.alt'],
+            ['geojson', [['lat' => null, 'lng' => 20, 'alt' => 20], ['lat' => 10, 'lng' => 20]], 'The geojson.1.alt field is required.', 'geojson.1.alt'],
             ['points', null, false],
             ['points', [], false],
             ['points', [['lat' => 50, 'lng' => 20]], false],
@@ -171,7 +173,7 @@ class PlannerUpdateTest extends TestCase
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+                ['lat' => 55, 'lng' => 22, 'alt' => 11], ['lat' => 56, 'lng' => 21, 'alt' => 12],
             ],
         ])->assertRedirect(route('login'));
     }
@@ -185,8 +187,23 @@ class PlannerUpdateTest extends TestCase
         $this->patch(route('planner.update', $route), [
             'name' => 'My Route',
             'geojson' => [
-                ['lat' => 55, 'lng' => 22], ['lat' => 56, 'lng' => 21],
+                ['lat' => 55, 'lng' => 22, 'alt' => 11], ['lat' => 56, 'lng' => 21, 'alt' => 12],
             ],
         ])->assertStatus(403);
+    }
+
+    /** @test */
+    public function you_can_pass_the_elevation_to_update_it(){
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function you_can_pass_the_distance_to_update_it(){
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function you_can_pass_the_duration_to_update_it(){
+        $this->markTestIncomplete();
     }
 }

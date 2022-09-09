@@ -115,8 +115,8 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])]);
-        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53), new Point(2, 52)])]);
+        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51,  0), new Point(2, 52, 2)])]);
+        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53, 1), new Point(2, 52,3)])]);
 
         $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
     }
@@ -150,8 +150,8 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])]);
-        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53), new Point(4, 54)])]);
+        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51, 0), new Point(2, 52, 2)])]);
+        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53, 1), new Point(4, 54, 3)])]);
 
         $this->assertEquals('Milton Keynes, UK', $tour->human_ended_at);
     }
@@ -181,7 +181,7 @@ class TourTest extends TestCase
 
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->has(
-            RoutePath::factory()->state(['linestring' => new LineString([new Point(1, 51), new Point(2, 52)])])
+            RoutePath::factory()->state(['linestring' => new LineString([new Point(1, 51, 2), new Point(2, 52, 4)])])
         )->create();
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route1->id]);

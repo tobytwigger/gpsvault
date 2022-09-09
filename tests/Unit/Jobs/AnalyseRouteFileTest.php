@@ -78,8 +78,8 @@ class AnalyseRouteFileTest extends TestCase
 
         $routePoints = $route->path->routePoints;
 
-        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(1, 2, 10.2)), $routePoints->shift()->location);
-        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(3, 4, 10.4)), $routePoints->shift()->location);
+        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(1, 2)), $routePoints->shift()->location);
+        $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(3, 4)), $routePoints->shift()->location);
 
         $this->assertEquals(
             new LineString([new \MStaack\LaravelPostgis\Geometries\Point(1, 2, 10.2), new \MStaack\LaravelPostgis\Geometries\Point(3, 4, 10.4)]),

@@ -51,12 +51,18 @@ class AnalyseRouteFile implements ShouldQueue
             'linestring' => $linestring,
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
+            'duration' => $this->getDuration(),
         ]);
 
-        foreach(collect($analysis->getPoints())->chunk(1000) as $points) {
+        foreach (collect($analysis->getPoints())->chunk(1000) as $points) {
             $routePath->routePoints()->createMany($points->map(fn (Point $point) => [
-                'location' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation()),
+                'location' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
             ]));
         }
+    }
+
+    private function getDuration(): int
+    {
+        return 0;
     }
 }

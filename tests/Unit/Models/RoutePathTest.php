@@ -15,7 +15,7 @@ class RoutePathTest extends TestCase
     {
         $route = Route::factory()->create();
 
-        $linestring = new LineString([new Point(1, 2), new Point(3, 4), new Point(5, 6)]);
+        $linestring = new LineString([new Point(1, 2, 0), new Point(3, 4, 1), new Point(5, 6, 20)]);
         $routePath = RoutePath::factory()->create([
             'linestring' => $linestring,
             'distance' => 20.58,

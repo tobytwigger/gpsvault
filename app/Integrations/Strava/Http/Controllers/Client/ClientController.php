@@ -13,7 +13,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $ownedClients = Auth::user()->ownedClients()->with('sharedUsers')->paginate(
+        $ownedClients = Auth::user()->ownedClients()->with('sharedUsers')->orderBy('created_at')->paginate(
             perPage: request()->input('owned_per_page', 8),
             columns: ['*'],
             pageName: 'owned_page',

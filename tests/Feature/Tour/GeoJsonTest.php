@@ -15,7 +15,7 @@ class GeoJsonTest extends TestCase
 {
     private function createNewRoute(array $coords)
     {
-        $points = array_map(fn (array $coord) => (new Point($coord[0], $coord[1])), $coords);
+        $points = array_map(fn (array $coord) => (new Point($coord[0], $coord[1], $coords[2]??0)), $coords);
 
         $route = Route::factory()
             ->has(RoutePath::factory()->state([

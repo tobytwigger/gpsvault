@@ -16,7 +16,7 @@ return new class() extends Migration {
             $table->addColumn('linestringz', 'linestring', ['geomtype' => 'GEOGRAPHY', 'srid' => '4326']);
             $table->float('distance');
             $table->float('elevation_gain');
-            $table->float('complete_in_seconds');
+            $table->float('duration');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
         });
