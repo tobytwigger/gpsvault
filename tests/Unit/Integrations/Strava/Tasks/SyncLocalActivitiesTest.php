@@ -39,7 +39,7 @@ class SyncLocalActivitiesTest extends TestCase
         $importer->status()->willReturn(ActivityImporter::CREATED);
         $this->app->instance(ActivityImporter::class, $importer->reveal());
 
-        \App\Integrations\Strava\Jobs\SyncLocalActivities::dispatch($user);
+        \App\Integrations\Strava\Jobs\SyncActivities::dispatch($user);
     }
 
     /** @test */
@@ -67,7 +67,7 @@ class SyncLocalActivitiesTest extends TestCase
         $importer->status()->willReturn(ActivityImporter::CREATED, ActivityImporter::UPDATED, ActivityImporter::CREATED);
         $this->app->instance(ActivityImporter::class, $importer->reveal());
 
-        \App\Integrations\Strava\Jobs\SyncLocalActivities::dispatch($user);
+        \App\Integrations\Strava\Jobs\SyncActivities::dispatch($user);
 
 //        $task->assertMessages([
 //            'Importing activities 0 to 2',

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SyncLocalActivities implements ShouldQueue
+class SyncActivities implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,13 +28,9 @@ class SyncLocalActivities implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(Strava $strava)
+    public function handle()
     {
         $strava = Strava::client($this->user);
-//        $createdActivies = 0;
-//        $updatedActivities = 0;
-//        $totalActivities = 0;
-
         $page = 1;
         do {
             $activities = $strava->activity()->getActivities($page);
@@ -43,23 +39,11 @@ class SyncLocalActivities implements ShouldQueue
                 continue;
             }
 
-//            $this->line(sprintf('Importing activities %u to %u', $totalActivities, $totalActivities + count($activities)));
-
-//            $totalActivities += count($activities);
-
             foreach ($activities as $activityData) {
                 ApiImport::activity()->import($activityData, $this->user);
 
-//                match ($import->status()) {
-//                    \App\Integrations\Strava\Client\Import\Resources\Activity::CREATED => $createdActivies++,
-//                    Activity::UPDATED => $updatedActivities++
-//                };
+                $page += 1;
             }
-//            $this->offerBail(sprintf('Cancelled after %u activities, added %u and updated %u.', $totalActivities, $createdActivies, $updatedActivities));
-
-            $page += 1;
-        } while (count($activities) > 0);
-
-//        $this->line(sprintf('Found %u activities, including %u new and %u updated.', $totalActivities, $createdActivies, $updatedActivities));
+        } while (count($activities) > 0) ;
     }
 }
