@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use App\Integrations\Strava\Client\Exceptions\StravaRateLimited;
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\Activity;
 use App\Models\User;
 use Carbon\Carbon;
@@ -14,7 +13,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use JobStatus\Trackable;
 use Throwable;
 
@@ -53,12 +51,12 @@ class StravaBaseJob implements ShouldQueue
 
     public function retryUntil()
     {
-        return now()->addMinutes(5);
         return now()->addDays(3);
     }
 
     public function failed(Throwable $e)
     {
+        \Illuminate\Support\Facades\Log::error($e->getMessage());
         if ($e instanceof StravaRateLimited) {
             $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
                 ->seconds(0);

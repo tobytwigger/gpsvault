@@ -17,21 +17,26 @@ class Stats
 
         $stats = $activity->statsFrom('strava')->firstOrFail();
         $stats->waypoints()->delete();
-
-        foreach($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
-            $stats->waypoints()->createMany(collect($chunkedPoints)->map(fn (Point $point) => [
-                'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-                'elevation' => $point->getElevation(),
-                'time' => $point->getTime(),
-                'cadence' => $point->getCadence(),
-                'temperature' => $point->getTemperature(),
-                'heart_rate' => $point->getHeartRate(),
-                'speed' => $point->getSpeed(),
-                'grade' => $point->getGrade(),
-                'battery' => $point->getBattery(),
-                'calories' => $point->getCalories(),
-                'cumulative_distance' => $point->getCumulativeDistance(),
-            ]));
+        $order = 0;
+        foreach ($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
+            $stats->waypoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
+                $toReturn = [
+                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                    'elevation' => $point->getElevation(),
+                    'time' => $point->getTime(),
+                    'cadence' => $point->getCadence(),
+                    'temperature' => $point->getTemperature(),
+                    'heart_rate' => $point->getHeartRate(),
+                    'speed' => $point->getSpeed(),
+                    'grade' => $point->getGrade(),
+                    'order' => $order,
+                    'battery' => $point->getBattery(),
+                    'calories' => $point->getCalories(),
+                    'cumulative_distance' => $point->getCumulativeDistance(),
+                ];
+                $order += 1;
+                return $toReturn;
+            }));
         }
 
         return $this;
@@ -40,7 +45,7 @@ class Stats
     private function getPoints(array $statsData, array $timeData, \App\Models\Activity $activity): \Generator
     {
         foreach (collect($timeData['data'])->chunk(1000) ?? [] as $chunkedTimeData) {
-            yield $chunkedTimeData->mapWithKeys(fn($timeDelta, $index) => (new Point())
+            yield $chunkedTimeData->mapWithKeys(fn($timeDelta, $index) => [$index => (new Point())
                 ->setTime($activity->started_at->addSeconds($timeDelta))
                 ->setCadence(data_get($statsData, 'cadence.data.' . $index, null))
                 ->setLatitude(data_get($statsData, 'latlng.data.' . $index . '.0', null))
@@ -50,7 +55,7 @@ class Stats
                 ->setCumulativeDistance(data_get($statsData, 'distance.data.' . $index, null))
                 ->setElevation(data_get($statsData, 'altitude.data.' . $index, null))
                 ->setHeartRate(data_get($statsData, 'heartrate.data.' . $index, null))
-            )->all();
+            ])->all();
         }
 
     }

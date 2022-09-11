@@ -86,6 +86,7 @@
                                 ></v-progress-circular>
                             </template>
                         </c-job-status>
+<!--                        <c-map v-if="hasStats && stats.linestring" :geojson="stats.linestring" :key="'map-' + stats.integration"></c-map>-->
                         <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
                     </v-col>
                 </v-row>
@@ -249,10 +250,12 @@ import CStats from 'ui/components/CStats';
 import CActivityMap from 'ui/components/Activity/CActivityMap';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 import CJobStatus from '../../ui/components/CJobStatus';
+import CMap from '../../ui/components/Map/CMap';
 
 export default {
     name: "Show",
     components: {
+        CMap,
         CJobStatus,
         CActivityLocationSummary,
         CActivityMap,

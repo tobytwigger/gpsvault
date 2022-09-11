@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
+use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Stats extends Model
 {
-    use HasFactory, HasAdditionalData;
+    use HasFactory, HasAdditionalData, PostgisTrait;
 
     protected $appends = [
         'human_started_at',
@@ -21,6 +22,8 @@ class Stats extends Model
     ];
 
     protected $fillable = [
+        'linestring',
+
         'integration',
 
         'stats_id',
@@ -98,6 +101,17 @@ class Stats extends Model
         'max_heartrate' => 'float',
         'average_heartrate' => 'float',
         'calories' => 'float',
+    ];
+
+    protected $postgisFields = [
+        'linestring',
+    ];
+
+    protected $postgisTypes = [
+        'linestring' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
     ];
 
     final public function __construct(array $attributes = [])

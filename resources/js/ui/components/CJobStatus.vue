@@ -1,8 +1,5 @@
 <template>
     <job-status :job-alias="job" :tags="tags" :poll-interval="2000">
-<!--        <template v-slot:loading>-->
-<!--            Loading...-->
-<!--        </template>-->
         <template v-slot:default="params">
             <div v-if="params === null || params.complete === true">
                 <slot></slot>

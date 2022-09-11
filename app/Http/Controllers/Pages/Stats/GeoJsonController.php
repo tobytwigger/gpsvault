@@ -17,6 +17,7 @@ class GeoJsonController extends Controller
 
         $points = $stats->waypoints()
             ->whereNotNull('points')
+            ->orderBy('order')
             ->get()
             ->map(fn (Waypoint $waypoint) => new Coordinate($waypoint->latitude, $waypoint->longitude));
 
