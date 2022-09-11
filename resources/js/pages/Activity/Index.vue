@@ -7,6 +7,15 @@
         </c-pagination-iterator>
 
         <template #headerActions>
+            <c-job-status job="load-strava-activities" :tags="{user_id: $page.props.user.id}">
+                <template v-slot:incomplete>
+                    <v-progress-circular
+                        indeterminate
+                        color="primary"
+                    ></v-progress-circular>
+                </template>
+            </c-job-status>
+
             <c-activity-form title="Add new activity" button-text="Create">
                 <template v-slot:activator="{trigger, showing}">
                     <v-tooltip bottom>
@@ -36,9 +45,10 @@ import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CActivityCard from 'ui/components/Activity/CActivityCard';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
 import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CJobStatus from '../../ui/components/CJobStatus';
 export default {
     name: "Index",
-    components: {CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
+    components: {CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
     props: {
         activities: {
             required: true,

@@ -44,7 +44,6 @@ class StravaClient extends Model
         'used_daily_calls' => 'integer',
         'limit_15_min' => 'integer',
         'limit_daily' => 'integer',
-        'pending_calls' => 'integer',
         'invitation_link_expires_at' => 'datetime',
         'enabled' => 'boolean',
         'public' => 'boolean',

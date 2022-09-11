@@ -3,23 +3,25 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
+use App\Integrations\Strava\Import\ApiImport;
 use Illuminate\Support\Arr;
 
-class LoadStravaPhotos extends StravaActivityBaseJob
+class LoadStravaPhotos extends StravaBaseJob
 {
+    public function alias(): ?string
+    {
+        return 'load-strava-photos';
+    }
+
     /**
      * Execute the job.
      */
-    public function handle(Strava $strava)
+    public function handle()
     {
-        $strava->setUserId($this->activity->user_id);
-        $photos = $strava->client($this->stravaClientModel)->getPhotos($this->activity->getAdditionalData('strava_id'));
-        $existingPhotoIds = collect(Arr::wrap($this->activity->getAdditionalData('strava_photo_ids')));
+        $strava = Strava::client($this->activity->user);
+        $photos = $strava->activity()->getPhotos($this->activity->getAdditionalData('strava_id'));
         foreach ($photos as $photo) {
-            if (isset($photo['unique_id']) && !$existingPhotoIds->contains($photo['unique_id'])) {
-                $this->activity->pushToAdditionalDataArray('strava_photo_ids', $photo['unique_id']);
-            }
+            ApiImport::photos()->import($photo, $this->activity);
         }
-        $this->activity->setAdditionalData('strava_is_loading_photos', false);
     }
 }

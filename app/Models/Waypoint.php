@@ -35,6 +35,7 @@ class Waypoint extends Model
         'calories',
         'cumulative_distance',
         'stats_id',
+        'order'
     ];
 
     protected $casts = [
