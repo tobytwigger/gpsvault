@@ -21,8 +21,11 @@
 
         <v-list
             nav
+            subheader
             dense
         >
+            <v-subheader>Activities</v-subheader>
+
             <v-list-item :input-value="['dashboard'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('dashboard'))">
                 <v-list-item-icon>
                     <v-icon>mdi-home</v-icon>
@@ -36,13 +39,17 @@
                 </v-list-item-icon>
                 <v-list-item-title>Activities</v-list-item-title>
             </v-list-item>
-
-            <v-divider></v-divider>
         </v-list>
+
+        <v-divider></v-divider>
+
         <v-list
             nav
+            subheader
             dense
         >
+            <v-subheader>Routes</v-subheader>
+
             <v-list-item :input-value="['route.index', 'route.show'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('route.index'))"
                          data-hint="See any rides you've previously planned." :data-step="994">
                 <v-list-item-icon>
@@ -70,27 +77,51 @@
 
         <v-list
             nav
+            subheader
             dense
         >
-            <v-list-group
-                :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"
-                no-action
-                prepend-icon="mdi-connection"
-            >
-                <template v-slot:activator>
-                    <v-list-item-content>
-                        <v-list-item-title>Integrations</v-list-item-title>
-                    </v-list-item-content>
-                </template>
+            <v-subheader>Integrations</v-subheader>
 
-                <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"
-                             data-hint="Manage the integration with Strava." :data-step="997">
-                    <v-list-item-title>Strava</v-list-item-title>
-                    <v-list-item-icon>
-                        <v-icon>mdi-arrow-right</v-icon>
-                    </v-list-item-icon>
-                </v-list-item>
-            </v-list-group>
+            <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"
+                         data-hint="Manage the integration with Strava." :data-step="997">
+                <v-list-item-icon>
+                    <v-icon>mdi-power-plug-off</v-icon>
+<!--                    <v-icon>mdi-power-plug</v-icon>-->
+                </v-list-item-icon>
+                <v-list-item-title>Strava</v-list-item-title>
+            </v-list-item>
+
+
+<!--            <v-list-group-->
+<!--                :value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1"-->
+<!--                no-action-->
+<!--                prepend-icon="mdi-connection"-->
+<!--            >-->
+<!--                <template v-slot:activator>-->
+<!--                    <v-list-item-content>-->
+<!--                        <v-list-item-title>Integrations</v-list-item-title>-->
+<!--                    </v-list-item-content>-->
+<!--                </template>-->
+
+<!--                <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"-->
+<!--                             data-hint="Manage the integration with Strava." :data-step="997">-->
+<!--                    <v-list-item-title>Strava</v-list-item-title>-->
+<!--                    <v-list-item-icon>-->
+<!--                        <v-icon>mdi-arrow-right</v-icon>-->
+<!--                    </v-list-item-icon>-->
+<!--                </v-list-item>-->
+<!--            </v-list-group>-->
+
+        </v-list>
+
+        <v-divider></v-divider>
+
+        <v-list
+            nav
+            subheader
+            dense
+        >
+            <v-subheader>Account</v-subheader>
 
             <v-list-item :input-value="['backup.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('backup.index'))"
                          data-hint="Create and download backups of all your data." :data-step="998">
@@ -99,27 +130,19 @@
                 </v-list-item-icon>
                 <v-list-item-title>Backups</v-list-item-title>
             </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list
-            nav
-            dense
-        >
-            <v-list-item :input-value="['settings.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('settings.index'))"
-                         data-hint="Manage your preferences." :data-step="1000">
-                <v-list-item-icon>
-                    <v-icon>mdi-cog</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Settings</v-list-item-title>
-            </v-list-item>
             <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link :href="route('documentation')"
                          data-hint="Learn how to use this site." :data-step="999">
                 <v-list-item-icon>
                     <v-icon>mdi-book-open-blank-variant</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Documentation</v-list-item-title>
+            </v-list-item>
+            <v-list-item :input-value="['settings.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('settings.index'))"
+                         data-hint="Manage your preferences." :data-step="1000">
+                <v-list-item-icon>
+                    <v-icon>mdi-cog</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Settings</v-list-item-title>
             </v-list-item>
             <v-list-item link @click="$inertia.post(route('logout'))">
                 <v-list-item-icon>

@@ -92,5 +92,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         /* Client Authentication */
         Route::get('client/{client}/login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'login'])->name('strava.client.login');
         Route::post('client/{client}/logout', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'logout'])->name('strava.client.logout');
+
+        Route::post('activity/{activity}/sync', \App\Integrations\Strava\Http\Controllers\ActivitySyncController::class)->name('strava.activity.sync');
     });
 });

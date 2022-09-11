@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava\Jobs;
 
-use App\Integrations\Strava\Client\Import\ApiImport;
 use App\Integrations\Strava\Client\Strava;
+use App\Integrations\Strava\Import\ApiImport;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,7 +40,7 @@ class SyncActivities implements ShouldQueue
             }
 
             foreach ($activities as $activityData) {
-                ApiImport::activity()->import($activityData, $this->user);
+                ApiImport::limitedActivity()->import($activityData, $this->user);
 
                 $page += 1;
             }
