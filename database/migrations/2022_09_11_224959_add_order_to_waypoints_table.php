@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('waypoints', function (Blueprint $table) {
-            $table->unsignedBigInteger('order');
+            $table->unsignedBigInteger('order')->nullable();
         });
     }
 
