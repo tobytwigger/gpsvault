@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Ramsey\Uuid\Uuid;
 
 class GenerateActivityThumbnail implements ShouldQueue
 {
@@ -38,7 +39,7 @@ class GenerateActivityThumbnail implements ShouldQueue
         if ($model instanceof Activity && $model->thumbnail_id === null) {
             $file = Upload::withContents(
                 StaticMap::ofPath($this->stats->linestring),
-                'thumbnail.png',
+                Uuid::uuid4()->toString() . '_thumbnail.png',
                 $model->user,
                 FileUploader::MAP_THUMBNAIL
             );

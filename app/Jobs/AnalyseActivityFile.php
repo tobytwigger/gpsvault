@@ -100,6 +100,8 @@ class AnalyseActivityFile implements ShouldQueue
             ]
         );
 
+        $this->saveLinestring($stats, $analysis->getPoints());
+
         $this->savePoints($stats, $analysis->getPoints());
 
         $this->successMessage('Saved data');
@@ -112,11 +114,10 @@ class AnalyseActivityFile implements ShouldQueue
         $activityPoints = collect($points)->chunk(1000);
         $percentage = 0;
         $increase = 100 / ($activityPoints->count() < 1 ? 1 : $activityPoints->count());
-        $points = [];
         $order = 0;
 
         foreach ($activityPoints as $chunkedPoints) {
-            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order, &$points) {
+            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
                 $toReturn = [
                     'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
                     'elevation' => $point->getElevation(),
@@ -131,9 +132,7 @@ class AnalyseActivityFile implements ShouldQueue
                     'calories' => $point->getCalories(),
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
-                $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
                 $order += 1;
-
                 return $toReturn;
             }));
 
@@ -141,10 +140,6 @@ class AnalyseActivityFile implements ShouldQueue
             $this->percentage($percentage);
         }
 
-        if (count($points) > 1) {
-            $stats->linestring = new LineString($points);
-            $stats->save();
-        }
     }
 
 //    public function middleware()
@@ -153,4 +148,18 @@ class AnalyseActivityFile implements ShouldQueue
 //            (new WithoutOverlapping('FileAnalyser')),
 //        ];
 //    }
+    private function saveLinestring(Stats $stats, array $points)
+    {
+        $convertedPoints = [];
+
+        foreach ($points as $point) {
+            $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+        }
+
+        if (count($convertedPoints) > 1) {
+            $stats->linestring = new LineString($convertedPoints);
+            $stats->save();
+        }
+
+    }
 }
