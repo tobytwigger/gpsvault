@@ -8,6 +8,7 @@
         >
             <v-tabs-slider></v-tabs-slider>
             <v-tab href="#tab-connection">Connection Health<v-icon>mdi-heart-pulse</v-icon></v-tab>
+            <v-tab href="#tab-sync">Sync<v-icon>mdi-autorenew</v-icon></v-tab>
             <v-tab href="#tab-import">Imports<v-icon>mdi-import</v-icon></v-tab>
         </v-tabs>
 
@@ -128,6 +129,17 @@
                 </div>
             </v-tab-item>
 
+            <v-tab-item value="tab-sync">
+                <v-alert
+                    outlined
+                    type="warning"
+                    prominent
+                    border="left"
+                >
+                    Sync is still in development and will be available soon.
+                </v-alert>
+            </v-tab-item>
+
             <v-tab-item value="tab-import">
                 <v-alert
                     outlined
@@ -135,7 +147,7 @@
                     prominent
                     border="left"
                 >
-                    The dashboard is still in development and will be available soon.
+                    Importing is still in development and will be available soon.
                 </v-alert>
             </v-tab-item>
         </v-tabs-items>
