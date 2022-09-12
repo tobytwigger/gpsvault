@@ -15,7 +15,7 @@ class ClientEnabledController extends Controller
         $client->enabled = true;
         $client->save();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function disable(StravaClient $client)
@@ -25,6 +25,6 @@ class ClientEnabledController extends Controller
         $client->enabled = false;
         $client->save();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 }

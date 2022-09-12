@@ -63,7 +63,7 @@ class RemoveFromClientTest extends TestCase
             'user_id' => $users[1]->id,
         ]);
 
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertCount(3, $client->sharedUsers()->get());
     }

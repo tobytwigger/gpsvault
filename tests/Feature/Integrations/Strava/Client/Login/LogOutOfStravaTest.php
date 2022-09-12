@@ -69,7 +69,7 @@ class LogOutOfStravaTest extends TestCase
         StravaToken::factory()->count(2)->create(['strava_client_id' => $client->id]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertDatabaseCount('strava_tokens', 4);
     }
 
@@ -86,7 +86,7 @@ class LogOutOfStravaTest extends TestCase
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseCount('strava_tokens', 0);
     }
@@ -103,7 +103,7 @@ class LogOutOfStravaTest extends TestCase
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseCount('strava_tokens', 0);
     }

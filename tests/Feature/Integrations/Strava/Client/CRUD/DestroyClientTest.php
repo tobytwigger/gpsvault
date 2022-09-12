@@ -56,7 +56,7 @@ class DestroyClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->delete(route('strava.client.destroy', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertNull(StravaClient::find($client->id));
     }

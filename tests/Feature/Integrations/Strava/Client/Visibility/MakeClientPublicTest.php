@@ -56,7 +56,7 @@ class MakeClientPublicTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'public' => true]);
 
         $response = $this->post(route('strava.client.public', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->public);
     }
 
@@ -68,7 +68,7 @@ class MakeClientPublicTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'public' => false]);
 
         $response = $this->post(route('strava.client.public', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->public);
     }
 }

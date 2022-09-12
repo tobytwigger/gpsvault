@@ -82,7 +82,7 @@
         >
             <v-subheader>Integrations</v-subheader>
 
-            <v-list-item :input-value="['integration.strava', 'strava.client.index'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"
+            <v-list-item :input-value="['integration.strava'].indexOf(route().current()) > -1" link @click="$inertia.visit(route('integration.strava'))"
                          data-hint="Manage the integration with Strava." :data-step="997">
                 <v-list-item-icon>
                     <v-icon>mdi-power-plug-off</v-icon>

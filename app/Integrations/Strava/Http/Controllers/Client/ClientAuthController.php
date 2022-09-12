@@ -29,7 +29,7 @@ class ClientAuthController extends Controller
 
         Auth::user()->setAdditionalData('strava_athlete_id', $token->getAthleteId());
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function logout(StravaClient $client)
@@ -39,6 +39,6 @@ class ClientAuthController extends Controller
 
         Auth::user()->stravaTokens()->where('strava_client_id', $client->id)->delete();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 }

@@ -56,7 +56,7 @@ class EnableClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'enabled' => true]);
 
         $response = $this->post(route('strava.client.enable', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->enabled);
     }
 
@@ -68,7 +68,7 @@ class EnableClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'enabled' => false]);
 
         $response = $this->post(route('strava.client.enable', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->enabled);
     }
 }

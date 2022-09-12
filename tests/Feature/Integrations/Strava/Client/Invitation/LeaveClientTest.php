@@ -69,7 +69,7 @@ class LeaveClientTest extends TestCase
 
         $this->assertCount(1, $client->sharedUsers()->get());
         $response = $this->delete(route('strava.client.leave', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertCount(0, $client->sharedUsers()->get());
     }

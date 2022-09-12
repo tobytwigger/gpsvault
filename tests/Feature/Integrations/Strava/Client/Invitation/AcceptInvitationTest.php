@@ -134,7 +134,7 @@ class AcceptInvitationTest extends TestCase
         $client->save();
 
         $response = $this->get($link->getFullUrl());
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertCount(1, $client->sharedUsers()->get());
         $this->assertEquals($this->user->id, $client->sharedUsers()->get()->first()->id);

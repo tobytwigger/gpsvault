@@ -83,7 +83,7 @@ class LogIntoStravaTest extends TestCase
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
         $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
@@ -120,7 +120,7 @@ class LogIntoStravaTest extends TestCase
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
         $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
@@ -156,7 +156,7 @@ class LogIntoStravaTest extends TestCase
         $this->app->instance(Authenticator::class, $authenticator->reveal());
 
         $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,

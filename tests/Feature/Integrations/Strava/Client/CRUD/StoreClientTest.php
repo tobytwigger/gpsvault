@@ -45,7 +45,7 @@ class StoreClientTest extends TestCase
             ['client_id' => 123, 'client_secret' => 'secret-123', 'name' => 'name123', 'description' => 'desc123']
         );
 
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseCount('strava_clients', 1);
 
