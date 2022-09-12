@@ -32,17 +32,6 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission()
-    {
-        $this->authenticated();
-        $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
-
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertStatus(403);
-        $response->assertSeeText('This action is unauthorized.');
-    }
-
-    /** @test */
     public function it_returns_403_if_you_do_not_have_access_to_the_client()
     {
         $this->authenticated();
