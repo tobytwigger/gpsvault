@@ -17,9 +17,13 @@ class CreateRoutesTable extends Migration
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('public')->default(false);
             $table->unsignedBigInteger('file_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('file_id')->references('id')->on('files')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

@@ -2,7 +2,6 @@
 
 namespace App\Integrations\Strava\Client\Commands;
 
-use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Jobs\SyncActivities;
 use App\Models\User;
 use Illuminate\Console\Command;

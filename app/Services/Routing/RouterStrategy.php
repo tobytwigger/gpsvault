@@ -4,5 +4,4 @@ namespace App\Services\Routing;
 
 interface RouterStrategy
 {
-
 }

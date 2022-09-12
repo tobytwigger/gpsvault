@@ -141,8 +141,7 @@ class AnalyseActivityFile implements ShouldQueue
             $this->percentage($percentage);
         }
 
-
-        if(count($points) > 1) {
+        if (count($points) > 1) {
             $stats->linestring = new LineString($points);
             $stats->save();
         }

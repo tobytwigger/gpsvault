@@ -13,12 +13,14 @@ return new class() extends Migration {
     {
         Schema::create('route_paths', function (Blueprint $table) {
             $table->id();
-            $table->addColumn('linestringz', 'linestring', ['geomtype' => 'GEOGRAPHY', 'srid' => '4326']);
+            $table->linestringZ('linestring');
             $table->float('distance');
             $table->float('elevation_gain');
             $table->float('duration');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
+
+            $table->foreign('route_id')->references('id')->on('routes')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

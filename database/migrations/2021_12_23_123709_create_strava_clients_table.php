@@ -28,6 +28,8 @@ class CreateStravaClientsTable extends Migration
             $table->unsignedBigInteger('limit_15_min')->default(100);
             $table->unsignedBigInteger('limit_daily')->default(1000);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

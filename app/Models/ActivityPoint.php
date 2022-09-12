@@ -35,7 +35,7 @@ class ActivityPoint extends Model
         'calories',
         'cumulative_distance',
         'stats_id',
-        'order'
+        'order',
     ];
 
     protected $casts = [

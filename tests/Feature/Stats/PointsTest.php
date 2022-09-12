@@ -60,7 +60,7 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function an_empty_array_is_returned_if_no_activityPoints_exist()
+    public function an_empty_array_is_returned_if_no_activity_points_exist()
     {
         $this->authenticated();
 

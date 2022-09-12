@@ -17,6 +17,9 @@ class CreateActivityFileTable extends Migration
             $table->unsignedBigInteger('file_id');
             $table->unsignedBigInteger('activity_id');
             $table->timestamps();
+
+            $table->foreign('file_id')->references('id')->on('files')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('activity_id')->references('id')->on('activities')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

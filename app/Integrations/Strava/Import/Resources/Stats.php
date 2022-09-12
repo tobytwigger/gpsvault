@@ -20,7 +20,8 @@ class Stats
         $order = 0;
         $points = [];
         foreach ($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
-            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
+            \Log::info('Processing');
+            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order, &$points) {
                 $toReturn = [
                     'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
                     'elevation' => $point->getElevation(),
@@ -40,7 +41,9 @@ class Stats
 
                 return $toReturn;
             }));
-
+        }
+        \Log::info(count($points));
+        if (count($points) > 1) {
             $stats->linestring = new LineString($points);
             $stats->save();
         }

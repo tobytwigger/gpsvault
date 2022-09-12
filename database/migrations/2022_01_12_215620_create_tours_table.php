@@ -21,6 +21,8 @@ class CreateToursTable extends Migration
             $table->dateTime('marked_as_started_at')->nullable();
             $table->dateTime('marked_as_finished_at')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

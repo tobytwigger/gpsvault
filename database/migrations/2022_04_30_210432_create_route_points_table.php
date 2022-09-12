@@ -18,6 +18,9 @@ return new class() extends Migration {
             $table->point('location')->nullable();
             $table->unsignedBigInteger('route_path_id');
             $table->timestamps();
+
+            $table->foreign('route_path_id')->references('id')->on('route_paths')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('place_id')->references('id')->on('places')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

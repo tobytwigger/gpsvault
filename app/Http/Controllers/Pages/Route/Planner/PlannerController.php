@@ -91,7 +91,7 @@ class PlannerController extends Controller
             'distance' => $request->input('distance', 0),
             'elevation_gain' => $request->input('elevation', 0),
             'linestring' => new LineString(array_map(fn (array $point) => new Point($point['lat'], $point['lng'], $point['alt']), $request->input('geojson'))),
-            'duration' => 0
+            'duration' => 0,
         ]);
 
         foreach ($request->input('points', []) as $point) {

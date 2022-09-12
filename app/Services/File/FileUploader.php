@@ -16,6 +16,8 @@ class FileUploader
 
     public const ACTIVITY_MEDIA = 'activity_media';
 
+    public const MAP_THUMBNAIL = 'map_thumbnail';
+
     public const ARCHIVE = 'archive';
 
     public const ACTIVITY_FILE_POINT_JSON = 'activity_file_point_json';

@@ -26,6 +26,8 @@ class CreateFilesTable extends Migration
             $table->string('hash', 32);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

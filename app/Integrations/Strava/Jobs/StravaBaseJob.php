@@ -61,10 +61,8 @@ class StravaBaseJob implements ShouldQueue
             $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
                 ->seconds(0);
             $this->release(Carbon::now()->diffInSeconds($time));
-        } elseif($e instanceof ClientNotAvailable) {
+        } elseif ($e instanceof ClientNotAvailable) {
             $this->release(300);
         }
     }
-
-
 }

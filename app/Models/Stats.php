@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\GenerateActivityThumbnail;
 use App\Services\Geocoding\Geocoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
@@ -98,7 +99,7 @@ class Stats extends Model
     protected $postgisFields = [
         'linestring',
         'start_point',
-        'end_point'
+        'end_point',
     ];
 
     protected $postgisTypes = [
@@ -123,6 +124,16 @@ class Stats extends Model
 
     protected static function booted()
     {
+        static::created(function (Stats $stats) {
+            if ($stats->linestring !== null) {
+                GenerateActivityThumbnail::dispatch($stats);
+            }
+        });
+        static::saved(function (Stats $stats) {
+            if ($stats->wasChanged('linestring')) {
+                GenerateActivityThumbnail::dispatch($stats);
+            }
+        });
     }
 
     public function model(): MorphTo

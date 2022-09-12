@@ -6,7 +6,6 @@ use App\Integrations\Strava\Models\StravaKudos;
 
 class Kudos
 {
-
     public function import(array $kudosData, \App\Models\Activity $activity): Kudos
     {
         StravaKudos::updateOrCreate([

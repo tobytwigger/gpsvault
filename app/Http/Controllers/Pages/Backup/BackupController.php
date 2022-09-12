@@ -44,7 +44,7 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
-        if(JobStatus::forJobAlias('create-full-backup')
+        if (JobStatus::forJobAlias('create-full-backup')
             ->whereTag('user_id', Auth::user()->id)
             ->whereNotStatus(['succeeded', 'failed', 'cancelled'])
             ->exists()) {

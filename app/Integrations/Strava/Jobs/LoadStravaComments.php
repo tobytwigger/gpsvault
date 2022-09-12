@@ -4,8 +4,6 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\ApiImport;
-use App\Integrations\Strava\Models\StravaComment;
-use Carbon\Carbon;
 
 class LoadStravaComments extends StravaBaseJob
 {
@@ -29,5 +27,4 @@ class LoadStravaComments extends StravaBaseJob
             $page++;
         } while (count($comments) === 200);
     }
-
 }

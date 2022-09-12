@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\ApiImport;
-use Illuminate\Support\Arr;
 
 class LoadStravaPhotos extends StravaBaseJob
 {

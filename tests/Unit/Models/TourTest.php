@@ -115,8 +115,8 @@ class TourTest extends TestCase
         $route2 = Route::factory()->create();
         Stage::factory()->create(['tour_id' => $tour->id, 'route_id' => $route2->id]);
 
-        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51,  0), new Point(2, 52, 2)])]);
-        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53, 1), new Point(2, 52,3)])]);
+        RoutePath::factory()->route($route1)->create(['linestring' => new LineString([new Point(1, 51, 0), new Point(2, 52, 2)])]);
+        RoutePath::factory()->route($route2)->create(['linestring' => new LineString([new Point(3, 53, 1), new Point(2, 52, 3)])]);
 
         $this->assertEquals('Milton Keynes, UK', $tour->human_started_at);
     }

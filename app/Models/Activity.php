@@ -17,7 +17,7 @@ class Activity extends Model
     use HasFactory, HasAdditionalData, HasStats, Searchable;
 
     protected $fillable = [
-        'name', 'description', 'file_id', 'linked_to', 'user_id',
+        'name', 'description', 'file_id', 'linked_to', 'user_id', 'thumbnail_id',
     ];
 
     protected $with = [
@@ -60,12 +60,21 @@ class Activity extends Model
 
     public function getCoverImageAttribute()
     {
+        if ($this->thumbnail_id !== null) {
+            return route('file.preview', $this->thumbnail);
+        }
+
         $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
         if ($image) {
             return route('file.preview', $image);
         }
 
         return null;
+    }
+
+    public function thumbnail()
+    {
+        return $this->belongsTo(File::class, 'thumbnail_id');
     }
 
     public function stravaComments()

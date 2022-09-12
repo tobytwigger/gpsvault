@@ -15,13 +15,13 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration'
+        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration',
     ];
 
     protected $casts = [
         'distance' => 'float',
         'elevation' => 'float',
-        'duration' => 'float'
+        'duration' => 'float',
     ];
 
     protected $postgisFields = [

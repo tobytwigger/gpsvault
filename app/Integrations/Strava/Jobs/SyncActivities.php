@@ -34,7 +34,7 @@ class SyncActivities implements ShouldQueue
     public function tags(): array
     {
         return [
-            'user_id' => $this->user->id
+            'user_id' => $this->user->id,
         ];
     }
 

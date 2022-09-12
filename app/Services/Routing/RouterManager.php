@@ -7,7 +7,6 @@ use Illuminate\Support\Manager;
 
 class RouterManager extends Manager
 {
-
     public function getDefaultDriver()
     {
         return 'valhalla';

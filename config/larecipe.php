@@ -11,7 +11,7 @@ return [
     | of your docs and the landing page when a user visits /docs route.
     |
     |
-    */
+     */
 
     'docs'        => [
         'route'   => '/docs',
@@ -30,13 +30,13 @@ return [
     | Just make sure that the default version is in the published list.
     |
     |
-    */
+     */
 
     'versions'      => [
         'default'   => '1.0',
         'published' => [
-            '1.0'
-        ]
+            '1.0',
+        ],
     ],
 
     /*
@@ -52,7 +52,7 @@ return [
     | to handle who can see your docs (don't forget to use gates for more granular control!).
     |
     |
-    */
+     */
 
     'settings'       => [
         'auth'       => false,
@@ -60,7 +60,7 @@ return [
         'ga_id'      => '',
         'middleware' => [
             'web',
-        ]
+        ],
     ],
 
     /*
@@ -74,11 +74,11 @@ return [
     |
     | Caching period unit: minutes
     |
-    */
+     */
 
     'cache'       => [
         'enabled' => env('APP_ENV') === 'production',
-        'period'  => 5
+        'period'  => 5,
     ],
 
     /*
@@ -92,20 +92,20 @@ return [
     |
     | Supported Search Engines: 'algolia', 'internal'
     |
-    */
+     */
 
     'search'            => [
         'enabled'       => true,
         'default'       => 'internal',
         'engines'       => [
             'internal'  => [
-                'index' => ['h2', 'h3']
+                'index' => ['h2', 'h3'],
             ],
             'algolia'   => [
                 'key'   => '',
-                'index' => ''
-            ]
-        ]
+                'index' => '',
+            ],
+        ],
     ],
 
     /*
@@ -118,7 +118,7 @@ return [
     | documentation a unique look. You can set the fav of your docs.
     |
     |
-    */
+     */
 
     'ui'                 => [
         'code_theme'     => 'dark', // or: light
@@ -127,10 +127,10 @@ return [
         'show_side_bar'  => true,
         'colors'         => [
             'primary'    => '#787AF6',
-            'secondary'  => '#2b9cf2'
+            'secondary'  => '#2b9cf2',
         ],
 
-        'theme_order'    => null // ['LaRecipeDarkTheme', 'customTheme']
+        'theme_order'    => null, // ['LaRecipeDarkTheme', 'customTheme']
     ],
 
     /*
@@ -143,7 +143,7 @@ return [
     | sets the canonical link to the viewed page's link automatically.
     |
     |
-    */
+     */
 
     'seo'                 => [
         'author'          => 'Toby Twigger',
@@ -155,10 +155,10 @@ return [
             'url'         => '',
             'image'       => '',
             'description' => '',
-        ]
+        ],
     ],
 
-   /*
+    /*
    |--------------------------------------------------------------------------
    | Forum
    |--------------------------------------------------------------------------
@@ -169,16 +169,16 @@ return [
    |
    | Supported Services: 'disqus'
    |
-   */
+     */
 
-  'forum'                   => [
+    'forum'                   => [
         'enabled'           => false,
         'default'           => 'disqus',
         'services'          => [
             'disqus'        => [
                 'site_name' => '', // yoursite.disqus.com
-            ]
-        ]
+            ],
+        ],
     ],
 
     /*
@@ -191,7 +191,7 @@ return [
     | you want a different location, feel free to change it.
     |
     |
-    */
+     */
 
     'packages' => [
         'path' => 'larecipe-components',
@@ -202,7 +202,7 @@ return [
             'code-blocks' => [
                 'match' => '/\<pre\>(.|\n)*?<\/pre\>/',
                 'replacement' => '<code-block>',
-            ]
-        ]
-    ]
+            ],
+        ],
+    ],
 ];

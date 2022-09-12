@@ -21,6 +21,9 @@ class CreateStravaTokensTable extends Migration
             $table->dateTime('expires_at');
             $table->boolean('disabled')->default(false);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('strava_client_id')->references('id')->on('strava_clients')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

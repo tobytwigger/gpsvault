@@ -7,7 +7,6 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
 use Illuminate\Support\Facades\Bus;
-use MStaack\LaravelPostgis\Geometries\LineString;
 use Tests\TestCase;
 
 class ActivityHasStatsTest extends TestCase

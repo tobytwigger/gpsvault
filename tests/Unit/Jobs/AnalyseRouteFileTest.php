@@ -5,7 +5,6 @@ namespace Unit\Jobs;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
-use App\Models\RoutePath;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Analyser\AnalysisFactoryContract;

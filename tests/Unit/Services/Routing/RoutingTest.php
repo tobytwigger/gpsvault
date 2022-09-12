@@ -6,10 +6,9 @@ use Tests\TestCase;
 
 class RoutingTest extends TestCase
 {
-
     /** @test */
-    public function test_this_package(){
+    public function test_this_package()
+    {
         $this->markTestSkipped('Routing');
     }
-
 }

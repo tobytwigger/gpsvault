@@ -63,7 +63,8 @@ class AnalyseActivityFileTest extends TestCase
     }
 
     /** @test */
-    public function todo_it_saves_a_linestring_of_all_points(){
+    public function todo_it_saves_a_linestring_of_all_points()
+    {
         $this->markTestSkipped();
     }
 }

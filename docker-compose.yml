@@ -33,7 +33,7 @@ services:
             dockerfile: Dockerfile.postgis
             args:
                 POSTGIS_MAJOR: '3'
-                POSTGIS_VERSION: '3.3.0+dfsg-1.pgdg110+1'
+                POSTGIS_VERSION: '3.3.1+dfsg-1.pgdg110+1'
         image: postgres-14/app
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
@@ -117,5 +117,5 @@ volumes:
         driver: local
     sailmeilisearch:
         driver: local
-    sailvalhalla:
-        driver: local
+#    sailvalhalla:
+#        driver: local

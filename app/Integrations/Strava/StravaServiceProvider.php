@@ -15,6 +15,5 @@ class StravaServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
     }
 }

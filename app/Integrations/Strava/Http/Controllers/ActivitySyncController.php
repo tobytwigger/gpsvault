@@ -12,7 +12,6 @@ use App\Models\Activity;
 
 class ActivitySyncController extends Controller
 {
-
     public function __invoke(Activity $activity)
     {
         LoadStravaActivity::dispatch($activity);
@@ -21,5 +20,4 @@ class ActivitySyncController extends Controller
         LoadStravaKudos::dispatch($activity);
         LoadStravaPhotos::dispatch($activity);
     }
-
 }

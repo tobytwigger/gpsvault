@@ -21,6 +21,8 @@ class CreateStravaCommentsTable extends Migration
             $table->dateTime('posted_at');
             $table->unsignedBigInteger('activity_id');
             $table->timestamps();
+
+            $table->foreign('activity_id')->references('id')->on('activities')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

@@ -17,6 +17,9 @@ class CreateStravaClientUserTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('strava_client_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('strava_client_id')->references('id')->on('strava_clients')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

@@ -17,7 +17,7 @@ class PageIncomplete
      */
     public function handle(Request $request, Closure $next)
     {
-        if(App::isProduction()) {
+        if (App::isProduction()) {
             return response('This page is not accessible', 503);
         }
 

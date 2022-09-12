@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Routing;
+namespace App\Services\StaticMapGenerator;
 
 use Illuminate\Support\Facades\Facade;
 
-class Router extends Facade
+class StaticMap extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return RouterManager::class;
+        return StaticMapManager::class;
     }
 }

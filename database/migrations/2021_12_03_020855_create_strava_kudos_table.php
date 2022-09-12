@@ -18,6 +18,8 @@ class CreateStravaKudosTable extends Migration
             $table->string('last_name');
             $table->unsignedBigInteger('activity_id');
             $table->timestamps();
+
+            $table->foreign('activity_id')->references('id')->on('activities')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

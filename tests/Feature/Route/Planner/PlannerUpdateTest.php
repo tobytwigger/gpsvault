@@ -47,7 +47,7 @@ class PlannerUpdateTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_the_activityPoints_of_a_route()
+    public function it_updates_the_activity_points_of_a_route()
     {
         $this->authenticated();
 
@@ -193,17 +193,20 @@ class PlannerUpdateTest extends TestCase
     }
 
     /** @test */
-    public function todo_you_can_pass_the_elevation_to_update_it(){
+    public function todo_you_can_pass_the_elevation_to_update_it()
+    {
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function todo_you_can_pass_the_distance_to_update_it(){
+    public function todo_you_can_pass_the_distance_to_update_it()
+    {
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function todo_you_can_pass_the_duration_to_update_it(){
+    public function todo_you_can_pass_the_duration_to_update_it()
+    {
         $this->markTestIncomplete();
     }
 }

@@ -6,5 +6,4 @@ use App\Services\Routing\RouterStrategy;
 
 class ValhallaRouterStrategy implements RouterStrategy
 {
-
 }

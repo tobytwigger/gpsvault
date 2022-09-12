@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\ApiImport;
-use App\Integrations\Strava\Models\StravaKudos;
 
 class LoadStravaKudos extends StravaBaseJob
 {
@@ -28,5 +27,4 @@ class LoadStravaKudos extends StravaBaseJob
             $page++;
         } while (count($kudoses) === 200);
     }
-
 }

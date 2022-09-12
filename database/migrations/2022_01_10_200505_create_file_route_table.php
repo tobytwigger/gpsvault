@@ -17,6 +17,9 @@ class CreateFileRouteTable extends Migration
             $table->unsignedBigInteger('file_id');
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
+
+            $table->foreign('route_id')->references('id')->on('routes')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('file_id')->references('id')->on('files')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
