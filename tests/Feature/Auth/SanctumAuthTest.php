@@ -10,7 +10,7 @@ class SanctumAuthTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function unfinished()
+    public function todo_scaffolding_unfinished()
     {
         $this->markTestSkipped('Write out full scaffolding and test');
     }

@@ -193,17 +193,17 @@ class PlannerUpdateTest extends TestCase
     }
 
     /** @test */
-    public function you_can_pass_the_elevation_to_update_it(){
+    public function todo_you_can_pass_the_elevation_to_update_it(){
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function you_can_pass_the_distance_to_update_it(){
+    public function todo_you_can_pass_the_distance_to_update_it(){
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function you_can_pass_the_duration_to_update_it(){
+    public function todo_you_can_pass_the_duration_to_update_it(){
         $this->markTestIncomplete();
     }
 }

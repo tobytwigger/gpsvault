@@ -39,7 +39,7 @@ class AnalyseActivityFileTest extends TestCase
     }
 
     /** @test */
-    public function it_maps_stats_across_to_the_model_correctly()
+    public function todo_it_maps_stats_across_to_the_model_correctly()
     {
         $analysisResult = (new Analysis());
         $file = File::factory()->routeFile()->create();

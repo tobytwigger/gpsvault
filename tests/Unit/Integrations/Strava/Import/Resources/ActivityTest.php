@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Integrations\Strava\Client\Import\Resources;
+namespace Tests\Unit\Integrations\Strava\Import\Resources;
 
 use App\Integrations\Strava\Import\Resources\Activity;
 use App\Models\Stats;
@@ -11,9 +11,9 @@ use Tests\TestCase;
 class ActivityTest extends TestCase
 {
     /** @test */
-    public function it_creates_a_new_activity()
+    public function todo_it_creates_a_new_activity()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $startDate = Carbon::now()->subDay();
         $user = User::factory()->create();
@@ -84,9 +84,9 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_select_attributes_for_an_activity_linked_to_strava()
+    public function todo_it_updates_select_attributes_for_an_activity_linked_to_strava()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $oldUser = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create(['name' => 'Old Name', 'user_id' => $oldUser->id, 'linked_to' => []]);
@@ -164,9 +164,9 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_created_with_only_an_id()
+    public function todo_it_can_be_created_with_only_an_id()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $user = User::factory()->create();
 
@@ -188,9 +188,9 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_isnt_marked_as_updated_if_nothing_changes()
+    public function todo_it_isnt_marked_as_updated_if_nothing_changes()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
@@ -209,9 +209,9 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_is_marked_as_updated_if_updated()
+    public function todo_it_is_marked_as_updated_if_updated()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
@@ -230,9 +230,9 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_is_marked_as_created_if_created()
+    public function todo_it_is_marked_as_created_if_created()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Check over to make sure this is still testing the import properly');
 
         $user = User::factory()->create();
         $activity = \App\Models\Activity::factory()->create();
@@ -251,7 +251,7 @@ class ActivityTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_an_activity_with_a_similar_distance_and_start_time()
+    public function todo_it_updates_an_activity_with_a_similar_distance_and_start_time()
     {
         $this->markTestIncomplete();
     }

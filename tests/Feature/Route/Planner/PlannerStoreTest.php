@@ -179,17 +179,17 @@ class PlannerStoreTest extends TestCase
     }
 
     /** @test */
-    public function you_can_pass_the_elevation_to_save_it(){
+    public function todo_you_can_pass_the_elevation_to_save_it(){
      $this->markTestIncomplete();
     }
 
     /** @test */
-    public function you_can_pass_the_distance_to_save_it(){
+    public function todo_you_can_pass_the_distance_to_save_it(){
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function you_can_pass_the_duration_to_save_it(){
+    public function todo_you_can_pass_the_duration_to_save_it(){
         $this->markTestIncomplete();
     }
 }
