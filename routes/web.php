@@ -59,7 +59,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);
-    Route::post('backups/sync/{sync}/cancel', [\App\Http\Controllers\Pages\Backup\CancelBackupController::class, 'cancel'])->name('backup.sync.cancel');
 
     /* Files */
     Route::get('file/{file}/download', [\App\Http\Controllers\Pages\File\FileDownloadController::class, 'download'])->name('file.download');

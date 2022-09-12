@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Pages\Backup;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\CreateBackup;
+use App\Jobs\CreateFullBackup;
 use App\Models\File;
 use App\Services\File\FileUploader;
 use Illuminate\Http\RedirectResponse;
@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use JobStatus\Models\JobStatus;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BackupController extends Controller
 {
@@ -42,7 +44,13 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
-        CreateBackup::dispatchSync(Auth::user());
+        if(JobStatus::forJobAlias('create-full-backup')
+            ->whereTag('user_id', Auth::user()->id)
+            ->whereNotStatus(['succeeded', 'failed', 'cancelled'])
+            ->exists()) {
+            throw new HttpException(403, 'A backup is already running');
+        }
+        CreateFullBackup::dispatch(Auth::user());
 
         return redirect()->route('backup.index');
     }

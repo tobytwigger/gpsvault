@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Jobs\CreateBackup;
+use App\Jobs\CreateFullBackup;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Route;
@@ -52,7 +52,7 @@ class CreateBackupTest extends TestCase
         $exporter->archive()->shouldBeCalled()->willReturn($file);
         ZipCreator::swap($exporter->reveal());
 
-        CreateBackup::dispatch($user);
+        CreateFullBackup::dispatch($user);
 
         $file->refresh();
         $this->assertEquals('Full backup 04/02/2022', $file->title);

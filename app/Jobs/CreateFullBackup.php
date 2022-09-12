@@ -13,10 +13,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use JobStatus\Trackable;
 
-class CreateBackup implements ShouldQueue
+class CreateFullBackup implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     public User $user;
 
@@ -28,50 +29,72 @@ class CreateBackup implements ShouldQueue
         $this->user = $user;
     }
 
+    public function alias(): ?string
+    {
+        return 'create-full-backup';
+    }
+
+    public function tags(): array
+    {
+        return [
+            'user_id' => $this->user->id
+        ];
+    }
+
+    public static function canSeeTracking($user = null, array $tags = []): bool
+    {
+        return (int) $tags['user_id'] === $user?->id;
+    }
+
     /**
      * Execute the job.
      */
     public function handle()
     {
-//        $this->line('Collecting data to back up.');
+        $this->line('Collecting data to back up.');
         $zipCreator = ZipCreator::start($this->user);
 
         /* User */
         $zipCreator->add($this->user);
 
         /* Activity */
-//        $activityCount = 0;
+        $activityCount = 0;
         foreach (Activity::where('user_id', $this->user->id)->get() as $activity) {
             $zipCreator->add($activity);
-//            $activityCount++;
+            $activityCount++;
         }
-//        $this->line(sprintf('Added %u activities.', $activityCount));
+        $this->line(sprintf('Added %u activities.', $activityCount));
 
         /* Route */
-//        $routeCount = 0;
+        $routeCount = 0;
         foreach (Route::where('user_id', $this->user->id)->get() as $route) {
             $zipCreator->add($route);
-//            $routeCount++;
+            $routeCount++;
         }
-//        $this->line(sprintf('Added %u routes.', $routeCount));
+        $this->line(sprintf('Added %u routes.', $routeCount));
 
         /* Tour */
-//        $tourCount = 0;
+        $tourCount = 0;
         foreach (Tour::where('user_id', $this->user->id)->get() as $tour) {
             $zipCreator->add($tour);
-//            $tourCount++;
+            $tourCount++;
         }
-//        $this->line(sprintf('Added %u tours.', $tourCount));
+        $this->line(sprintf('Added %u tours.', $tourCount));
 
-//        $this->offerBail('Cancelled without generating an archive.');
+        $this->checkForSignals();
 
-//        $this->line('Generating archive.');
+        $this->line('Generating archive.');
 
         $file = $zipCreator->archive();
         $file->title = $file->title ?? 'Full backup ' . Carbon::now()->format('d/m/Y');
         $file->caption = $file->caption ?? 'Full backup taken at ' . Carbon::now()->format('d/m/Y H:i:s');
         $file->save();
 
-//        $this->succeed('Generated full backup of your data.');
+        $this->successMessage('Generated full backup of your data.');
+    }
+
+    public function onCancel()
+    {
+        $this->warningMessage('Cancelled without generating an archive.');
     }
 }
