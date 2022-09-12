@@ -1,19 +1,9 @@
 site_name: Cycle Store
 site_url: !ENV SITE_URL
-repo_url: https://github.com/tobytwigger/cycle-store
+repo_url: https://github.com/tobytwigger/gpsvault
 edit_uri: edit/develop/docs/docs/
 nav:
   - Introduction: index.md
-  - Activity:
-    - Adding an Activity: activity/adding.md
-    - Viewing an Activity: activity/viewing.md
-  - Route:
-      - Planning a new route: route/adding.md
-      - Viewing a route: route/viewing.md
-      - Visiting places: route/places.md
-      - Multi-day routes: route/multi-day.md
-  - Backup:
-      - Backing up your data: backup/adding.md
   - Developers:
       - Getting Started: developers/get-started.md
       - Activities: developers/activities.md

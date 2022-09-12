@@ -130,7 +130,7 @@
                 </v-list-item-icon>
                 <v-list-item-title>Backups</v-list-item-title>
             </v-list-item>
-            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link :href="route('documentation')"
+            <v-list-item :input-value="['documentation'].indexOf(route().current()) > -1" link target="_blank" :href="route('documentation')"
                          data-hint="Learn how to use this site." :data-step="999">
                 <v-list-item-icon>
                     <v-icon>mdi-book-open-blank-variant</v-icon>

@@ -18,7 +18,7 @@ Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'we
 Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
 /* Documentation */
-Route::get('/documentation', fn () => \Illuminate\Support\Facades\Redirect::away(config('app.docs')))->name('documentation');
+Route::redirect('/documentation', '/docs')->name('documentation');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Dashboard */
