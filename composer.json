@@ -79,8 +79,8 @@
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",
-            "@php artisan telescope:install --quiet --ansi",
-            "@php artisan horizon:install --quiet --ansi",
+            "@php artisan telescope:publish --quiet --ansi",
+            "@php artisan horizon:publish --quiet --ansi",
             "@php artisan larecipe:install --quiet --ansi"
         ],
         "post-install-cmd": [

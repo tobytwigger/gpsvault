@@ -48,7 +48,7 @@ class PlannerStoreTest extends TestCase
     }
 
     /** @test */
-    public function it_stores_the_waypoints_of_a_route()
+    public function it_stores_the_activityPoints_of_a_route()
     {
         $this->authenticated();
 

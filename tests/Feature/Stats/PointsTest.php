@@ -22,7 +22,7 @@ class PointsTest extends TestCase
             (new Point())->setLatitude(3)->setLongitude(52)->setSpeed(22),
             (new Point())->setLatitude(4)->setLongitude(53)->setSpeed(23),
         ];
-        $stats->waypoints()->createMany(collect($points)->map(fn (Point $point) => [
+        $stats->activityPoints()->createMany(collect($points)->map(fn (Point $point) => [
             'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
             'speed' => $point->getSpeed(),
         ]));
@@ -60,7 +60,7 @@ class PointsTest extends TestCase
     }
 
     /** @test */
-    public function an_empty_array_is_returned_if_no_waypoints_exist()
+    public function an_empty_array_is_returned_if_no_activityPoints_exist()
     {
         $this->authenticated();
 

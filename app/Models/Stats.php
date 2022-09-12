@@ -61,14 +61,10 @@ class Stats extends Model
         'average_watts',
         // The average energy output in kjoules
         'kilojoules',
-        // The start latitude
-        'start_latitude',
-        // The start longitude
-        'start_longitude',
-        // The end latitude
-        'end_latitude',
-        // The end longitude
-        'end_longitude',
+        // The starting point
+        'start_point',
+        // The end point
+        'end_point',
         // The average heartrate in bpm
         'average_heartrate',
         // The max heartrate in bpm
@@ -94,10 +90,6 @@ class Stats extends Model
         'average_temp' => 'float',
         'average_watts' => 'float',
         'kilojoules' => 'float',
-        'start_latitude' => 'float',
-        'start_longitude' => 'float',
-        'end_latitude' => 'float',
-        'end_longitude' => 'float',
         'max_heartrate' => 'float',
         'average_heartrate' => 'float',
         'calories' => 'float',
@@ -105,10 +97,20 @@ class Stats extends Model
 
     protected $postgisFields = [
         'linestring',
+        'start_point',
+        'end_point'
     ];
 
     protected $postgisTypes = [
         'linestring' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
+        'start_point' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
+        'end_point' => [
             'geomtype' => 'geography',
             'srid' => 4326,
         ],
@@ -130,20 +132,20 @@ class Stats extends Model
 
     public function getHumanStartedAtAttribute()
     {
-        if (!$this->start_latitude || !$this->start_longitude) {
+        if (!$this->start_point) {
             return null;
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_latitude, $this->start_longitude);
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_point->getLat(), $this->start_point->getLng());
     }
 
     public function getHumanEndedAtAttribute()
     {
-        if (!$this->end_latitude || !$this->end_longitude) {
+        if (!$this->end_point) {
             return null;
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_latitude, $this->end_longitude);
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_point->getLat(), $this->end_point->getLng());
     }
 
     public static function default()
@@ -167,8 +169,8 @@ class Stats extends Model
         $query->orderByPreference();
     }
 
-    public function waypoints()
+    public function activityPoints()
     {
-        return $this->hasMany(Waypoint::class);
+        return $this->hasMany(ActivityPoint::class);
     }
 }

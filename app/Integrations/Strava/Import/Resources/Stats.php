@@ -3,10 +3,10 @@
 namespace App\Integrations\Strava\Import\Resources;
 
 use App\Services\Analysis\Parser\Point;
+use MStaack\LaravelPostgis\Geometries\LineString;
 
 class Stats
 {
-
     public function import(array $statsData, \App\Models\Activity $activity): Stats
     {
         if ($activity->started_at === null) {
@@ -16,10 +16,11 @@ class Stats
         $timeData = $statsData['time'] ?? throw new \Exception('No time stream was returned from Strava');
 
         $stats = $activity->statsFrom('strava')->firstOrFail();
-        $stats->waypoints()->delete();
+        $stats->activityPoints()->delete();
         $order = 0;
+        $points = [];
         foreach ($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
-            $stats->waypoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
+            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
                 $toReturn = [
                     'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
                     'elevation' => $point->getElevation(),
@@ -34,9 +35,14 @@ class Stats
                     'calories' => $point->getCalories(),
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
+                $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
                 $order += 1;
+
                 return $toReturn;
             }));
+
+            $stats->linestring = new LineString($points);
+            $stats->save();
         }
 
         return $this;
@@ -45,7 +51,7 @@ class Stats
     private function getPoints(array $statsData, array $timeData, \App\Models\Activity $activity): \Generator
     {
         foreach (collect($timeData['data'])->chunk(1000) ?? [] as $chunkedTimeData) {
-            yield $chunkedTimeData->mapWithKeys(fn($timeDelta, $index) => [$index => (new Point())
+            yield $chunkedTimeData->mapWithKeys(fn ($timeDelta, $index) => [$index => (new Point())
                 ->setTime($activity->started_at->addSeconds($timeDelta))
                 ->setCadence(data_get($statsData, 'cadence.data.' . $index, null))
                 ->setLatitude(data_get($statsData, 'latlng.data.' . $index . '.0', null))
@@ -54,9 +60,8 @@ class Stats
                 ->setTemperature(data_get($statsData, 'temp.data.' . $index, null))
                 ->setCumulativeDistance(data_get($statsData, 'distance.data.' . $index, null))
                 ->setElevation(data_get($statsData, 'altitude.data.' . $index, null))
-                ->setHeartRate(data_get($statsData, 'heartrate.data.' . $index, null))
+                ->setHeartRate(data_get($statsData, 'heartrate.data.' . $index, null)),
             ])->all();
         }
-
     }
 }

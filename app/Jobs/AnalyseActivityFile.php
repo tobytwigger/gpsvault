@@ -13,6 +13,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use JobStatus\Trackable;
+use MStaack\LaravelPostgis\Geometries\LineString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseActivityFile implements ShouldQueue
@@ -90,10 +91,8 @@ class AnalyseActivityFile implements ShouldQueue
                 'average_temp' => $analysis->getAverageTemp(),
                 'average_watts' => $analysis->getAverageWatts(),
                 'kilojoules' => $analysis->getKilojoules(),
-                'start_latitude' => $analysis->getStartLatitude(),
-                'start_longitude' => $analysis->getStartLongitude(),
-                'end_latitude' => $analysis->getEndLatitude(),
-                'end_longitude' => $analysis->getEndLongitude(),
+                'start_point' => new \MStaack\LaravelPostgis\Geometries\Point($analysis->getStartLatitude(), $analysis->getStartLongitude()),
+                'end_point' => new \MStaack\LaravelPostgis\Geometries\Point($analysis->getEndLatitude(), $analysis->getEndLongitude()),
                 'min_altitude' => $analysis->getMinAltitude(),
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
@@ -108,28 +107,44 @@ class AnalyseActivityFile implements ShouldQueue
 
     private function savePoints(Stats $stats, array $points)
     {
-        $stats->waypoints()->delete();
+        $stats->activityPoints()->delete();
 
-        $waypoints = collect($points)->chunk(1000);
+        $activityPoints = collect($points)->chunk(1000);
         $percentage = 0;
-        $increase = 100 / ($waypoints->count() < 1 ? 1 : $waypoints->count());
+        $increase = 100 / ($activityPoints->count() < 1 ? 1 : $activityPoints->count());
+        $points = [];
+        $order = 0;
 
-        foreach ($waypoints as $chunkedPoints) {
-            $stats->waypoints()->createMany($chunkedPoints->map(fn (Point $point) => [
-                'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-                'elevation' => $point->getElevation(),
-                'time' => $point->getTime(),
-                'cadence' => $point->getCadence(),
-                'temperature' => $point->getTemperature(),
-                'heart_rate' => $point->getHeartRate(),
-                'speed' => $point->getSpeed(),
-                'grade' => $point->getGrade(),
-                'battery' => $point->getBattery(),
-                'calories' => $point->getCalories(),
-                'cumulative_distance' => $point->getCumulativeDistance(),
-            ]));
+        foreach ($activityPoints as $chunkedPoints) {
+            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order, &$points) {
+                $toReturn = [
+                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                    'elevation' => $point->getElevation(),
+                    'time' => $point->getTime(),
+                    'cadence' => $point->getCadence(),
+                    'temperature' => $point->getTemperature(),
+                    'heart_rate' => $point->getHeartRate(),
+                    'speed' => $point->getSpeed(),
+                    'grade' => $point->getGrade(),
+                    'order' => $order,
+                    'battery' => $point->getBattery(),
+                    'calories' => $point->getCalories(),
+                    'cumulative_distance' => $point->getCumulativeDistance(),
+                ];
+                $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+                $order += 1;
+
+                return $toReturn;
+            }));
+
             $percentage += $increase;
             $this->percentage($percentage);
+        }
+
+
+        if(count($points) > 1) {
+            $stats->linestring = new LineString($points);
+            $stats->save();
         }
     }
 

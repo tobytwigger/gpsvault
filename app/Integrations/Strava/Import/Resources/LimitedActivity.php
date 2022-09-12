@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class LimitedActivity
 {
@@ -111,10 +112,14 @@ class LimitedActivity
             'average_temp' => $activityData['average_temp'] ?? $stats->average_temp,
             'average_watts' => $activityData['average_watts'] ?? $stats->average_watts,
             'kilojoules' => $activityData['kilojoules'] ?? $stats->kilojoules,
-            'start_latitude' => Arr::first($activityData['start_latlng'] ?? [$stats->start_latitude]),
-            'start_longitude' => Arr::last($activityData['start_latlng'] ?? [$stats->start_longitude]),
-            'end_latitude' => Arr::first($activityData['end_latlng'] ?? [$stats->end_latitude]),
-            'end_longitude' => Arr::last($activityData['end_latlng'] ?? [$stats->end_longitude]),
+            'start_point' => new Point(
+                Arr::first($activityData['start_latlng'] ?? [$stats->start_point?->getLat()]),
+                Arr::last($activityData['start_latlng'] ?? [$stats->start_point?->getLng()])
+            ),
+            'end_point' => new Point(
+                Arr::first($activityData['end_latlng'] ?? [$stats->end_point?->getLat()]),
+                Arr::last($activityData['end_latlng'] ?? [$stats->end_point?->getLng()])
+            ),
         ]);
 
         return $stats;

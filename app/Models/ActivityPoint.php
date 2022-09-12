@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
-class Waypoint extends Model
+class ActivityPoint extends Model
 {
     use PostgisTrait;
 
-    protected $table = 'waypoints';
+    protected $table = 'activity_points';
 
     protected $postgisFields = [
         'points',

@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Route;
 use App\Models\Stats;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class StatsFactory extends Factory
 {
@@ -34,10 +35,8 @@ class StatsFactory extends Factory
             'average_temp' => $this->faker->randomFloat(2, 1, 100),
             'average_watts' => $this->faker->randomFloat(2, 1, 100),
             'kilojoules' => $this->faker->randomFloat(2, 1, 100),
-            'start_latitude' => $this->faker->latitude,
-            'start_longitude' => $this->faker->longitude,
-            'end_latitude' => $this->faker->latitude,
-            'end_longitude' => $this->faker->longitude,
+            'start_point' => new Point($this->faker->latitude, $this->faker->longitude),
+            'end_point' => new Point($this->faker->latitude, $this->faker->longitude),
             'max_heartrate' => $this->faker->randomFloat(2, 1, 100),
             'average_heartrate' => $this->faker->randomFloat(2, 1, 100),
             'calories' => $this->faker->randomFloat(2, 1, 100),
