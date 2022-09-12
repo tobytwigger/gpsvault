@@ -12,6 +12,6 @@ class SanctumAuthTest extends TestCase
     /** @test */
     public function unfinished()
     {
-        $this->markTestSkipped();
+        $this->markTestSkipped('Write out full scaffolding and test');
     }
 }

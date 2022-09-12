@@ -34,7 +34,7 @@ class UserTest extends TestCase
         $activities = Activity::factory()->count(5)->create(['user_id' => $user->id]);
 
         $this->assertContainsOnlyInstancesOf(Activity::class, $user->activities);
-        $retrievedActivities = $user->activities;
+        $retrievedActivities = $user->activities()->orderBy('id')->get();
         foreach ($activities as $activity) {
             $this->assertTrue($activity->is($retrievedActivities->shift()));
         }
