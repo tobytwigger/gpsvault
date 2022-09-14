@@ -26,11 +26,16 @@
                     </template>
                 </c-activity-form>
 
+                <v-list-item @click="$inertia.get(route('planner.create'))">
+                    <v-list-item-icon><v-icon>mdi-map</v-icon></v-list-item-icon>
+                    <v-list-item-title>Plan a Route</v-list-item-title>
+                </v-list-item>
+
                 <c-route-form title="Add new route" button-text="Create">
                     <template v-slot:activator="{trigger, showing}">
                         <v-list-item @click="trigger">
-                            <v-list-item-icon><v-icon>mdi-routes</v-icon></v-list-item-icon>
-                            <v-list-item-title>Route</v-list-item-title>
+                            <v-list-item-icon><v-icon>mdi-upload</v-icon></v-list-item-icon>
+                            <v-list-item-title>Upload a Route</v-list-item-title>
                         </v-list-item>
                     </template>
                 </c-route-form>

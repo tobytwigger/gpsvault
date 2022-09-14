@@ -1,34 +1,27 @@
 <template>
+    <div>Location Input</div>
+<!--    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener">-->
 
-    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener">
+<!--        <l-tile-layer-->
+<!--            v-for="tileProvider in tileProviders"-->
+<!--            :key="tileProvider.name"-->
+<!--            :name="tileProvider.name"-->
+<!--            :visible="tileProvider.visible"-->
+<!--            :url="tileProvider.url"-->
+<!--            :attribution="tileProvider.attribution"-->
+<!--            layer-type="base"/>-->
 
-        <l-tile-layer
-            v-for="tileProvider in tileProviders"
-            :key="tileProvider.name"
-            :name="tileProvider.name"
-            :visible="tileProvider.visible"
-            :url="tileProvider.url"
-            :attribution="tileProvider.attribution"
-            layer-type="base"/>
+<!--        <l-marker v-if="hasLocation" :draggable="true" @update:latLng="(e) => setLatLng(e.lat, e.lng)" :lat-lng="markerLatLng"></l-marker>-->
 
-        <l-marker v-if="hasLocation" :draggable="true" @update:latLng="(e) => setLatLng(e.lat, e.lng)" :lat-lng="markerLatLng"></l-marker>
-
-    </l-map>
+<!--    </l-map>-->
 
 </template>
 
 <script>
-import { LMap, LGeoJson, LTileLayer, LControl, LControlLayers, LMarker } from "vue2-leaflet";
 
 export default {
     name: "CLocationInput",
     components: {
-        LMap,
-        LGeoJson,
-        LTileLayer,
-        LControlLayers,
-        LControl,
-        LMarker
     },
     props: {
         value: {
@@ -46,7 +39,6 @@ export default {
             this.$emit('input', {lat: lat, lng: lng})
         },
         test(e) {
-            console.log(e);
         }
     },
     data() {

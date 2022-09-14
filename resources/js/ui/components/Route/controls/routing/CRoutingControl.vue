@@ -1,0 +1,182 @@
+<template>
+    <div>
+        <v-row>
+            <v-col style="margin: 10px;">
+                <v-card
+                    max-width="600"
+                    class="mx-auto"
+                >
+                    <v-toolbar
+                        color="light-blue"
+                        dark
+                    >
+                        <v-toolbar-title>Routing</v-toolbar-title>
+
+                        <v-spacer></v-spacer>
+
+                        <v-btn icon @click="showSettings = !showSettings">
+                            <v-icon>mdi-cog</v-icon>
+                        </v-btn>
+                    </v-toolbar>
+
+                    <div v-if="showSettings">
+                        <v-text-field
+                            v-model="_schema.name"
+                            hint="A name for the route"
+                            label="Route Name"
+                        ></v-text-field>
+                    </div>
+
+                    <v-list
+                        subheader
+                        two-line
+                    >
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title>{{convert(result.distance, 'distance').value}}{{convert(result.distance, 'distance').unit}}</v-list-item-title>
+                                <v-list-item-subtitle>Distance</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title>{{routeTime}}</v-list-item-title>
+                                <v-list-item-subtitle>Duration</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <draggable v-model="_orderArray" handle=".drag-handle">
+                            <v-list-item
+                                v-for="(waypoint, index) in schema?.waypoints ?? []" :key="waypoint.id"
+                            >
+                                <v-list-item-avatar style="cursor: grab;">
+                                    <v-icon class="drag-handle">
+                                        mdi-drag
+                                    </v-icon>
+                                </v-list-item-avatar>
+
+                                <v-list-item-content>
+                                    <v-list-item-title>Waypoint #{{parseInt(index) + 1}}</v-list-item-title>
+
+                                    <!--                                <v-list-item-subtitle></v-list-item-subtitle>-->
+                                </v-list-item-content>
+
+                                <v-list-item-action>
+                                    <v-btn icon @click="deleteWaypoint(waypoint.id)">
+                                        <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                                    </v-btn>
+                                </v-list-item-action>
+                            </v-list-item>
+                        </draggable>
+                    </v-list>
+                </v-card>
+
+
+<!--                <v-card-->
+<!--                    class="mx-auto"-->
+<!--                    outlined-->
+<!--                    v-for="(waypoint, index) in schema?.waypoints ?? []" :key="waypoint.id"-->
+<!--                >-->
+<!--                    <v-list-item three-line>-->
+<!--                        <v-list-item-content>-->
+<!--                            <div class="text-overline mb-4">-->
+<!--                                Waypoint #{{index}}-->
+<!--                            </div>-->
+<!--&lt;!&ndash;                            <v-list-item-title class="text-h5 mb-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                Headline 5&ndash;&gt;-->
+<!--&lt;!&ndash;                            </v-list-item-title>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <v-list-item-subtitle>Greyhound divisely hello coldly fonwderfully</v-list-item-subtitle>&ndash;&gt;-->
+<!--                        </v-list-item-content>-->
+<!--                    </v-list-item>-->
+
+<!--                    <v-card-actions>-->
+<!--                        <v-spacer></v-spacer>-->
+<!--                        <v-btn-->
+<!--                            outlined-->
+<!--                            rounded-->
+<!--                            icon-->
+<!--                            @click="deleteWaypoint(waypoint.id)"-->
+<!--                        >-->
+<!--                            <v-icon>mdi-delete</v-icon>-->
+<!--                            Delete-->
+<!--                        </v-btn>-->
+<!--                    </v-card-actions>-->
+<!--                </v-card>-->
+            </v-col>
+        </v-row>
+    </div>
+</template>
+
+<script>
+
+import {cloneDeep} from 'lodash';
+import draggable from 'vuedraggable'
+import units from '../../../../mixins/units';
+import moment from 'moment/moment';
+
+export default {
+    name: "CRoutingControl",
+    mixins: [units],
+    components: {
+        draggable
+    },
+    props: {
+        schema: {
+            required: false,
+//            required: true,
+            type: Object,
+            default: () => {
+                return {
+
+                }
+            }
+        },
+        result: {
+            required: true,
+            type: Object
+        }
+    },
+    data() {
+        return {
+            showSettings: false,
+        }
+    },
+    computed: {
+        _orderArray: {
+            get: function() {
+                return this.schema.waypoints;
+            },
+            set: function(val) {
+                let schema = cloneDeep(this._schema);
+                schema.waypoints = val;
+                this._schema = schema;
+            }
+        },
+        _schema: {
+            get: function() {
+                return this.schema;
+            },
+            set: function(val) {
+                return this.$emit('update:schema', val);
+            }
+        },
+        routeTime() {
+            if(!this.result?.time) {
+                return '0s'
+            }
+            return moment.duration(this.result.time, 's').humanize();
+        }
+    },
+    methods: {
+        deleteWaypoint(waypointId) {
+            let schema = cloneDeep(this._schema);
+            schema.waypoints = schema.waypoints.filter(w => w.id.toString() !== waypointId.toString());
+            this._schema = schema;
+        }
+    },
+
+}
+</script>
+
+<style scoped>
+</style>

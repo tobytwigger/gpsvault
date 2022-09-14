@@ -25,14 +25,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'index'])->name('dashboard');
 
     /* Tours */
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
+    Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
+    Route::resource('tour.stage', \App\Http\Controllers\Pages\Stage\StageController::class)->only(['store', 'update', 'destroy']);
+    Route::get('/tour/{tour}/geojson', [\App\Http\Controllers\Pages\Tour\GeoJsonController::class, 'show'])->name('tour.geojson');
 
     /* Places */
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->get('place/search', [\App\Http\Controllers\Pages\Place\PlaceSearchController::class, 'search'])->name('place.search');
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->resource('place', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->resource('route.place', \App\Http\Controllers\Pages\Place\PlaceRouteController::class)->only(['store', 'destroy']);
+    Route::get('place/search', [\App\Http\Controllers\Pages\Place\PlaceSearchController::class, 'search'])->name('place.search');
+    Route::resource('place', \App\Http\Controllers\Pages\Place\PlaceController::class)->only(['index', 'show', 'update', 'store']);
+    Route::resource('route.place', \App\Http\Controllers\Pages\Place\PlaceRouteController::class)->only(['store', 'destroy']);
 
     /* Activities */
     Route::get('/activity/search', [\App\Http\Controllers\Pages\Activity\ActivitySearchController::class, 'search'])->name('activity.search');
@@ -44,18 +44,19 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/activity/file/duplicate', [\App\Http\Controllers\Pages\Activity\ActivityDuplicateController::class, 'index'])->name('activity.file.duplicate');
 
     /* Routes */
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->get('/route/search', [\App\Http\Controllers\Pages\Route\RouteSearchController::class, 'search'])->name('route.search');
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->resource('route', \App\Http\Controllers\Pages\Route\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->prefix('route/{route}')->group(function () {
+    Route::get('/route/search', [\App\Http\Controllers\Pages\Route\RouteSearchController::class, 'search'])->name('route.search');
+    Route::resource('route', \App\Http\Controllers\Pages\Route\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
+    Route::prefix('route/{route}')->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Route\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
         Route::resource('file', \App\Http\Controllers\Pages\Route\RouteFileController::class, ['as' => 'route'])->only(['destroy', 'update', 'store']);
     });
 
     /* Route Planner */
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->post('/route/planner/save', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'store'])->name('planner.store');
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
-    Route::middleware(\App\Http\Middleware\PageIncomplete::class)->patch('/route/planner/save/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'update'])->name('planner.update');
+    Route::get('/route/planner/create', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'create'])->name('planner.create');
+    Route::post('/route/planner/save', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'store'])->name('planner.store');
+    Route::get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
+    Route::patch('/route/planner/save/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'update'])->name('planner.update');
+    Route::post('/route/planner/plan', \App\Http\Controllers\Pages\Route\Planner\RoutingController::class)->name('planner.plan');
 
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);

@@ -33,11 +33,11 @@
  * @see [Display map navigation controls](https://maplibre.org/maplibre-gl-js-docs/example/navigation/)
  * @see [Add a third party vector tile source](https://maplibre.org/maplibre-gl-js-docs/example/third-party/)
  */
-class RoutingControl {
+class ElevationControl {
     _map;
     options;
     _container;
-    _routingButton;
+    _elevationButton;
     _sidebar;
     _sidebarIsShowing = false;
 
@@ -45,15 +45,17 @@ class RoutingControl {
 
         this._container = window.document.createElement('div');
         this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';// maplibregl-ctrl-top-left';
-
         this._container.addEventListener('contextmenu', (e) => e.preventDefault());
 
-        this._routingButton = this._createButton('maplibregl-ctrl-icon maplibregl-ctrl-zoom-in', (e) => {
+        this._hideSidebar.bind(this);
+        this._showSidebar.bind(this);
+
+        this._elevationButton = this._createButton('maplibregl-ctrl-icon maplibregl-ctrl-zoom-in', (e) => {
             if(this._sidebarIsShowing) {
-                this.hideSidebar();
+                this._hideSidebar();
                 this._sidebarIsShowing = false;
             } else {
-                this.showSidebar();
+                this._showSidebar();
                 this._sidebarIsShowing = true;
             }
         });
@@ -61,44 +63,34 @@ class RoutingControl {
         let span = window.document.createElement('span');
         span.className = 'maplibregl-ctrl-icon mapboxgl-ctrl-icon';
         span.setAttribute('aria-hidden', 'true');
-        this._routingButton.appendChild(span);
+        this._elevationButton.appendChild(span);
 
         this._sidebar = window.document.createElement('div');
-        this._sidebar.className = 'maplibregl-custom-ctrl-sidebar';
+        this._sidebar.className = 'maplibregl-custom-ctrl-bottom-bar';
         this._sidebar.hidden = true;
         this._container.appendChild(this._sidebar);
-        this._sidebar.appendChild(window.document.getElementById('routing-control'));
+        this._sidebar.appendChild(window.document.getElementById('elevation-control'));
     }
 
-    hideSidebar() {
+    _hideSidebar() {
         this._sidebar.hidden = true;
-        this._routingButton.classList.remove('maplibregl-ctrl-zoom-out')
-        this._routingButton.classList.add('maplibregl-ctrl-zoom-in');
+        this._elevationButton.classList.remove('maplibregl-ctrl-zoom-out')
+        this._elevationButton.classList.add('maplibregl-ctrl-zoom-in');
     }
 
-    showSidebar() {
+    _showSidebar() {
         this._sidebar.hidden = false;
-        this._routingButton.classList.add('maplibregl-ctrl-zoom-out')
-        this._routingButton.classList.remove('maplibregl-ctrl-zoom-in');
+        this._elevationButton.classList.add('maplibregl-ctrl-zoom-out')
+        this._elevationButton.classList.remove('maplibregl-ctrl-zoom-in');
     }
 
     getDefaultPosition() {
-        return 'top-left';
-    }
-
-    _updateZoomButtons() {
-        // const zoom = this._map.getZoom();
-        // const isMax = zoom === this._map.getMaxZoom();
-        // const isMin = zoom === this._map.getMinZoom();
-        // this._routingButton.disabled = isMax;
-        // this._zoomOutButton.disabled = isMin;
-        // this._routingButton.setAttribute('aria-disabled', isMax.toString());
-        // this._zoomOutButton.setAttribute('aria-disabled', isMin.toString());
+        return 'bottom-left';
     }
 
     onAdd(map) {
         this._map = map;
-        this._setButtonTitle(this._routingButton, 'Routing');
+        this._setButtonTitle(this._elevationButton, 'Elevation');
         // this._map.on('zoom', this._updateZoomButtons);
         // this._updateZoomButtons();
         return this._container;
@@ -128,4 +120,4 @@ class RoutingControl {
     }
 }
 
-export default RoutingControl;
+export default ElevationControl;

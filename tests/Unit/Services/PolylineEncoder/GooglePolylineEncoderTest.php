@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Services\StaticMapGenerator;
+namespace Tests\Unit\Services\PolylineEncoder;
 
 use Tests\TestCase;
 

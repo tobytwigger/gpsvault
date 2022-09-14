@@ -210,7 +210,6 @@ export default {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
         },
         addToRoute(place) {
-            console.log(place);
             this.$inertia.post(route('route.place.store', this.routeModel.id), {
                 place_id: place.id
             }, {

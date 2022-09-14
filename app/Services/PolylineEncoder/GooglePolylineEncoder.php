@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\StaticMapGenerator;
+namespace App\Services\PolylineEncoder;
 
 class GooglePolylineEncoder
 {
@@ -71,39 +71,26 @@ class GooglePolylineEncoder
      * @param type $value
      * @return type
      */
-    static public function decodeValue($value)
+    static public function decodeValue($encoded, $precision = 5)
     {
-        $index = 0;
         $points = array();
-        $lat = 0;
-        $lng = 0;
-
-        while ($index < strlen($value)) {
-            $b;
-            $shift = 0;
-            $result = 0;
+        $index = $i = 0;
+        $previous = array(0,0);
+        while ($i < strlen($encoded)) {
+            $shift = $result = 0x00;
             do {
-                $b = ord(substr($value, $index++, 1)) - 63;
-                $result |= ($b & 0x1f) << $shift;
+                $bit = ord(substr($encoded, $i++)) - 63;
+                $result |= ($bit & 0x1f) << $shift;
                 $shift += 5;
-            } while ($b > 31);
-            $dlat = (($result & 1) ? ~($result >> 1) : ($result >> 1));
-            $lat += $dlat;
+            } while ($bit >= 0x20);
 
-            $shift = 0;
-            $result = 0;
-            do {
-                $b = ord(substr($value, $index++, 1)) - 63;
-                $result |= ($b & 0x1f) << $shift;
-                $shift += 5;
-            } while ($b > 31);
-            $dlng = (($result & 1) ? ~($result >> 1) : ($result >> 1));
-            $lng += $dlng;
-
-            $points[] = array('x' => $lat / 100000, 'y' => $lng / 100000);
+            $diff = ($result & 1) ? ~($result >> 1) : ($result >> 1);
+            $number = $previous[$index % 2] + $diff;
+            $previous[$index % 2] = $number;
+            $index++;
+            $points[] = $number * 1 / pow(10, $precision);
         }
-
-        return $points;
+        return array_chunk($points, 2);
     }
 
 }

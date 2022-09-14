@@ -2,6 +2,16 @@
     <c-app-wrapper title="New Route" :header-action="true">
 
         <template #headerActions>
+
+            <v-alert
+                outlined
+                type="warning"
+                border="left"
+                v-if="schema?.waypoints?.length < 2"
+            >
+                Add a start and end point to start planning
+            </v-alert>
+
             <v-tooltip bottom v-if="routeModel">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -17,6 +27,12 @@
                 <span>View</span>
             </v-tooltip>
 
+            <v-progress-circular
+                indeterminate
+                v-if="searching"
+                color="primary"
+            ></v-progress-circular>
+
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -31,6 +47,7 @@
                 </template>
                 <span>Save</span>
             </v-tooltip>
+
         </template>
 
         <c-route-planner
@@ -58,21 +75,36 @@ export default {
     },
     data() {
         return {
+            searching: false,
             result: {
-                coordinates: []
+                coordinates: [],
+                distance: 0,
+                time: 0
             },
             schema: {
-                test: 'hello'
+                waypoints: []
             }
         }
     },
     methods: {
         updateSchema(schema) {
             this.schema = schema;
-            this.performSearch();
+            if(this.schema?.waypoints?.length > 1) {
+                this.performSearch();
+            } else {
+                this.result = {
+                    coordinates: [],
+                    distance: 0,
+                    time: 0
+                };
+            }
         },
         performSearch() {
-            // TODO
+            this.searching = true;
+            axios.post(route('planner.plan'), this.schema)
+                .then(response => this.result = response.data)
+                .catch(e => console.log(e))
+                .finally(() => this.searching = false);
         },
         save() {
             // if(this.routeModel) {
@@ -104,6 +136,9 @@ export default {
         }
     },
     mounted() {
+        if(this.schema.waypoints.length > 1) {
+            this.performSearch();
+        }
         if(this.routeModel) {
             // this.waypoints = (this.routeModel?.path?.route_points ?? []).map(r => {
             //     return {lat: r.location.coordinates[1], lng: r.location.coordinates[0]}

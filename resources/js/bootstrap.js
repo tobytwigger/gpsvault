@@ -22,7 +22,6 @@ window.axios.defaults.withCredentials = true;
  */
 import VueEasyLightbox from 'vue-easy-lightbox'
 import UiKit from 'ui/install';
-import 'leaflet/dist/leaflet.css';
 import {Link} from '@inertiajs/inertia-vue';
 
 Vue.use(UiKit);

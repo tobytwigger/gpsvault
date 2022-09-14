@@ -3,7 +3,7 @@
 namespace App\Services\StaticMapGenerator\Generators;
 
 use App\Services\StaticMapGenerator\Generator;
-use App\Services\StaticMapGenerator\GooglePolylineEncoder;
+use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use MStaack\LaravelPostgis\Geometries\LineString;

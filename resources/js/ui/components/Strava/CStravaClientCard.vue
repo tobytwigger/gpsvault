@@ -303,7 +303,6 @@ export default {
         deleteClient() {
             let ref = this.$refs.deleteClientDialog;
             this.isDeleting = true;
-            console.log(ref);
             this.$inertia.delete(route('strava.client.destroy', this.client.id), {
                 onSuccess: () => {
                     this.isDeleting = false;

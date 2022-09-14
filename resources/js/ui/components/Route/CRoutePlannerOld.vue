@@ -172,8 +172,6 @@ export default {
 
 
             this.routeControl.on('routeselected', (e) => {
-                console.log(e);
-                console.log(e.route);
                 this._geojson = this.addElevation(e.route.coordinates);
                 this._distance = e.route.summary.totalDistance * 1000
                 this._time = e.route.summary.totalTime
