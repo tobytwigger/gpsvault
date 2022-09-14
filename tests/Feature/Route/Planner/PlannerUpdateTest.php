@@ -5,7 +5,7 @@ namespace Feature\Route\Planner;
 use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePath;
-use App\Models\RoutePoint;
+use App\Models\Waypoint;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
@@ -63,7 +63,7 @@ class PlannerUpdateTest extends TestCase
         $place = Place::factory()->create();
         $route = Route::factory()->has(RoutePath::factory())->create(['user_id' => $this->user->id]);
         $path = RoutePath::factory()->create(['route_id' => $route->id]);
-        $point = RoutePoint::factory()->create(['route_path_id' => $path]);
+        $point = Waypoint::factory()->create(['route_path_id' => $path]);
 
         $response = $this->patch(route('planner.update', $route), [
             'geojson' => [

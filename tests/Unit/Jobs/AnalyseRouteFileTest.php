@@ -5,6 +5,7 @@ namespace Unit\Jobs;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
+use App\Models\RoutePathWaypoint;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Analyser\AnalysisFactoryContract;
@@ -75,7 +76,7 @@ class AnalyseRouteFileTest extends TestCase
             'elevation_gain' => 10.4,
         ]);
 
-        $routePoints = $route->path->routePoints;
+        $routePoints = RoutePathWaypoint::where('route_path_id', $route->path->id)->ordered()->with('waypoint')->get()->map(fn(RoutePathWaypoint $m) => $m->waypoint);
 
         $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(1, 2)), $routePoints->shift()->location);
         $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(3, 4)), $routePoints->shift()->location);

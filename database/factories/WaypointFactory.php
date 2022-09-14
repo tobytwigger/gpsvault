@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\RoutePoint>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Waypoint>
  */
-class RoutePointFactory extends Factory
+class WaypointFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -21,7 +21,6 @@ class RoutePointFactory extends Factory
     {
         return [
             'place_id' => Place::factory(),
-            'route_path_id' => RoutePath::factory(),
             'location' => new Point(-0.770416, 52.027825),
         ];
     }

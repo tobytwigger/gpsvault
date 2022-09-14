@@ -3,6 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\Route;
+use App\Models\RoutePathWaypoint;
+use App\Models\Waypoint;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Parser\Point;
 use Illuminate\Bus\Queueable;
@@ -54,11 +56,18 @@ class AnalyseRouteFile implements ShouldQueue
             'duration' => $this->getDuration(),
         ]);
 
-        foreach (collect($analysis->getPoints())->chunk(1000) as $points) {
-            $routePath->routePoints()->createMany($points->map(fn (Point $point) => [
-                'location' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-            ]));
+        $ids = [];
+        foreach (collect($analysis->getPoints()) as $point) {
+            $waypoint = Waypoint::create([
+                'location' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude())
+            ]);
+            $rpw = RoutePathWaypoint::create([
+                'route_path_id' => $routePath->id,
+                'waypoint_id' => $waypoint->id
+            ]);
+            $ids[] = $rpw->id;
         }
+        RoutePathWaypoint::setNewOrder($ids);
     }
 
     private function getDuration(): int

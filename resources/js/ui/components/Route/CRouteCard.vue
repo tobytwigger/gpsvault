@@ -86,7 +86,7 @@ export default {
             if(this.routeModel.main_path && this.routeModel.main_path.length > 0 && this.routeModel.main_path[0].duration) {
                 let duration = moment.duration(this.routeModel.main_path[0].duration, 's');
                 let hours = floor(duration.asHours())
-                let minutes = floor(duration.asMinutes())
+                let minutes = floor(duration.asMinutes() % 60)
                 return hours + 'h ' + minutes + 'm';
             }
             return '0h 0m';

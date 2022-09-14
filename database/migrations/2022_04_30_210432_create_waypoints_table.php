@@ -11,15 +11,14 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('route_points', function (Blueprint $table) {
+        Schema::create('waypoints', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order');
             $table->unsignedBigInteger('place_id')->nullable();
             $table->point('location')->nullable();
-            $table->unsignedBigInteger('route_path_id');
+            $table->string('name')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->foreign('route_path_id')->references('id')->on('route_paths')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('place_id')->references('id')->on('places')->cascadeOnUpdate()->nullOnDelete();
         });
     }
@@ -30,6 +29,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('route_points');
+        Schema::dropIfExists('waypoints');
     }
 };

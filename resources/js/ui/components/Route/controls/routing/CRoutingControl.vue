@@ -192,7 +192,7 @@ export default {
             }
             let duration = moment.duration(this.result.time, 's');
             let hours = floor(duration.asHours())
-            let minutes = floor(duration.asMinutes())
+            let minutes = floor(duration.asMinutes() % 60)
             return hours + 'h ' + minutes + 'm';
         }
     },

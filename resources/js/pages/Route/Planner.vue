@@ -86,7 +86,8 @@ export default {
             schema: {
                 waypoints: [],
                 use_roads: 0.3,
-                use_hills: 0.5
+                use_hills: 0.5,
+                name: 'New Route'
             }
         }
     },
@@ -112,40 +113,36 @@ export default {
         },
         save() {
             if(this.routeModel) {
-            //     this.$inertia.patch(route('planner.update', this.routeModel.id), {
-            //         'geojson': this.geojson.map(c => {
-            //             return {lat: c[0], lng: c[1], alt: c[2]};
-            //         }),
-            //         'points': this.waypoints.map(r => {
-            //             return {lat: r.lat, lng: r.lng}
-            //         }),
-            //         'distance': this.distance,
-            //         'complete_in_seconds': this.time,
-            //         'elevation': this.elevation
-            //     })
+                this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray())
             } else if(this.schema.waypoints.length > 1 && this.result.coordinates.length > 0) {
-                this.$inertia.post(route('planner.store'), {
-                    name: 'New Route',
-                    'geojson': polyline.encode(this.result.coordinates.map(c => {
-                        return [c[0], c[1]];
-                    }), 6),
-                    'waypoints': this.schema.waypoints.map(waypoint => {
-                        // If custom waypoint, then we remove the ID
-                        if(waypoint.unsaved ?? false) {
-                            delete waypoint.id;
-                        }
+                this.$inertia.post(route('planner.store'), this._calculateDataArray())
+            }
+        },
+        _calculateDataArray() {
+            return {
+                name: this.schema.name,
+                geojson: polyline.encode(this.result.coordinates.map(c => {
+                    return [c[0], c[1]];
+                }), 6),
+                waypoints: this.schema.waypoints.map(waypoint => {
+                    // If custom waypoint, then we remove the ID
+                    if(waypoint.unsaved ?? false) {
+                        delete waypoint.id;
+                        delete waypoint.unsaved;
+                    }
 
-                        return {
-                            id: waypoint.id ?? null,
-                            lat: waypoint.location[0],
-                            lng: waypoint.location[1],
-                            place_id: waypoint.place_id
-                        }
-                    }),
-                    'distance': this.result.distance,
-                    'duration': this.result.time,
-                    'elevation_gain': this.elevation
-                })
+                    return {
+                        id: waypoint.id ?? null,
+                        lat: waypoint.location[0],
+                        lng: waypoint.location[1],
+                        name: waypoint.name ?? null,
+                        notes: waypoint.notes ?? null,
+                        place_id: waypoint.place_id
+                    }
+                }),
+                distance: this.result.distance,
+                duration: this.result.time,
+                elevation_gain: this.elevation
             }
         }
     },
@@ -154,15 +151,20 @@ export default {
             this.performSearch();
         }
         if(this.routeModel) {
-            // this.waypoints = (this.routeModel?.path?.route_points ?? []).map(r => {
-            //     return {lat: r.location.coordinates[1], lng: r.location.coordinates[0]}
-            // })
-            // this.geojson = (this.routeModel.path?.linestring ?? []).map(l => {
-            //     return {lat: l.coordinates[1], lng: l.coordinates[0], alt: l.coordinates[2]}
-            // })
-            // this.distance = this.routeModel?.distance ?? 0;
-            // this.elevation = this.routeModel?.elevation ?? 0;
-            // this.time = this.routeModel?.time ?? 0;
+            this.updateSchema({
+                waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
+                    return {
+                        id: waypoint.id ?? null,
+                        location: [waypoint.location.coordinates[1], waypoint.location.coordinates[0]],
+                        name: waypoint.name ?? null,
+                        notes: waypoint.notes ?? null,
+                        place_id: waypoint.place_id ?? null
+                    }
+                }),
+                use_roads: 0.3,
+                use_hills: 0.5,
+                name: this.routeModel.name ?? 'New Route'
+            })
         }
     }
 }

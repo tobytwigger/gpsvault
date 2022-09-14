@@ -41,20 +41,6 @@ export default {
             default: () => {
                 return {
                     waypoints: [
-                        {
-                            id: 1,
-                            order: 2,
-                            place_id: null,
-                            location: [0, 51],
-                            route_path_id: 4
-                        },
-                        {
-                            id: 2,
-                            order: 1,
-                            place_id: null,
-                            location: [0, 51.2],
-                            route_path_id: 4
-                        },
                     ]
                 }
             }
@@ -232,11 +218,13 @@ export default {
                 bounds = coordinates.reduce(function (bounds, coord) {
                     return bounds.extend([coord[0], coord[1]]);
                 }, new maplibregl.LngLatBounds(coordinates[1], coordinates[0]));
-            } else if(Array.isArray(this._schema?.waypoints) && this._schema.waypoints.length > 0) {
+            } else if(Array.isArray(this._schema?.waypoints) && this._schema.waypoints.length > 2) {
 
+
+                console.log(this._schema.waypoints[0].location[0]);
                 bounds = this._schema.waypoints.reduce(function (bounds, waypoints) {
                     return bounds.extend([waypoints.location[0], waypoints.location[1]]);
-                }, new maplibregl.LngLatBounds(this._schema.waypoints[0].location[0], this._schema.waypoints[0].location[1]));
+                }, new maplibregl.LngLatBounds(this._schema.waypoints[0].location, this._schema.waypoints[1].location));
             } else {
                 bounds = new maplibregl.LngLatBounds(new maplibregl.LngLat(-26, 37), new maplibregl.LngLat(10, 60));
             }
@@ -272,10 +260,11 @@ export default {
                     // If it doesn't exist, assign it a random uuid ID, and create a marker.
                     let markerId = CryptoJS.lib.WordArray.random(32).toString();
                     this.markers[markerId] = this._createMarker(waypoint, waypointIndex);
-                    this.markers[markerId].unsaved = true;
                     this.markers[markerId].addTo(this.map);
                     // Add the ID to an array
                     idArray.push(markerId);
+                    waypoint.unsaved = true;
+                    this._schema.waypoints[waypointIndex] = waypoint;
                 }
             }
             for(let obsoleteMarkerId of Object.keys(this.markers).filter((id) => !idArray.includes(id))) {
@@ -311,9 +300,25 @@ export default {
 
             let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(buttonDiv);
 
-            return new maplibregl.Marker(markerEl)
+            let marker = new maplibregl.Marker({element: markerEl, draggable: true})
                 .setLngLat([waypoint.location[0], waypoint.location[1]])
                 .setPopup(popup); // sets a popup on this marker
+
+            marker.on('dragend', (e) => {
+                console.log('HERE');
+                let schema = cloneDeep(this._schema);
+                let waypoints = schema.waypoints.filter(w => w.id.toString() === waypoint.id.toString());
+                if(waypoints.length > 0) {
+                    let waypoint = waypoints[0];
+                    let index = schema.waypoints.indexOf(waypoint);
+                    let coords = marker.getLngLat();
+                    waypoint.location = [coords.lng, coords.lat];
+                    schema.waypoints.splice(index, 1, waypoint);
+                    this._schema = schema;
+                }
+            });
+
+            return marker;
         },
         _createPopupButton(text, id, fn) {
             let btn = document.createElement('a');
@@ -327,16 +332,20 @@ export default {
 
             return container;
         },
+        _newWaypoint(location) {
+            return {
+                id: CryptoJS.lib.WordArray.random(32).toString(),
+                unsaved: true,
+                place_id: null,
+                location: location
+            }
+        },
         _createGeneralClickHandler() {
             this.map.on('click', (e) => {
                 if(e.originalEvent.target.classList.contains('clickable') === false) {
                     if(this.generalPopup === null) {
                         let addToStartButton = this._createPopupButton('Add to start', 'add-to-start', (e) => {
-                            let waypoint = {
-                                id: CryptoJS.lib.WordArray.random(32).toString(),
-                                place_id: null,
-                                location: [this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]
-                            }
+                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
                             let schema = cloneDeep(this._schema);
                             schema.waypoints.unshift(waypoint);
                             this._schema = schema;
@@ -346,11 +355,7 @@ export default {
                             }
                         });
                         let addToEndBtn = this._createPopupButton('Add to end', 'add-to-end', (e) => {
-                            let waypoint = {
-                                id: CryptoJS.lib.WordArray.random(32).toString(),
-                                place_id: null,
-                                location: [this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]
-                            }
+                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
                             let schema = cloneDeep(this._schema);
                             schema.waypoints.push(waypoint);
                             this._schema = schema;
@@ -360,11 +365,7 @@ export default {
                             }
                         });
                         let addAsWaypointBtn = this._createPopupButton('Add as waypoint', 'add-as-waypoint', (e) => {
-                            let waypoint = {
-                                id: CryptoJS.lib.WordArray.random(32).toString(),
-                                place_id: null,
-                                location: [this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]
-                            }
+                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
                             let schema = cloneDeep(this._schema);
                             schema.waypoints.splice(schema.waypoints.length - 1, 0, waypoint);
                             this._schema = schema;

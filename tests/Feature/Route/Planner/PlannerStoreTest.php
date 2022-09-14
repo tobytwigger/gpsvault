@@ -4,7 +4,7 @@ namespace Feature\Route\Planner;
 
 use App\Models\Place;
 use App\Models\Route;
-use App\Models\RoutePoint;
+use App\Models\Waypoint;
 use Illuminate\Support\Str;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
@@ -84,7 +84,7 @@ class PlannerStoreTest extends TestCase
         $points = $route->path->routePoints;
 
         $this->assertCount(2, $points);
-        $this->assertContainsOnlyInstancesOf(RoutePoint::class, $points);
+        $this->assertContainsOnlyInstancesOf(Waypoint::class, $points);
 
         $this->assertEquals(new Point(55, 25), $points[0]->location);
         $this->assertEquals(new Point(57, 26), $points[1]->location);

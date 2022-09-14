@@ -35,9 +35,15 @@ class RoutePath extends Model
         ],
     ];
 
-    public function routePoints()
+    public function routePathWaypoints()
     {
-        return $this->hasMany(RoutePoint::class);
+        return $this->hasMany(RoutePathWaypoint::class);
+    }
+
+    public function getWaypointsAttribute()
+    {
+        return $this->routePathWaypoints()->ordered()->with('waypoint')->get()
+            ->map(fn(RoutePathWaypoint $pivot) => $pivot->waypoint);
     }
 
     public function route()
