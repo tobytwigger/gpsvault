@@ -14,6 +14,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+        <link href='https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css' rel='stylesheet' />
 
         <!-- Scripts -->
         @routes

@@ -71,7 +71,7 @@
                         <div v-else>No stats available</div>
                     </v-col>
                 </v-row>
-                <v-row>
+                <v-row v-if="images.length > 0">
                     <v-col>
                         <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
                     </v-col>

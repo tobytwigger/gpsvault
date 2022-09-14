@@ -2,7 +2,7 @@ import {createInertiaApp, Link} from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import vuetify from './plugins/vuetify';
-    import Vue from 'vue';
+import Vue from 'vue';
 import L from 'leaflet';
 window.L = L;
 

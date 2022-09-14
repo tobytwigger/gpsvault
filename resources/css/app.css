@@ -1,1 +1,8 @@
 @import 'intro.js/introjs.css';
+
+.maplibregl-custom-ctrl-sidebar {
+    transition: transform 1s;
+    z-index: 1;
+    width: 300px;
+    height: 100%;
+}

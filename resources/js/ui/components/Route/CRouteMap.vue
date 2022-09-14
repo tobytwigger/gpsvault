@@ -2,7 +2,7 @@
     <div>
         <div v-if="loading">Loading map</div>
         <div v-else-if="geojson === null">No route could be plotted</div>
-        <c-map :geojson="geojson" :markers="markers" v-else></c-map>
+        <c-map :geojson="geojson" v-else></c-map>
     </div>
 </template>
 
@@ -12,10 +12,6 @@ export default {
     name: "CRouteMap",
     components: {CMap},
     props: {
-        stats: {
-            required: false,
-            type: Object
-        },
         places: {
             required: false,
             type: Array,
@@ -29,13 +25,7 @@ export default {
     data() {
         return {
             loading: false,
-            // geojson: null
         }
-    },
-    mounted() {
-        // axios.get(route('stats.geojson', this.stats.id))
-        //     .then(response => this.geojson = response.data)
-        //     .then(() => this.loading = false);
     },
     computed: {
         markers() {

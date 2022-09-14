@@ -41,6 +41,7 @@
         "leaflet-iconmaterial": "^1.1.0",
         "leaflet-routing-machine": "^3.2.12",
         "lrm-valhalla": "^0.1.1",
+        "maplibre-gl": "^2.4.0",
         "vue-easy-lightbox": "^0.16.2",
         "vue2-leaflet": "^2.7.1",
         "vue2-leaflet-fullscreen": "^1.0.1",

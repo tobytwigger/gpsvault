@@ -231,7 +231,7 @@ export default {
             if(this.routeModel.path) {
                 return {
                     type: 'LineString',
-                    coordinates: this.routeModel.path.linestring.map(c => [c.coordinates[0], c.coordinates[1]])
+                    coordinates: this.routeModel.path.linestring.map(c => c.coordinates)
                 }
             }
             return null;

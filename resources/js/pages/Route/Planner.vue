@@ -34,11 +34,9 @@
         </template>
 
         <c-route-planner
-            :geojson.sync="geojson"
-            :distance.sync="distance"
-            :time.sync="time"
-            :elevation.sync="elevation"
-            :waypoints.sync="waypoints"
+            :result="result"
+            :schema="schema"
+            @update:schema="updateSchema"
         ></c-route-planner>
 
     </c-app-wrapper>
@@ -47,7 +45,6 @@
 <script>
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
-import L from 'leaflet';
 
 export default {
     name: "Planner",
@@ -61,59 +58,66 @@ export default {
     },
     data() {
         return {
-            waypoints: [],
-            geojson: null,
-            distance: 0,
-            time: 0,
-            elevation: 0
+            result: {
+                coordinates: []
+            },
+            schema: {
+                test: 'hello'
+            }
         }
     },
     methods: {
+        updateSchema(schema) {
+            this.schema = schema;
+            this.performSearch();
+        },
+        performSearch() {
+            // TODO
+        },
         save() {
-            if(this.routeModel) {
-                this.$inertia.patch(route('planner.update', this.routeModel.id), {
-                    'geojson': this.geojson.map(c => {
-                        return {lat: c[0], lng: c[1], alt: c[2]};
-                    }),
-                    'points': this.waypoints.map(r => {
-                        return {lat: r.lat, lng: r.lng}
-                    }),
-                    'distance': this.distance,
-                    'complete_in_seconds': this.time,
-                    'elevation': this.elevation
-                })
-            } else if(this.geojson) {
-                this.$inertia.post(route('planner.store'), {
-                    name: 'New Route',
-                    'geojson': this.geojson.map(c => {
-                        return {lat: c[0], lng: c[1], alt: c[2]};
-                    }),
-                    'points': this.waypoints.map(r => {
-                        return {lat: r.lat, lng: r.lng}
-                    }),
-                    'distance': this.distance,
-                    'complete_in_seconds': this.time,
-                    'elevation': this.elevation
-                })
-            }
+            // if(this.routeModel) {
+            //     this.$inertia.patch(route('planner.update', this.routeModel.id), {
+            //         'geojson': this.geojson.map(c => {
+            //             return {lat: c[0], lng: c[1], alt: c[2]};
+            //         }),
+            //         'points': this.waypoints.map(r => {
+            //             return {lat: r.lat, lng: r.lng}
+            //         }),
+            //         'distance': this.distance,
+            //         'complete_in_seconds': this.time,
+            //         'elevation': this.elevation
+            //     })
+            // } else if(this.geojson) {
+            //     this.$inertia.post(route('planner.store'), {
+            //         name: 'New Route',
+            //         'geojson': this.geojson.map(c => {
+            //             return {lat: c[0], lng: c[1], alt: c[2]};
+            //         }),
+            //         'points': this.waypoints.map(r => {
+            //             return {lat: r.lat, lng: r.lng}
+            //         }),
+            //         'distance': this.distance,
+            //         'complete_in_seconds': this.time,
+            //         'elevation': this.elevation
+            //     })
+            // }
         }
     },
     mounted() {
         if(this.routeModel) {
-            this.waypoints = (this.routeModel?.path?.route_points ?? []).map(r => {
-                return {lat: r.location.coordinates[1], lng: r.location.coordinates[0]}
-            })
-            this.geojson = (this.routeModel.path?.linestring ?? []).map(l => {
-                return {lat: l.coordinates[1], lng: l.coordinates[0], alt: l.coordinates[2]}
-            })
-            this.distance = this.routeModel?.distance ?? 0;
-            this.elevation = this.routeModel?.elevation ?? 0;
-            this.time = this.routeModel?.time ?? 0;
+            // this.waypoints = (this.routeModel?.path?.route_points ?? []).map(r => {
+            //     return {lat: r.location.coordinates[1], lng: r.location.coordinates[0]}
+            // })
+            // this.geojson = (this.routeModel.path?.linestring ?? []).map(l => {
+            //     return {lat: l.coordinates[1], lng: l.coordinates[0], alt: l.coordinates[2]}
+            // })
+            // this.distance = this.routeModel?.distance ?? 0;
+            // this.elevation = this.routeModel?.elevation ?? 0;
+            // this.time = this.routeModel?.time ?? 0;
         }
     }
 }
 </script>
 
 <style scoped>
-    @import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 </style>

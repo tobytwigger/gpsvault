@@ -29,7 +29,7 @@ export default {
             }
             return {
                 type: 'LineString',
-                coordinates: this.stats.linestring.map(l => [l.coordinates[0], l.coordinates[1]])
+                coordinates: this.stats.linestring.map(l => l.coordinates)
             };
         }
     }
