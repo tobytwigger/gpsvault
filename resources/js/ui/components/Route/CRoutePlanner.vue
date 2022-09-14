@@ -272,6 +272,7 @@ export default {
                     // If it doesn't exist, assign it a random uuid ID, and create a marker.
                     let markerId = CryptoJS.lib.WordArray.random(32).toString();
                     this.markers[markerId] = this._createMarker(waypoint, waypointIndex);
+                    this.markers[markerId].unsaved = true;
                     this.markers[markerId].addTo(this.map);
                     // Add the ID to an array
                     idArray.push(markerId);

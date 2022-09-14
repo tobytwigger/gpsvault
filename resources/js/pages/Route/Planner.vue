@@ -62,6 +62,7 @@
 <script>
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
+import polyline from '@mapbox/polyline';
 
 export default {
     name: "Planner",
@@ -79,10 +80,13 @@ export default {
             result: {
                 coordinates: [],
                 distance: 0,
-                time: 0
+                time: 0,
+                elevation: 0
             },
             schema: {
-                waypoints: []
+                waypoints: [],
+                use_roads: 0.3,
+                use_hills: 0.5
             }
         }
     },
@@ -107,7 +111,7 @@ export default {
                 .finally(() => this.searching = false);
         },
         save() {
-            // if(this.routeModel) {
+            if(this.routeModel) {
             //     this.$inertia.patch(route('planner.update', this.routeModel.id), {
             //         'geojson': this.geojson.map(c => {
             //             return {lat: c[0], lng: c[1], alt: c[2]};
@@ -119,20 +123,30 @@ export default {
             //         'complete_in_seconds': this.time,
             //         'elevation': this.elevation
             //     })
-            // } else if(this.geojson) {
-            //     this.$inertia.post(route('planner.store'), {
-            //         name: 'New Route',
-            //         'geojson': this.geojson.map(c => {
-            //             return {lat: c[0], lng: c[1], alt: c[2]};
-            //         }),
-            //         'points': this.waypoints.map(r => {
-            //             return {lat: r.lat, lng: r.lng}
-            //         }),
-            //         'distance': this.distance,
-            //         'complete_in_seconds': this.time,
-            //         'elevation': this.elevation
-            //     })
-            // }
+            } else if(this.schema.waypoints.length > 1 && this.result.coordinates.length > 0) {
+                this.$inertia.post(route('planner.store'), {
+                    name: 'New Route',
+                    'geojson': polyline.encode(this.result.coordinates.map(c => {
+                        return [c[0], c[1]];
+                    }), 6),
+                    'waypoints': this.schema.waypoints.map(waypoint => {
+                        // If custom waypoint, then we remove the ID
+                        if(waypoint.unsaved ?? false) {
+                            delete waypoint.id;
+                        }
+
+                        return {
+                            id: waypoint.id ?? null,
+                            lat: waypoint.location[0],
+                            lng: waypoint.location[1],
+                            place_id: waypoint.place_id
+                        }
+                    }),
+                    'distance': this.result.distance,
+                    'duration': this.result.time,
+                    'elevation_gain': this.elevation
+                })
+            }
         }
     },
     mounted() {

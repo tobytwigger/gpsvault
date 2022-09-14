@@ -30,6 +30,16 @@
                 </v-icon>
                 {{ routeDistance }}
             </v-chip>
+            <v-chip
+                outlined
+                class="ma-2"
+                color="indigo"
+            >
+                <v-icon left>
+                    mdi-clock
+                </v-icon>
+                {{ routeTime }}
+            </v-chip>
         </v-card-text>
 
         <v-card-actions>
@@ -51,6 +61,7 @@
 <script>
 import moment from 'moment';
 import units from '../../mixins/units';
+import {floor} from 'lodash';
 
 export default {
     name: "CRouteCard",
@@ -69,7 +80,18 @@ export default {
                     return converted.value + converted.unit;
                 }
             }
-            return 'No Distance';
+            return '0' + this.getSystemUnit('distance');
+        },
+        routeTime() {
+            if(this.routeModel.main_path && this.routeModel.main_path.length > 0 && this.routeModel.main_path[0].duration) {
+                let duration = moment.duration(this.routeModel.main_path[0].duration, 's');
+                let hours = floor(duration.asHours())
+                let minutes = floor(duration.asMinutes())
+                return hours + 'h ' + minutes + 'm';
+            }
+            return '0h 0m';
+
+
         }
     }
 }

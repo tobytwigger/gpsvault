@@ -20,11 +20,17 @@
                     </v-toolbar>
 
                     <div v-if="showSettings">
-                        <v-text-field
-                            v-model="_schema.name"
-                            hint="A name for the route"
-                            label="Route Name"
-                        ></v-text-field>
+                        <v-slider
+                            v-model="_useHills"
+                            label="Prefer hills?"
+                            hint="How much do you want to prioritise hills? 1 = lots of hills."
+                        ></v-slider>
+
+                        <v-slider
+                            v-model="_useRoads"
+                            label="Prefer roads?"
+                            hint="How much do you want to prioritise roads? 1 = more main roads."
+                        ></v-slider>
                     </div>
 
                     <v-list
@@ -109,7 +115,7 @@
 
 <script>
 
-import {cloneDeep} from 'lodash';
+import {cloneDeep, floor} from 'lodash';
 import draggable from 'vuedraggable'
 import units from '../../../../mixins/units';
 import moment from 'moment/moment';
@@ -152,6 +158,26 @@ export default {
                 this._schema = schema;
             }
         },
+        _useHills: {
+            get: function() {
+                return this.schema.use_hills * 100;
+            },
+            set: _.debounce(function(val) {
+                let schema = cloneDeep(this._schema);
+                schema.use_hills = val / 100.0;
+                this._schema = schema;
+            }, 1000)
+        },
+        _useRoads: {
+            get: function() {
+                return this.schema.use_roads * 100;
+            },
+            set: _.debounce(function(val) {
+                let schema = cloneDeep(this._schema);
+                schema.use_roads = val / 100.0;
+                this._schema = schema;
+            }, 1000)
+        },
         _schema: {
             get: function() {
                 return this.schema;
@@ -162,9 +188,12 @@ export default {
         },
         routeTime() {
             if(!this.result?.time) {
-                return '0s'
+                return '0m'
             }
-            return moment.duration(this.result.time, 's').humanize();
+            let duration = moment.duration(this.result.time, 's');
+            let hours = floor(duration.asHours())
+            let minutes = floor(duration.asMinutes())
+            return hours + 'h ' + minutes + 'm';
         }
     },
     methods: {

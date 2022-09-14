@@ -19,7 +19,8 @@ class ValhallaRouterStrategy implements RouterStrategy
                 'lat' => $waypoint->getLat(),
                 'lon' => $waypoint->getLng(),
                 'type' => 'through'
-            ])->all()
+            ])->all(),
+            $options->toArray()
         );
 
         // What is the linestring returned in?
