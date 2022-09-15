@@ -305,7 +305,6 @@ export default {
                 .setPopup(popup); // sets a popup on this marker
 
             marker.on('dragend', (e) => {
-                console.log('HERE');
                 let schema = cloneDeep(this._schema);
                 let waypoints = schema.waypoints.filter(w => w.id.toString() === waypoint.id.toString());
                 if(waypoints.length > 0) {

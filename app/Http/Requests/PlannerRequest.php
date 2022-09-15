@@ -22,7 +22,10 @@ class PlannerRequest extends FormRequest
             'distance' => 'sometimes|nullable|numeric|min:0',
             'elevation_gain' => 'sometimes|nullable|numeric',
             'duration' => 'sometimes|nullable|numeric|min:0',
-            'name' => 'sometimes|nullable|string|min:1|max:255'
+            'name' => 'sometimes|nullable|string|min:1|max:255',
+            'settings' => 'array',
+            'settings.use_hills' => 'required|numeric|min:0|max:1',
+            'settings.use_roads' => 'required|numeric|min:0|max:1',
         ];
     }
 

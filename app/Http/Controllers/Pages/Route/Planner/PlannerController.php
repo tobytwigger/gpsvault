@@ -63,6 +63,7 @@ class PlannerController extends Controller
             'duration' => $request->input('duration', 0),
             'elevation_gain' => $request->input('elevation_gain', 0),
             'linestring' => new LineString(Arr::map($linestring, fn (array $point, int $index) => new Point($point[0], $point[1], $elevation['range_height'][$index][1]))),
+            'settings' => $request->input('settings')
         ]);
 
         $waypointOrder = [];

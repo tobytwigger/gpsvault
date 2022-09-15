@@ -17,6 +17,7 @@ return new class() extends Migration {
             $table->float('distance');
             $table->float('elevation_gain');
             $table->float('duration');
+            $table->text('settings')->nullable();
             $table->unsignedBigInteger('route_id');
             $table->timestamps();
 

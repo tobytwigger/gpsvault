@@ -62,12 +62,22 @@
                                 </v-list-item-avatar>
 
                                 <v-list-item-content>
-                                    <v-list-item-title>Waypoint #{{parseInt(index) + 1}}</v-list-item-title>
+                                    <v-list-item-title v-if="waypoint.name">{{ waypoint.name }}</v-list-item-title>
+                                    <v-list-item-title v-else>Waypoint #{{parseInt(index) + 1}}</v-list-item-title>
 
-                                    <!--                                <v-list-item-subtitle></v-list-item-subtitle>-->
+                                    <v-list-item-subtitle v-if="waypoint.notes">{{ waypoint.notes }}</v-list-item-subtitle>
+                                    <v-list-item-subtitle v-else>No notes</v-list-item-subtitle>
                                 </v-list-item-content>
 
                                 <v-list-item-action>
+                                    <c-waypoint-form :waypoint="waypoint" @update="updateWaypoint($event, waypoint)">
+                                        <template v-slot:activator="{trigger, showing}">
+                                            <v-btn :disabled="showing" icon @click="trigger">
+                                                <v-icon color="grey lighten-1">mdi-pencil</v-icon>
+                                            </v-btn>
+                                        </template>
+                                    </c-waypoint-form>
+
                                     <v-btn icon @click="deleteWaypoint(waypoint.id)">
                                         <v-icon color="grey lighten-1">mdi-delete</v-icon>
                                     </v-btn>
@@ -119,11 +129,13 @@ import {cloneDeep, floor} from 'lodash';
 import draggable from 'vuedraggable'
 import units from '../../../../mixins/units';
 import moment from 'moment/moment';
+import CWaypointForm from './CWaypointForm';
 
 export default {
     name: "CRoutingControl",
     mixins: [units],
     components: {
+        CWaypointForm,
         draggable
     },
     props: {
@@ -197,6 +209,16 @@ export default {
         }
     },
     methods: {
+        updateWaypoint(newWaypoint, waypoint) {
+            let schema = cloneDeep(this._schema);
+            let waypoints = schema.waypoints.filter(w => w.id.toString() === waypoint.id.toString());
+            if(waypoints.length > 0) {
+                let waypoint = waypoints[0];
+                let index = schema.waypoints.indexOf(waypoint);
+                schema.waypoints[index] = newWaypoint;
+                this._schema = schema;
+            }
+        },
         deleteWaypoint(waypointId) {
             let schema = cloneDeep(this._schema);
             schema.waypoints = schema.waypoints.filter(w => w.id.toString() !== waypointId.toString());

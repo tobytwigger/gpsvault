@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper title="New Route" :header-action="true">
+    <c-app-wrapper :title="this.routeModel?.name ? this.routeModel.name : 'New Route'" :header-action="true">
 
         <template #headerActions>
 
@@ -11,6 +11,33 @@
             >
                 Add a start and end point to start planning
             </v-alert>
+
+            <v-alert
+                outlined
+                type="warning"
+                border="left"
+                v-else-if="schemaUnsaved"
+            >
+                You have unsaved changes.
+            </v-alert>
+
+            <v-snackbar
+                v-model="recentlySaved"
+                :timeout="3500"
+            >
+                Your route has been saved.
+
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                        color="blue"
+                        text
+                        v-bind="attrs"
+                        @click="recentlySaved = false"
+                    >
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
 
             <v-tooltip bottom v-if="routeModel">
                 <template v-slot:activator="{ on, attrs }">
@@ -41,8 +68,10 @@
                         v-bind="attrs"
                         v-on="on"
                         @click="save"
+                        :disabled="!schemaUnsaved"
+                        :loading="isSaving"
                     >
-                        <v-icon>mdi-content-save</v-icon>
+                        <v-icon >mdi-content-save</v-icon>
                     </v-btn>
                 </template>
                 <span>Save</span>
@@ -63,6 +92,7 @@
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
 import polyline from '@mapbox/polyline';
+import {isEqual} from 'lodash';
 
 export default {
     name: "Planner",
@@ -88,11 +118,24 @@ export default {
                 use_roads: 0.3,
                 use_hills: 0.5,
                 name: 'New Route'
-            }
+            },
+            schemaUnsaved: false,
+            recentlySaved: false,
+            isSaving: false
+        }
+    },
+    watch: {
+        schemaUnsaved(isUnsaved) {
+            window.onbeforeunload = this.schemaUnsaved ? function() {
+                return true;
+            } : null;
         }
     },
     methods: {
-        updateSchema(schema) {
+        updateSchema(schema, needsSaving = true) {
+            if(needsSaving && !isEqual(schema, this.schema)) {
+                this.schemaUnsaved = true;
+            }
             this.schema = schema;
             if(this.schema?.waypoints?.length > 1) {
                 this.performSearch();
@@ -112,10 +155,24 @@ export default {
                 .finally(() => this.searching = false);
         },
         save() {
+            this.isSaving = true;
             if(this.routeModel) {
-                this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray())
+                this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
+                    onSuccess: (page) => {
+                        this.schemaUnsaved = false;
+                        this.recentlySaved = true;
+                        this.isSaving = false;
+                    }
+                });
             } else if(this.schema.waypoints.length > 1 && this.result.coordinates.length > 0) {
-                this.$inertia.post(route('planner.store'), this._calculateDataArray())
+                this.$inertia.post(route('planner.store'), this._calculateDataArray(), {
+                    onSuccess: (page) => {
+                        this.schemaUnsaved = false;
+                        this.recentlySaved = true;
+                        this.isSaving = false;
+                        this.$inertia.reload();
+                    }
+                });
             }
         },
         _calculateDataArray() {
@@ -142,7 +199,11 @@ export default {
                 }),
                 distance: this.result.distance,
                 duration: this.result.time,
-                elevation_gain: this.elevation
+                elevation_gain: this.elevation,
+                settings: {
+                    use_roads: this.schema.use_roads,
+                    use_hills: this.schema.use_hills
+                }
             }
         }
     },
@@ -161,10 +222,10 @@ export default {
                         place_id: waypoint.place_id ?? null
                     }
                 }),
-                use_roads: 0.3,
-                use_hills: 0.5,
+                use_roads: this.routeModel?.path?.settings?.use_roads ?? 0.25,
+                use_hills: this.routeModel?.path?.settings?.use_hills ?? 0.4,
                 name: this.routeModel.name ?? 'New Route'
-            })
+            }, false)
         }
     }
 }
