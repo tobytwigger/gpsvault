@@ -20,6 +20,7 @@ import CElevationControl from './controls/elevation/CElevationControl';
 
 import CryptoJS from 'crypto-js';
 import {cloneDeep} from 'lodash';
+import polyline from '@mapbox/polyline';
 
 export default {
     name: "CRoutePlanner",
@@ -221,7 +222,6 @@ export default {
             } else if(Array.isArray(this._schema?.waypoints) && this._schema.waypoints.length > 2) {
 
 
-                console.log(this._schema.waypoints[0].location[0]);
                 bounds = this._schema.waypoints.reduce(function (bounds, waypoints) {
                     return bounds.extend([waypoints.location[0], waypoints.location[1]]);
                 }, new maplibregl.LngLatBounds(this._schema.waypoints[0].location, this._schema.waypoints[1].location));
@@ -364,10 +364,28 @@ export default {
                             }
                         });
                         let addAsWaypointBtn = this._createPopupButton('Add as waypoint', 'add-as-waypoint', (e) => {
-                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
-                            let schema = cloneDeep(this._schema);
-                            schema.waypoints.splice(schema.waypoints.length - 1, 0, waypoint);
-                            this._schema = schema;
+                            if(this.result?.coordinates?.length > 1) {
+                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                                let schema = cloneDeep(this._schema);
+                                axios.post(route('planner.tools.new-waypoint-locator'), {
+                                    geojson: schema.waypoints.map(w => {
+                                        return {lat: w.location[1], lng: w.location[0]}
+                                    }),
+                                    lat: this.generalPopup.getLngLat().lat,
+                                    lng: this.generalPopup.getLngLat().lng
+                                })
+                                    .then(response => {
+                                        let index = response.data.index;
+                                        let schema = cloneDeep(this._schema);
+                                        schema.waypoints.splice(index, 0, waypoint);
+                                        this._schema = schema;
+                                    })
+                            } else {
+                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                                let schema = cloneDeep(this._schema);
+                                schema.waypoints.push(waypoint);
+                                this._schema = schema;
+                            }
                             if(this.generalPopup) {
                                 this.generalPopup.remove();
                                 this.generalPopup = null;

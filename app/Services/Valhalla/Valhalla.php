@@ -43,4 +43,21 @@ class Valhalla
         return $response->json();
     }
 
+    public function matrix(array $sources, array $targets)
+    {
+        $response = $this->request(
+            'GET',
+            sprintf(
+                '/sources_to_targets?json=%s',
+                json_encode([
+                    'sources' => $sources,
+                    'targets' => $targets,
+                    'costing' => 'bicycle'
+                ])
+            )
+        );
+
+        return $response->json();
+    }
+
 }

@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/route/planner/edit/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'edit'])->name('planner.edit');
     Route::patch('/route/planner/save/{route}', [\App\Http\Controllers\Pages\Route\Planner\PlannerController::class, 'update'])->name('planner.update');
     Route::post('/route/planner/plan', \App\Http\Controllers\Pages\Route\Planner\RoutingController::class)->name('planner.plan');
+    Route::post('/route/planner/tools/new-waypoint-locator', \App\Http\Controllers\Pages\Route\Planner\Tools\NewWaypointLocatorController::class)->name('planner.tools.new-waypoint-locator');
 
     /* Backups */
     Route::resource('backup', \App\Http\Controllers\Pages\Backup\BackupController::class)->only(['index', 'store', 'update', 'destroy'])->parameters(['backup' => 'file']);

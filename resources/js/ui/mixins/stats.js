@@ -15,7 +15,6 @@ export default {
         },
         dataSources() {
             let sortingArr = this.$setting.stats_order_preference;
-            console.log(this.allStats);
             return this.allStats.map(s => s.integration).sort((a, b) => sortingArr.indexOf(a) - sortingArr.indexOf(b));
         },
         activeDataSource: {
