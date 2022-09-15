@@ -14,29 +14,58 @@ class ValhallaRouterStrategy implements RouterStrategy
 {
     public function route(Collection $waypoints, RouteOptions $options): RouteResult
     {
-        $result = (new Valhalla())->route(
-            $waypoints->map(fn(Waypoint $waypoint) => [
-                'lat' => $waypoint->getLat(),
-                'lon' => $waypoint->getLng(),
-                'type' => 'through'
-            ])->all(),
-            $options->toArray()
-        );
-
-        // What is the linestring returned in?
-        $linestring = GooglePolylineEncoder::decodeValue($result['trip']['legs'][0]['shape'], 6);
-        // Add in elevation
-        $distance = $result['trip']['legs'][0]['summary']['length'] * 1000;
-        $time = $result['trip']['legs'][0]['summary']['time'];
-
-        $elevation = (new Valhalla())->elevationForLineString($result['trip']['legs'][0]['shape']);
+        [$linestring, $elevation, $distance, $time] = $this->getFullRoute($waypoints, $options);
 
         return new RouteResult(
-            collect($linestring)->map(fn($location, $index) => [
-                $location[0], $location[1], $elevation['range_height'][$index][1], $elevation['range_height'][$index][0] // [0] is the distance through the route!
+            collect($linestring)->map(fn ($location, $index) => [
+                $location[0], $location[1], $elevation[$index][1], [$index][0], // [0] is the distance through the route!
             ])->all(),
             $distance,
             $time
         );
+    }
+
+    private function getFullRoute(Collection $waypoints, RouteOptions $options)
+    {
+        $linestring = [];
+        $distance = 0;
+        $time = 0;
+
+        $previous = null; // Will be set to the last point in the previous chunk
+
+        foreach ($waypoints->chunk(30) as $chunkedWaypoints) {
+            if($previous !== null) {
+                $chunkedWaypoints->prepend($previous);
+            }
+            $result = (new Valhalla())->route(
+                $chunkedWaypoints->map(fn (Waypoint $waypoint) => [
+                    'lat' => $waypoint->getLat(),
+                    'lon' => $waypoint->getLng(),
+                    //                'type' => 'through'
+                ])->all(),
+                $options->toArray()
+            );
+
+            foreach ($result['trip']['legs'] ?? [] as $leg) {
+                $linestring = array_merge($linestring, GooglePolylineEncoder::decodeValue($leg['shape'], 6));
+                // Add in elevation
+                $distance += $leg['summary']['length'] * 1000;
+                $time += $leg['summary']['time'];
+            }
+
+            $previous = $chunkedWaypoints->last();
+        }
+
+        $elevation = [];
+        foreach (collect($linestring)->chunk(1000) as $chunkedPoints) {
+
+            $elevation = array_merge(
+                $elevation,
+                (new Valhalla())
+                    ->elevationForLineString(GooglePolylineEncoder::encode($chunkedPoints->all(), 6))['range_height']
+            );
+        }
+
+        return [$linestring, $elevation, $distance, $time];
     }
 }

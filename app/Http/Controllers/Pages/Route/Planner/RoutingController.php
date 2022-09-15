@@ -12,7 +12,7 @@ class RoutingController
 
     public function __invoke(RoutingRequest $request)
     {
-        $waypoints = collect($request->input('waypoints'))->map(fn($waypoint) => new Waypoint($waypoint['location'][1], $waypoint['location'][0]));
+        $waypoints = collect($request->input('waypoints'))->map(fn($waypoint) => new Waypoint($waypoint['location']['lat'], $waypoint['location']['lng']));
         $result = Router::route($waypoints, new RouteOptions(
             costingOptions: [
                 'bicycle' => [

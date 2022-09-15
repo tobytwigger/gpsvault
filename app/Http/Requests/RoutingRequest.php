@@ -12,10 +12,10 @@ class RoutingRequest extends FormRequest
         return [
             'use_hills' => 'sometimes|nullable|numeric|min:0|max:1',
             'use_roads' => 'sometimes|nullable|numeric|min:0|max:1',
-            'waypoints' => 'required|array|min:2',
+            'waypoints' => 'required|array|min:2|max:250',
             'waypoints.*.location' => 'required|array|min:2|max:2',
-            'waypoints.*.location.0' => 'required|numeric|min:-90|max:90',
-            'waypoints.*.location.1' => 'required|numeric|min:-180|max:180',
+            'waypoints.*.location.lat' => 'required|numeric|min:-90|max:90',
+            'waypoints.*.location.lng' => 'required|numeric|min:-180|max:180',
         ];
     }
 

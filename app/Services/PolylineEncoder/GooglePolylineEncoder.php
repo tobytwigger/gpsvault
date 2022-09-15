@@ -34,6 +34,51 @@ class GooglePolylineEncoder
     }
 
     /**
+     * Reduce multi-dimensional to single list
+     *
+     * @param array $array Subject array to flatten.
+     *
+     * @return array flattened
+     */
+    final public static function flatten( $array )
+    {
+        $flatten = array();
+        array_walk_recursive(
+            $array, // @codeCoverageIgnore
+            function ($current) use (&$flatten) {
+                $flatten[] = $current;
+            }
+        );
+        return $flatten;
+    }
+
+    // https://github.com/emcconville/google-map-polyline-encoding-tool/blob/master/src/Polyline.php
+    public static function encode(array $points, int $precision = 5)
+    {
+        $points = self::flatten($points);
+        $encodedString = '';
+        $index = 0;
+        $previous = array(0,0);
+        foreach ( $points as $number ) {
+            $number = (float)($number);
+            $number = (int)round($number * pow(10, $precision));
+            $diff = $number - $previous[$index % 2];
+            $previous[$index % 2] = $number;
+            $number = $diff;
+            $index++;
+            $number = ($number < 0) ? ~($number << 1) : ($number << 1);
+            $chunk = '';
+            while ( $number >= 0x20 ) {
+                $chunk .= chr((0x20 | ($number & 0x1f)) + 63);
+                $number >>= 5;
+            }
+            $chunk .= chr($number + 63);
+            $encodedString .= $chunk;
+        }
+        return $encodedString;
+    }
+
+    /**
      * Return the encoded string generated from the points
      *
      * @return string
@@ -69,7 +114,7 @@ class GooglePolylineEncoder
      * Decode an encoded polyline string to an array of points
      *
      * @param type $value
-     * @return type
+     * @return array
      */
     static public function decodeValue($encoded, $precision = 5)
     {

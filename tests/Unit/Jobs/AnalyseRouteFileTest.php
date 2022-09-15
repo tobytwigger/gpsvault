@@ -17,6 +17,11 @@ use Tests\TestCase;
 class AnalyseRouteFileTest extends TestCase
 {
     /** @test */
+    public function todo_it_spaces_waypoints_appropriately(){
+        
+    }
+
+    /** @test */
     public function it_throws_an_exception_if_a_route_is_missing_a_file()
     {
         $route = Route::factory()->create(['file_id' => null]);

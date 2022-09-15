@@ -221,10 +221,9 @@ export default {
                 }, new maplibregl.LngLatBounds(coordinates[1], coordinates[0]));
             } else if(Array.isArray(this._schema?.waypoints) && this._schema.waypoints.length > 2) {
 
-
                 bounds = this._schema.waypoints.reduce(function (bounds, waypoints) {
-                    return bounds.extend([waypoints.location[0], waypoints.location[1]]);
-                }, new maplibregl.LngLatBounds(this._schema.waypoints[0].location, this._schema.waypoints[1].location));
+                    return bounds.extend([waypoints.location[1], waypoints.location[0]]);
+                }, new maplibregl.LngLatBounds([this._schema.waypoints[0].location[1], this._schema.waypoints[0].location[0]], [this._schema.waypoints[0].location[1], this._schema.waypoints[0].location[0]]));
             } else {
                 bounds = new maplibregl.LngLatBounds(new maplibregl.LngLat(-26, 37), new maplibregl.LngLat(10, 60));
             }
@@ -246,7 +245,7 @@ export default {
                     if(this.markers.hasOwnProperty(waypoint.id)) {
                         // If it does exist, make sure the location matches.
                         if(waypoint.location !== this.markers[waypoint.id].getLngLat()) {
-                            this.markers[waypoint.id].setLngLat([waypoint.location[0], waypoint.location[1]]);
+                            this.markers[waypoint.id].setLngLat([waypoint.location[1], waypoint.location[0]]);
                             this.markers[waypoint.id].getElement().style.backgroundImage = this._getBackgroundImage(parseInt(waypointIndex) + 1)
                         }
                     } else {
@@ -301,7 +300,7 @@ export default {
             let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(buttonDiv);
 
             let marker = new maplibregl.Marker({element: markerEl, draggable: true})
-                .setLngLat([waypoint.location[0], waypoint.location[1]])
+                .setLngLat([waypoint.location[1], waypoint.location[0]])
                 .setPopup(popup); // sets a popup on this marker
 
             marker.on('dragend', (e) => {
@@ -311,7 +310,7 @@ export default {
                     let waypoint = waypoints[0];
                     let index = schema.waypoints.indexOf(waypoint);
                     let coords = marker.getLngLat();
-                    waypoint.location = [coords.lng, coords.lat];
+                    waypoint.location = [coords.lat, coords.lng];
                     schema.waypoints.splice(index, 1, waypoint);
                     this._schema = schema;
                 }
@@ -369,7 +368,7 @@ export default {
                                 let schema = cloneDeep(this._schema);
                                 axios.post(route('planner.tools.new-waypoint-locator'), {
                                     geojson: schema.waypoints.map(w => {
-                                        return {lat: w.location[1], lng: w.location[0]}
+                                        return {lat: w.location[0], lng: w.location[1]}
                                     }),
                                     lat: this.generalPopup.getLngLat().lat,
                                     lng: this.generalPopup.getLngLat().lng

@@ -10,19 +10,42 @@ class Valhalla
     public function request(string $method, string $url, array $options = [])
     {
         $fullUrl = 'https://valhalla1.openstreetmap.de' . $url;
-        return Http::send($method, $fullUrl, $options);
+        $response = Http::send($method, $fullUrl, $options);
+        if ($response->failed()) {
+            throw $response->toException();
+        }
+        return $response;
     }
+
+
+//
+//dd(Http::get('https://valhalla1.openstreetmap.de/route?json=' . json_encode($options), [
+////            'json' =>
+//])->toException());
+//$response = $this->request(
+//'POST',
+//sprintf('/route'),
+//[
+//'query' => json_encode([
+//'json' => array_merge($defaultOptions, $options, ['locations' => $locations])
+//])
+//]
+//);
+//dd($response);
+//if($response->failed()) {
+//throw $response->toException();
+//}
+//return $response->json();
 
     public function route(array $locations, array $options = [])
     {
-        $defaultOptions = [
+        $options = array_merge([
             'costing' => 'bicycle'
-        ];
+        ], $options, ['locations' => $locations]);
+
         $response = $this->request(
             'GET',
-            sprintf('/route?json=%s&api_key=%s',
-                json_encode(array_merge($defaultOptions, $options, ['locations' => $locations])),
-                '')
+            sprintf('/route?json=%s', json_encode($options))
         );
 
         return $response->json();
@@ -33,11 +56,11 @@ class Valhalla
         $response = $this->request(
             'GET',
             sprintf('/height?json=%s',
-            json_encode([
-                'range' => true,
-                'encoded_polyline' => $encodedPolyline,
-                'shape_format' => 'polyline6'
-            ]))
+                json_encode([
+                    'range' => true,
+                    'encoded_polyline' => $encodedPolyline,
+                    'shape_format' => 'polyline6'
+                ]))
         );
 
         return $response->json();

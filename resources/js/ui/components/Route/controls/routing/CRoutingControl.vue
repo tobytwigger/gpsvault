@@ -50,6 +50,13 @@
                                 <v-list-item-subtitle>Duration</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
+                    </v-list>
+                    <v-list
+                        style="overflow-y:auto;"
+                        height="500px"
+                        subheader
+                        two-line
+                        v-if="schema?.waypoints?.length ?? 0 !== 0">
 
                         <draggable v-model="_orderArray" handle=".drag-handle">
                             <v-list-item
@@ -85,6 +92,9 @@
                             </v-list-item>
                         </draggable>
                     </v-list>
+                    <div v-else>
+                        No waypoints found. Please place a waypoint on the map to get started.
+                    </div>
                 </v-card>
 
 

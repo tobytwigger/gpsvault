@@ -92,7 +92,7 @@
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
 import polyline from '@mapbox/polyline';
-import {isEqual} from 'lodash';
+import {cloneDeep, isEqual} from 'lodash';
 
 export default {
     name: "Planner",
@@ -149,7 +149,15 @@ export default {
         },
         performSearch() {
             this.searching = true;
-            axios.post(route('planner.plan'), this.schema)
+            let schema = cloneDeep(this.schema);
+            schema.waypoints = schema.waypoints.map(w => {
+                w.location = {
+                    lat: w.location[0],
+                    lng: w.location[1]
+                };
+                return w;
+            })
+            axios.post(route('planner.plan'), schema)
                 .then(response => this.result = response.data)
                 .catch(e => console.log(e))
                 .finally(() => this.searching = false);
