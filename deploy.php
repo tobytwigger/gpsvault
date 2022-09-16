@@ -31,6 +31,7 @@ task('deploy', [
     'assets:compile',
     'assets:upload',
     'artisan:migrate',
+    'permission:install',
     'artisan:storage:link',
     'artisan:cache:clear',
     'artisan:route:cache',
@@ -42,6 +43,8 @@ task('deploy', [
 ]);
 
 task('horizon:publish', artisan('horizon:publish'));
+
+task('permission:install', artisan('permission:install'));
 
 task('assets:compile', function () {
     runLocally('npm install');

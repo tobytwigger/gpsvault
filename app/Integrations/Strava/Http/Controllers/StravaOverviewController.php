@@ -4,6 +4,7 @@ namespace App\Integrations\Strava\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
+use App\Integrations\Strava\Sync\SyncStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -76,6 +77,7 @@ class StravaOverviewController extends Controller
             'ownedClients' => $ownedClients,
             'sharedClients' => $sharedClients,
             'publicClients' => $publicClients,
+            'sync' => SyncStatus::forUser(Auth::user())->toArray()
         ]);
     }
 }

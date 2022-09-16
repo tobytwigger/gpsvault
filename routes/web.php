@@ -76,6 +76,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware('can:manage-strava-clients')->group(function () {
         Route::resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'update', 'destroy']);
 
+        /* Sync */
+        Route::post('/sync', \App\Integrations\Strava\Http\Controllers\StravaSyncController::class)->name('strava.sync');
+        Route::patch('/activity/{activity}/link', [\App\Integrations\Strava\Http\Controllers\ActivityStravaIdController::class, 'update'])->name('strava.activity.link.update');
+
         /* Client invitations */
         Route::middleware('link')->get('/client/{client}/accept', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'accept'])->name('strava.client.accept');
         Route::post('/client/{client}/invite', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'invite'])->name('strava.client.invite');

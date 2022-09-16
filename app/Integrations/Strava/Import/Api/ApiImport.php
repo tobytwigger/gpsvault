@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Integrations\Strava\Import;
+namespace App\Integrations\Strava\Import\Api;
 
-use App\Integrations\Strava\Import\Resources\Activity;
-use App\Integrations\Strava\Import\Resources\Comment;
-use App\Integrations\Strava\Import\Resources\Kudos;
-use App\Integrations\Strava\Import\Resources\LimitedActivity;
-use App\Integrations\Strava\Import\Resources\Photos;
-use App\Integrations\Strava\Import\Resources\Stats;
+use App\Integrations\Strava\Import\Api\Resources\Activity;
+use App\Integrations\Strava\Import\Api\Resources\Comment;
+use App\Integrations\Strava\Import\Api\Resources\Kudos;
+use App\Integrations\Strava\Import\Api\Resources\LimitedActivity;
+use App\Integrations\Strava\Import\Api\Resources\Photos;
+use App\Integrations\Strava\Import\Api\Resources\Stats;
 
 class ApiImport
 {

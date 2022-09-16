@@ -3,7 +3,7 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
-use App\Integrations\Strava\Import\ApiImport;
+use App\Integrations\Strava\Import\Api\ApiImport;
 
 class LoadStravaKudos extends StravaBaseJob
 {

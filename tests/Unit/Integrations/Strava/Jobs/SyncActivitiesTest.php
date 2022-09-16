@@ -2,13 +2,7 @@
 
 namespace Unit\Integrations\Strava\Jobs;
 
-use App\Integrations\Strava\Client\Client\Resources\Activity as ActivityClientResource;
-use App\Integrations\Strava\Client\StravaClientFactory;
-use App\Integrations\Strava\Import\Resources\Activity as ActivityImporter;
-use App\Models\User;
-use Prophecy\Argument;
 use Tests\TestCase;
-use Tests\Utils\MocksStrava;
 
 class SyncActivitiesTest extends TestCase
 {

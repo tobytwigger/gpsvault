@@ -6,14 +6,37 @@ use App\Services\StaticMapGenerator\Generator;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
+use Location\Coordinate;
+use Location\Polyline;
+use Location\Processor\Polyline\SimplifyBearing;
+use Location\Processor\Polyline\SimplifyDouglasPeucker;
 use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 class MapboxGenerator implements Generator
 {
     public function ofPath(LineString $lineString): string
     {
+        $polyline = new Polyline();
+
+        $polyline->addPoints(
+            collect($lineString->getPoints())
+                ->map(fn (Point $point) => new Coordinate($point->getLat(), $point->getLng()))
+                ->all()
+        );
+
+        // Remove any points that don't involve a 20 degree change in direction
+        $processor = new SimplifyBearing(20);
+        $newPolyline = $processor->simplify($polyline);
+
+        // Remove any points within 20m of another
+        $processor = new SimplifyDouglasPeucker(20);
+
+        $newPoints = $processor->simplify($newPolyline)->getPoints();
+
+
         $encoder = new GooglePolylineEncoder();
-        foreach($lineString->getPoints() as $point) {
+        foreach($newPoints as $point) {
             $encoder->addPoint($point->getLat(), $point->getLng());
         }
 

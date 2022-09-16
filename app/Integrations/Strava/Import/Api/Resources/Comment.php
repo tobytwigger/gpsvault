@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Import\Resources;
+namespace App\Integrations\Strava\Import\Api\Resources;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Models\Activity as ActivityModel;

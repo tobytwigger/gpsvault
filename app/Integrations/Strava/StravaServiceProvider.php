@@ -2,8 +2,8 @@
 
 namespace App\Integrations\Strava;
 
-use App\Integrations\Strava\Client\Commands\ResetRateLimit;
-use App\Integrations\Strava\Client\Commands\SyncStravaForUser;
+use App\Integrations\Strava\Commands\ResetRateLimit;
+use App\Integrations\Strava\Commands\SyncStravaForUser;
 use Illuminate\Support\ServiceProvider;
 
 class StravaServiceProvider extends ServiceProvider

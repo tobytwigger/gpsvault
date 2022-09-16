@@ -18,7 +18,7 @@ class AnalyseRouteFileTest extends TestCase
 {
     /** @test */
     public function todo_it_spaces_waypoints_appropriately(){
-        
+        $this->markTestSkipped();
     }
 
     /** @test */

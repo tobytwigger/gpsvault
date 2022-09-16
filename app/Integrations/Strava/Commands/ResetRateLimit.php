@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Client\Commands;
+namespace App\Integrations\Strava\Commands;
 
 use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Console\Command;

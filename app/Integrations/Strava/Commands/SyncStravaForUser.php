@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Integrations\Strava\Client\Commands;
+namespace App\Integrations\Strava\Commands;
 
 use App\Integrations\Strava\Jobs\SyncActivities;
 use App\Models\User;

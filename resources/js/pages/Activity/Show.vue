@@ -218,15 +218,27 @@
                         dense
                     ></v-select>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item v-if="activity.additional_data.strava_id">
                     <v-btn @click="refreshStravaActivity" :loading="loadingStravaSync" :disabled="loadingStravaSync">
                         Reload from Strava
                     </v-btn>
                 </v-list-item>
                 <v-list-item>
-                    <a data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
-                       v-if="activity.linked_to.indexOf('strava') !== -1"
-                    >View on strava</a>
+                    <v-btn link data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
+                       v-if="activity.additional_data.strava_id"
+                    >View on strava</v-btn>
+                </v-list-item>
+                <v-list-item v-if="activity.additional_data.strava_id">
+                    <c-link-strava-activity-form :activity="activity">
+                        <template v-slot:activator="{trigger, showing}">
+                            <v-btn @click="trigger"
+                                   :disabled="showing"
+                                   v-bind="attrs"
+                                   v-on="on">
+                                Edit link to Strava
+                            </v-btn>
+                        </template>
+                    </c-link-strava-activity-form>
                 </v-list-item>
             </v-list>
         </template>
@@ -251,10 +263,12 @@ import CActivityMap from 'ui/components/Activity/CActivityMap';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
 import CJobStatus from '../../ui/components/CJobStatus';
 import CMap from '../../ui/components/Map/CMap';
+import CLinkStravaActivityForm from '../../ui/components/Strava/Sync/CLinkStravaActivityForm';
 
 export default {
     name: "Show",
     components: {
+        CLinkStravaActivityForm,
         CMap,
         CJobStatus,
         CActivityLocationSummary,

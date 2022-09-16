@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Integrations\Strava\Import\Resources;
 
-use App\Integrations\Strava\Import\Resources\Activity;
+use App\Integrations\Strava\Import\Api\Resources\Activity;
 use App\Models\Stats;
 use App\Models\User;
 use Carbon\Carbon;

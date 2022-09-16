@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Integrations\Strava\Import\Resources;
+namespace App\Integrations\Strava\Import\Api\Resources;
 
 use App\Services\Analysis\Parser\Point;
 use MStaack\LaravelPostgis\Geometries\LineString;
+use function App\Integrations\Strava\Import\Resources\collect;
+use function App\Integrations\Strava\Import\Resources\count;
+use function App\Integrations\Strava\Import\Resources\data_get;
 
 class Stats
 {
@@ -20,7 +23,6 @@ class Stats
         $order = 0;
         $points = [];
         foreach ($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
-            \Log::info('Processing');
             $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order, &$points) {
                 $toReturn = [
                     'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
@@ -42,7 +44,7 @@ class Stats
                 return $toReturn;
             }));
         }
-        \Log::info(count($points));
+
         if (count($points) > 1) {
             $stats->linestring = new LineString($points);
             $stats->save();

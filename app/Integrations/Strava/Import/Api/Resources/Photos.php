@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Integrations\Strava\Import\Resources;
+namespace App\Integrations\Strava\Import\Api\Resources;
 
 use App\Models\Activity as ActivityModel;
 use Illuminate\Support\Arr;
+use function App\Integrations\Strava\Import\Resources\collect;
 
 class Photos
 {

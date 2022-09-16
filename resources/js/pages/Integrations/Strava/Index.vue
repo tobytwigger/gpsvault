@@ -130,14 +130,62 @@
             </v-tab-item>
 
             <v-tab-item value="tab-sync">
-                <v-alert
-                    outlined
-                    type="warning"
-                    prominent
-                    border="left"
-                >
-                    Sync is still in development and will be available soon.
-                </v-alert>
+                <v-row v-if="sync.unlinked_activities.length > 0">
+                    <v-col>
+                        <v-alert
+                            border="top"
+                            colored-border
+                            type="info"
+                            elevation="2"
+                        >
+                            There are {{ sync.unlinked_activities.length }} activities that are not yet linked to Strava.
+
+                            <v-expansion-panels>
+                            <v-expansion-panel>
+                                <v-expansion-panel-header>
+                                    <v-progress-linear
+                                        :value="activitiesLinkedPercentage"
+                                        height="20"
+                                        color="orange lighten-2"
+                                    >
+                                        <span>{{Math.floor(activitiesLinkedPercentage)}}%</span>
+                                        <span>  </span>
+                                        <span>({{ sync.activities_linked }}/{{ sync.total_activities }})</span>
+                                    </v-progress-linear>
+
+                                </v-expansion-panel-header>
+                                <v-expansion-panel-content>
+                                    <c-link-activity :activities="sync.unlinked_activities">
+
+                                    </c-link-activity>
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-alert>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <v-list
+                            subheader
+                            two-line
+                        >
+                            <v-subheader>
+                                Loading from Strava
+                                <v-spacer></v-spacer>
+                                <v-btn @click="reload" icon :loading="isReloading">
+                                    <v-icon>mdi-autorenew</v-icon>
+                                </v-btn>
+                            </v-subheader>
+
+                            <c-sync-information-item title="Activities" :activities="sync.activities" description="Checks for updates to basic information about your activity." icon="mdi-bike"></c-sync-information-item>
+                            <c-sync-information-item title="Stats" :activities="sync.stats" description="Checks for updates to your data, such as speed and heart rate." icon="mdi-chart-line"></c-sync-information-item>
+                            <c-sync-information-item title="Photos" :activities="sync.photos" description="CHecks for any new photos." icon="mdi-camera"></c-sync-information-item>
+                            <c-sync-information-item title="Kudos" :activities="sync.kudos" description="Checks for any new Kudos." icon="mdi-thumb-up-outline"></c-sync-information-item>
+                            <c-sync-information-item title="Comments" :activities="sync.comments" description="Checks for any new comments." icon="mdi-comment-text"></c-sync-information-item>
+                        </v-list>
+                    </v-col>
+                </v-row>
             </v-tab-item>
 
             <v-tab-item value="tab-import">
@@ -146,8 +194,9 @@
                     type="warning"
                     prominent
                     border="left"
+                    v-if="syncIsOngoing"
                 >
-                    Importing is still in development and will be available soon.
+                    We're taking a backup of your Strava account. We recommend importing once the sync is complete.
                 </v-alert>
             </v-tab-item>
         </v-tabs-items>
@@ -166,6 +215,28 @@
                         </template>
                     </c-strava-client-form>
                 </v-list-item>
+                <v-list-item>
+                    <v-btn
+                        data-hint="Sync Strava"
+                        @click="$inertia.post(route('strava.sync'))"
+                        :disabled="!isConnected"
+                    >
+                        Sync Strava
+                    </v-btn>
+                </v-list-item>
+                <v-list-item>
+                    <c-strava-client-form title="Upload a Strava export" button-text="Import">
+                        <template v-slot:activator="{trigger, showing}">
+                            <v-btn
+                                data-hint="You can import the export of your Strava account to quickly syncronise your data."
+                                @click="trigger"
+                                :disabled="showing"
+                            >
+                                Import Strava data
+                            </v-btn>
+                        </template>
+                    </c-strava-client-form>
+                </v-list-item>
             </v-list>
         </template>
     </c-app-wrapper>
@@ -175,9 +246,11 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CStravaClientForm from '../../../ui/components/Strava/CStravaClientForm';
 import CStravaClientList from '../../../ui/components/Strava/CStravaClientList';
+import CSyncInformationItem from '../../../ui/components/Strava/Sync/CSyncInformationItem';
+import CLinkActivity from '../../../ui/components/Strava/Sync/CLinkActivity';
 export default {
     name: "Index",
-    components: {CStravaClientList, CStravaClientForm, CAppWrapper},
+    components: {CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper},
     props: {
         ownedClients: {
             required: true,
@@ -190,11 +263,16 @@ export default {
         publicClients: {
             required: true,
             type: Object
+        },
+        sync: {
+            required: true,
+            type: Object
         }
     },
     data() {
         return {
-            tab: null
+            tab: null,
+            isReloading: false
         }
     },
 
@@ -219,10 +297,26 @@ export default {
                     .filter(client => client.enabled)
                     .filter(client => client.is_connected)[0].id));
             }
+        },
+        reload() {
+            this.$inertia.reload({
+                onStart: () => this.isReloading = true,
+                onFinish: () => this.isReloading = false
+            });
         }
     },
 
     computed: {
+        syncIsOngoing() {
+            return this.sync.activities.length > 0
+                || this.sync.stats.length > 0
+                || this.sync.photos.length > 0
+                || this.sync.kudos.length > 0
+                || this.sync.comments.length > 0
+        },
+        activitiesLinkedPercentage() {
+            return (this.sync.activities_linked / (this.sync.total_activities === 0 ? 1 : this.sync.total_activities)) * 100;
+        },
         clients() {
             let clients = [];
             for(let data of this.ownedClients.data) {
