@@ -5,29 +5,27 @@ namespace App\Integrations\Strava\Import\Upload\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Import extends Model
+class StravaImport extends Model
 {
-    protected $table = 'imports';
-
     protected $fillable = ['user_id'];
 
     protected $casts = [];
 
     protected $with = [
-        'importResults'
+        'stravaImportResults'
     ];
 
     protected static function booted()
     {
-        static::creating(function (Import $import) {
+        static::creating(function (StravaImport $import) {
             if ($import->user_id === null && Auth::check()) {
                 $import->user_id = Auth::id();
             }
         });
     }
 
-    public function importResults()
+    public function stravaImportResults()
     {
-        return $this->hasMany(ImportResult::class);
+        return $this->hasMany(StravaImportResult::class);
     }
 }

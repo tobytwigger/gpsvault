@@ -2,36 +2,25 @@
 
 namespace App\Integrations\Strava\Import\Upload\Importers;
 
-use Alchemy\Zippy\Archive\MemberInterface;
 use App\Exceptions\ActivityDuplicate;
-use App\Integrations\Strava\Import\Importers\Importer;
 use App\Models\Activity;
 use App\Models\File;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class ActivityImporter extends Importer
 {
     protected function import()
     {
-        $this->availableActivityFiles()->each(function (MemberInterface $member, int $key) {
-            $this->updateProgress($key + 1, $this->availableActivityFiles()->count());
-            $this->processActivityFile($member);
+        $this->zip->contents->activityFiles()->each(function(ZipFile $filename) {
+            $this->processActivityFile($filename);
         });
     }
 
-    private function availableActivityFiles(): Collection
+    private function existingActivityUsingFile(ZipFile $filename): ?Activity
     {
-        return $this->zip->getMembers()
-            ->filter(fn (MemberInterface $member) => Str::startsWith($member->getLocation(), 'activities/') && Str::length($member->getLocation()) > 11)
-            ->values();
-    }
-
-    private function existingActivityUsingFile(MemberInterface $file): ?Activity
-    {
-        $uploadId = intval((string) Str::of(Str::substr($file->getLocation(), 11))->before('.'));
+        $uploadId = intval((string) Str::of(Str::substr($filename, 11))->before('.'));
 
         return Activity::linkedTo('strava')->whereAdditionalData('strava_upload_id', $uploadId)->first();
     }
@@ -41,13 +30,13 @@ class ActivityImporter extends Importer
         return 'activities';
     }
 
-    private function processActivityFile(MemberInterface $file)
+    private function processActivityFile(ZipFile $filename)
     {
         try {
-            $activity = $this->existingActivityUsingFile($file);
+            $activity = $this->existingActivityUsingFile($filename);
             if ($activity === null) {
                 $this->failed('unmatched', [
-                    'file_location' => $file->getLocation(),
+                    'file_location' => $filename,
                 ]);
 
                 return;
@@ -60,7 +49,7 @@ class ActivityImporter extends Importer
                 return;
             }
 
-            $file = $this->convertMemberToFile($file);
+            $file = $this->convertToFile($filename);
 
             try {
                 $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
@@ -78,51 +67,16 @@ class ActivityImporter extends Importer
         }
     }
 
-    public function convertMemberToFile(MemberInterface $member): File
+    public function convertToFile(ZipFile $filename): File
     {
-        $fullMemberPath = $this->zip->getFullExtractedDirectory($member->getLocation());
-        if ($this->memberIsTarFile($member)) {
-            $fullMemberPath = $this->unzipMember($member);
-        }
-
-        $filename = Str::substr($member->getLocation(), 11);
-        if ($this->memberIsTarFile($member)) {
-            $filename = Str::replace('.gz', '', $filename);
-        }
+        $contents = $this->zip->extract($filename);
 
         return Upload::withContents(
-            trim(file_get_contents($fullMemberPath)),
+            trim($contents),
             $filename,
             $this->user,
             FileUploader::ARCHIVE
         );
     }
 
-    private function memberIsTarFile(MemberInterface $member): bool
-    {
-        return Str::endsWith($member->getLocation(), '.gz');
-    }
-
-    private function unzipMember(MemberInterface $member): string
-    {
-        $path = $this->zip->getFullExtractedDirectory($member->getLocation());
-
-        $bufferSize = 4096; // read 4kb at a time
-        $outputFileName = str_replace('.gz', '', $path);
-
-        // Open the file
-        $file = gzopen($path, 'rb');
-        $outputFile = fopen($outputFileName, 'wb');
-
-        while (!gzeof($file)) {
-            // Read buffer-size bytes
-            // Both fwrite and gzread and binary-safe
-            fwrite($outputFile, gzread($file, $bufferSize));
-        }
-
-        fclose($outputFile);
-        gzclose($file);
-
-        return $outputFileName;
-    }
 }

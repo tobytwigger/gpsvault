@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Integrations\Strava\Import\Resources;
+namespace Tests\Unit\Integrations\Strava\Import\Api\Resources;
 
 use App\Integrations\Strava\Import\Api\Resources\Activity;
 use App\Models\Stats;

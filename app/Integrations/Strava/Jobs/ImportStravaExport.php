@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Import\Upload\Importer;
+use App\Integrations\Strava\Import\Upload\Importers\ImportZip;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,18 +11,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use JobStatus\Trackable;
 
-class ImportStravaExport implements ShouldQueue, ShouldBeUnique
+class ImportStravaExport
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     private User $user;
+    private string $zipPath;
 
-    public function __construct(User $user)
+    public function __construct(User $user, string $zipPath)
     {
         $this->user = $user;
+        $this->zipPath = $zipPath;
     }
 
     public function uniqueId()
@@ -47,15 +51,14 @@ class ImportStravaExport implements ShouldQueue, ShouldBeUnique
     {
         $this->line('Extracting Strava archive');
 
-        $import = Importer::import(
-            ImportingZip::fromTempArchivePath($this->config('file_path')),
-            $this->task,
-            $this->user()
+        Importer::import(
+            ImportZip::fromTempArchivePath($this->zipPath),
+            $this->user
         );
 
-        Storage::disk('temp')->delete($this->config('file_path'));
+        Storage::disk('temp')->delete($this->zipPath);
 
-        $this->succeed(sprintf('Importing complete. You may view the results at %s', url()->route('import.show', $import)));
+        $this->successMessage(sprintf('Importing complete.'));
     }
 
 }

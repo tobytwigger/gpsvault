@@ -171,7 +171,7 @@
                             two-line
                         >
                             <v-subheader>
-                                Loading from Strava
+                                Loading from Strava. These numbers aren't yet accurate.
                                 <v-spacer></v-spacer>
                                 <v-btn @click="reload" icon :loading="isReloading">
                                     <v-icon>mdi-autorenew</v-icon>
@@ -225,7 +225,7 @@
                     </v-btn>
                 </v-list-item>
                 <v-list-item>
-                    <c-strava-client-form title="Upload a Strava export" button-text="Import">
+                    <c-strava-import-form>
                         <template v-slot:activator="{trigger, showing}">
                             <v-btn
                                 data-hint="You can import the export of your Strava account to quickly syncronise your data."
@@ -235,7 +235,7 @@
                                 Import Strava data
                             </v-btn>
                         </template>
-                    </c-strava-client-form>
+                    </c-strava-import-form>
                 </v-list-item>
             </v-list>
         </template>
@@ -248,9 +248,12 @@ import CStravaClientForm from '../../../ui/components/Strava/CStravaClientForm';
 import CStravaClientList from '../../../ui/components/Strava/CStravaClientList';
 import CSyncInformationItem from '../../../ui/components/Strava/Sync/CSyncInformationItem';
 import CLinkActivity from '../../../ui/components/Strava/Sync/CLinkActivity';
+import CStravaImportForm from '../../../ui/components/Strava/Import/CStravaImportForm';
 export default {
     name: "Index",
-    components: {CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper},
+    components: {
+        CStravaImportForm,
+        CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper},
     props: {
         ownedClients: {
             required: true,
@@ -267,6 +270,10 @@ export default {
         sync: {
             required: true,
             type: Object
+        },
+        imports: {
+            required: true,
+            type: Array
         }
     },
     data() {

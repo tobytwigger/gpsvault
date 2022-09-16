@@ -2,8 +2,6 @@
 
 namespace App\Integrations\Strava\Import\Upload\Importers;
 
-use Alchemy\Zippy\Archive\MemberInterface;
-use App\Integrations\Strava\Import\Importers\Importer;
 use App\Models\Activity;
 use App\Models\File;
 use App\Services\File\FileUploader;

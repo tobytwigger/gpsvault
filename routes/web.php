@@ -76,6 +76,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::middleware('can:manage-strava-clients')->group(function () {
         Route::resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'update', 'destroy']);
 
+        /* Import */
+        Route::resource('import', \App\Integrations\Strava\Http\Controllers\Import\ImportController::class, ['as' => 'strava'])->only(['index', 'store']);
+
         /* Sync */
         Route::post('/sync', \App\Integrations\Strava\Http\Controllers\StravaSyncController::class)->name('strava.sync');
         Route::patch('/activity/{activity}/link', [\App\Integrations\Strava\Http\Controllers\ActivityStravaIdController::class, 'update'])->name('strava.activity.link.update');

@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Integrations\Strava\Import\Resources;
+namespace Tests\Unit\Integrations\Strava\Import\Api\Resources;
 
 use Tests\TestCase;
 
-class CommentTest extends TestCase
+class LimitedActivityTest extends TestCase
 {
     /** @test */
     public function todo_scaffolding_strava()

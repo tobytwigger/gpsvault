@@ -3,12 +3,11 @@
 namespace App\Integrations\Strava\Import\Upload;
 
 
-use App\Integrations\Strava\Import\Importers\ImportingZip;
-use App\Integrations\Strava\Import\Importers\ImportResults;
-use App\Integrations\Strava\Import\Models\Import;
-use App\Integrations\Strava\Import\Models\ImportResult;
+use App\Integrations\Strava\Import\Upload\Importers\ImportZip;
+use App\Integrations\Strava\Import\Upload\Importers\ImportResults;
+use App\Integrations\Strava\Import\Upload\Models\StravaImport;
+use App\Integrations\Strava\Import\Upload\Models\StravaImportResult;
 use App\Models\User;
-use App\Services\Sync\SyncTask;
 
 class StravaImporter
 {
@@ -16,7 +15,7 @@ class StravaImporter
 
     public function registerImporter(string $importer)
     {
-        if (!is_a($importer, \App\Integrations\Strava\Import\Importers\Importer::class, true)) {
+        if (!is_a($importer, \App\Integrations\Strava\Import\Upload\Importers\Importer::class, true)) {
             throw new \Exception(sprintf('Importer [%s] must extend the Importer contract', $importer));
         }
         $this->importers[] = $importer;
@@ -29,20 +28,17 @@ class StravaImporter
             ->all();
     }
 
-    public function import(ImportingZip $zip, ?SyncTask $syncTask, User $user): Import
+    public function import(ImportZip $zip, User $user): StravaImport
     {
         $results = new ImportResults();
         foreach ($this->importers() as $importer) {
-            if ($syncTask) {
-                $syncTask->addMessage(sprintf('Importing %s.', $importer->type()));
-            }
             $results->merge(
-                $importer->run($zip, $syncTask, $user)
+                $importer->run($zip, $user)
             );
         }
-        $import = Import::create(['user_id' => $user->id]);
+        $import = StravaImport::create(['user_id' => $user->id]);
         foreach ($results->all() as $result) {
-            ImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
+            StravaImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
         }
         $zip->clearUp();
 
