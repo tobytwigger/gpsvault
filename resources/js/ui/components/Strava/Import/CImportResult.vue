@@ -117,7 +117,7 @@
                                     <v-expansion-panel-content>
                                         <ul>
                                             <li v-for="i in photoImports.imported">
-                                                <a :href="i.data.file_id ? route('file.download', i.data.file_id) : '#'">Photo {{i.data.filename}}</a> for <a :href="route('activity.show', i.data.matched_activity_id)">{{i.data.activity_name ?? route('activity.show', i.data.matched_activity_id)}}</a>
+                                                <a :href="i.data.file_id ? route('file.download', i.data.file_id) : '#'">Photo {{i.data.filename}}</a> for <a :href="route('activity.show', i.data.activity_id)">{{i.data.activity_name ?? route('activity.show', i.data.activity_id)}}</a>
                                             </li>
                                         </ul>
 

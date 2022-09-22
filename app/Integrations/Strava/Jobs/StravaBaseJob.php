@@ -24,7 +24,7 @@ abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
 
     public Activity $activity;
 
-    protected $backoff = [1, 10, 30, 60];
+    protected $backoff = [60, 120, 180, 300];
 
     /**
      * The number of seconds after which the job's unique lock will be released.

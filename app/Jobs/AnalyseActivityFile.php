@@ -148,12 +148,20 @@ class AnalyseActivityFile implements ShouldQueue
 //            (new WithoutOverlapping('FileAnalyser')),
 //        ];
 //    }
+
+    /**
+     * @param Stats $stats
+     * @param array|Point[] $points
+     * @return void
+     */
     private function saveLinestring(Stats $stats, array $points)
     {
         $convertedPoints = [];
 
         foreach ($points as $point) {
-            $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+            if($point->getLatitude() && $point->getLongitude() && $point->getElevation()) {
+                $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+            }
         }
 
         if (count($convertedPoints) > 1) {

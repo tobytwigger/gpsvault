@@ -6,8 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Integrations\Strava\Import\Upload\Models\StravaImport;
 use App\Integrations\Strava\Sync\SyncStatus;
+use App\Models\Activity;
+use App\Models\File;
 use App\Models\User;
+use App\Services\Analysis\Parser\Point;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class StravaOverviewController extends Controller
@@ -73,13 +79,29 @@ class StravaOverviewController extends Controller
             ];
             $publicClients->offsetSet($index, $client);
         }
-
         return Inertia::render('Integrations/Strava/Index', [
             'ownedClients' => $ownedClients,
             'sharedClients' => $sharedClients,
             'publicClients' => $publicClients,
             'sync' => SyncStatus::forUser(Auth::user())->toArray(),
-            'imports' => StravaImport::where('user_id', Auth::id())->latest()->get()
+            'imports' => StravaImport::where('user_id', Auth::id())->latest()->get(),
+            // Activities that are linked to Strava but don't have a file.
+            'activity_files_needing_import' => Activity::whereHas('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id')->whereNotNull('value'))
+                ->whereNull('file_id')->get()->map(fn(Activity $activity) => ['id' => $activity->id, 'name' => $activity->name]),
+            // Activities that are linked to Strava and are missing a photo. This means a photo ID referenced does not exist in files.
+            'photos_needing_import' => Activity::whereHas('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id')->whereNotNull('value'))
+                ->with(['files'])->get()->map(function(Activity $activity) {
+                    $photos = [];
+                    foreach($activity->getAdditionalData('strava_photo_ids') ?? [] as $photoId) {
+                        if($activity->files->filter(fn(File $file) => Str::contains($file->filename, $photoId))->count() === 0) {
+                            $photos[] = $photoId;
+                        }
+                    }
+                    if(empty($photos)) {
+                        return null;
+                    }
+                    return ['id' => $activity->id, 'name' => $activity->name, 'photos' => $photos];
+                })->filter()->values(),
         ]);
     }
 }

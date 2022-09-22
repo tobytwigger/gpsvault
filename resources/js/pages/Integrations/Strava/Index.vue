@@ -7,9 +7,15 @@
             icons-and-text
         >
             <v-tabs-slider></v-tabs-slider>
-            <v-tab href="#tab-connection">Connection Health<v-icon>mdi-heart-pulse</v-icon></v-tab>
-            <v-tab href="#tab-sync">Sync<v-icon>mdi-autorenew</v-icon></v-tab>
-            <v-tab href="#tab-import">Imports<v-icon>mdi-import</v-icon></v-tab>
+            <v-tab href="#tab-connection">Connection Health
+                <v-icon>mdi-heart-pulse</v-icon>
+            </v-tab>
+            <v-tab href="#tab-sync">Sync
+                <v-icon>mdi-autorenew</v-icon>
+            </v-tab>
+            <v-tab href="#tab-import">Imports
+                <v-icon>mdi-import</v-icon>
+            </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
@@ -25,7 +31,7 @@
                             Not connected
                         </v-alert>
                         <v-btn :href="stravaLoginUrl" v-if="stravaLoginUrl">
-                            <v-img src="/dist/images/strava_logo.svg" alt="Connect to Strava" />
+                            <v-img src="/dist/images/strava_logo.svg" alt="Connect to Strava"/>
                         </v-btn>
                     </div>
                     <div v-else-if="!isConnected && !clientIsAvailable">
@@ -82,7 +88,8 @@
                             </c-strava-client-form>
 
                         </v-alert>
-                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients" :public-clients="publicClients"></c-strava-client-list>
+                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients"
+                                              :public-clients="publicClients"></c-strava-client-list>
                     </div>
                     <div v-else-if="!isConnected && !clientIsAvailable">
                         <v-alert
@@ -124,7 +131,8 @@
                         >
                             Available shortly, rate limits met
                         </v-alert>
-                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients" :public-clients="publicClients"></c-strava-client-list>
+                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients"
+                                              :public-clients="publicClients"></c-strava-client-list>
                     </div>
                 </div>
             </v-tab-item>
@@ -138,28 +146,29 @@
                             type="info"
                             elevation="2"
                         >
-                            There are {{ sync.unlinked_activities.length }} activities that are not yet linked to Strava.
+                            There are {{ sync.unlinked_activities.length }} activities that are not yet linked to
+                            Strava.
 
                             <v-expansion-panels>
-                            <v-expansion-panel>
-                                <v-expansion-panel-header>
-                                    <v-progress-linear
-                                        :value="activitiesLinkedPercentage"
-                                        height="20"
-                                        color="orange lighten-2"
-                                    >
-                                        <span>{{Math.floor(activitiesLinkedPercentage)}}%</span>
-                                        <span>  </span>
-                                        <span>({{ sync.activities_linked }}/{{ sync.total_activities }})</span>
-                                    </v-progress-linear>
+                                <v-expansion-panel>
+                                    <v-expansion-panel-header>
+                                        <v-progress-linear
+                                            :value="activitiesLinkedPercentage"
+                                            height="20"
+                                            color="orange lighten-2"
+                                        >
+                                            <span>{{ Math.floor(activitiesLinkedPercentage) }}%</span>
+                                            <span>  </span>
+                                            <span>({{ sync.activities_linked }}/{{ sync.total_activities }})</span>
+                                        </v-progress-linear>
 
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content>
-                                    <c-link-activity :activities="sync.unlinked_activities">
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <c-link-activity :activities="sync.unlinked_activities">
 
-                                    </c-link-activity>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
+                                        </c-link-activity>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
                             </v-expansion-panels>
                         </v-alert>
                     </v-col>
@@ -178,11 +187,21 @@
                                 </v-btn>
                             </v-subheader>
 
-                            <c-sync-information-item title="Activities" :activities="sync.activities" description="Checks for updates to basic information about your activity." icon="mdi-bike"></c-sync-information-item>
-                            <c-sync-information-item title="Stats" :activities="sync.stats" description="Checks for updates to your data, such as speed and heart rate." icon="mdi-chart-line"></c-sync-information-item>
-                            <c-sync-information-item title="Photos" :activities="sync.photos" description="CHecks for any new photos." icon="mdi-camera"></c-sync-information-item>
-                            <c-sync-information-item title="Kudos" :activities="sync.kudos" description="Checks for any new Kudos." icon="mdi-thumb-up-outline"></c-sync-information-item>
-                            <c-sync-information-item title="Comments" :activities="sync.comments" description="Checks for any new comments." icon="mdi-comment-text"></c-sync-information-item>
+                            <c-sync-information-item title="Activities" :activities="sync.activities"
+                                                     description="Checks for updates to basic information about your activity."
+                                                     icon="mdi-bike"></c-sync-information-item>
+                            <c-sync-information-item title="Stats" :activities="sync.stats"
+                                                     description="Checks for updates to your data, such as speed and heart rate."
+                                                     icon="mdi-chart-line"></c-sync-information-item>
+                            <c-sync-information-item title="Photos" :activities="sync.photos"
+                                                     description="CHecks for any new photos."
+                                                     icon="mdi-camera"></c-sync-information-item>
+                            <c-sync-information-item title="Kudos" :activities="sync.kudos"
+                                                     description="Checks for any new Kudos."
+                                                     icon="mdi-thumb-up-outline"></c-sync-information-item>
+                            <c-sync-information-item title="Comments" :activities="sync.comments"
+                                                     description="Checks for any new comments."
+                                                     icon="mdi-comment-text"></c-sync-information-item>
                         </v-list>
                     </v-col>
                 </v-row>
@@ -199,8 +218,61 @@
                     We're taking a backup of your Strava account. We recommend importing once the sync is complete.
                 </v-alert>
 
+                <v-dialog>
+                    <template v-slot:activator="{on, attrs}">
+                        <v-alert
+                            outlined
+                            type="info"
+                            prominent
+                            border="left"
+                            v-if="!syncIsOngoing && activity_files_needing_import.length > 0 && photos_needing_import.length > 0"
+                        >
+                            You should upload a Strava export shortly, we're missing data which Strava contains.
+
+                            <v-btn text v-on="on" v-bind="attrs">Find out more</v-btn>
+                        </v-alert>
+                    </template>
+
+                    <v-expansion-panels>
+                        <v-expansion-panel v-if="activity_files_needing_import.length > 0">
+                            <v-expansion-panel-header>
+                                Missing activity files ({{ activity_files_needing_import.length }}) <small>The .gpx file is missing for some activities</small>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <ul>
+                                    <li v-for="i in activity_files_needing_import">
+                                        <a :href="route('activity.show', i.id)">{{i.name}}</a>
+                                    </li>
+                                </ul>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel v-if="photos_needing_import.length > 0">
+                            <v-expansion-panel-header>
+                                Missing photos ({{ photos_needing_import.length }}) <small>Expected photos are missing for some activities</small>
+                            </v-expansion-panel-header>
+                            <v-expansion-panel-content>
+                                <ul>
+                                    <li v-for="i in photos_needing_import">
+                                        <v-tooltip>
+                                            <template v-slot:activator="{on, attrs}">
+                                                <a :href="route('activity.show', i.id)"><span v-on="on" v-bind="attrs">{{i.name}}</span></a>
+                                            </template>
+                                        </v-tooltip>
+                                        <ul>
+                                            <li v-for="photo in i.photos" :key="i.id">
+                                                {{photo}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                    </v-expansion-panels>
+                </v-dialog>
+
                 <v-list dense>
-                    <c-import-result :import-model="importModel" v-for="(importModel, index) in imports" :key="importModel.id" :index="imports.length - index">
+                    <c-import-result :import-model="importModel" v-for="(importModel, index) in imports"
+                                     :key="importModel.id" :index="imports.length - index">
                     </c-import-result>
                 </v-list>
 
@@ -256,12 +328,14 @@ import CSyncInformationItem from '../../../ui/components/Strava/Sync/CSyncInform
 import CLinkActivity from '../../../ui/components/Strava/Sync/CLinkActivity';
 import CStravaImportForm from '../../../ui/components/Strava/Import/CStravaImportForm';
 import CImportResult from '../../../ui/components/Strava/Import/CImportResult';
+
 export default {
     name: "Index",
     components: {
         CImportResult,
         CStravaImportForm,
-        CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper},
+        CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper
+    },
     props: {
         ownedClients: {
             required: true,
@@ -280,6 +354,14 @@ export default {
             type: Object
         },
         imports: {
+            required: true,
+            type: Array
+        },
+        activity_files_needing_import: {
+            required: true,
+            type: Array
+        },
+        photos_needing_import: {
             required: true,
             type: Array
         }
@@ -307,7 +389,7 @@ export default {
             return stravaUrl.toString();
         },
         logoutClient() {
-            if(this.isConnected) {
+            if (this.isConnected) {
                 this.$inertia.post(route('strava.client.logout', this.clients
                     .filter(client => client.enabled)
                     .filter(client => client.is_connected)[0].id));
@@ -334,13 +416,13 @@ export default {
         },
         clients() {
             let clients = [];
-            for(let data of this.ownedClients.data) {
+            for (let data of this.ownedClients.data) {
                 clients.push(data);
             }
-            for(let data of this.sharedClients.data) {
+            for (let data of this.sharedClients.data) {
                 clients.push(data);
             }
-            for(let data of this.publicClients.data) {
+            for (let data of this.publicClients.data) {
                 clients.push(data);
             }
             return clients;
@@ -362,7 +444,7 @@ export default {
                 .length > 0;
         },
         stravaLoginUrl() {
-            if(this.clientIsAvailable) {
+            if (this.clientIsAvailable) {
                 return this.createStravaLoginUrl(
                     this.clients.filter(client => client.enabled)[0]
                 )
