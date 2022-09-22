@@ -6,11 +6,8 @@ use App\Integrations\Strava\Import\Upload\Zip\ImportZip;
 use App\Integrations\Strava\Import\Upload\Zip\ZipFile;
 use App\Models\File;
 use App\Models\User;
-use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use Illuminate\Support\Str;
-use splitbrain\PHPArchive\Tar;
-use wapmorgan\UnifiedArchive\UnifiedArchive;
 
 abstract class Importer
 {
@@ -50,7 +47,7 @@ abstract class Importer
         $contents = $this->zip->extract($filename);
         $filenameAsString = (string) $filename;
 
-        if($filename->isTarFile()) {
+        if ($filename->isTarFile()) {
             $filenameAsString = Str::before($filenameAsString, '.gz');
             $contents = gzdecode($contents);
         }

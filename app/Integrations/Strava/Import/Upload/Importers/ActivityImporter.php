@@ -57,7 +57,7 @@ class ActivityImporter extends Importer
             if ($activity->file()->exists()) {
                 $this->failed('duplicate', [
                     'duplicate_id' => $activity->id,
-                    'activity_name' => $activity->name
+                    'activity_name' => $activity->name,
                 ]);
 
                 return;

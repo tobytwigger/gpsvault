@@ -4,7 +4,6 @@ namespace App\Services\Routing;
 
 class Waypoint
 {
-
     private float $latitude;
 
     private float $longitude;

@@ -21,6 +21,7 @@ class LoadStravaActivity extends StravaBaseJob
     public function handle()
     {
         $strava = Strava::client($this->activity->user);
+
         try {
             $activityData = $strava->activity()->getActivity($this->activity->getAdditionalData('strava_id'));
 

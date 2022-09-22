@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class StravaImportResult extends Model
 {
     protected $fillable = [
-        'type', 'message', 'success', 'strava_import_id', 'data'
+        'type', 'message', 'success', 'strava_import_id', 'data',
     ];
 
     protected $casts = [
         'success' => 'boolean',
-        'data' => 'array'
+        'data' => 'array',
     ];
 
     public function stravaImport()
@@ -27,7 +27,7 @@ class StravaImportResult extends Model
             'message' => $message,
             'success' => $success,
             'strava_import_id' => $import->id,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 }

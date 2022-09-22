@@ -2,7 +2,6 @@
 
 namespace App\Integrations\Strava\Import\Upload;
 
-
 use App\Integrations\Strava\Import\Upload\Importers\ImportResults;
 use App\Integrations\Strava\Import\Upload\Models\StravaImport;
 use App\Integrations\Strava\Import\Upload\Models\StravaImportResult;

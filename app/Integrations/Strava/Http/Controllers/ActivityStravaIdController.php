@@ -8,17 +8,14 @@ use Illuminate\Http\Request;
 
 class ActivityStravaIdController extends Controller
 {
-
     public function update(Request $request, Activity $activity)
     {
         $request->validate([
-            'strava_id' => 'required|numeric'
+            'strava_id' => 'required|numeric',
         ]);
 
         $activity->setAdditionalData('strava_id', $request->input('strava_id'));
 
         return $activity;
-
     }
-
 }

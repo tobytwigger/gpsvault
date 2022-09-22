@@ -2,10 +2,9 @@
 
 namespace App\Services\StaticMapGenerator\Generators;
 
-use App\Services\StaticMapGenerator\Generator;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
+use App\Services\StaticMapGenerator\Generator;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Http;
 use Location\Coordinate;
 use Location\Polyline;
 use Location\Processor\Polyline\SimplifyBearing;
@@ -36,7 +35,7 @@ class MapboxGenerator implements Generator
 
 
         $encoder = new GooglePolylineEncoder();
-        foreach($newPoints as $point) {
+        foreach ($newPoints as $point) {
             $encoder->addPoint($point->getLat(), $point->getLng());
         }
 

@@ -97,7 +97,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/client/{client}/disable', [\App\Integrations\Strava\Http\Controllers\Client\ClientEnabledController::class, 'disable'])->name('strava.client.disable');
         Route::post('/client/{client}/public', [\App\Integrations\Strava\Http\Controllers\Client\ClientVisibilityController::class, 'makePublic'])->name('strava.client.public');
         Route::post('/client/{client}/private', [\App\Integrations\Strava\Http\Controllers\Client\ClientVisibilityController::class, 'makePrivate'])->name('strava.client.private');
-
     });
 
     /* Client Authentication */

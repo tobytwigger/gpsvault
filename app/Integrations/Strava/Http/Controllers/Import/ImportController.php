@@ -10,16 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ImportController extends Controller
 {
-
     public function show(StravaImport $import)
     {
-
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'archive' => 'file'
+            'archive' => 'file',
         ]);
 
         $path = $request->file('archive')->store('strava_archives', 'temp');
@@ -28,5 +26,4 @@ class ImportController extends Controller
 
         return redirect()->route('integration.strava');
     }
-
 }

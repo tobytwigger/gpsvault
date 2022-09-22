@@ -49,6 +49,6 @@ return [
         'key' => env('MAPBOX_API_KEY'),
         'position' => 'auto',
         'width' => 344,
-        'height' => 200
+        'height' => 200,
     ],
 ];

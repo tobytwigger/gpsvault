@@ -52,7 +52,7 @@ class ImportZip
 //        return new ZipContents($extractTo);
 //    }
 
-    public function extract(\App\Integrations\Strava\Import\Upload\Zip\ZipFile $file): string
+    public function extract(ZipFile $file): string
     {
         return $this->zip->getEntryContents((string) $file);
     }
@@ -111,6 +111,7 @@ class ImportZip
 
         $csv = $csvReader->jsonSerialize();
         array_shift($csv);
+
         return $csv;
     }
 }

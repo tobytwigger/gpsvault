@@ -2,10 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
-use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -14,7 +11,7 @@ class RoutePathWaypoint extends Model implements Sortable
     use SortableTrait;
 
     protected $fillable = [
-        'order', 'route_path_id', 'waypoint_id'
+        'order', 'route_path_id', 'waypoint_id',
     ];
 
     protected $sortable = [

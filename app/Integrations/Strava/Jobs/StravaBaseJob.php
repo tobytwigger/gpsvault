@@ -53,7 +53,7 @@ abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
     {
         return [
             'activity_id' => $this->activity->id,
-            'user_id' => $this->activity->user_id
+            'user_id' => $this->activity->user_id,
         ];
     }
 
@@ -93,6 +93,4 @@ abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
         // Throttle exceptions
         return [(new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id)];
     }
-
-
 }

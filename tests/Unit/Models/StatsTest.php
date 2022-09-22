@@ -141,23 +141,26 @@ class StatsTest extends TestCase
     }
 
     /** @test */
-    public function todo_it_dispatches_a_static_image_job_when_saved_with_linestring(){
+    public function todo_it_dispatches_a_static_image_job_when_saved_with_linestring()
+    {
         $this->markTestSkipped();
     }
 
     /** @test */
-    public function todo_it_does_not_dispatch_a_static_image_job_when_saved_without_a_linestring(){
+    public function todo_it_does_not_dispatch_a_static_image_job_when_saved_without_a_linestring()
+    {
         $this->markTestSkipped();
     }
 
     /** @test */
-    public function todo_it_dispatches_a_static_image_job_when_linestring_updated(){
+    public function todo_it_dispatches_a_static_image_job_when_linestring_updated()
+    {
         $this->markTestSkipped();
     }
 
     /** @test */
-    public function todo_it_does_not_dispatch_a_static_image_job_when_saved_when_linestring_not_updated_but_stats_updated(){
+    public function todo_it_does_not_dispatch_a_static_image_job_when_saved_when_linestring_not_updated_but_stats_updated()
+    {
         $this->markTestSkipped();
     }
-
 }

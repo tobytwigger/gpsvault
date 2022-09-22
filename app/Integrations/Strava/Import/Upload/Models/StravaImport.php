@@ -12,7 +12,7 @@ class StravaImport extends Model
     protected $casts = [];
 
     protected $with = [
-        'stravaImportResults'
+        'stravaImportResults',
     ];
 
     protected static function booted()

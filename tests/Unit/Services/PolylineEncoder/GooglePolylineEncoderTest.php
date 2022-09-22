@@ -6,10 +6,9 @@ use Tests\TestCase;
 
 class GooglePolylineEncoderTest extends TestCase
 {
-
     /** @test */
-    public function todo_scaffold(){
+    public function todo_scaffold()
+    {
         $this->markTestSkipped();
     }
-
 }

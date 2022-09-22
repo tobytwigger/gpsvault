@@ -133,13 +133,13 @@ class AnalyseActivityFile implements ShouldQueue
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
                 $order += 1;
+
                 return $toReturn;
             }));
 
             $percentage += $increase;
             $this->percentage($percentage);
         }
-
     }
 
 //    public function middleware()
@@ -152,14 +152,13 @@ class AnalyseActivityFile implements ShouldQueue
     /**
      * @param Stats $stats
      * @param array|Point[] $points
-     * @return void
      */
     private function saveLinestring(Stats $stats, array $points)
     {
         $convertedPoints = [];
 
         foreach ($points as $point) {
-            if($point->getLatitude() && $point->getLongitude() && $point->getElevation()) {
+            if ($point->getLatitude() && $point->getLongitude() && $point->getElevation()) {
                 $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
             }
         }
@@ -168,6 +167,5 @@ class AnalyseActivityFile implements ShouldQueue
             $stats->linestring = new LineString($convertedPoints);
             $stats->save();
         }
-
     }
 }

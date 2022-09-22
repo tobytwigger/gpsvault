@@ -14,7 +14,6 @@ use JobStatus\Trackable;
 
 class ImportStravaExport
 {
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     private User $user;
@@ -58,5 +57,4 @@ class ImportStravaExport
 
         $this->successMessage(sprintf('Importing complete.'));
     }
-
 }

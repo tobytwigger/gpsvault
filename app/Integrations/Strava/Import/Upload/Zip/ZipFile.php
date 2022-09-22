@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 
 class ZipFile
 {
-
     private string $filename;
 
     public function __construct(string $filename)
@@ -43,5 +42,4 @@ class ZipFile
     {
         return $this->filename;
     }
-
 }

@@ -13,7 +13,8 @@ use Tests\TestCase;
 class PlannerStoreTest extends TestCase
 {
     /** @test */
-    public function todo_scaffolding_check_for_missing_tests(){
+    public function todo_scaffolding_check_for_missing_tests()
+    {
         $this->markTestSkipped();
     }
 

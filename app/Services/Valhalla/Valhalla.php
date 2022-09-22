@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 
 class Valhalla
 {
-
     public function request(string $method, string $url, array $options = [])
     {
         $fullUrl = 'https://valhalla1.openstreetmap.de' . $url;
@@ -14,6 +13,7 @@ class Valhalla
         if ($response->failed()) {
             throw $response->toException();
         }
+
         return $response;
     }
 
@@ -40,7 +40,7 @@ class Valhalla
     public function route(array $locations, array $options = [])
     {
         $options = array_merge([
-            'costing' => 'bicycle'
+            'costing' => 'bicycle',
         ], $options, ['locations' => $locations]);
 
         $response = $this->request(
@@ -55,12 +55,14 @@ class Valhalla
     {
         $response = $this->request(
             'GET',
-            sprintf('/height?json=%s',
+            sprintf(
+                '/height?json=%s',
                 json_encode([
                     'range' => true,
                     'encoded_polyline' => $encodedPolyline,
-                    'shape_format' => 'polyline6'
-                ]))
+                    'shape_format' => 'polyline6',
+                ])
+            )
         );
 
         return $response->json();
@@ -75,12 +77,11 @@ class Valhalla
                 json_encode([
                     'sources' => $sources,
                     'targets' => $targets,
-                    'costing' => 'bicycle'
+                    'costing' => 'bicycle',
                 ])
             )
         );
 
         return $response->json();
     }
-
 }

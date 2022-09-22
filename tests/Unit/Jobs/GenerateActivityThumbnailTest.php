@@ -6,10 +6,9 @@ use Tests\TestCase;
 
 class GenerateActivityThumbnailTest extends TestCase
 {
-
     /** @test */
-    public function todo_scaffolding(){
+    public function todo_scaffolding()
+    {
         $this->markTestSkipped();
     }
-
 }

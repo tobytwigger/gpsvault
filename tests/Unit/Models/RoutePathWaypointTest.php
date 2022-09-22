@@ -6,10 +6,9 @@ use Tests\TestCase;
 
 class RoutePathWaypointTest extends TestCase
 {
-
     /** @test */
-    public function todo_scaffolding(){
+    public function todo_scaffolding()
+    {
         $this->markTestSkipped();
     }
-
 }

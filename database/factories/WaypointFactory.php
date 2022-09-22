@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Place;
-use App\Models\RoutePath;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use MStaack\LaravelPostgis\Geometries\Point;
 

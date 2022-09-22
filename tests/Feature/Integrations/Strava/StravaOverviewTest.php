@@ -18,7 +18,7 @@ class StravaOverviewTest extends TestCase
         $response = $this->get(route('integration.strava'));
         $response->assertStatus(200);
         $response->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Integrations/Strava/Index')
         );
     }
@@ -36,17 +36,17 @@ class StravaOverviewTest extends TestCase
             $responseAttribute . '_per_page' => 5,
             $responseAttribute . '_page' => 2,
         ]))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Integrations/Strava/Index')
                 ->has(
                     $responseAttribute . 'Clients',
-                    fn(Assert $page) => $page
+                    fn (Assert $page) => $page
                         ->has('data', 5)
-                        ->has('data.0', fn(Assert $page) => $page->where('name', $models[5]->name)->etc())
-                        ->has('data.1', fn(Assert $page) => $page->where('id', $models[6]->id)->etc())
-                        ->has('data.2', fn(Assert $page) => $page->where('id', $models[7]->id)->etc())
-                        ->has('data.3', fn(Assert $page) => $page->where('id', $models[8]->id)->etc())
-                        ->has('data.4', fn(Assert $page) => $page->where('id', $models[9]->id)->etc())
+                        ->has('data.0', fn (Assert $page) => $page->where('name', $models[5]->name)->etc())
+                        ->has('data.1', fn (Assert $page) => $page->where('id', $models[6]->id)->etc())
+                        ->has('data.2', fn (Assert $page) => $page->where('id', $models[7]->id)->etc())
+                        ->has('data.3', fn (Assert $page) => $page->where('id', $models[8]->id)->etc())
+                        ->has('data.4', fn (Assert $page) => $page->where('id', $models[9]->id)->etc())
                         ->etc()
                 )
         );
@@ -55,15 +55,15 @@ class StravaOverviewTest extends TestCase
             $responseAttribute . '_per_page' => 3,
             $responseAttribute . '_page' => 4,
         ]))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Integrations/Strava/Index')
                 ->has(
                     $responseAttribute . 'Clients',
-                    fn(Assert $page) => $page
+                    fn (Assert $page) => $page
                         ->has('data', 3)
-                        ->has('data.0', fn(Assert $page) => $page->where('name', $models[9]->name)->etc())
-                        ->has('data.1', fn(Assert $page) => $page->where('id', $models[10]->id)->etc())
-                        ->has('data.2', fn(Assert $page) => $page->where('id', $models[11]->id)->etc())
+                        ->has('data.0', fn (Assert $page) => $page->where('name', $models[9]->name)->etc())
+                        ->has('data.1', fn (Assert $page) => $page->where('id', $models[10]->id)->etc())
+                        ->has('data.2', fn (Assert $page) => $page->where('id', $models[11]->id)->etc())
                         ->etc()
                 )
         );
@@ -77,10 +77,10 @@ class StravaOverviewTest extends TestCase
 
         $ownedClients = StravaClient::factory()->count(20)->create(['user_id' => $this->user->id]);
         $sharedClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create();
         $publicClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create(['public' => true]);
 
         $this->assertPaginatesClients($ownedClients, 'owned');
@@ -94,10 +94,10 @@ class StravaOverviewTest extends TestCase
 
         $ownedClients = StravaClient::factory()->count(20)->create(['user_id' => $this->user->id]);
         $sharedClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create();
         $publicClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create(['public' => true]);
 
         $this->assertPaginatesClients($sharedClients, 'shared');
@@ -124,10 +124,10 @@ class StravaOverviewTest extends TestCase
 
         $ownedClients = StravaClient::factory()->count(20)->create(['user_id' => $this->user->id]);
         $sharedClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create();
         $publicClients = StravaClient::factory()->count(20)
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create(['public' => true]);
 
         $this->get(route('integration.strava', [
@@ -135,36 +135,36 @@ class StravaOverviewTest extends TestCase
             'shared_per_page' => 4, 'shared_page' => 3,
             'public_per_page' => 3, 'public_page' => 5,
         ]))->assertInertia(
-            fn(Assert $page) => $page
+            fn (Assert $page) => $page
                 ->component('Integrations/Strava/Index')
                 ->has(
                     'ownedClients',
-                    fn(Assert $page) => $page
+                    fn (Assert $page) => $page
                         ->has('data', 5)
-                        ->has('data.0', fn(Assert $page) => $page->where('name', $ownedClients[5]->name)->etc())
-                        ->has('data.1', fn(Assert $page) => $page->where('id', $ownedClients[6]->id)->etc())
-                        ->has('data.2', fn(Assert $page) => $page->where('id', $ownedClients[7]->id)->etc())
-                        ->has('data.3', fn(Assert $page) => $page->where('id', $ownedClients[8]->id)->etc())
-                        ->has('data.4', fn(Assert $page) => $page->where('id', $ownedClients[9]->id)->etc())
+                        ->has('data.0', fn (Assert $page) => $page->where('name', $ownedClients[5]->name)->etc())
+                        ->has('data.1', fn (Assert $page) => $page->where('id', $ownedClients[6]->id)->etc())
+                        ->has('data.2', fn (Assert $page) => $page->where('id', $ownedClients[7]->id)->etc())
+                        ->has('data.3', fn (Assert $page) => $page->where('id', $ownedClients[8]->id)->etc())
+                        ->has('data.4', fn (Assert $page) => $page->where('id', $ownedClients[9]->id)->etc())
                         ->etc()
                 )
                 ->has(
                     'sharedClients',
-                    fn(Assert $page) => $page
+                    fn (Assert $page) => $page
                         ->has('data', 4)
-                        ->has('data.0', fn(Assert $page) => $page->where('name', $sharedClients[8]->name)->etc())
-                        ->has('data.1', fn(Assert $page) => $page->where('id', $sharedClients[9]->id)->etc())
-                        ->has('data.2', fn(Assert $page) => $page->where('id', $sharedClients[10]->id)->etc())
-                        ->has('data.3', fn(Assert $page) => $page->where('id', $sharedClients[11]->id)->etc())
+                        ->has('data.0', fn (Assert $page) => $page->where('name', $sharedClients[8]->name)->etc())
+                        ->has('data.1', fn (Assert $page) => $page->where('id', $sharedClients[9]->id)->etc())
+                        ->has('data.2', fn (Assert $page) => $page->where('id', $sharedClients[10]->id)->etc())
+                        ->has('data.3', fn (Assert $page) => $page->where('id', $sharedClients[11]->id)->etc())
                         ->etc()
                 )
                 ->has(
                     'publicClients',
-                    fn(Assert $page) => $page
+                    fn (Assert $page) => $page
                         ->has('data', 3)
-                        ->has('data.0', fn(Assert $page) => $page->where('name', $publicClients[12]->name)->etc())
-                        ->has('data.1', fn(Assert $page) => $page->where('id', $publicClients[13]->id)->etc())
-                        ->has('data.2', fn(Assert $page) => $page->where('id', $publicClients[14]->id)->etc())
+                        ->has('data.0', fn (Assert $page) => $page->where('name', $publicClients[12]->name)->etc())
+                        ->has('data.1', fn (Assert $page) => $page->where('id', $publicClients[13]->id)->etc())
+                        ->has('data.2', fn (Assert $page) => $page->where('id', $publicClients[14]->id)->etc())
                         ->etc()
                 )
         );
@@ -181,10 +181,10 @@ class StravaOverviewTest extends TestCase
 
         $ownedClient = StravaClient::factory()->create(['user_id' => $this->user->id]);
         $ownedClient->sharedUsers()->attach([$user1->id, $user2->id]);
-        $sharedClient = StravaClient::factory()->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+        $sharedClient = StravaClient::factory()->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create();
         $publicClient = StravaClient::factory()
-            ->afterCreating(fn(StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
+            ->afterCreating(fn (StravaClient $client) => $client->sharedUsers()->attach($this->user->id))
             ->create(['public' => true]);
 
         $this->get(route('integration.strava', [
@@ -193,15 +193,15 @@ class StravaOverviewTest extends TestCase
             'public_per_page' => 1, 'public_page' => 1,
         ]))
             ->assertInertia(
-                fn(Assert $page) => $page
+                fn (Assert $page) => $page
                     ->component('Integrations/Strava/Index')
                     ->has(
                         'ownedClients',
-                        fn(Assert $page) => $page
+                        fn (Assert $page) => $page
                             ->has('data', 1)
                             ->has(
                                 'data.0',
-                                fn(Assert $page) => $page
+                                fn (Assert $page) => $page
                                     ->where('id', $ownedClient->id)
                                     ->where('name', $ownedClient->name)
                                     ->where('user_id', $ownedClient->user_id)
@@ -225,14 +225,14 @@ class StravaOverviewTest extends TestCase
                                     ->has('shared_users', 2)
                                     ->has(
                                         'shared_users.0',
-                                        fn(Assert $page) => $page
+                                        fn (Assert $page) => $page
                                             ->where('id', $user1->id)
                                             ->where('name', $user1->name)
                                             ->where('email', $user1->email)
                                     )
                                     ->has(
                                         'shared_users.1',
-                                        fn(Assert $page) => $page
+                                        fn (Assert $page) => $page
                                             ->where('id', $user2->id)
                                             ->where('name', $user2->name)
                                             ->where('email', $user2->email)
@@ -242,11 +242,11 @@ class StravaOverviewTest extends TestCase
                     )
                     ->has(
                         'sharedClients',
-                        fn(Assert $page) => $page
+                        fn (Assert $page) => $page
                             ->has('data', 1)
                             ->has(
                                 'data.0',
-                                fn(Assert $page) => $page
+                                fn (Assert $page) => $page
                                     ->where('id', $sharedClient->id)
                                     ->where('name', $sharedClient->name)
                                     ->where('description', $sharedClient->description)
@@ -263,11 +263,11 @@ class StravaOverviewTest extends TestCase
                     )
                     ->has(
                         'publicClients',
-                        fn(Assert $page) => $page
+                        fn (Assert $page) => $page
                             ->has('data', 1)
                             ->has(
                                 'data.0',
-                                fn(Assert $page) => $page
+                                fn (Assert $page) => $page
                                     ->where('id', $publicClient->id)
                                     ->where('name', $publicClient->name)
                                     ->where('description', $publicClient->description)
@@ -282,5 +282,4 @@ class StravaOverviewTest extends TestCase
                     )
             );
     }
-
 }

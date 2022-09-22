@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RoutingRequest extends FormRequest
 {
-
     public function rules()
     {
         return [
@@ -18,5 +17,4 @@ class RoutingRequest extends FormRequest
             'waypoints.*.location.lng' => 'required|numeric|min:-180|max:180',
         ];
     }
-
 }

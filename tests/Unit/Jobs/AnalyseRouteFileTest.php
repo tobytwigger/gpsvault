@@ -17,7 +17,8 @@ use Tests\TestCase;
 class AnalyseRouteFileTest extends TestCase
 {
     /** @test */
-    public function todo_it_spaces_waypoints_appropriately(){
+    public function todo_it_spaces_waypoints_appropriately()
+    {
         $this->markTestSkipped();
     }
 
@@ -81,7 +82,7 @@ class AnalyseRouteFileTest extends TestCase
             'elevation_gain' => 10.4,
         ]);
 
-        $routePoints = RoutePathWaypoint::where('route_path_id', $route->path->id)->ordered()->with('waypoint')->get()->map(fn(RoutePathWaypoint $m) => $m->waypoint);
+        $routePoints = RoutePathWaypoint::where('route_path_id', $route->path->id)->ordered()->with('waypoint')->get()->map(fn (RoutePathWaypoint $m) => $m->waypoint);
 
         $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(1, 2)), $routePoints->shift()->location);
         $this->assertEquals((new \MStaack\LaravelPostgis\Geometries\Point(3, 4)), $routePoints->shift()->location);

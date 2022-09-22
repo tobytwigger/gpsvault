@@ -4,7 +4,6 @@ namespace App\Services\Routing;
 
 class RouteResult
 {
-
     private array $waypoints;
     private float $distance;
     private float $time;
@@ -21,8 +20,7 @@ class RouteResult
         return [
             'coordinates' => $this->waypoints,
             'distance' => $this->distance,
-            'time' => $this->time
+            'time' => $this->time,
         ];
     }
-
 }

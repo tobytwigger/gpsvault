@@ -7,7 +7,8 @@ use Tests\TestCase;
 class NewWaypointLocatorTest extends TestCase
 {
     /** @test */
-    public function todo_scaffolding(){
+    public function todo_scaffolding()
+    {
         $this->markTestSkipped();
     }
 }

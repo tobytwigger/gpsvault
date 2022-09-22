@@ -4,14 +4,11 @@ namespace App\Integrations\Strava\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Client\Models\StravaClient;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 
 class ClientController extends Controller
 {
-
     public function store(Request $request)
     {
         $request->validate([

@@ -17,8 +17,8 @@ use Tests\TestCase;
 class StravaRequestHandlerTest extends TestCase
 {
     /** @test */
-    public function todo_if_a_client_is_set_it_will_only_use_that_client(){
-
+    public function todo_if_a_client_is_set_it_will_only_use_that_client()
+    {
     }
 
     /** @test */

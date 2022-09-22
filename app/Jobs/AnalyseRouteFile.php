@@ -100,14 +100,15 @@ class AnalyseRouteFile implements ShouldQueue
 
         $i = 1;
         // Limit to 50 points, all the router can handle
-        while(count($newPoints) > 250) {
+        while (count($newPoints) > 250) {
             unset($newPoints[$i]);
-            if($i === count($newPoints)) {
+            if ($i === count($newPoints)) {
                 $i = 1;
             } else {
                 $i++;
             }
         }
+
         return $newPoints;
     }
 

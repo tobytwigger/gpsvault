@@ -14,8 +14,7 @@ class RouteOptions
     public function toArray(): array
     {
         return [
-            'costing_options' => $this->costingOptions
+            'costing_options' => $this->costingOptions,
         ];
     }
-
 }

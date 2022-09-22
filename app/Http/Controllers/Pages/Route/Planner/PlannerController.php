@@ -63,7 +63,7 @@ class PlannerController extends Controller
             'duration' => $request->input('duration', 0),
             'elevation_gain' => $request->input('elevation_gain', 0),
             'linestring' => new LineString(Arr::map($linestring, fn (array $point, int $index) => new Point($point[0], $point[1], $elevation['range_height'][$index][1]))),
-            'settings' => $request->input('settings')
+            'settings' => $request->input('settings'),
         ]);
 
         $waypointOrder = [];
@@ -72,7 +72,7 @@ class PlannerController extends Controller
                 'place_id' => $point['place_id'] ?? null,
                 'location' => new Point($point['lat'], $point['lng']),
                 'name' => $point['name'] ?? null,
-                'notes' => $point['notes'] ?? null
+                'notes' => $point['notes'] ?? null,
             ];
             if (isset($point['id']) && $point['id']) {
                 $waypoint = Waypoint::findOrFail($point['id']);
@@ -82,7 +82,7 @@ class PlannerController extends Controller
             }
 
             $routePathWaypoint = RoutePathWaypoint::create([
-                'route_path_id' => $path->id, 'waypoint_id' => $waypoint->id
+                'route_path_id' => $path->id, 'waypoint_id' => $waypoint->id,
             ]);
             $waypointOrder[] = $routePathWaypoint->id;
         }

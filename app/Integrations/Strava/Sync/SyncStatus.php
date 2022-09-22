@@ -6,13 +6,11 @@ use App\Models\Activity;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use JobStatus\Models\JobStatus;
 use JobStatus\Models\JobStatusTag;
 
 class SyncStatus
 {
-
     private User $user;
 
     public function __construct(User $user)
@@ -36,8 +34,8 @@ class SyncStatus
             'activities_linked' => $this->user->activities()->whereHasAdditionalData('strava_id')->count(),
             'unlinked_activities' => $this->user->activities()
                 ->whereDoesntHave('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id'))
-            ->get(),
-            'total_activities' => $this->user->activities()->count()
+                ->get(),
+            'total_activities' => $this->user->activities()->count(),
         ];
     }
 
@@ -83,12 +81,12 @@ class SyncStatus
 
     private function getActivitiesFrom(Collection $jobStatuses): Collection
     {
-        $jobStatusIds = $jobStatuses->map(fn(JobStatus $jobStatus) => $jobStatus->id);
+        $jobStatusIds = $jobStatuses->map(fn (JobStatus $jobStatus) => $jobStatus->id);
         $tags = JobStatusTag::whereIn('job_status_id', $jobStatusIds)->where('key', 'activity_id')->get();
-        $activityIds = $tags->map(fn(JobStatusTag $tag) => $tag->value);
-        return $this->user->activities()->whereIn('id', $activityIds)->select('id', 'name')->get()->map(fn(Activity $activity) => [
-            'id' => $activity->id, 'name' => $activity->name
+        $activityIds = $tags->map(fn (JobStatusTag $tag) => $tag->value);
+
+        return $this->user->activities()->whereIn('id', $activityIds)->select('id', 'name')->get()->map(fn (Activity $activity) => [
+            'id' => $activity->id, 'name' => $activity->name,
         ]);
     }
-
 }

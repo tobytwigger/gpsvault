@@ -12,7 +12,7 @@ class ImportResults
             'type' => $type,
             'message' => $message,
             'success' => $success,
-            'data' => $data
+            'data' => $data,
         ];
     }
 

@@ -20,6 +20,7 @@ abstract class Resource
     public function withClient(StravaClientModel $client)
     {
         $this->request->withClient($client);
+
         return $this;
     }
 }

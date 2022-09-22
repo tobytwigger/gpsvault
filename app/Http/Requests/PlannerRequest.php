@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PlannerRequest extends FormRequest
 {
-
     public function rules()
     {
         return [
@@ -28,5 +27,4 @@ class PlannerRequest extends FormRequest
             'settings.use_roads' => 'required|numeric|min:0|max:1',
         ];
     }
-
 }

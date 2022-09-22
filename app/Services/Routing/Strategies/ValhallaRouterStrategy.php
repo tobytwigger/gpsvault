@@ -34,7 +34,7 @@ class ValhallaRouterStrategy implements RouterStrategy
         $previous = null; // Will be set to the last point in the previous chunk
 
         foreach ($waypoints->chunk(30) as $chunkedWaypoints) {
-            if($previous !== null) {
+            if ($previous !== null) {
                 $chunkedWaypoints->prepend($previous);
             }
             $result = (new Valhalla())->route(
@@ -58,7 +58,6 @@ class ValhallaRouterStrategy implements RouterStrategy
 
         $elevation = [];
         foreach (collect($linestring)->chunk(1000) as $chunkedPoints) {
-
             $elevation = array_merge(
                 $elevation,
                 (new Valhalla())

@@ -15,14 +15,14 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings'
+        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings',
     ];
 
     protected $casts = [
         'distance' => 'float',
         'elevation' => 'float',
         'duration' => 'float',
-        'settings' => 'array'
+        'settings' => 'array',
     ];
 
     protected $postgisFields = [
@@ -44,7 +44,7 @@ class RoutePath extends Model
     public function getWaypointsAttribute()
     {
         return $this->routePathWaypoints()->ordered()->with('waypoint')->get()
-            ->map(fn(RoutePathWaypoint $pivot) => $pivot->waypoint);
+            ->map(fn (RoutePathWaypoint $pivot) => $pivot->waypoint);
     }
 
     public function route()

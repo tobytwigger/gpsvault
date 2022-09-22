@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ClientTestController extends Controller
 {
-
     public function __invoke(StravaClient $client)
     {
         abort_if(!in_array($client->id, Auth::user()->stravaClients()->pluck('id')->toArray()), 403, 'You do not have access to this client.');
@@ -19,9 +18,7 @@ class ClientTestController extends Controller
         $result = $strava->authentication()->withClient($client)->currentUser();
 
         return [
-            'name' => $result['firstname'] ?? null . ' ' . $result['lastname']
+            'name' => $result['firstname'] ?? null . ' ' . $result['lastname'],
         ];
-
     }
-
 }
