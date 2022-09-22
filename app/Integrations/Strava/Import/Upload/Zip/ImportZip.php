@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Integrations\Strava\Import\Upload\Importers;
+namespace App\Integrations\Strava\Import\Upload\Zip;
 
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use PhpZip\Model\ZipEntry;
+use League\Csv\Reader;
 use PhpZip\ZipFile;
 
 class ImportZip
@@ -53,16 +52,9 @@ class ImportZip
 //        return new ZipContents($extractTo);
 //    }
 
-    public function extract(\App\Integrations\Strava\Import\Upload\Importers\ZipFile $file): string
+    public function extract(\App\Integrations\Strava\Import\Upload\Zip\ZipFile $file): string
     {
         return $this->zip->getEntryContents((string) $file);
-    }
-
-    public function clearUp(): void
-    {
-        if(isset($this->extractedDirectory)) {
-            Storage::disk('temp')->deleteDirectory($this->extractedDirectory);
-        }
     }
 
 //    /**
@@ -112,4 +104,13 @@ class ImportZip
 //
 //        return $data;
 //    }
+
+    public function getCsv(string $filename): array
+    {
+        $csvReader = Reader::createFromString($this->extract(new \App\Integrations\Strava\Import\Upload\Zip\ZipFile($filename)));
+
+        $csv = $csvReader->jsonSerialize();
+        array_shift($csv);
+        return $csv;
+    }
 }

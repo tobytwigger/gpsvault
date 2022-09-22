@@ -4,9 +4,6 @@ namespace App\Integrations\Strava\Import\Api\Resources;
 
 use App\Services\Analysis\Parser\Point;
 use MStaack\LaravelPostgis\Geometries\LineString;
-use function App\Integrations\Strava\Import\Resources\collect;
-use function App\Integrations\Strava\Import\Resources\count;
-use function App\Integrations\Strava\Import\Resources\data_get;
 
 class Stats
 {

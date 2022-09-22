@@ -3,6 +3,7 @@
 namespace App\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Client\Resources\Activity;
+use App\Integrations\Strava\Client\Client\Resources\Authentication;
 use App\Integrations\Strava\Client\Client\Resources\Webhook;
 use App\Models\User;
 
@@ -34,6 +35,11 @@ class StravaClient
     public function webhook(): Webhook
     {
         return $this->createHandler(Webhook::class);
+    }
+
+    public function authentication(): Authentication
+    {
+        return $this->createHandler(Authentication::class);
     }
 
     public function getUser(): User

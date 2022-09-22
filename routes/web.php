@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::resource('client', \App\Integrations\Strava\Http\Controllers\Client\ClientController::class, ['as' => 'strava'])->only(['store', 'update', 'destroy']);
 
         /* Import */
-        Route::resource('import', \App\Integrations\Strava\Http\Controllers\Import\ImportController::class, ['as' => 'strava'])->only(['index', 'store']);
+        Route::resource('import', \App\Integrations\Strava\Http\Controllers\Import\ImportController::class, ['as' => 'strava'])->only(['show', 'store']);
 
         /* Sync */
         Route::post('/sync', \App\Integrations\Strava\Http\Controllers\StravaSyncController::class)->name('strava.sync');
@@ -88,6 +88,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::post('/client/{client}/invite', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'invite'])->name('strava.client.invite');
         Route::delete('/client/{client}/leave', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'leave'])->name('strava.client.leave');
         Route::delete('/client/{client}/remove', [\App\Integrations\Strava\Http\Controllers\Client\ClientInvitationController::class, 'remove'])->name('strava.client.remove');
+
+        /* Testing a client */
+        Route::post('/client/{client}/test', \App\Integrations\Strava\Http\Controllers\Client\ClientTestController::class)->name('strava.client.test');
 
         /* Client status */
         Route::post('/client/{client}/enable', [\App\Integrations\Strava\Http\Controllers\Client\ClientEnabledController::class, 'enable'])->name('strava.client.enable');

@@ -2,7 +2,15 @@
 
 namespace App\Integrations\Strava\Import\Upload\Importers;
 
+use App\Integrations\Strava\Import\Upload\Zip\ImportZip;
+use App\Integrations\Strava\Import\Upload\Zip\ZipFile;
+use App\Models\File;
 use App\Models\User;
+use App\Services\File\FileUploader;
+use App\Services\File\Upload;
+use Illuminate\Support\Str;
+use splitbrain\PHPArchive\Tar;
+use wapmorgan\UnifiedArchive\UnifiedArchive;
 
 abstract class Importer
 {
@@ -35,6 +43,29 @@ abstract class Importer
     public function failed(string $message, array $data = [], ?string $type = null)
     {
         $this->importResults->addResult($type ?? $this->type(), $message, false, $data);
+    }
+
+    public function convertToFile(ZipFile $filename, string $type): File
+    {
+        $contents = $this->zip->extract($filename);
+        $filenameAsString = (string) $filename;
+
+        if($filename->isTarFile()) {
+            $filenameAsString = Str::before($filenameAsString, '.gz');
+            $contents = gzdecode($contents);
+        }
+
+        return Upload::withContents(
+            trim($contents),
+            $this->sanitiseFileName($filenameAsString),
+            $this->user,
+            $type
+        );
+    }
+
+    public function sanitiseFileName(string $filename)
+    {
+        return Str::replace(['/', '\\'], ['_', '-'], $filename);
     }
 
     abstract protected function import();

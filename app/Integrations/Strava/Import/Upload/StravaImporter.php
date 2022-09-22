@@ -3,10 +3,10 @@
 namespace App\Integrations\Strava\Import\Upload;
 
 
-use App\Integrations\Strava\Import\Upload\Importers\ImportZip;
 use App\Integrations\Strava\Import\Upload\Importers\ImportResults;
 use App\Integrations\Strava\Import\Upload\Models\StravaImport;
 use App\Integrations\Strava\Import\Upload\Models\StravaImportResult;
+use App\Integrations\Strava\Import\Upload\Zip\ImportZip;
 use App\Models\User;
 
 class StravaImporter
@@ -21,6 +21,9 @@ class StravaImporter
         $this->importers[] = $importer;
     }
 
+    /**
+     * @return array|\App\Integrations\Strava\Import\Upload\Importers\Importer[]
+     */
     public function importers(): array
     {
         return collect($this->importers)
@@ -30,17 +33,16 @@ class StravaImporter
 
     public function import(ImportZip $zip, User $user): StravaImport
     {
+        $import = StravaImport::create(['user_id' => $user->id]);
         $results = new ImportResults();
         foreach ($this->importers() as $importer) {
             $results->merge(
                 $importer->run($zip, $user)
             );
         }
-        $import = StravaImport::create(['user_id' => $user->id]);
         foreach ($results->all() as $result) {
             StravaImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);
         }
-        $zip->clearUp();
 
         return $import;
     }

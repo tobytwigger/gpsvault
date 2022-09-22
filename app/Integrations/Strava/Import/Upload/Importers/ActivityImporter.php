@@ -2,27 +2,38 @@
 
 namespace App\Integrations\Strava\Import\Upload\Importers;
 
-use App\Exceptions\ActivityDuplicate;
+use App\Integrations\Strava\Import\Upload\Zip\ZipFile;
+use App\Jobs\AnalyseActivityFile;
 use App\Models\Activity;
-use App\Models\File;
 use App\Services\File\FileUploader;
-use App\Services\File\Upload;
-use Illuminate\Support\Str;
 
 class ActivityImporter extends Importer
 {
+    private array $activityIdLookup = [];
+
     protected function import()
     {
-        $this->zip->contents->activityFiles()->each(function(ZipFile $filename) {
+        $this->activityIdLookup = collect($this->zip->getCsv('activities.csv'))
+            ->mapWithKeys(fn (array $entry) => [
+                $entry[11] => $entry[0],
+            ])
+            ->all();
+
+        $this->zip->contents->activityFiles()->each(function (ZipFile $filename) {
             $this->processActivityFile($filename);
         });
     }
 
     private function existingActivityUsingFile(ZipFile $filename): ?Activity
     {
-        $uploadId = intval((string) Str::of(Str::substr($filename, 11))->before('.'));
+        // Filename is strava_upload_id, activity is strava_id
+        if (array_key_exists($filename->getFilename(), $this->activityIdLookup)) {
+            $stravaId = intval($this->activityIdLookup[$filename->getFilename()]);
 
-        return Activity::linkedTo('strava')->whereAdditionalData('strava_upload_id', $uploadId)->first();
+            return Activity::whereAdditionalData('strava_id', $stravaId)->first();
+        }
+
+        return null;
     }
 
     public function type(): string
@@ -34,49 +45,37 @@ class ActivityImporter extends Importer
     {
         try {
             $activity = $this->existingActivityUsingFile($filename);
+
             if ($activity === null) {
                 $this->failed('unmatched', [
-                    'file_location' => $filename,
+                    'file_location' => $filename->getFilename(),
                 ]);
 
                 return;
             }
+
             if ($activity->file()->exists()) {
                 $this->failed('duplicate', [
                     'duplicate_id' => $activity->id,
+                    'activity_name' => $activity->name
                 ]);
 
                 return;
             }
 
-            $file = $this->convertToFile($filename);
+            $file = $this->convertToFile($filename, FileUploader::ACTIVITY_FILE);
 
-            try {
-                $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
-                    ->withActivityFile($file)
-                    ->save();
-            } catch (ActivityDuplicate $exception) {
-                $this->failed('duplicate', ['duplicate_id' => $exception->activity->id]);
-            }
+            $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
+                ->withActivityFile($file)
+                ->save();
 
-            $this->succeeded('Activity file added to activity ' . $activity->id);
+            AnalyseActivityFile::dispatch($activity);
+
+            $this->succeeded('imported', ['activity_id' => $activity->id, 'activity_name' => $activity->name]);
         } catch (\Exception $e) {
-            $this->failed('exception', ['message' => $e->getMessage()]);
+            $this->failed('exception', ['message' => $e->getMessage(), 'filename' => (string) $filename]);
 
             return;
         }
     }
-
-    public function convertToFile(ZipFile $filename): File
-    {
-        $contents = $this->zip->extract($filename);
-
-        return Upload::withContents(
-            trim($contents),
-            $filename,
-            $this->user,
-            FileUploader::ARCHIVE
-        );
-    }
-
 }

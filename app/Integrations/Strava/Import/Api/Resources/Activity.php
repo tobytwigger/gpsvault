@@ -9,7 +9,6 @@ use App\Services\ActivityImport\ActivityImporter;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use MStaack\LaravelPostgis\Geometries\Point;
-use function App\Integrations\Strava\Import\Resources\data_get;
 
 class Activity
 {

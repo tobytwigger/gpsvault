@@ -65,6 +65,43 @@
             </c-strava-client-form>
 
             <div>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            v-if="client.is_connected"
+                            icon
+                            link
+                            @click="testClient"
+                            :disabled="testingClient"
+                            :loading="testingClient"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon :color="testClientColour">mdi-test-tube</v-icon>
+                        </v-btn>
+                    </template>
+                    Test Client
+                </v-tooltip>
+
+                <v-snackbar
+                    v-model="showSnackbar"
+                >
+                    {{ clientSuccessString }}
+
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                            color="pink"
+                            text
+                            v-bind="attrs"
+                            @click="showSnackbar = false"
+                        >
+                            Close
+                        </v-btn>
+                    </template>
+                </v-snackbar>
+            </div>
+
+            <div>
                 <c-confirmation-dialog key="disableClient" v-if="client.enabled" title="Disable client?" button-text="Disable" :loading="isDisabling" cancel-button-text="Nevermind" @confirm="disableClient" ref="disableClientDialog">
                     <template v-slot:activator="{trigger,showing}">
                         <v-tooltip bottom>
@@ -275,9 +312,21 @@ export default {
             isMakingPublic: false,
             isMakingPrivate: false,
             isLeaving: false,
+            testingClient: false,
+            clientWorks: null,
+            clientSuccessString: '',
+            showSnackbar: false
         }
     },
     computed: {
+        testClientColour() {
+            if(this.clientWorks === true) {
+                return 'green';
+            } else if(this.clientWorks === false) {
+                return 'red';
+            }
+            return 'theme--light';
+        },
         cardName() {
             if(this.client.name) {
                 return this.client.name + ' - ' + this.client.client_id;
@@ -300,6 +349,24 @@ export default {
         }
     },
     methods: {
+        testClient() {
+            this.testingClient = true;
+
+            axios.post(route('strava.client.test', this.client.id))
+                .then((response) => {
+                    this.clientWorks = true;
+                    this.clientSuccessString = 'You are logged in as ' + response.data.name;
+                })
+                .catch((error) => {
+                    this.clientWorks = true;
+                    this.clientSuccessString = 'Sorry, an error occured: ' + error.message;
+                })
+                .finally(() => {
+                    this.showSnackbar = true;
+                    this.testingClient = false;
+                    this.$inertia.reload();
+                })
+        },
         deleteClient() {
             let ref = this.$refs.deleteClientDialog;
             this.isDeleting = true;

@@ -4,7 +4,7 @@ namespace Tests\Feature\Integrations\Strava\Import;
 
 use Tests\TestCase;
 
-class StoreIndexTest extends TestCase
+class ShowImportTest extends TestCase
 {
 
     /** @test */

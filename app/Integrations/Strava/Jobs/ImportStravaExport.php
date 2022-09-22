@@ -3,11 +3,9 @@
 namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Import\Upload\Importer;
-use App\Integrations\Strava\Import\Upload\Importers\ImportZip;
+use App\Integrations\Strava\Import\Upload\Zip\ImportZip;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;

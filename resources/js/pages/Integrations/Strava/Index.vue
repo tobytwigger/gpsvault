@@ -198,6 +198,12 @@
                 >
                     We're taking a backup of your Strava account. We recommend importing once the sync is complete.
                 </v-alert>
+
+                <v-list dense>
+                    <c-import-result :import-model="importModel" v-for="(importModel, index) in imports" :key="importModel.id" :index="imports.length - index">
+                    </c-import-result>
+                </v-list>
+
             </v-tab-item>
         </v-tabs-items>
         <template #sidebar>
@@ -249,9 +255,11 @@ import CStravaClientList from '../../../ui/components/Strava/CStravaClientList';
 import CSyncInformationItem from '../../../ui/components/Strava/Sync/CSyncInformationItem';
 import CLinkActivity from '../../../ui/components/Strava/Sync/CLinkActivity';
 import CStravaImportForm from '../../../ui/components/Strava/Import/CStravaImportForm';
+import CImportResult from '../../../ui/components/Strava/Import/CImportResult';
 export default {
     name: "Index",
     components: {
+        CImportResult,
         CStravaImportForm,
         CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper},
     props: {

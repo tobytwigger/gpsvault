@@ -232,9 +232,7 @@
                     <c-link-strava-activity-form :activity="activity">
                         <template v-slot:activator="{trigger, showing}">
                             <v-btn @click="trigger"
-                                   :disabled="showing"
-                                   v-bind="attrs"
-                                   v-on="on">
+                                   :disabled="showing">
                                 Edit link to Strava
                             </v-btn>
                         </template>

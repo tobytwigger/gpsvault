@@ -9,7 +9,7 @@ class ImportTest extends TestCase
 
     /** @test */
     public function todo_scaffolding(){
-        $this->markTestSkipped();
+        $this->markTestSkipped('Whole package');
     }
 
 }

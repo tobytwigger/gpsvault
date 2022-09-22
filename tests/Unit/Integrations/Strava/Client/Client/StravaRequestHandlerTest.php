@@ -17,6 +17,11 @@ use Tests\TestCase;
 class StravaRequestHandlerTest extends TestCase
 {
     /** @test */
+    public function todo_if_a_client_is_set_it_will_only_use_that_client(){
+
+    }
+
+    /** @test */
     public function todo_unauthenticated_request_makes_a_request()
     {
         $this->markTestSkipped();

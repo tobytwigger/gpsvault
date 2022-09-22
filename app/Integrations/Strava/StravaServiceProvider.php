@@ -17,7 +17,7 @@ class StravaServiceProvider extends ServiceProvider
         $this->commands([ResetRateLimit::class, SyncStravaForUser::class]);
         $this->app->singleton(StravaImporter::class);
         Importer::registerImporter(ActivityImporter::class);
-//        Importer::registerImporter(PhotoImporter::class);
+        Importer::registerImporter(PhotoImporter::class);
     }
 
     public function boot()

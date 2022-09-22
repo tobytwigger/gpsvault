@@ -2,37 +2,77 @@
 
 namespace App\Integrations\Strava\Import\Upload\Importers;
 
+use App\Integrations\Strava\Import\Upload\Zip\ZipFile;
 use App\Models\Activity;
 use App\Models\File;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class PhotoImporter extends Importer
 {
+    private array $captions = [];
+
     protected function import()
     {
-        $captions = $this->zip->getCsv('photos.csv');
+        $this->captions =  collect($this->zip->getCsv('photos.csv'))
+            ->mapWithKeys(fn(array $entry) => [
+                $entry[0] => $entry[1]
+            ])
+            ->all();
 
-        $this->availablePhotos()->each(function (MemberInterface $member, int $key) use ($captions) {
-            $this->updateProgress($key + 1, $this->availablePhotos()->count());
-            $this->processFile($member, $captions);
+        $this->zip->contents->photos()->each(function(ZipFile $filename) {
+            $this->processFile($filename);
         });
     }
 
-    private function availablePhotos(): Collection
+    private function processFile(ZipFile $file)
     {
-        return $this->zip->getMembers()
-            ->filter(fn (MemberInterface $member) => Str::startsWith($member->getLocation(), 'photos/') && Str::length($member->getLocation()) > 7)
-            ->values();
+
+        try {
+            $activity = $this->getActivity($file);
+
+            if($this->photoAlreadyImported($file) === true) {
+                $this->failed('duplicate', [
+                    'file_location' => (string) $file,
+                    'activity_id' => $activity->id,
+                    'activity_name' => $activity->name
+                ]);
+                return;
+            }
+
+
+
+            if ($activity === null) {
+                $this->failed('unmatched', [
+                    'file_location' => $file->getFilename(),
+                ]);
+
+                return;
+            }
+
+            $uploadedFile = $this->convertToFile($file, FileUploader::ACTIVITY_MEDIA);
+
+            $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
+                ->addMedia([$uploadedFile])
+                ->save();
+
+            $this->addCaptions($uploadedFile);
+
+            $this->succeeded('imported', [
+                'file_id' => $uploadedFile->id,
+                'activity_id' => $activity->id,
+                'activity_name' => $activity->name
+            ]);
+        } catch (\Exception $e) {
+            $this->failed('exception', ['message' => $e->getMessage(), 'filename' => (string) $file]);
+            return;
+        }
     }
 
-    private function photoExists(MemberInterface $file): ?File
+    private function photoAlreadyImported(ZipFile $file): bool
     {
-        $fileName = Str::substr($file->getLocation(), 7);
-
-        return File::where('filename', $fileName)->first();
+        return File::where('filename', $this->sanitiseFileName((string) $file))->exists();
     }
 
     public function type(): string
@@ -40,62 +80,20 @@ class PhotoImporter extends Importer
         return 'photos';
     }
 
-    private function processFile(MemberInterface $member, array $captions)
+    private function getActivity(ZipFile $file): ?Activity
     {
-        try {
-            $file = $this->photoExists($member);
-            if ($file !== null) {
-                $this->failed('duplicate', [
-                    'file_location' => $member->getLocation()
-                ]);
+        return Activity::whereAdditionalData('strava_photo_ids', $file->getFilenameWithoutExtAfter('photos/'))
+            ->where('user_id', $this->user->id)
+            ->first();
+    }
 
-                return;
-            }
-
-            $activity = Activity::whereAdditionalData('strava_photo_ids', (string) Str::of($member->getLocation())->after('photos/')->before('.'))
-                ->where('user_id', $this->user->id)
-                ->first();
-
-            // Resolve the activity it is for and set $activity to the new activity
-            $file = $this->convertMemberToFile($member);
-
-            $caption = $captions[$member->getLocation()] ?? null;
-            if ($caption) {
-                $file->caption = $caption;
-                $file->save();
-            }
-
-            if ($activity !== null) {
-                $file->type = FileUploader::ACTIVITY_MEDIA;
-                $file->save();
-
-                $activity = \App\Services\ActivityImport\ActivityImporter::update($activity)
-                    ->addMedia([$file])
-                    ->save();
-            }
-
-            $this->succeeded('Photo imported', [
-                'file_id' => $file->id,
-                'matched_activity_id' => $activity?->id
-            ]);
-        } catch (\Exception $e) {
-            $this->failed($e->getMessage(), ['reason' => 'exception']);
-
-            return;
+    private function addCaptions(File $file)
+    {
+        $caption = $this->captions[$file->filename] ?? null;
+        if ($caption) {
+            $file->caption = $caption;
+            $file->save();
         }
     }
 
-    public function convertMemberToFile(MemberInterface $member): File
-    {
-        $fullMemberPath = $this->zip->getFullExtractedDirectory($member->getLocation());
-
-        $filename = Str::substr($member->getLocation(), 7);
-
-        return Upload::withContents(
-            trim(file_get_contents($fullMemberPath)),
-            $filename,
-            $this->user,
-            FileUploader::ACTIVITY_MEDIA
-        );
-    }
 }

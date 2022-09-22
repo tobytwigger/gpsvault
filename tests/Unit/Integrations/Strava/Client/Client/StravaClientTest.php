@@ -3,6 +3,7 @@
 namespace Unit\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Client\Resources\Activity;
+use App\Integrations\Strava\Client\Client\Resources\Authentication;
 use App\Integrations\Strava\Client\Client\Resources\Webhook;
 use App\Integrations\Strava\Client\Client\StravaClient;
 use App\Integrations\Strava\Client\Client\StravaRequestHandler;
@@ -21,6 +22,20 @@ class StravaClientTest extends TestCase
         $handler = $client->activity();
 
         $this->assertInstanceOf(Activity::class, $handler);
+        $this->assertTrue($user->is($handler->user));
+        $this->assertEquals($requestHandler->reveal(), $handler->request);
+    }
+
+    /** @test */
+    public function it_creates_an_authentication_handler()
+    {
+        $user = User::factory()->create();
+        $requestHandler = $this->prophesize(StravaRequestHandler::class);
+
+        $client = new StravaClient($user, $requestHandler->reveal());
+        $handler = $client->authentication();
+
+        $this->assertInstanceOf(Authentication::class, $handler);
         $this->assertTrue($user->is($handler->user));
         $this->assertEquals($requestHandler->reveal(), $handler->request);
     }
