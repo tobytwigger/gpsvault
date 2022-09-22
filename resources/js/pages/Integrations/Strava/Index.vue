@@ -293,6 +293,14 @@
                         </template>
                     </c-strava-client-form>
                 </v-list-item>
+                <v-list-item v-if="canManageClients">
+                    <v-btn
+                        :href="route('larecipe.show', {version: '1.0', page: 'strava/logging-in-clients'})"
+                        data-hint="Get help creating a new client"
+                    >
+                        Get help creating a new client
+                    </v-btn>
+                </v-list-item>
                 <v-list-item>
                     <v-btn
                         data-hint="Sync Strava"

@@ -10,3 +10,6 @@
     - [Multi-day routes](/{{route}}/{{version}}/route/multi-day)
 - ## Backups
     - [Backing up your data](/{{route}}/{{version}}/backup/adding)
+- ## Strava
+    - [Logging In](/{{route}}/{{version}}/strava/logging-in)
+    - [Syncronising](/{{route}}/{{version}}/strava/syncronising)
