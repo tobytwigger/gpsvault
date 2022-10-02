@@ -41,16 +41,16 @@ jobs:
 #        run: ./vendor/bin/php-cs-fixer fix
 
       - name: Run phpinsights
-        run: ./vendor/bin/sail artisan insights --no-interaction --min-quality=80 --min-complexity=80 --min-architecture=80 --min-style=80 --format=github-actions
+        run: ./vendor/bin/sail artisan insights --no-interaction --format=github-actions
 
 #      - name: Apply php-cs-fixer changes
 #        uses: stefanzweifel/git-auto-commit-action@v4
 #        with:
 #          commit_message: Apply php-cs-fixer changes
 #          file_pattern: app tests database config routes
-
-      - name: Run phpstan
-        run: ./vendor/bin/phpstan analyze -c phpstan.neon
+#
+#      - name: Run phpstan
+#        run: ./vendor/bin/phpstan analyze -c phpstan.neon
 
       - name: Run tests
         run: ./vendor/bin/sail artisan test --parallel
