@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 /* Public */
 Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'welcome'])->name('welcome');
-Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
+Route::get('/contact', [\App\Http\Controllers\Pages\Public\ContactController::class, 'index'])->name('contact');
+
+//Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
 /* Documentation */
 Route::redirect('/documentation', '/docs')->name('documentation');
