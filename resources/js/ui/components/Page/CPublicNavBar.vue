@@ -59,7 +59,6 @@
                 depressed
                 :href="route('register')"
                 rel="noopener"
-                target="_blank"
                 x-large
             >
                 Sign up
