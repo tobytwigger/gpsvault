@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 /* Public */
 Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'welcome'])->name('welcome');
 Route::get('/contact', [\App\Http\Controllers\Pages\Public\ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [\App\Http\Controllers\Pages\Public\ContactController::class, 'store'])->name('contact.store');
 
 //Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
