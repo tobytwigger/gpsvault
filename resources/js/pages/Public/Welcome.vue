@@ -24,6 +24,7 @@
                             <v-btn
                                 class="align-self-end"
                                 fab
+                                color="white"
                                 outlined
                                 @click="$vuetify.goTo('#about')"
                             >
@@ -88,7 +89,7 @@
                     <div class="py-12"></div>
 
                     <v-container class="text-center">
-                        <h2 class="display-2 font-weight-bold mb-3">FEATURES</h2>
+                        <h2 class="display-2 font-weight-bold mb-3">Features</h2>
 
                         <v-responsive
                             class="mx-auto mb-12"
@@ -162,7 +163,22 @@
                                     cols="12"
                                     md="3"
                                 >
-                                    <div class="text-center">
+                                    <div class="text-center" v-if="url !== null">
+                                        <a :href="url" style="text-decoration: none; color: white" target="_blank">
+                                            <v-icon
+                                                color="white"
+                                                style="cursor: pointer;"
+                                                class="display-3 text-white mb-4"
+                                            >{{icon}}</v-icon>
+
+                                            <div
+                                                class="title font-weight-regular text-uppercase"
+                                            >
+                                                {{title}}
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="text-center" v-else>
                                         <v-icon
                                             color="white"
                                             class="display-3 text-white mb-4"
@@ -193,34 +209,34 @@ export default {
         return {
             features: [
                 {
-                    title: 'Pixel Perfect Design',
+                    title: 'Analyse activities',
                     icon: 'mdi-fountain-pen-tip',
-                    text: 'Lorem ipsum'
+                    text: 'Automatically upload new rides. Browse in depth analysis and stats.'
                 },
                 {
-                    title: 'Retina Ready',
+                    title: 'Strava',
                     icon: 'mdi-cellphone',
-                    text: 'Lorem ipsum'
+                    text: 'Import all your rides from Strava, including photos.'
                 },
                 {
-                    title: 'Easily Customizable',
+                    title: 'Routes',
                     icon: 'mdi-pencil-box-outline',
-                    text: 'Lorem ipsum'
+                    text: 'Plan a route'
                 },
                 {
-                    title: 'Image Parallax',
+                    title: 'Multi-day tours',
                     icon: 'mdi-image-size-select-actual',
-                    text: 'Lorem ipsum'
+                    text: 'Plan a tour spanning multiple days'
                 },
                 {
-                    title: 'Seo Optimized',
+                    title: 'Backups',
                     icon: 'mdi-ice-pop',
-                    text: 'Lorem ipsum'
+                    text: 'Create a backup instantly at any time, and download it for safekeeping.'
                 },
                 {
-                    title: '24/7 Support',
+                    title: 'Compare',
                     icon: 'mdi-help-circle-outline',
-                    text: 'Lorem ipsum'
+                    text: 'Switch between datasets to see the differences between analysis by Strava and us.'
                 },
             ],
             stats: [
@@ -233,6 +249,19 @@ export default {
                     icon: 'mdi-github',
                     url: 'https://github.com/tobytwigger/gpsvault',
                     title: 'View on GitHub'
+                },
+                {
+                    icon: 'mdi-sd',
+                    url: null,
+                    title: '20GB free storage'
+                },
+                {
+                    icon: 'mdi-lock',
+                    url: null,
+                    title: 'Registration closed',
+                    // icon: 'mdi-lock-open-variant',
+                    // url: route('register')
+                    // title: 'Registration open'
                 }
             ]
         }

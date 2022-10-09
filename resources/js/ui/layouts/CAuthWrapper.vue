@@ -19,6 +19,9 @@
                 </v-row>
             </v-container>
         </v-main>
+
+        <c-footer></c-footer>
+
     </c-base-page>
 </template>
 
@@ -27,6 +30,7 @@ import { Head } from '@inertiajs/inertia-vue';
 import CPublicNavBar from '../components/Page/CPublicNavBar';
 import CSidebar from '../components/Page/CSidebar';
 import CBasePage from './CVuetifyWrapper';
+import CFooter from '../components/Page/CFooter';
 
 export default {
     name: 'CAuthWrapper',
@@ -35,6 +39,7 @@ export default {
     },
 
     components: {
+        CFooter,
         CBasePage,
         CSidebar,
         CPublicNavBar,

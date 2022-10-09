@@ -49,21 +49,31 @@
         </div>
 
         <div v-if="$page.props.user">
-            <Link :href="route('dashboard')">Dashboard</Link>
+            <v-btn
+                class="font-weight-bold ml-6"
+                color="#11c684"
+                dark
+                depressed
+                @click="$inertia.visit(route('dashboard'))"
+                rel="noopener"
+                x-large
+            >
+                Dashboard
+            </v-btn>
         </div>
+
         <div v-else>
             <v-btn
                 class="font-weight-bold ml-6"
                 color="#11c684"
                 dark
                 depressed
-                :href="route('register')"
+                @click="$inertia.visit(route('register'))"
                 rel="noopener"
                 x-large
             >
                 Sign up
             </v-btn>
-
         </div>
 
 <!--        <v-app-bar-nav-icon-->
@@ -130,9 +140,9 @@ export default {
         },
         tab: {
             get() {
-                let item = this.items.filter(i => window.location.href === i.url);
+                let item = this.items.filter(i => window.location.href.replace(/\/?$/, '/') === i.url.replace(/\/?$/, '/'));
                 return item.length === 0
-                    ? 0
+                    ? null
                     : this.items.indexOf(item[0]);
             }
         }
