@@ -197,6 +197,8 @@ return [
         //        \App\Integrations\Dropbox\DropboxServiceProvider::class,
         \App\Services\Geocoding\GeocodingServiceProvider::class,
 
+        \App\Services\Dashboard\DashboardServiceProvider::class
+
     ],
 
     /*

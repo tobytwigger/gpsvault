@@ -26,6 +26,7 @@ Route::redirect('/documentation', '/docs')->name('documentation');
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Dashboard */
     Route::get('/dashboard', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{dashboardId}', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'show'])->name('dashboard.show');
 
     /* Tours */
     Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
