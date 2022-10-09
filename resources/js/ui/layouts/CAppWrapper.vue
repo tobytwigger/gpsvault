@@ -48,6 +48,9 @@
                 </v-row>
             </v-container>
         </v-main>
+
+        <c-footer></c-footer>
+
     </c-base-page>
 </template>
 
@@ -56,6 +59,7 @@
     import CAppNavBar from '../components/Page/CAppNavBar';
     import CSidebar from '../components/Page/CSidebar';
     import CBasePage from './CVuetifyWrapper';
+    import CFooter from '../components/Page/CFooter';
 
     export default {
         name: 'CAppWrapper',
@@ -77,6 +81,7 @@
         },
 
         components: {
+            CFooter,
             CBasePage,
             CSidebar,
             CAppNavBar,

@@ -1,6 +1,11 @@
-CREATE USER sail;
-
 PGPASSWORD="${PGPASSWORD}" psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+DO \$\$
+BEGIN
+CREATE ROLE sail;
+EXCEPTION WHEN duplicate_object THEN RAISE NOTICE '%, skipping', SQLERRM USING ERRCODE = SQLSTATE;
+END
+\$\$;
+
 CREATE DATABASE gpsvault_testing;
 CREATE DATABASE gpsvault_testing_test_1;
 CREATE DATABASE gpsvault_testing_test_2;

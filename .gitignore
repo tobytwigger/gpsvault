@@ -22,3 +22,4 @@ storage/tests/*
 !storage/tests/.gitkeep
 docs/venv
 docs/site
+templates/zero-free-theme-v2.0.1/theme/node_modules
