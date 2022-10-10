@@ -17,6 +17,11 @@ class DashboardIndexTest extends TestCase
     }
 
     /** @test */
+    public function todo_scaffolding(){
+        $this->markTestIncomplete('Add tests for creating default dashboards, viewing a dashboard etc.');
+    }
+
+    /** @test */
     public function you_must_be_authenticated()
     {
         $this->get(route('dashboard'))->assertRedirect(route('login'));
