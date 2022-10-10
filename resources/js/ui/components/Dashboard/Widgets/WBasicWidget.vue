@@ -1,8 +1,8 @@
 <template>
     <widget
-        widget-name="Total Time"
-        :data="processedTime"
-        description="of riding this year"
+        :widget-name="widgetName"
+        :data="data"
+        :description="description"
         >
     </widget>
 </template>
@@ -10,22 +10,24 @@
 <script>
 import Widget from '../Widget';
 import units from '../../../mixins/units';
-import moment from 'moment';
 export default {
     name: "WTotalMileage",
     mixins: [units],
     components: {Widget},
     props: {
-        duration: {
+        data: {
             required: true,
-            type: Number
+            type: String
+        },
+        widgetName: {
+            required: true,
+            type: String
+        },
+        description: {
+            required: true,
+            type: String
         }
     },
-    computed: {
-        processedTime() {
-            return this.duration / (60 * 60) + ' hours';
-        }
-    }
 }
 </script>
 

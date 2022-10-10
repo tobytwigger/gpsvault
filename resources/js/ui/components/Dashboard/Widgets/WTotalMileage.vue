@@ -1,8 +1,8 @@
 <template>
     <widget
-        widget-name="Total Mileage"
+        :widget-name="widgetName"
         :data="processedDistance"
-        description="travelled this year"
+        :description="description"
         >
     </widget>
 </template>
@@ -18,6 +18,14 @@ export default {
         distance: {
             required: true,
             type: Number
+        },
+        widgetName: {
+            required: true,
+            type: String
+        },
+        description: {
+            required: true,
+            type: String
         }
     },
     computed: {

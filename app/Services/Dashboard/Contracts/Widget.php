@@ -32,6 +32,11 @@ abstract class Widget
         $this->settings = $settings;
     }
 
+    public function getSetting(string $key): mixed
+    {
+        return data_get($this->settings, $key);
+    }
+
     abstract public static function key(): string;
 
     public static function create(int $id, array $settings = [], array $position = []): static
