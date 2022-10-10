@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueGridLayout from 'vue-grid-layout';
 
 /**
  * Lodash
@@ -27,7 +28,11 @@ import {Link} from '@inertiajs/inertia-vue';
 Vue.use(UiKit);
 Vue.use(VueEasyLightbox);
 Vue.component('Link', Link);
+Vue.component('grid-layout', VueGridLayout.GridLayout);
+Vue.component('grid-item', VueGridLayout.GridItem);
 Vue.mixin({methods: { route }});
+
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

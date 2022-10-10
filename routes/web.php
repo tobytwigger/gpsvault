@@ -18,7 +18,7 @@ Route::get('/', [\App\Http\Controllers\Pages\Public\PublicController::class, 'we
 Route::get('/contact', [\App\Http\Controllers\Pages\Public\ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [\App\Http\Controllers\Pages\Public\ContactController::class, 'store'])->name('contact.store');
 
-//Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
+Route::get('/route/{route}/public', [\App\Http\Controllers\Pages\Route\PublicRouteController::class, 'show'])->name('route.public');
 
 /* Documentation */
 Route::redirect('/documentation', '/docs')->name('documentation');
@@ -26,6 +26,7 @@ Route::redirect('/documentation', '/docs')->name('documentation');
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Dashboard */
     Route::get('/dashboard', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/{dashboardId}', [\App\Http\Controllers\Pages\Dashboard\DashboardController::class, 'show'])->name('dashboard.show');
 
     /* Tours */
     Route::resource('tour', \App\Http\Controllers\Pages\Tour\TourController::class)->only(['index', 'store', 'show', 'destroy', 'update']);
