@@ -6,34 +6,29 @@ use App\Models\Activity;
 use App\Models\Stats;
 use App\Services\Dashboard\Contracts\Widget;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\Auth;
 
-class TotalMileage extends Widget
+class RideCount extends Widget
 {
-
     public static function key(): string
     {
-        return 'total-mileage';
+        return 'ride-count';
     }
 
     public function component(): string
     {
-        return 'w-total-mileage';
+        return 'w-ride-count';
     }
 
     public function gatherData(): array
     {
         return [
-            'distance' =>Stats::where('stats_type', Activity::class)
+            'count' => Stats::where('stats_type', Activity::class)
                 ->orderByPreference()
-                ->whereNotNull('distance')
-                ->select(['id', 'stats_id', 'distance'])
+                ->select(['id', 'stats_id'])
                 ->where('finished_at', '>', Carbon::createFromDate(now()->year, 1, 1))
                 ->get()
                 ->unique(fn (Stats $stats) => $stats->stats_id)
-                ->sum(fn (Stats $stats) => $stats->distance)
+                ->count(),
         ];
     }
 }

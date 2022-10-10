@@ -7,6 +7,26 @@ abstract class Widget
 
     protected array $settings = [];
 
+    protected array $position = [];
+
+    protected int $id;
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param array $position
+     */
+    public function setPosition(array $position): void
+    {
+        $this->position = $position;
+    }
+
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
@@ -14,10 +34,12 @@ abstract class Widget
 
     abstract public static function key(): string;
 
-    public static function create(array $settings = []): static
+    public static function create(int $id, array $settings = [], array $position = []): static
     {
         $instance = app(static::class);
+        $instance->setId($id);
         $instance->setSettings($settings);
+        $instance->setPosition($position);
         return $instance;
     }
 
@@ -39,6 +61,8 @@ abstract class Widget
         return [
             'component' => $this->component(),
             'data' => $this->gatherData(),
+            'position' => $this->position,
+            'id' => $this->id
         ];
     }
 

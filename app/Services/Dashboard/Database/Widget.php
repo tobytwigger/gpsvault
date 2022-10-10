@@ -11,11 +11,13 @@ class Widget extends Model
     protected $fillable = [
         'dashboard_id',
         'settings',
-        'widget_key'
+        'widget_key',
+        'position'
     ];
 
     protected $casts = [
-        'settings' => 'array'
+        'settings' => 'array',
+        'position' => 'array'
     ];
 
     public function dashboard()
@@ -25,7 +27,7 @@ class Widget extends Model
 
     public function toSchema(): array
     {
-        return app(WidgetStore::class)->get($this->widget_key)::create($this->settings)->toSchema();
+        return app(WidgetStore::class)->get($this->widget_key)::create($this->id, $this->settings, $this->position)->toSchema();
     }
 
 }

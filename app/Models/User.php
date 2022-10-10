@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Integrations\Strava\UsesStrava;
+use App\Services\Dashboard\DefaultDashboardFactory;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -60,6 +61,10 @@ class User extends Authenticatable
 
     protected static function booted()
     {
+        static::created(function(User $user) {
+            app(DefaultDashboardFactory::class)->syncDashboards($user);
+        });
+
         static::deleting(function (User $user) {
             $user->deleteProfilePhoto();
             $user->tokens->each->delete();

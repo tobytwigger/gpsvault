@@ -49,8 +49,6 @@
             </v-container>
         </v-main>
 
-        <c-footer></c-footer>
-
     </c-base-page>
 </template>
 

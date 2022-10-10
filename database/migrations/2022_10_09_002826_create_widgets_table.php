@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('widget_key');
             $table->text('settings');
+            $table->text('position');
             $table->unsignedBigInteger('dashboard_id');
             $table->timestamps();
 

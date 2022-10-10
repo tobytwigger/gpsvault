@@ -1,8 +1,8 @@
 <template>
     <widget
-        widget-name="Total Mileage"
-        :data="processedDistance"
-        description="travelled this year"
+        widget-name="Number of rides"
+        :data="count.toString()"
+        description="rides this year"
         >
     </widget>
 </template>
@@ -15,17 +15,11 @@ export default {
     mixins: [units],
     components: {Widget},
     props: {
-        distance: {
+        count: {
             required: true,
             type: Number
         }
     },
-    computed: {
-        processedDistance() {
-            let distanceUnit = this.convert(this.distance, 'distance');
-            return distanceUnit.value + distanceUnit.unit;
-        }
-    }
 }
 </script>
 

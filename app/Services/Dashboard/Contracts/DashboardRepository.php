@@ -13,4 +13,10 @@ interface DashboardRepository
     public function getMainDashboard(User $user): Dashboard;
 
     public function getDashboardsForUser(User $user): Collection;
+
+    public function existsForUser(User $user, string $name);
+
+    public function createDashboard(User $user, string $name, string $description, float $refreshRate);
+
+    public function createWidget($dashboard, string $key, array $settings, array $position);
 }
