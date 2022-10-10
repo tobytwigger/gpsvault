@@ -19,16 +19,6 @@
                 </slot>
             </v-list-item-content>
         </v-list-item>
-
-        <v-card-actions>
-            <v-btn
-                outlined
-                rounded
-                text
-            >
-                Refresh
-            </v-btn>
-        </v-card-actions>
     </v-card>
 </template>
 

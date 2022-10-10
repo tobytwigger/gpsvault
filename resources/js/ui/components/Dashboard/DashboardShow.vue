@@ -2,6 +2,22 @@
     <div>
         <div class="text-right pr-5">
             <small>{{schema.description}}</small>
+
+            <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        icon
+                        link
+                        @click="$inertia.reload()"
+                        v-bind="attrs"
+                        v-on="on"
+                    >
+                        <v-icon>mdi-autorenew</v-icon>
+                    </v-btn>
+                </template>
+                Reload dashboard
+            </v-tooltip>
+
         </div>
 
         <grid-layout
@@ -39,10 +55,18 @@ export default {
             type: Object
         }
     },
+    data() {
+        return {
+            intervalId: null
+        }
+    },
     mounted() {
-        this.timeout = setTimeout(() => {
+        this.intervalId = setInterval(() => {
             this.$inertia.reload();
         }, this.schema.refresh_rate * 1000);
+    },
+    beforeDestroy() {
+        clearInterval(this.intervalId);
     },
     computed: {
         layout() {
