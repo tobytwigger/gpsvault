@@ -2,9 +2,9 @@
     <div>
         <v-row>
             <v-col style="margin: 10px;">
-                TEST
                 <v-card
                     max-width="600"
+                    width="600"
                     class="mx-auto"
                     id="elevation-canvas-container"
                 >
@@ -22,9 +22,11 @@
 import {cloneDeep} from 'lodash';
 import draggable from 'vuedraggable'
 import {Chart, registerables} from 'chart.js';
+import units from '../../../../mixins/units';
 
 export default {
     name: "CElevationControl",
+    mixins: [units],
     components: {
         draggable
     },
@@ -53,7 +55,7 @@ export default {
             const data = [];
             const labels = [];
             this.result.coordinates.forEach((coords, index) => {
-                labels.push(coords[3]/1000.0);
+                labels.push(this.convert(coords[3], 'distance').value);
                 data.push(coords[2]);
             });
 
@@ -78,6 +80,11 @@ export default {
                 this.chart = new Chart(this.elevationCanvas.getContext('2d'), {
                     type: 'line',
                     options: {
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
                         animation: false,
                         maintainAspectRatio: false,
                         interaction: { intersect: false, mode: 'index' },
@@ -107,9 +114,12 @@ export default {
                         labels: this.elevationProfileDataset.labels,
                         datasets: [
                             {
-                                fill: false,
-                                borderColor: 'rgb(75, 192, 192)',
+                                fill: true,
+                                borderColor: '#66ccff',
+                                backgroundColor: '#66ccff66',
                                 tension: 0.1,
+                                pointRadius: 0,
+                                spanGaps: true,
                                 data: this.elevationProfileDataset.data
                             }
                         ]

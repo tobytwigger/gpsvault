@@ -18,7 +18,7 @@ class ValhallaRouterStrategy implements RouterStrategy
 
         return new RouteResult(
             collect($linestring)->map(fn ($location, $index) => [
-                $location[0], $location[1], $elevation[$index][1], [$index][0], // [0] is the distance through the route!
+                $location[0], $location[1], $elevation[$index][1], $elevation[$index][0], // [0] is the distance through the route!
             ])->all(),
             $distance,
             $time
@@ -58,11 +58,8 @@ class ValhallaRouterStrategy implements RouterStrategy
 
         $elevation = [];
         foreach (collect($linestring)->chunk(1000) as $chunkedPoints) {
-            $elevation = array_merge(
-                $elevation,
-                (new Valhalla())
-                    ->elevationForLineString(GooglePolylineEncoder::encode($chunkedPoints->all(), 6))['range_height']
-            );
+            $elevation = array_merge($elevation, (new Valhalla())
+                ->elevationForLineString(GooglePolylineEncoder::encode($chunkedPoints->all(), 6))['range_height']);
         }
 
         return [$linestring, $elevation, $distance, $time];

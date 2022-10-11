@@ -145,7 +145,7 @@ export default {
                     }
                 });
                 this.map.addLayer({
-                    'id': 'route',
+                    'id': 'route-layer',
                     'type': 'line',
                     'source': 'route',
                     'layout': {
@@ -157,6 +157,21 @@ export default {
                         'line-width': 8
                     }
                 });
+
+                // ADDING A POPUP ON HOVER OVER ROUTE
+                // let popup = null;
+                // this.map.on('mouseover', 'route-layer', (e) => {
+                //     console.log(e);
+                //     popup = new maplibregl.Popup()
+                //         .setLngLat(e.lngLat)
+                //         .setHTML("<h2>This is the third line that will explain something</h2>")
+                //         .addTo(this.map);
+                // });
+                //
+                // this.map.on('mouseout', 'route-layer', (e) => {
+                //     if (popup) popup.remove();
+                // });
+
             } else {
                 this.map.getSource('route').setData(geojson);
             }
@@ -343,7 +358,7 @@ export default {
                 if(e.originalEvent.target.classList.contains('clickable') === false) {
                     if(this.generalPopup === null) {
                         let addToStartButton = this._createPopupButton('Add to start', 'add-to-start', (e) => {
-                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lat, this.generalPopup.getLngLat().lng]);
                             let schema = cloneDeep(this._schema);
                             schema.waypoints.unshift(waypoint);
                             this._schema = schema;
@@ -353,7 +368,7 @@ export default {
                             }
                         });
                         let addToEndBtn = this._createPopupButton('Add to end', 'add-to-end', (e) => {
-                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                            let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lat, this.generalPopup.getLngLat().lng]);
                             let schema = cloneDeep(this._schema);
                             schema.waypoints.push(waypoint);
                             this._schema = schema;
@@ -364,7 +379,7 @@ export default {
                         });
                         let addAsWaypointBtn = this._createPopupButton('Add as waypoint', 'add-as-waypoint', (e) => {
                             if(this.result?.coordinates?.length > 1) {
-                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lat, this.generalPopup.getLngLat().lng]);
                                 let schema = cloneDeep(this._schema);
                                 axios.post(route('planner.tools.new-waypoint-locator'), {
                                     geojson: schema.waypoints.map(w => {
@@ -380,7 +395,7 @@ export default {
                                         this._schema = schema;
                                     })
                             } else {
-                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lng, this.generalPopup.getLngLat().lat]);
+                                let waypoint = this._newWaypoint([this.generalPopup.getLngLat().lat, this.generalPopup.getLngLat().lng]);
                                 let schema = cloneDeep(this._schema);
                                 schema.waypoints.push(waypoint);
                                 this._schema = schema;
