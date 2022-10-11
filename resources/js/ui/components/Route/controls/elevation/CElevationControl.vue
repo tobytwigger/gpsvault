@@ -56,7 +56,7 @@ export default {
             const labels = [];
             this.result.coordinates.forEach((coords, index) => {
                 labels.push(this.convert(coords[3], 'distance').value);
-                data.push(coords[2]);
+                data.push(this.convert(coords[2], 'elevation').value);
             });
 
             return {data: data, labels: labels};
@@ -80,35 +80,29 @@ export default {
                 this.chart = new Chart(this.elevationCanvas.getContext('2d'), {
                     type: 'line',
                     options: {
+                        scales: {
+                            x: { type: 'linear' },
+                            y: { type: 'linear', beginAtZero: true },
+                        },
                         plugins: {
-                            legend: {
-                                display: false
+                            title: { align: "center", display: true, text: "Distance (" + this.getUserUnit('distance') + ") / Elevation (" + this.getUserUnit('elevation') + ")" },
+                            legend: { display: false },
+                            tooltip: {
+                                displayColors: false,
+                                callbacks: {
+                                    title: (tooltipItems) => {
+                                        return "Distance: " + tooltipItems[0].label + this.getUserUnit('distance')
+                                    },
+                                    label: (tooltipItem) => {
+                                        return "Elevation: " + tooltipItem.raw + this.getUserUnit('elevation')
+                                    },
+                                }
                             }
                         },
                         animation: false,
                         maintainAspectRatio: false,
                         interaction: { intersect: false, mode: 'index' },
                         tooltip: { position: 'nearest' },
-                        scales: {
-                            x: { type: 'linear' },
-                            y: { type: 'linear', beginAtZero: true },
-                            y1: { type: 'linear', display: true, position: 'right', beginAtZero: true, grid: { drawOnChartArea: false }},
-                        },
-                        // plugins: {
-                        //     title: { align: "end", display: true, text: "Distance, m / Elevation, m" },
-                        //     legend: { display: false },
-                        //     tooltip: {
-                        //         displayColors: false,
-                        //         callbacks: {
-                        //             title: (tooltipItems) => {
-                        //                 return "Distance: " + tooltipItems[0].label + 'm'
-                        //             },
-                        //             label: (tooltipItem) => {
-                        //                 return "Elevation: " + tooltipItem.raw + 'm'
-                        //             },
-                        //         }
-                        //     }
-                        // }
                     },
                     data: {
                         labels: this.elevationProfileDataset.labels,
