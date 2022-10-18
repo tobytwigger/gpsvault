@@ -248,7 +248,7 @@ export default {
                 {
                     icon: 'mdi-github',
                     url: 'https://github.com/tobytwigger/gpsvault',
-                    title: 'View on GitHub'
+                    title: 'View source code'
                 },
                 {
                     icon: 'mdi-sd',

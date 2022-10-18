@@ -87,7 +87,9 @@
                             </template>
                         </c-job-status>
 <!--                        <c-map v-if="hasStats && stats.linestring" :geojson="stats.linestring" :key="'map-' + stats.integration"></c-map>-->
-                        <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
+                        <v-container>
+                            <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
+                        </v-container>
                     </v-col>
                 </v-row>
             </v-tab-item>

@@ -18,17 +18,16 @@
             </draggable>
         </v-list>
 
-        <template #actions>
-            <v-btn :disabled="form.processing" :loading="form.processing" @click="submit">
-                Save
-            </v-btn>
-        </template>
+        <div v-if="errors.length > 0">
+            {{ errors }}
+        </div>
     </c-form-section>
 </template>
 
 <script>
 import CFormSection from './CFormSection';
 import draggable from "vuedraggable";
+import settingCard from '../../mixins/settingCard';
 
 export default {
     name: 'CStatsOrderSetting',
@@ -36,12 +35,10 @@ export default {
         CFormSection,
         draggable
     },
+    mixins: [settingCard],
 
     data() {
         return {
-            form: this.$inertia.form({
-                stats_order_preference: this.$setting.stats_order_preference
-            }),
             sources: {
                 php: {text: 'GPS Vault', value: 'php', description: 'Our own analysis of your activities.'},
                 strava: {text: 'Strava', value: 'strava', description: 'Analysis done by Strava.'},
@@ -49,22 +46,13 @@ export default {
         }
     },
 
-    methods: {
-        submit() {
-            this.form.post(route('settings.store'), {
-                errorBag: 'updateStatsOrderSetting',
-                preserveScroll: true
-            });
-        },
-    },
-
     computed: {
         schema: {
             get() {
-                return this.form.stats_order_preference.map(id => this.sources[id])
+                return this.value.map(id => this.sources[id])
             },
             set(val) {
-                this.form.stats_order_preference = val.map(source => source.value);
+                this.value = val.map(source => source.value);
             }
         }
     }

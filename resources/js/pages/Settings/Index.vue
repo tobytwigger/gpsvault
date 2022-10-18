@@ -8,95 +8,36 @@
         >
             <v-tabs-slider></v-tabs-slider>
 
-            <v-tab href="#tab-account">
-                Your Account
-                <v-icon>mdi-account</v-icon>
-            </v-tab>
-
-            <v-tab href="#tab-general">
-                General
-                <v-icon>mdi-information</v-icon>
-            </v-tab>
-
-            <v-tab href="#tab-security">
-                Security
-                <v-icon>mdi-security</v-icon>
-            </v-tab>
-
-            <v-tab href="#tab-earth" v-if="$page.props.permissions.indexOf('manage-global-settings') > -1">
-                Global
-                <v-icon>mdi-earth</v-icon>
+            <v-tab :href="'#tab-' + groupId" v-for="(group, groupId) in settings" :key="groupId" v-if="group.shouldShow">
+                {{ group.name }}
+                <v-icon>{{ group.icon }}</v-icon>
             </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab">
-            <v-tab-item value="tab-account">
-                <v-row>
+            <v-tab-item v-for="(group, groupId) in settings" :key="groupId" :value="'tab-' + groupId">
+                <v-row v-for="(setting, settingKey) in group.components" :key="settingKey" v-if="group.shouldShow && Object.keys(settingValues).length > 0">
                     <v-col>
-                        <c-update-profile-information-form></c-update-profile-information-form>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-delete-user-form></c-delete-user-form>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-            <v-tab-item value="tab-general">
-                <v-row>
-                    <v-col>
-                        <c-unit-setting>
+                        <component :is="setting.component"
+                                   :ref="'component-' + settingKey"
+                                   v-bind="setting.bind ?? {}"
+                                   :model-value="settingValues[settingKey]"
+                                   :is-basic-setting="setting.isBasicSetting"
+                                   @update:modelValue="$e => updateSetting(settingKey, $e)"
+                                   :errors="$page.props.errors.hasOwnProperty(settingKey) ? [$page.props.errors[settingKey]] : []">
 
-                        </c-unit-setting>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-dark-mode>
-
-                        </c-dark-mode>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-stats-order-setting></c-stats-order-setting>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-            <v-tab-item value="tab-security">
-                <v-row>
-                    <v-col>
-                        <c-update-password-form></c-update-password-form>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-logout-other-browser-sessions-form :sessions="sessions"></c-logout-other-browser-sessions-form>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <c-two-factor-authentication-form></c-two-factor-authentication-form>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-            <v-tab-item value="tab-earth" v-if="$page.props.permissions.indexOf('manage-global-settings') > -1">
-                <v-row>
-                    <v-col>
-                        <c-system-strava-client
-                            v-if="$page.props.permissions.indexOf('manage-global-settings') > -1"
-                            :clients="stravaClients">
-
-                        </c-system-strava-client>
-
-                        <c-bruit-api-key
-                            v-if="$page.props.permissions.indexOf('manage-bruit-key') > -1">
-
-                        </c-bruit-api-key>
+                        </component>
                     </v-col>
                 </v-row>
             </v-tab-item>
         </v-tabs-items>
+
+        <template #headerActions>
+            <v-btn :disabled="!isDirty" :color="isDirty ? 'primary' : 'secondary'" :loading="isSaving" @click="saveSettings">
+                Save
+            </v-btn>
+        </template>
+
     </c-app-wrapper>
 </template>
 
@@ -111,11 +52,10 @@ import CUnitSetting from 'ui/components/Settings/CUnitSetting';
 import CDarkMode from 'ui/components/Settings/CDarkMode';
 import CSystemStravaClient from 'ui/components/Settings/CSystemStravaClient';
 import CStatsOrderSetting from 'ui/components/Settings/CStatsOrderSetting';
-import CBruitApiKey from '../../ui/components/Settings/CBruitApiKey';
+import {cloneDeep, isEqual} from 'lodash';
 export default {
     name: "Index",
     components: {
-        CBruitApiKey,
         CStatsOrderSetting,
         CSystemStravaClient,
         CDarkMode,
@@ -138,7 +78,122 @@ export default {
     },
     data() {
         return {
-            tab: null
+            tab: null,
+            settingValues: {},
+            savedSettingValues: {},
+            isSaving: false,
+            settings: {
+                'account': {
+                    name: 'Your Account',
+                    icon: 'mdi-account',
+                    shouldShow: true,
+                    components: {
+                        'update_profile_information': {
+                            component: CUpdateProfileInformationForm,
+                            isBasicSetting: false
+                        },
+                        'update_password': {component: CUpdatePasswordForm, isBasicSetting: false},
+                        'delete_user': {component: CDeleteUserForm, isBasicSetting: false}
+                    }
+                },
+                'general': {
+                    name: 'General',
+                    icon: 'mdi-information',
+                    shouldShow: true,
+                    components: {
+                        'unit_system': {component: CUnitSetting},
+                        'dark_mode': {component: CDarkMode},
+                        'stats_order_preference': {component: CStatsOrderSetting},
+                    }
+                },
+                'security': {
+                    name: 'Security',
+                    icon: 'mdi-security',
+                    shouldShow: true,
+                    components: {
+                        '2fa': {
+                            component: CTwoFactorAuthenticationForm,
+                            isBasicSetting: false,
+                        },
+                        'logout_other_browser_sessions': {
+                            component: CLogoutOtherBrowserSessionsForm,
+                            bind: {sessions: this.sessions},
+                            isBasicSetting: false,
+                        },
+                    }
+                },
+                'global': {
+                    name: 'Global',
+                    icon: 'mdi-earth',
+                    shouldShow: this.$page.props.permissions.indexOf('manage-global-settings') > -1,
+                    components: {
+                        'strava_client_id': {
+                            component: CSystemStravaClient, bind: {clients: this.stravaClients},
+                        }
+                    },
+                },
+            }
+        }
+    },
+    mounted() {
+        let settingVals = {};
+        // Assign an initial value to setting components
+        for(let groupId of Object.keys(this.settings)) {
+            if(this.settings[groupId].shouldShow) {
+                for(let componentId of Object.keys(this.settings[groupId].components)) {
+                    if(!this.settings[groupId].components[componentId].hasOwnProperty('isBasicSetting') || this.settings[groupId].components[componentId].isBasicSetting === true) {
+                        settingVals[componentId] = this.$settings.getValue(componentId);
+                    }
+                }
+            }
+        }
+        this.savedSettingValues = cloneDeep(settingVals);
+        this.settingValues = cloneDeep(settingVals);
+    },
+    methods: {
+        saveSettings(group) {
+            let params = {};
+            Object.keys(this.settingValues)
+                .filter(settingKey => !isEqual(this.settingValues[settingKey], this.savedSettingValues[settingKey]))
+                .forEach(key => params[key] = this.settingValues[key]);
+
+            this.$inertia.post(route('settings.store'), params, {
+                onBefore: () => this.isSaving = true,
+                onFinish: () => this.isSaving = false,
+                onSuccess: () => this.savedSettingValues = cloneDeep(this.settingValues)
+            });
+        },
+        updateSetting(key, value) {
+            // Update a setting value in the setting component
+            for(let groupId of Object.keys(this.settings)) {
+                if(this.settings[groupId].shouldShow) {
+                    for(let componentId of Object.keys(this.settings[groupId].components)) {
+                        if(componentId === key) {
+                            this.settingValues[componentId] = value;
+                        }
+                    }
+                }
+            }
+        }
+    },
+    computed: {
+        isDirty() {
+            return Object.keys(this.settingValues)
+                .filter(settingKey => !isEqual(this.settingValues[settingKey], this.savedSettingValues[settingKey]))
+                .length > 0;
+        },
+        // currentTabSchema() {
+        //     if(this.tab && Object.keys(this.settings).filter(id => 'tab-' + id === this.tab).length > 0) {
+        //         return this.settings[Object.keys(this.settings).filter(id => 'tab-' + id === this.tab)[0]];
+        //     }
+        //     return this.settings[Object.keys(this.settings)[0]];
+        // }
+    },
+    watch: {
+        isDirty(isDirty) {
+            window.onbeforeunload = isDirty ? function() {
+                return true;
+            } : null;
         }
     }
 }

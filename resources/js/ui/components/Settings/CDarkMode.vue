@@ -1,58 +1,32 @@
 <template>
     <c-form-section description="Use darker colours on the site." title="Dark mode">
-        <v-form @submit.prevent="submit">
-            <v-switch
-                v-model="form.dark_mode"
-                flat
-                :label="darkMode ? 'Dark mode on' : 'Dark mode off'"
-            ></v-switch>
+        <v-switch
+            v-model="value"
+            flat
+            :error="errors.length > 0"
+            :error-messages="errors"
+            :label="value ? 'Dark mode on' : 'Dark mode off'"
+        ></v-switch>
 
-        </v-form>
-
-        <template #actions>
-            <v-btn :disabled="form.processing" :loading="form.processing" @click="submit">
-                Save
-            </v-btn>
-        </template>
     </c-form-section>
 </template>
 
 <script>
 import CFormSection from './CFormSection';
+import settingCard from '../../mixins/settingCard';
 
 export default {
     name: 'CDarkMode',
     components: {
         CFormSection,
     },
-
-    data() {
-        return {
-            form: this.$inertia.form({
-                dark_mode: this.$setting.dark_mode
-            })
-        }
-    },
-
-    computed: {
-        darkMode() {
-            return this.form.dark_mode
-        }
-    },
+    mixins: [settingCard],
 
     watch: {
-        darkMode(val) {
+        value(val) {
+            console.log(val);
             this.$vuetify.theme.dark = val;
         }
-    },
-
-    methods: {
-        submit() {
-            this.form.post(route('settings.store'), {
-                errorBag: 'updateDarkMode',
-                preserveScroll: true
-            });
-        },
     },
 }
 </script>
