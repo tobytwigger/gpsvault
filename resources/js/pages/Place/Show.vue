@@ -69,6 +69,26 @@
                     </v-tooltip>
                 </template>
             </c-place-form>
+            <c-delete-place-button v-if="place.user_id === $page.props.user.id" :place="place">
+                <template #button="{trigger, showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                icon
+                                link
+                                @click="trigger"
+                                :disabled="showing"
+                                :loading="showing"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </template>
+                        Delete
+                    </v-tooltip>
+                </template>
+            </c-delete-place-button>
         </template>
     </c-app-wrapper>
 
@@ -78,9 +98,10 @@
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CLocationInput from '../../ui/components/Map/CLocationInput';
 import CPlaceForm from '../../ui/components/Place/CPlaceForm';
+import CDeletePlaceButton from '../../ui/components/Place/CDeletePlaceButton';
 export default {
     name: "Show",
-    components: {CPlaceForm, CLocationInput, CAppWrapper},
+    components: {CDeletePlaceButton, CPlaceForm, CLocationInput, CAppWrapper},
     props: {
         place: {
             required: true,

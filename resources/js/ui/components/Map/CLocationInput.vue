@@ -96,8 +96,6 @@ export default {
                 })
             );
 
-            this.map.addControl(new maplibregl.FullscreenControl({}));
-
             if(this.value !== null) {
                 this.updateMarker(this.value);
             }
