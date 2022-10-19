@@ -38,7 +38,6 @@ task('deploy', [
     'artisan:view:cache',
     'artisan:config:cache',
     'artisan:event:cache',
-    'meilisearch:install',
     'artisan:optimize',
     'deploy:publish',
 ]);
