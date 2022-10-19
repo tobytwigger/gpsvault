@@ -1,23 +1,16 @@
 <template>
-    <div>Location Input</div>
-<!--    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener">-->
-
-<!--        <l-tile-layer-->
-<!--            v-for="tileProvider in tileProviders"-->
-<!--            :key="tileProvider.name"-->
-<!--            :name="tileProvider.name"-->
-<!--            :visible="tileProvider.visible"-->
-<!--            :url="tileProvider.url"-->
-<!--            :attribution="tileProvider.attribution"-->
-<!--            layer-type="base"/>-->
-
-<!--        <l-marker v-if="hasLocation" :draggable="true" @update:latLng="(e) => setLatLng(e.lat, e.lng)" :lat-lng="markerLatLng"></l-marker>-->
-
-<!--    </l-map>-->
+    <div>
+        <div>Location</div>
+        <div>
+            <div style="height: 500px" ref="map"></div>
+            <canvas ref="canvas" height="250"></canvas>
+        </div>
+    </div>
 
 </template>
 
-<script>
+<script type="text/ecmascript-6">
+import maplibregl from 'maplibre-gl';
 
 export default {
     name: "CLocationInput",
@@ -27,41 +20,105 @@ export default {
         value: {
             required: true,
             type: Object,
-        }
-    },
-    methods: {
-        initialiseClickListener() {
-            this.$refs.map.mapObject.setView([52.025612, -0.801140]);
-            this.$refs.map.mapObject.on('click', (e) => this.setLatLng(e.latlng.lat, e.latlng.lng));
-            this.$refs.map.mapObject.invalidateSize();
         },
-        setLatLng(lat, lng) {
-            this.$emit('input', {lat: lat, lng: lng})
-        },
-        test(e) {
+        disabled: {
+            required: false,
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
-            tileProviders: [
-                {
-                    name: 'OpenStreetMap',
-                    visible: true,
-                    attribution:
-                        '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                },
-                {
-                    name: 'OpenTopoMap',
-                    visible: false,
-                    url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-                    attribution:
-                        'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
-                }
-            ],
-            zoom: 9
+            map: null,
+            marker: null
         }
     },
+    watch: {
+        value: {
+            deep: true,
+            handler: function(val) {
+                this.updateMarker(val);
+            }
+        }
+    },
+    mounted() {
+        this.map = new maplibregl.Map({
+            container: this.$refs.map,
+            // style: 'https://demotiles.maplibre.org/style.json', // style URL
+            center: [0, 51], // starting position [lng, lat]
+            zoom: 1, // starting zoom
+            style: {
+                version: 8,
+                sources: {
+                    osm: {
+                        type: 'raster',
+                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: '&copy; OpenStreetMap Contributors',
+                        maxzoom: 19
+                    },
+                    opentopo: {
+                        type: 'raster',
+                        tiles: ['https://a.tile.opentopomap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>',
+                        maxzoom: 19
+                    },
+                    simple: {
+                        type: 'raster',
+                        tiles: ['https://a.tile.opentopomap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>',
+                        maxzoom: 19
+                    },
+                },
+                layers: [
+                    {
+                        id: 'osm',
+                        type: 'raster',
+                        source: 'osm'
+                    },
+                ],
+            },
+        });
+
+        this.map.on('click', (e) => {
+            if(!this.disabled) {
+                this.setLatLng(e.lngLat.lat, e.lngLat.lng);
+            }
+        });
+
+        this.map.on('load', () => {
+            this.map.addControl(
+                new maplibregl.NavigationControl({
+                    showZoom: true,
+                    showCompass: false
+                })
+            );
+
+            this.map.addControl(new maplibregl.FullscreenControl({}));
+
+            if(this.value !== null) {
+                this.updateMarker(this.value);
+            }
+        });
+    },
+
+    methods: {
+        setLatLng(lat, lng) {
+            this.$emit('input', {lat: lat, lng: lng})
+        },
+        updateMarker(value) {
+            if(this.marker) {
+                this.marker.setLngLat(value);
+            } else {
+                this.marker = new maplibregl.Marker()
+                    .setLngLat(value)
+                    .addTo(this.map);
+            }
+        }
+    },
+
     computed: {
         hasLocation() {
             return this.value.lat !== null && this.value.lng !== null;
@@ -76,6 +133,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.vue2leaflet-map {
+    z-index: 1;
+}
 </style>
