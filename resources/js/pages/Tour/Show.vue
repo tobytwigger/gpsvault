@@ -58,18 +58,41 @@
             </v-tab-item>
 
             <v-tab-item value="tab-stages">
-                <c-stage-wizard v-if="tour.stages.length === 0">
+                <v-container>
+                    <v-row v-if="tour.stages.length === 0">
+                        <v-col>
+                            <c-stage-wizard :tour="tour"></c-stage-wizard>
+                        </v-col>
+                    </v-row>
+                    <v-row v-else>
+                        <v-col>
+                            <c-stage-summary :tour="tour">
 
-                </c-stage-wizard>
-                <c-stage-summary v-else :tour="tour">
+                            </c-stage-summary>
+                        </v-col>
+                    </v-row>
 
-                </c-stage-summary>
+                    <v-row>
+                        <v-col>
+                            <v-timeline dense>
+                                <v-slide-x-reverse-transition
+                                    group
+                                    hide-on-leave
+                                >
+                                    <v-timeline-item
+                                        :key="stage.id"
+                                        v-for="stage in tour.stages"
+                                        small
+                                        fill-dot
+                                    >
+                                        <c-stage-card :stage="stage"></c-stage-card>
+                                    </v-timeline-item>
+                                </v-slide-x-reverse-transition>
+                            </v-timeline>
 
-                <v-row>
-                    <v-col :key="stage.id" v-for="stage in tour.stages" cols="12" xl="3" md="6">
-                        <c-stage-card :stage="stage"></c-stage-card>
-                    </v-col>
-                </v-row>
+                        </v-col>
+                    </v-row>
+                </v-container>
 
             </v-tab-item>
         </v-tabs-items>

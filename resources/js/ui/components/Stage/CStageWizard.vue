@@ -7,17 +7,17 @@
                 </v-card-title>
 
                 <v-card-text>
-                    <v-input
+                    <v-text-field
                         type="number"
-                        id="count"
-                        v-model="form.count"
+                        id="total_days"
+                        v-model="form.total_days"
                         label="How many days is your tour?"
                         hint="How many days will you be doing your tour, including rest days."
-                        name="count"
+                        name="total_days"
                         prepend-icon="mdi-calendar-question"
-                        :error="form.errors.hasOwnProperty('count')"
-                        :error-messages="form.errors.hasOwnProperty('count') ? [form.errors.email] : []"
-                    ></v-input>
+                        :error="form.errors.hasOwnProperty('total_days')"
+                        :error-messages="form.errors.hasOwnProperty('total_days') ? [form.errors.email] : []"
+                    ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn :loading="form.processing" :disabled="form.processing" aria-label="Create stages" block color="primary"
@@ -33,18 +33,25 @@
 <script>
 export default {
     name: "CStageWizard",
+    props: {
+        tour: {
+            required: true,
+            type: Object
+        }
+    },
     data() {
         return {
             form: this.$inertia.form({
-                count: 3
+                total_days: 3
             })
         }
     },
     methods: {
         submit() {
-            this.form.post(route('tour.stage.store', this.tour.id), {
+            this.form.post(route('tour.stage.wizard', this.tour.id), {
                 onSuccess: () => {
                     this.form.reset();
+                    this.$inertia.reload();
                 }
             });
         }
