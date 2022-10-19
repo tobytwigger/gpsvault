@@ -13,6 +13,10 @@ return [
     |
      */
 
+    'static-map' => [
+        'driver' => env('STATIC_MAP_DRIVER', 'mapbox')
+    ],
+
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
