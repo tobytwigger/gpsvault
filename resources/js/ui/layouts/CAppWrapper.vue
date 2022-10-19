@@ -11,6 +11,8 @@
                         <v-toolbar
                             class="mt-2 mx-2"
                         >
+                            <slot name="prependActions"></slot>
+
                             <v-spacer></v-spacer>
 
                             <v-toolbar-title>{{ title }}</v-toolbar-title>

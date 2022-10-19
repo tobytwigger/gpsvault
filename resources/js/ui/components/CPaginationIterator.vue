@@ -13,7 +13,7 @@
         @update:items-per-page="perPage = $event"
     >
         <template v-slot:default="{ items, isExpanded, expand }">
-            <v-row>
+            <v-row v-if="layout === 'cards'">
                 <v-col
                     v-if="prepend"
                     cols="12"
@@ -31,8 +31,27 @@
                     md="4"
                     sm="6"
                 >
-                    <slot v-bind:item="item" v-bind:isFirst="index === 0"></slot>
+                    <slot name="default" v-bind:item="item" v-bind:isFirst="index === 0"></slot>
                 </v-col>
+            </v-row>
+            <v-row v-else-if="layout === 'list'">
+                <v-simple-table>
+                    <template v-slot:default>
+                        <thead>
+                        <tr>
+                            <th v-for="(header, i) in listHeaders" :key="i" class="text-left">
+                                {{ header }}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item, index) in items"
+                            :key="item[itemKey]">
+                            <slot name="list" v-bind:item="item" v-bind:isFirst="index === 0"></slot>
+                        </tr>
+                        </tbody>
+                    </template>
+                </v-simple-table>
             </v-row>
         </template>
 
@@ -131,6 +150,17 @@ export default {
             type: String,
             default: 'perPage'
         },
+        layout: {
+            required: false,
+            type: String,
+            default: 'cards',
+            validator: (val) => ['cards', 'list'].includes(val)
+        },
+        listHeaders: {
+            required: false,
+            type: Array,
+            default: () => []
+        }
     },
     data() {
         return {

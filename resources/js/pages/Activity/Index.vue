@@ -1,10 +1,31 @@
 <template>
     <c-app-wrapper title="Your Activities" :header-action="true">
-        <c-pagination-iterator :paginator="activities" item-key="id">
+        <c-pagination-iterator :paginator="activities" item-key="id" :layout="layout" :list-headers="['Name', 'Distance', 'Date', 'View']">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
             </template>
+            <template v-slot:list="{item, isFirst}">
+                <td>{{item.name}}</td>
+                <td>{{convert(item.distance, 'distance')['value']}} {{convert(item.distance, 'distance')['unit']}}</td>
+                <td>
+                    {{ toDateTime(item.started_at) }}
+                </td>
+                <td>
+                    <v-btn @click="$inertia.visit(route('activity.show', item.id))" icon>
+                        <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                </td>
+            </template>
         </c-pagination-iterator>
+
+        <template #prependActions>
+            <v-btn v-if="layout === 'cards'" @click="layout = 'list'" icon>
+                <v-icon>mdi-view-list-outline</v-icon>
+            </v-btn>
+            <v-btn v-if="layout === 'list'" @click="layout = 'cards'" icon>
+                <v-icon>mdi-grid</v-icon>
+            </v-btn>
+        </template>
 
         <template #headerActions>
             <c-job-status job="load-strava-activities" :tags="{user_id: $page.props.user.id}">
@@ -46,14 +67,30 @@ import CActivityCard from 'ui/components/Activity/CActivityCard';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
 import CPaginationIterator from 'ui/components/CPaginationIterator';
 import CJobStatus from '../../ui/components/CJobStatus';
+import units from '../../ui/mixins/units';
+import moment from 'moment/moment';
 export default {
     name: "Index",
     components: {CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
+    mixins: [units],
     props: {
         activities: {
             required: true,
             type: Object
         }
+    },
+    data() {
+        return {
+            layout: 'cards'
+        }
+    },
+    methods: {
+        toDateTime(value) {
+            if (value === null) {
+                return 'No Date';
+            }
+            return moment(value).format('DD/MM/YYYY');
+        },
     }
 }
 </script>
