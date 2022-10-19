@@ -48,7 +48,7 @@
             </v-tabs>
         </div>
 
-        <div v-if="$page.props.user">
+        <div v-if="$page.props.user || user">
             <v-btn
                 class="font-weight-bold ml-6"
                 color="#11c684"
@@ -107,6 +107,11 @@ export default {
         title: {
             required: true,
             type: String
+        },
+        user: {
+            required: false,
+            type: Object,
+            default: null
         }
     },
     data() {
@@ -133,7 +138,7 @@ export default {
                 {name: 'Docs', url: route('documentation'), hardUrl: true},
                 {name: 'Contact', url: route('contact')}
             ];
-            if(!this.$page.props.user) {
+            if(!this.$page.props.user && !this.user) {
                 elements.push({name: 'Login', url: route('login')});
             }
             return elements;

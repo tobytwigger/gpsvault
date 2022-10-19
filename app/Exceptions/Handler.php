@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -34,5 +37,30 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $response = parent::render($request, $e);
+
+        if (!app()->environment(['locals', 'testing']) && in_array($response->status(), [403, 404, 500, 503])) {
+            return $this->toInertiaResponse($response, $request);
+        } else if ($response->status() === 419) {
+            return back()->with([
+                'message' => 'The page expired, please try again.',
+            ]);
+        }
+
+        return $response;
+    }
+
+    private function toInertiaResponse(\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response $response, Request $request)
+    {
+        return Inertia::render('ErrorPage', [
+            'status' => $response->status(),
+            'user' => Auth::user()
+        ])
+            ->toResponse($request)
+            ->setStatusCode($response->status());
     }
 }
