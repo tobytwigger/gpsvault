@@ -58,11 +58,15 @@
             </v-tab-item>
 
             <v-tab-item value="tab-stages">
-                <v-btn color="secondary" :disabled="stageForm.processing" :loading="stageForm.processing" @click="createStage">
-                    Add a stage
-                </v-btn>
+                <c-stage-wizard v-if="tour.stages.length === 0">
+
+                </c-stage-wizard>
+                <c-stage-summary v-else :tour="tour">
+
+                </c-stage-summary>
+
                 <v-row>
-                    <v-col :key="stage.id" v-for="stage in tour.stages" cols="12" xl="3" md="4" sm="6">
+                    <v-col :key="stage.id" v-for="stage in tour.stages" cols="12" xl="3" md="6">
                         <c-stage-card :stage="stage"></c-stage-card>
                     </v-col>
                 </v-row>
@@ -100,10 +104,14 @@ import CTourMap from 'ui/components/Tour/CTourMap';
 import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
 import CTourForm from '../../ui/components/Tour/CTourForm';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
+import CStageWizard from '../../ui/components/Stage/CStageWizard';
+import CStageSummary from '../../ui/components/Stage/CStageSummary';
 
 export default {
     name: "Show",
     components: {
+        CStageSummary,
+        CStageWizard,
         CActivityLocationSummary,
         CTourForm,
         CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
@@ -116,20 +124,9 @@ export default {
     data() {
         return {
             tab: null,
-            stageForm: this.$inertia.form({
-                stage_number: null,
-            })
+
         }
     },
-    methods: {
-        createStage() {
-            this.stageForm.post(route('tour.stage.store', this.tour.id), {
-                onSuccess: () => {
-                    this.stageForm.reset();
-                }
-            });
-        }
-    }
 }
 </script>
 

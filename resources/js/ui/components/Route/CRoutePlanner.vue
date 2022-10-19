@@ -51,7 +51,8 @@ export default {
         return {
             map: null,
             markers: {},
-            generalPopup: null
+            generalPopup: null,
+            ready: false
         }
     },
     mounted() {
@@ -98,6 +99,7 @@ export default {
 
 
         this.map.on('load', () => {
+            this.ready = true;
             this.setupMap();
         });
     },
@@ -111,7 +113,13 @@ export default {
         result: {
             deep: true,
             handler: function(val) {
-                this.updateMapWithResult();
+                if(this.ready) {
+                    this.updateMapWithResult();
+                } else {
+                    this.map.on('load', () => {
+                        this.updateMapWithResult();
+                    });
+                }
             }
         }
     },

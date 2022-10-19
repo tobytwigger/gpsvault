@@ -36,6 +36,11 @@ class Route extends Model
 
     public function getCoverImageAttribute()
     {
+        $routePath = $this->routePaths()->whereNotNull('thumbnail_id')->latest()->first();
+        if($routePath) {
+            return route('file.preview', $routePath->thumbnail);
+        }
+
         $image = $this->files()->where('mimetype', 'LIKE', 'image/%')->first();
         if ($image) {
             return route('file.preview', $image);

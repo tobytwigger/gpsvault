@@ -38,6 +38,7 @@ task('deploy', [
     'artisan:view:cache',
     'artisan:config:cache',
     'artisan:event:cache',
+    'meilisearch:install',
     'artisan:optimize',
     'deploy:publish',
 ]);
@@ -45,6 +46,8 @@ task('deploy', [
 task('horizon:publish', artisan('horizon:publish'));
 
 task('permission:install', artisan('permission:install'));
+
+task('meilisearch:install', artisan('meilisearch:install'));
 
 task('assets:compile', function () {
     runLocally('npm install');

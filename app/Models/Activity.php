@@ -38,6 +38,7 @@ class Activity extends Model
         return [
             'name' => $this->name,
             'description' => $this->description,
+            'updated_at' => $this->updated_at,
             'user_id' => $this->user_id,
         ];
     }

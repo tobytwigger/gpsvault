@@ -219,6 +219,7 @@ export default {
         if(this.schema.waypoints.length > 1) {
             this.performSearch();
         }
+        console.log((this.routeModel?.path?.waypoints ?? []))
         if(this.routeModel) {
             this.updateSchema({
                 waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
