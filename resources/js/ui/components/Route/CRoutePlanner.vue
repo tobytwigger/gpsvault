@@ -54,6 +54,7 @@ export default {
             map: null,
             geojsonMarker: null,
             hoverLngLat: {lng: null, lat: null},
+            hoverDistance: null,
             markers: {},
             generalPopup: null,
             ready: false
@@ -134,41 +135,37 @@ export default {
                     this.geojsonMarker.remove();
                 }
 
-                if(lngLat !== null) {
-                    let distance = this.result.coordinates.filter(c => c[0] === lngLat.lat && c[1] === lngLat.lng);
-                    console.log(distance);
-                    if(distance.length > 0) {
-                        let markerEl = document.createElement('div');
-                        markerEl.id = 'route-geolocation-hover';
-                        markerEl.className = 'marker clickable';
-                        markerEl.style.backgroundImage = this._getBackgroundImage(12);
-                        markerEl.style.cursor = 'pointer';
-                        markerEl.style.width = '40px';
-                        markerEl.style.height = '48px';
+                if(lngLat !== null && this.hoverDistance) {
+                    let markerEl = document.createElement('div');
+                    markerEl.id = 'route-geolocation-hover';
+                    markerEl.className = 'marker clickable';
+                    markerEl.style.backgroundImage = this._getBackgroundImage(12);
+                    markerEl.style.cursor = 'pointer';
+                    markerEl.style.width = '40px';
+                    markerEl.style.height = '48px';
 
-                        // Create the onclick popup
-                        let convertedDistance = this.convert(distance[0][3], 'distance');
-                        let distanceSpan = document.createElement('span');
-                        distanceSpan.textContent = convertedDistance.value + convertedDistance.unit;
-                        distanceSpan.id = 'distance-span'
+                    // Create the onclick popup
+                    let convertedDistance = this.convert(this.hoverDistance, 'distance');
+                    let distanceSpan = document.createElement('span');
+                    distanceSpan.textContent = convertedDistance.value + convertedDistance.unit;
+                    distanceSpan.id = 'distance-span'
 
-                        let container = document.createElement('div');
-                        container.style.padding = '3px';
-                        container.appendChild(distanceSpan)
-                        let popup = new maplibregl.Popup({
-                            offset: 25,
-                            closeButton: false,
-                            closeOnClick: false
-                        }).setDOMContent(container);
+                    let container = document.createElement('div');
+                    container.style.padding = '3px';
+                    container.appendChild(distanceSpan)
+                    let popup = new maplibregl.Popup({
+                        offset: 25,
+                        closeButton: false,
+                        closeOnClick: false
+                    }).setDOMContent(container);
 
-                        this.geojsonMarker = new maplibregl.Marker({element: markerEl, draggable: true})
-                            .setLngLat(lngLat)
-                            .setPopup(popup);
+                    this.geojsonMarker = new maplibregl.Marker({element: markerEl, draggable: true})
+                        .setLngLat(lngLat)
+                        .setPopup(popup);
 
-                        this.geojsonMarker.on('')
+                    this.geojsonMarker.on('')
 
-                        this.geojsonMarker.addTo(this.map);
-                    }
+                    this.geojsonMarker.addTo(this.map);
                 }
             }
         }
