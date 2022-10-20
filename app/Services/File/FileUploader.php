@@ -71,4 +71,35 @@ class FileUploader
 
         return $file;
     }
+
+    public function streamedFile($serverId, User $user, string $type)
+    {
+        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
+        $disk = config('filepond.temporary_files_disk');
+
+
+        $path = $filepond->getPathFromServerId($serverId);
+        $fullpath = Storage::disk($disk)->get($path);
+
+        // TODO Move between streams
+
+//        $path = $uploadedFile->store('activities', $user->disk());
+
+//        $file = File::create([
+//            'path' => $path,
+//            'filename' => $uploadedFile->getClientOriginalName(),
+//            'size' => Storage::disk($user->disk())->size($path),
+//            'mimetype' => $uploadedFile->getClientMimeType(),
+//            'extension' => $uploadedFile->getClientOriginalExtension(),
+//            'disk' => $user->disk(),
+//            'user_id' => $user->id,
+//            'type' => $type,
+//        ]);
+
+//        if ($uploadedFile->getClientOriginalExtension() === 'tcx') {
+//            Storage::disk($file->disk)->update($file->path, trim($file->getFileContents()));
+//        }
+//
+//        return $file;
+    }
 }
