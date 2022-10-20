@@ -7,7 +7,7 @@
         ref="pond"
         class-name="my-pond"
         label-idle="Drop files here..."
-        allow-multiple="true"
+        :allow-multiple="multiple"
         :accepted-file-types="accept"
         v-bind:files="files"
         @init="handleFilePondInit"
@@ -68,7 +68,6 @@ export default {
         },
         value: {
             required: false,
-            type: Array,
             default: null
         },
         hint: {
@@ -82,14 +81,20 @@ export default {
     },
     data() {
         return {
-            files: this.multiple ? [] : null
+            files: []
         }
     },
     watch: {
         files: {
             deep: true,
             handler: function(files) {
-                this.$emit('input', files.filter(i => i.serverId !== null).map(i => i.serverId));
+                let processedFiles = files.filter(i => i.serverId !== null);
+                if(processedFiles.length === 0) {
+                    this.$emit('input', this.multiple ? [] : null)
+                } else {
+                    let serverIds = processedFiles.map(i => i.serverId);
+                    this.$emit('input', this.multiple ? serverIds : serverIds[0]);
+                }
             }
         }
     },
@@ -113,11 +118,11 @@ export default {
 
             filepondsArray.forEach((filepond) => {
                 filepond.addEventListener('FilePond:processfile', e => {
+                    console.log(e.detail.file);
                     this.files.push(e.detail.file);
                 })
 
                 filepond.addEventListener('FilePond:removefile', e => {
-                    console.log(this.files.filter(f => f.id !== e.detail.file.id));
                     this.files = this.files.filter(f => f.id !== e.detail.file.id);
                 })
 
