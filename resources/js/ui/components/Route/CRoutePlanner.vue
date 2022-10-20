@@ -19,12 +19,14 @@ import ElevationControl from './controls/elevation/ElevationControl';
 import CElevationControl from './controls/elevation/CElevationControl';
 
 import CryptoJS from 'crypto-js';
-import {cloneDeep} from 'lodash';
+import {cloneDeep, isEqual} from 'lodash';
 import polyline from '@mapbox/polyline';
+import units from '../../mixins/units';
 
 export default {
     name: "CRoutePlanner",
     components: {CElevationControl, CRoutingControl},
+    mixins: [units],
     props: {
         result: {
             required: false,
@@ -50,6 +52,8 @@ export default {
     data() {
         return {
             map: null,
+            geojsonMarker: null,
+            hoverLngLat: {lng: null, lat: null},
             markers: {},
             generalPopup: null,
             ready: false
@@ -121,6 +125,52 @@ export default {
                     });
                 }
             }
+        },
+        hoverLngLat: {
+            deep: true,
+            handler: function(lngLat) {
+                console.log('Updating', lngLat, 'UPDATED');
+                if(this.geojsonMarker) {
+                    this.geojsonMarker.remove();
+                }
+
+                if(lngLat !== null) {
+                    let distance = this.result.coordinates.filter(c => c[0] === lngLat.lat && c[1] === lngLat.lng);
+                    console.log(distance);
+                    if(distance.length > 0) {
+                        let markerEl = document.createElement('div');
+                        markerEl.id = 'route-geolocation-hover';
+                        markerEl.className = 'marker clickable';
+                        markerEl.style.backgroundImage = this._getBackgroundImage(12);
+                        markerEl.style.cursor = 'pointer';
+                        markerEl.style.width = '40px';
+                        markerEl.style.height = '48px';
+
+                        // Create the onclick popup
+                        let convertedDistance = this.convert(distance[0][3], 'distance');
+                        let distanceSpan = document.createElement('span');
+                        distanceSpan.textContent = convertedDistance.value + convertedDistance.unit;
+                        distanceSpan.id = 'distance-span'
+
+                        let container = document.createElement('div');
+                        container.style.padding = '3px';
+                        container.appendChild(distanceSpan)
+                        let popup = new maplibregl.Popup({
+                            offset: 25,
+                            closeButton: false,
+                            closeOnClick: false
+                        }).setDOMContent(container);
+
+                        this.geojsonMarker = new maplibregl.Marker({element: markerEl, draggable: true})
+                            .setLngLat(lngLat)
+                            .setPopup(popup);
+
+                        this.geojsonMarker.on('')
+
+                        this.geojsonMarker.addTo(this.map);
+                    }
+                }
+            }
         }
     },
     computed: {
@@ -166,23 +216,18 @@ export default {
                     }
                 });
 
-                // ADDING A POPUP ON HOVER OVER ROUTE
-                // let popup = null;
-                // this.map.on('mouseover', 'route-layer', (e) => {
-                //     console.log(e);
-                //     popup = new maplibregl.Popup()
-                //         .setLngLat(e.lngLat)
-                //         .setHTML("<h2>This is the third line that will explain something</h2>")
-                //         .addTo(this.map);
-                // });
-                //
-                // this.map.on('mouseout', 'route-layer', (e) => {
-                //     if (popup) popup.remove();
-                // });
+                this.map.on('mouseenter', 'route-layer', (event) => this.hoverLngLat = event.lngLat);
+                this.map.on('mousemove', 'route-layer', (event) => this.hoverLngLat = event.lngLat);
+                this.map.on('mouseleave', 'route-layer', (event) => {
+                    setTimeout(() => {
+                        this.hoverLngLat = null
+                    }, 1000);
+                });
 
             } else {
                 this.map.getSource('route').setData(geojson);
             }
+
         },
         setupMap: function () {
             this.map.addControl(
