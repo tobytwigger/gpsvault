@@ -9,7 +9,7 @@ return [
     | The middleware to append to the filepond API routes
     |
     */
-    'middleware' => 'api',
+    'middleware' => ['web'],
 
     /*
     |--------------------------------------------------------------------------
