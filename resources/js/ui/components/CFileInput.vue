@@ -5,19 +5,18 @@
         :required="required"
         type="file"
         ref="pond"
-        :server="serverOptions"
         class-name="my-pond"
         label-idle="Drop files here..."
         allow-multiple="true"
         :accepted-file-types="accept"
-        v-bind:files="value"
+        v-bind:files="files"
         @init="handleFilePondInit"
     />
 </template>
 
 <script>
 // Import Vue FilePond
-import vueFilePond from "vue-filepond";
+import vueFilePond, { setOptions } from "vue-filepond";
 
 // Import FilePond styles
 import "filepond/dist/filepond.min.css";
@@ -83,35 +82,45 @@ export default {
     },
     data() {
         return {
-            serverOptions: {
-                url: route('filepond.chunk'),
-                process: '/process',
-                revert: '/process',
-                patch: "?patch=",
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
+            files: this.multiple ? [] : null
+        }
+    },
+    watch: {
+        files: {
+            deep: true,
+            handler: function(files) {
+                this.$emit('input', files.filter(i => i.serverId !== null).map(i => i.serverId));
             }
         }
     },
     methods: {
         handleFilePondInit: function () {
+            setOptions({
+                server: {
+                    url: route('filepond.chunk'),
+                    process: '/process',
+                    revert: '/process',
+                    patch: "?patch=",
+                    headers: {
+                        'X-CSRF-TOKEN': this.$page.props.csrf,
+                        'X-REQUESTED-WITH': 'XMLHttpRequest'
+                    }
+                }
+            })
             const filepondsArray = document.getElementsByClassName(
                 "filepond--root"
             );
 
             filepondsArray.forEach((filepond) => {
-                filepond.addEventListener(
-                    "FilePond:updatefiles",
-                    (e) => {
-                        let files = e.detail.items.map(i => {
-                            console.log(i);
-                            return i.serverId
-                        });
-                        console.log(files);
-                        this.$emit('input', files);
-                    }
-                );
+                filepond.addEventListener('FilePond:processfile', e => {
+                    this.files.push(e.detail.file);
+                })
+
+                filepond.addEventListener('FilePond:removefile', e => {
+                    console.log(this.files.filter(f => f.id !== e.detail.file.id));
+                    this.files = this.files.filter(f => f.id !== e.detail.file.id);
+                })
+
             });
         }
     }
