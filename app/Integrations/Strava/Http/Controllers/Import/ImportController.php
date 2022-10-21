@@ -5,6 +5,9 @@ namespace App\Integrations\Strava\Http\Controllers\Import;
 use App\Http\Controllers\Controller;
 use App\Integrations\Strava\Import\Upload\Models\StravaImport;
 use App\Integrations\Strava\Jobs\ImportStravaExport;
+use App\Services\Filepond\FilePondFile;
+use App\Services\Filepond\FilePondRepository;
+use App\Services\Filepond\FilePondResolver;
 use App\Services\Filepond\FilepondRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,22 +27,14 @@ class ImportController extends Controller
             'archive' => [app(FilepondRule::class)],
         ]);
 
+        $file = FilePondFile::fromArray($request->input('archive'));
 
-        $newPath = Str::replace('filepond', 'strava_archives', app(Filepond::class)->getPathFromServerId(
-            $request->input('archive')
-        ));
-
-        $fileStream = Storage::disk(config('filepond.temporary_files_disk'))->readStream(
-            app(Filepond::class)->getPathFromServerId(
-                $request->input('archive')
-            )
-        );
         Storage::disk('temp')->writeStream(
-            $newPath,
-            $fileStream
+            'strava_archives/' . $file->tempFileNameWithoutPath(),
+            $file->readAsStream()
         );
 
-        ImportStravaExport::dispatch(Auth::user(), $newPath);
+        ImportStravaExport::dispatch(Auth::user(), 'strava_archives/' . $file->tempFileNameWithoutPath());
 
         return redirect()->route('integration.strava');
     }

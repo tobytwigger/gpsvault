@@ -33,7 +33,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 
 // Create component
 const FilePond = vueFilePond(
-    FilePondPluginFileValidateType,
+    // FilePondPluginFileValidateType,
     FilePondPluginImagePreview
 );
 
@@ -92,8 +92,16 @@ export default {
                 if(processedFiles.length === 0) {
                     this.$emit('input', this.multiple ? [] : null)
                 } else {
-                    let serverIds = processedFiles.map(i => i.serverId);
-                    this.$emit('input', this.multiple ? serverIds : serverIds[0]);
+                    let fileObjects = processedFiles.map(f => {
+                        return {
+                            filename: f.filename,
+                            size: f.fileSize,
+                            mimetype: f.fileType,
+                            serverId: f.serverId,
+                            extension: f.fileExtension,
+                        }
+                    });
+                    this.$emit('input', this.multiple ? fileObjects : fileObjects[0]);
                 }
             }
         }

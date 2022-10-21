@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Services\Filepond\FilePondFile;
+use App\Services\Filepond\FilepondRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreActivityRequest extends FormRequest
@@ -24,7 +26,7 @@ class StoreActivityRequest extends FormRequest
     public function rules()
     {
         return [
-            'file' => 'required|file',
+            'file' => ['required', app(FilepondRule::class)],
             'name' => 'sometimes|nullable|max:255',
         ];
     }

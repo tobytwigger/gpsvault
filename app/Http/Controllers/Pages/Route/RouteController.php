@@ -7,6 +7,8 @@ use App\Http\Requests\StoreRouteRequest;
 use App\Models\Route;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use App\Services\Filepond\FilePondFile;
+use App\Services\Filepond\FilepondRule;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -45,7 +47,7 @@ class RouteController extends Controller
     {
         $fileId = null;
         if ($request->has('file')) {
-            $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
+            $fileId = Upload::filePondFile($request->input('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
 
         $route = Route::create([
@@ -88,12 +90,12 @@ class RouteController extends Controller
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
             'notes' => 'sometimes|nullable|string|max:65535',
-            'file' => ['sometimes', 'nullable', 'file'],
+            'file' => ['sometimes', 'nullable', app(FilepondRule::class)],
         ]);
 
         $fileId = $route->file_id;
-        if ($request->has('file') && $request->file('file') !== null) {
-            $fileId = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
+        if ($request->has('file') && $request->input('file') !== null) {
+            $fileId = Upload::filePondFile($request->input('file'), Auth::user(), FileUploader::ROUTE_FILE)->id;
         }
 
         $route->name = $request->input('name', $route->name);
@@ -102,7 +104,7 @@ class RouteController extends Controller
         $route->file_id = $fileId;
         $route->save();
 
-        if ($request->has('file') && $request->file('file') !== null) {
+        if ($request->has('file') && $request->input('file') !== null) {
             $route->analyse();
         }
 

@@ -4,6 +4,7 @@ namespace App\Services\File;
 
 use App\Models\File;
 use App\Models\User;
+use App\Services\Filepond\FilePondFile;
 use Exception;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Http\UploadedFile;
@@ -72,34 +73,29 @@ class FileUploader
         return $file;
     }
 
-    public function streamedFile($serverId, User $user, string $type)
+    public function filePondFile(FilePondFile|array $filePondFile, User $user, string $type)
     {
-        $filepond = app(\Sopamo\LaravelFilepond\Filepond::class);
-        $disk = config('filepond.temporary_files_disk');
+        if(is_array($filePondFile)) {
+            $filePondFile = FilePondFile::fromArray($filePondFile);
+        }
 
+        $path = $filePondFile->store('activities', $user->disk());
 
-        $path = $filepond->getPathFromServerId($serverId);
-        $fullpath = Storage::disk($disk)->get($path);
+        $file = File::create([
+            'path' => $path,
+            'filename' => $filePondFile->getFilename(),
+            'size' => $filePondFile->getSize(),
+            'mimetype' => $filePondFile->getMimetype(),
+            'extension' => $filePondFile->getExtension(),
+            'disk' => $user->disk(),
+            'user_id' => $user->id,
+            'type' => $type,
+        ]);
 
-        // TODO Move between streams
+        if ($filePondFile->getExtension() === 'tcx') {
+            Storage::disk($file->disk)->put($file->path, trim($file->getFileContents()));
+        }
 
-//        $path = $uploadedFile->store('activities', $user->disk());
-
-//        $file = File::create([
-//            'path' => $path,
-//            'filename' => $uploadedFile->getClientOriginalName(),
-//            'size' => Storage::disk($user->disk())->size($path),
-//            'mimetype' => $uploadedFile->getClientMimeType(),
-//            'extension' => $uploadedFile->getClientOriginalExtension(),
-//            'disk' => $user->disk(),
-//            'user_id' => $user->id,
-//            'type' => $type,
-//        ]);
-
-//        if ($uploadedFile->getClientOriginalExtension() === 'tcx') {
-//            Storage::disk($file->disk)->update($file->path, trim($file->getFileContents()));
-//        }
-//
-//        return $file;
+        return $file;
     }
 }
