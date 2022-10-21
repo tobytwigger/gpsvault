@@ -1,7 +1,7 @@
 <template>
     <file-pond
-        :name="'file-input-' + id"
-        :id="'file-input-' + id"
+        name="file"
+        id="file"
         :required="required"
         type="file"
         ref="pond"
@@ -110,7 +110,8 @@ export default {
                         'X-CSRF-TOKEN': this.$page.props.csrf,
                         'X-REQUESTED-WITH': 'XMLHttpRequest'
                     }
-                }
+                },
+                chunkUploads: true
             })
             const filepondsArray = document.getElementsByClassName(
                 "filepond--root"
