@@ -32,7 +32,7 @@ class CleanTempStorage extends Command
     {
         $files = collect(Storage::disk('temp')->allFiles())
             ->filter(fn (string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()))
-            ->filter(fn (string $path) => Str::contains($path, '.gitignore'));
+            ->filter(fn (string $path) => !Str::contains($path, '.gitignore'));
 
         $this->line(sprintf('Removing %u files from temp.', $files->count()));
 
