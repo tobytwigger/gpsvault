@@ -98,7 +98,7 @@ class FileFactory extends Factory
             'filename' => $this->faker->word . '.tcx',
             'extension' => 'tcx',
             'type' => FileUploader::ACTIVITY_FILE,
-            'mimetype' => 'application/xml+gpx',
+            'mimetype' => 'text/xml',
         ]);
     }
 
