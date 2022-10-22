@@ -5,7 +5,7 @@
             <c-routing-control :schema.sync="_schema" :result="result"></c-routing-control>
         </div>
         <div id="elevation-control">
-            <c-elevation-control :result="result"></c-elevation-control>
+            <c-elevation-control :result="result" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
         </div>
     </div>
 </template>
@@ -54,10 +54,10 @@ export default {
             map: null,
             geojsonMarker: null,
             hoverLngLat: {lng: null, lat: null},
-            hoverDistance: null,
             markers: {},
             generalPopup: null,
-            ready: false
+            ready: false,
+            selectedIndex: null
         }
     },
     mounted() {
@@ -101,8 +101,6 @@ export default {
             },
         });
 
-
-
         this.map.on('load', () => {
             this.ready = true;
             this.setupMap();
@@ -127,43 +125,19 @@ export default {
                 }
             }
         },
-        hoverLngLat: {
+        selectedIndex: {
             deep: true,
-            handler: function(lngLat) {
-                console.log('Updating', lngLat, 'UPDATED');
-                if(this.geojsonMarker) {
-                    this.geojsonMarker.remove();
-                }
+            handler: function(selectedIndex) {
+                if(selectedIndex !== null) {
+                    if(this.geojsonMarker) {
+                        this.geojsonMarker.remove();
+                    }
 
-                if(lngLat !== null && this.hoverDistance) {
-                    let markerEl = document.createElement('div');
-                    markerEl.id = 'route-geolocation-hover';
-                    markerEl.className = 'marker clickable';
-                    markerEl.style.backgroundImage = this._getBackgroundImage(12);
-                    markerEl.style.cursor = 'pointer';
-                    markerEl.style.width = '40px';
-                    markerEl.style.height = '48px';
-
-                    // Create the onclick popup
-                    let convertedDistance = this.convert(this.hoverDistance, 'distance');
-                    let distanceSpan = document.createElement('span');
-                    distanceSpan.textContent = convertedDistance.value + convertedDistance.unit;
-                    distanceSpan.id = 'distance-span'
-
-                    let container = document.createElement('div');
-                    container.style.padding = '3px';
-                    container.appendChild(distanceSpan)
-                    let popup = new maplibregl.Popup({
-                        offset: 25,
-                        closeButton: false,
-                        closeOnClick: false
-                    }).setDOMContent(container);
-
-                    this.geojsonMarker = new maplibregl.Marker({element: markerEl, draggable: true})
-                        .setLngLat(lngLat)
-                        .setPopup(popup);
-
-                    this.geojsonMarker.on('')
+                    this.geojsonMarker = new maplibregl.Marker()
+                        .setLngLat({
+                            lng: this.result.coordinates[selectedIndex][1],
+                            lat: this.result.coordinates[selectedIndex][0]
+                        });
 
                     this.geojsonMarker.addTo(this.map);
                 }
