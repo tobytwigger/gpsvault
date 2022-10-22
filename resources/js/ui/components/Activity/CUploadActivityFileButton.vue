@@ -24,17 +24,16 @@
                 Upload the fit/tcx/gpx recording of your ride for a deeper analysis.
             </v-card-text>
             <v-card-text>
-                <v-file-input
-                    show-size
-                    truncate-length="30"
+                <c-file-input
                     v-model="form.file"
                     id="activity-file"
                     name="file"
+                    accept="application/gpx+xml"
                     label="Activity file"
                     hint="Upload the raw recording of this ride."
                     :error="form.errors.hasOwnProperty('file')"
                     :error-messages="form.errors.hasOwnProperty('file') ? [form.errors.file] : []"
-                ></v-file-input>
+                ></c-file-input>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -56,8 +55,10 @@
 </template>
 
 <script>
+import CFileInput from '../CFileInput';
 export default {
     name: "CUploadActivityFileButton",
+    components: {CFileInput},
     props: {
         activity: {
             required: true,

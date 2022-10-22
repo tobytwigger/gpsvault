@@ -14,16 +14,15 @@
                 </v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="submit">
-                        <v-file-input
-                            accept=".zip"
+                        <c-file-input
                             id="archive"
+                            accept="application/zip"
                             v-model="form.archive"
                             label="Archive"
                             hint="A Strava archive"
                             name="archive"
-                            :error="form.errors.hasOwnProperty('archive')"
                             :error-messages="form.errors.hasOwnProperty('archive') ? [form.errors.archive] : []"
-                        ></v-file-input>
+                        ></c-file-input>
 
                     </v-form>
 
@@ -52,8 +51,10 @@
 </template>
 
 <script>
+import CFileInput from '../../CFileInput';
 export default {
     name: "CStravaImportForm",
+    components: {CFileInput},
     props: {
     },
     data() {
@@ -63,9 +64,6 @@ export default {
                 archive: null,
             })
         }
-    },
-    mounted() {
-
     },
     methods: {
         submit() {

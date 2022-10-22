@@ -7,6 +7,7 @@ use App\Models\File;
 use App\Models\Route;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use App\Services\Filepond\FilepondRule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -40,14 +41,14 @@ class RouteFileController extends Controller
 
         $request->validate([
             'files' => 'required|array|min:1',
-            'files.*' => 'file|max:10000',
+            'files.*' => [app(FilepondRule::class)],
             'title' => 'sometimes|nullable|string|max:255',
             'caption' => 'sometimes|nullable|string|max:65535',
         ]);
 
-        $files = collect($request->file('files', []))
-            ->map(function (UploadedFile $uploadedFile) use ($request) {
-                $file = Upload::uploadedFile($uploadedFile, Auth::user(), FileUploader::ROUTE_MEDIA);
+        $files = collect($request->input('files', []))
+            ->map(function (array $file) use ($request) {
+                $file = Upload::filePondFile($file, Auth::user(), FileUploader::ROUTE_MEDIA);
                 $file->title = $request->input('title');
                 $file->caption = $request->input('caption');
                 $file->save();
