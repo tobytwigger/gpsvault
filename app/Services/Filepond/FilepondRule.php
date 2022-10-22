@@ -11,15 +11,34 @@ use Sopamo\LaravelFilepond\Filepond;
 
 class FilepondRule implements InvokableRule
 {
+    private \Closure $fail;
+
     public function __invoke($attribute, $value, $fail)
     {
-        $this->validateStructure($value, $fail);
+        $this->fail = $fail;
+        try {
+            $this->validateStructure($value, $fail);
 
-        $this->validateFileExistence($value, $fail);
+            $this->validateFileExistence($value, $fail);
+        } catch (\Exception $e) {
+            if($e->getMessage() === 'Rule failed') {
+                return;
+            }
+            throw $e;
+        }
     }
 
-    protected function validateStructure($value, \Closure $fail): void
+    private function failRule(string $message)
     {
+        call_user_func($this->fail, $message);
+        throw new \Exception('Rule failed');
+    }
+
+    protected function validateStructure($value): void
+    {
+        if(!is_array($value)) {
+            $this->failRule('The :attribute is not an array');
+        }
         try {
             Validator::validate($value, [
                 'filename' => 'required|string',
@@ -29,11 +48,11 @@ class FilepondRule implements InvokableRule
                 'extension' => 'required|string'
             ]);
         } catch (ValidationException $e) {
-            $fail($e->validator->errors()->first());
+            $this->failRule($e->validator->errors()->first());
         }
     }
 
-    private function validateFileExistence(array $value, \Closure $fail)
+    private function validateFileExistence($value)
     {
         if (!Storage::disk(config('filepond.temporary_files_disk'))->exists(
             app(Filepond::class)->getPathFromServerId($value['serverId'])

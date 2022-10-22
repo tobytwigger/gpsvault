@@ -2,11 +2,13 @@
 
 namespace App\Services\Filepond;
 
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Sopamo\LaravelFilepond\Filepond;
 
-class FilePondFile
+class FilePondFile implements Arrayable, Jsonable, \Stringable
 {
     private string $filename;
 
@@ -118,5 +120,26 @@ class FilePondFile
         );
 
         return $newPath;
+    }
+
+    public function toArray()
+    {
+        return [
+            'filename' => $this->getFilename(),
+            'size' => $this->getSize(),
+            'mimetype' => $this->getMimetype(),
+            'serverId' => $this->getServerId(),
+            'extension' => $this->getExtension()
+        ];
+    }
+
+    public function toJson($options = 0)
+    {
+        return json_encode($this->toArray());
+    }
+
+    public function __toString()
+    {
+        return $this->toJson();
     }
 }

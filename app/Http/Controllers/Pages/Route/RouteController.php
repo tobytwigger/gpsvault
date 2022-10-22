@@ -56,7 +56,7 @@ class RouteController extends Controller
             'file_id' => $fileId,
         ]);
 
-        if ($request->has('file') && $request->file('file') !== null) {
+        if ($request->has('file') && $request->input('file') !== null) {
             $route->analyse();
         }
 

@@ -39,7 +39,7 @@ class ActivityFileController extends Controller
         ]);
 
         $importer = ActivityImporter::update($activity);
-        $files = collect($request->file('files', []))
+        $files = collect($request->input('files', []))
             ->map(function (array $file) use ($request) {
                 $file = Upload::filePondFile($file, Auth::user(), FileUploader::ACTIVITY_MEDIA);
                 $file->title = $request->input('title');

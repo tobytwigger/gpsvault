@@ -46,7 +46,7 @@ class RouteFileController extends Controller
             'caption' => 'sometimes|nullable|string|max:65535',
         ]);
 
-        $files = collect($request->file('files', []))
+        $files = collect($request->input('files', []))
             ->map(function (array $file) use ($request) {
                 $file = Upload::filePondFile($file, Auth::user(), FileUploader::ROUTE_MEDIA);
                 $file->title = $request->input('title');
