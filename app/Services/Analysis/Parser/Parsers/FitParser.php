@@ -84,17 +84,17 @@ class FitParser implements ParserContract
         };
         $analysis = new Analysis();
         $analysis->setPoints($points->all());
-        $analysis->setMovingTime($getSessionData('total_timer_time'));
-        $analysis->setDuration($getSessionData('total_elapsed_time'));
-        $analysis->setAverageSpeed($getSessionData('avg_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
-        $analysis->setMaxSpeed($getSessionData('max_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
-        $analysis->setDistance($getSessionData('total_distance', [KiloMeter::class, Meter::class]));
-        $analysis->setAverageHeartrate($getSessionData('avg_heart_rate'));
-        $analysis->setAverageCadence($getSessionData('avg_cadence'));
-        $analysis->setCumulativeElevationGain($getSessionData('total_ascent'));
-        $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
-        $analysis->setCalories($getSessionData('total_calories'));
-        $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
+//        $analysis->setMovingTime($getSessionData('total_timer_time'));
+//        $analysis->setDuration($getSessionData('total_elapsed_time'));
+//        $analysis->setAverageSpeed($getSessionData('avg_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
+//        $analysis->setMaxSpeed($getSessionData('max_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
+//        $analysis->setDistance($getSessionData('total_distance', [KiloMeter::class, Meter::class]));
+//        $analysis->setAverageHeartrate($getSessionData('avg_heart_rate'));
+//        $analysis->setAverageCadence($getSessionData('avg_cadence'));
+//        $analysis->setCumulativeElevationGain($getSessionData('total_ascent'));
+//        $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
+//        $analysis->setCalories($getSessionData('total_calories'));
+//        $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
 
         return $analysis;
     }

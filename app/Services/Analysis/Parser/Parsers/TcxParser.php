@@ -36,17 +36,17 @@ class TcxParser implements ParserContract
 
         $analysis = new Analysis();
         $analysis->setPoints($points->all());
-        $analysis->setAverageHeartrate(count($averages['avg_heart_rate']) > 0 ? (float) collect($averages['avg_heart_rate'])->average() : null);
-        $analysis->setAverageCadence(count($averages['avg_cadence']) > 0 ? (float) collect($averages['avg_cadence'])->average() : null);
-        $analysis->setMaxHeartrate($averages['max_heart_rate']);
-        $analysis->setAverageSpeed($file->getAverageSpeedInKPH() * 3.6);
-        $analysis->setMaxSpeed($file->getMaxSpeedInKPH() * 3.6);
-        $analysis->setCalories($file->getTotalCalories());
-        $analysis->setDistance($file->getTotalDistance());
-        $analysis->setDuration($file->getTotalDuration());
-        $analysis->setCumulativeElevationGain($file->getTotalAscentDescent()['ascent']);
-        $analysis->setCumulativeElevationLoss($file->getTotalAscentDescent()['descent']);
-        $analysis->setAveragePace(CarbonInterval::createFromFormat('H:i:s', $file->getAveragePacePerKilometre())->totalMinutes * 0.06);
+//        $analysis->setAverageHeartrate(count($averages['avg_heart_rate']) > 0 ? (float) collect($averages['avg_heart_rate'])->average() : null);
+//        $analysis->setAverageCadence(count($averages['avg_cadence']) > 0 ? (float) collect($averages['avg_cadence'])->average() : null);
+//        $analysis->setMaxHeartrate($averages['max_heart_rate']);
+//        $analysis->setAverageSpeed($file->getAverageSpeedInKPH() * 3.6);
+//        $analysis->setMaxSpeed($file->getMaxSpeedInKPH() * 3.6);
+//        $analysis->setCalories($file->getTotalCalories());
+//        $analysis->setDistance($file->getTotalDistance());
+//        $analysis->setDuration($file->getTotalDuration());
+//        $analysis->setCumulativeElevationGain($file->getTotalAscentDescent()['ascent']);
+//        $analysis->setCumulativeElevationLoss($file->getTotalAscentDescent()['descent']);
+//        $analysis->setAveragePace(CarbonInterval::createFromFormat('H:i:s', $file->getAveragePacePerKilometre())->totalMinutes * 0.06);
 
         return $analysis;
     }
