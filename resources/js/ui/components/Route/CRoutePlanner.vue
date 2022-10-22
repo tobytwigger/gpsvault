@@ -5,7 +5,7 @@
             <c-routing-control :schema.sync="_schema" :result="result"></c-routing-control>
         </div>
         <div id="elevation-control">
-            <c-elevation-control :result="result"></c-elevation-control>
+            <c-elevation-control :result="result" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
         </div>
     </div>
 </template>
@@ -19,12 +19,14 @@ import ElevationControl from './controls/elevation/ElevationControl';
 import CElevationControl from './controls/elevation/CElevationControl';
 
 import CryptoJS from 'crypto-js';
-import {cloneDeep} from 'lodash';
+import {cloneDeep, isEqual} from 'lodash';
 import polyline from '@mapbox/polyline';
+import units from '../../mixins/units';
 
 export default {
     name: "CRoutePlanner",
     components: {CElevationControl, CRoutingControl},
+    mixins: [units],
     props: {
         result: {
             required: false,
@@ -50,9 +52,12 @@ export default {
     data() {
         return {
             map: null,
+            geojsonMarker: null,
+            hoverLngLat: {lng: null, lat: null},
             markers: {},
             generalPopup: null,
-            ready: false
+            ready: false,
+            selectedIndex: null
         }
     },
     mounted() {
@@ -96,8 +101,6 @@ export default {
             },
         });
 
-
-
         this.map.on('load', () => {
             this.ready = true;
             this.setupMap();
@@ -119,6 +122,24 @@ export default {
                     this.map.on('load', () => {
                         this.updateMapWithResult();
                     });
+                }
+            }
+        },
+        selectedIndex: {
+            deep: true,
+            handler: function(selectedIndex) {
+                if(selectedIndex !== null) {
+                    if(this.geojsonMarker) {
+                        this.geojsonMarker.remove();
+                    }
+
+                    this.geojsonMarker = new maplibregl.Marker()
+                        .setLngLat({
+                            lng: this.result.coordinates[selectedIndex][1],
+                            lat: this.result.coordinates[selectedIndex][0]
+                        });
+
+                    this.geojsonMarker.addTo(this.map);
                 }
             }
         }
@@ -166,23 +187,18 @@ export default {
                     }
                 });
 
-                // ADDING A POPUP ON HOVER OVER ROUTE
-                // let popup = null;
-                // this.map.on('mouseover', 'route-layer', (e) => {
-                //     console.log(e);
-                //     popup = new maplibregl.Popup()
-                //         .setLngLat(e.lngLat)
-                //         .setHTML("<h2>This is the third line that will explain something</h2>")
-                //         .addTo(this.map);
-                // });
-                //
-                // this.map.on('mouseout', 'route-layer', (e) => {
-                //     if (popup) popup.remove();
-                // });
+                this.map.on('mouseenter', 'route-layer', (event) => this.hoverLngLat = event.lngLat);
+                this.map.on('mousemove', 'route-layer', (event) => this.hoverLngLat = event.lngLat);
+                this.map.on('mouseleave', 'route-layer', (event) => {
+                    setTimeout(() => {
+                        this.hoverLngLat = null
+                    }, 1000);
+                });
 
             } else {
                 this.map.getSource('route').setData(geojson);
             }
+
         },
         setupMap: function () {
             this.map.addControl(
