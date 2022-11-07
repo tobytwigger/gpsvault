@@ -16,17 +16,30 @@ abstract class BaseAnalysisTestCase extends TestCase
 
     protected function createAnalysis(string $filename): Analysis
     {
-        $points = [];
+        $analysisFile = json_decode(file_get_contents(__DIR__ . '/../../assets/analysis/' . $filename), true);
+        $analysis = new Analysis();
 
-        foreach(json_decode(file_get_contents(__DIR__ . '/../../assets/analysis/' . $filename), true)['features'] as $coordinate) {
-            $points[] = (new Point())
-                ->setLatitude($coordinate['geometry']['coordinates'][1])
-                ->setLongitude($coordinate['geometry']['coordinates'][0])
-                ->setTime(Carbon::parse($coordinate['properties']['time']));
+        if (array_key_exists('points', $analysisFile)) {
+            foreach ($analysisFile['points'] as $point) {
+                $analysis->pushPoint(
+                    (new Point())
+                        ->setLatitude(data_get($point, 'coordinates.1'))
+                        ->setLongitude(data_get($point, 'coordinates.0'))
+                        ->setElevation($point['elevation'] ?? null)
+                        ->setTime(array_key_exists('time', $point) ? Carbon::make($point['time']) : null)
+                        ->setCadence($point['cadence'] ?? null)
+                        ->setTemperature($point['temperature'] ?? null)
+                        ->setHeartRate($point['heart_rate'] ?? null)
+                        ->setSpeed($point['speed'] ?? null)
+                        ->setGrade($point['grade'] ?? null)
+                        ->setBattery($point['battery'] ?? null)
+                        ->setCalories($point['calories'] ?? null)
+                        ->setCumulativeDistance($point['cumulative_distance'] ?? null)
+                );
+            }
         }
 
-        return (new Analysis())
-            ->setPoints($points);
+        return $analysis;
     }
 
     /**

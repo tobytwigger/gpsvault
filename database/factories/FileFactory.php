@@ -66,9 +66,11 @@ class FileFactory extends Factory
     public function simpleGpx()
     {
         $path = 'gpx_' . Str::uuid() . '.gpx';
-        Storage::disk('tests')->put($path, file_get_contents(base_path('tests/assets/parsing/gpx.gpx')));
+        dd(Storage::disk('test-fake')->makeDirectory('tet'));
+        dd(Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/gpx.gpx'))));
         return $this->state(fn (array $attributes) => [
             'path' => $path,
+            'disk' => 'test-fake',
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -79,10 +81,11 @@ class FileFactory extends Factory
     public function simpleFit()
     {
         $path = 'fit_' . Str::uuid() . '.fit';
-        Storage::disk('tests')->put($path, file_get_contents(base_path('tests/assets/parsing/fit.fit')));
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/fit.fit')));
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.fit',
+            'disk' => 'test-fake',
             'extension' => 'fit',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'application/xml+gpx',
@@ -92,10 +95,11 @@ class FileFactory extends Factory
     public function simpleTcx()
     {
         $path = 'fit_' . Str::uuid() . '.fit';
-        Storage::disk('tests')->put($path, file_get_contents(base_path('tests/assets/parsing/tcx.tcx')));
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/tcx.tcx')));
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.tcx',
+            'disk' => 'test-fake',
             'extension' => 'tcx',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/xml',
