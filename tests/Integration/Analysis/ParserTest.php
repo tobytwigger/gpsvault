@@ -26,9 +26,9 @@ class ParserTest extends TestCase
         $this->assertEquals(null, $analysis->getDuration());
         $this->assertEquals(null, $analysis->getStartedAt());
         $this->assertEquals(null, $analysis->getFinishedAt());
-        $this->assertEquals(null, $analysis->getAverageCadence(), 2);
-        $this->assertEquals(null, $analysis->getAverageHeartrate(), 2);
-        $this->assertEquals(null, $analysis->getMaxHeartrate(), 2);
+        $this->assertEquals(null, $analysis->getAverageCadence());
+        $this->assertEquals(null, $analysis->getAverageHeartrate());
+        $this->assertEquals(null, $analysis->getMaxHeartrate());
         $this->assertEquals(null, $analysis->getAverageTemp());
         $this->assertEquals(null, $analysis->getMaxAltitude());
         $this->assertEquals(null, $analysis->getMinAltitude());
@@ -79,9 +79,9 @@ class ParserTest extends TestCase
         $this->assertEquals(null, $analysis->getDuration());
         $this->assertEquals(null, $analysis->getStartedAt());
         $this->assertEquals(null, $analysis->getFinishedAt());
-        $this->assertEquals(null, $analysis->getAverageCadence(), 2);
-        $this->assertEquals(null, $analysis->getAverageHeartrate(), 2);
-        $this->assertEquals(null, $analysis->getMaxHeartrate(), 2);
+        $this->assertEquals(null, $analysis->getAverageCadence());
+        $this->assertEquals(null, $analysis->getAverageHeartrate());
+        $this->assertEquals(null, $analysis->getMaxHeartrate());
         $this->assertEquals(null, $analysis->getAverageTemp());
         $this->assertEquals(null, $analysis->getMaxAltitude());
         $this->assertEquals(null, $analysis->getMinAltitude());
@@ -132,9 +132,9 @@ class ParserTest extends TestCase
         $this->assertEquals(null, $analysis->getDuration());
         $this->assertEquals(null, $analysis->getStartedAt());
         $this->assertEquals(null, $analysis->getFinishedAt());
-        $this->assertEquals(null, $analysis->getAverageCadence(), 2);
-        $this->assertEquals(null, $analysis->getAverageHeartrate(), 2);
-        $this->assertEquals(null, $analysis->getMaxHeartrate(), 2);
+        $this->assertEquals(null, $analysis->getAverageCadence());
+        $this->assertEquals(null, $analysis->getAverageHeartrate());
+        $this->assertEquals(null, $analysis->getMaxHeartrate());
         $this->assertEquals(null, $analysis->getAverageTemp());
         $this->assertEquals(null, $analysis->getMaxAltitude());
         $this->assertEquals(null, $analysis->getMinAltitude());

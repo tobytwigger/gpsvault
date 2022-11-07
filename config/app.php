@@ -13,6 +13,8 @@ return [
     |
      */
 
+    'force-https' => env('FORCE_HTTPS', false),
+
     'static-map' => [
         'driver' => env('STATIC_MAP_DRIVER', 'mapbox')
     ],
