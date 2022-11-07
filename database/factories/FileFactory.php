@@ -72,6 +72,7 @@ class FileFactory extends Factory
     public function simpleGpx()
     {
         $path = 'gpx_' . Str::uuid() . '.gpx';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/gpx.gpx')));
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'disk' => 'test-fake',
