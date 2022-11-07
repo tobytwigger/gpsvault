@@ -24,7 +24,7 @@ class FileFactory extends Factory
             'size' => $this->faker->numberBetween(20, 100000),
             'title' => $this->faker->words(3, true),
             'caption' => $this->faker->paragraph,
-            'disk' => 'tests',
+            'disk' => 'test-fake',
             'hash' => Str::random(32),
             'user_id' => fn () => User::factory(),
         ];
@@ -32,8 +32,10 @@ class FileFactory extends Factory
 
     public function routeMedia()
     {
+        $path = 'routeMedia/' . Str::random(40) . '.jpeg';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::ROUTE_MEDIA,
@@ -43,8 +45,10 @@ class FileFactory extends Factory
 
     public function activityMedia()
     {
+        $path = 'activityMedia/' . Str::random(40) . '.jpeg';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image2.jpeg')));
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/images'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::ACTIVITY_MEDIA,
@@ -54,8 +58,10 @@ class FileFactory extends Factory
 
     public function activityFile()
     {
+        $path = 'activityFile/' . Str::random(40) . '.gpx';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/gpx/Afternoon_Ride.gpx')));
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -92,7 +98,7 @@ class FileFactory extends Factory
 
     public function simpleTcx()
     {
-        $path = 'fit_' . Str::uuid() . '.fit';
+        $path = 'fit_' . Str::uuid() . '.tcx';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/tcx.tcx')));
         return $this->state(fn (array $attributes) => [
             'path' => $path,
@@ -106,8 +112,10 @@ class FileFactory extends Factory
 
     public function dartmoorDevilGpx()
     {
+        $path = 'dartmoorDevil/' . Str::random(40) . '.gpx';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/DartmoorDevil/Dartmoor_Devil.gpx')));
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevil'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -117,8 +125,11 @@ class FileFactory extends Factory
 
     public function dartmoorDevilFit()
     {
+        $path = 'dartmoorDevil/' . Str::random(40) . '.fit';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/DartmoorDevil/Dartmoor_Devil.fit')));
+
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/DartmoorDevilFit'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.fit',
             'extension' => 'fit',
             'type' => FileUploader::ACTIVITY_FILE,
@@ -128,8 +139,11 @@ class FileFactory extends Factory
 
     public function routeFile()
     {
+        $path = 'routeFile/' . Str::random(40) . '.gpx';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/gpx/Afternoon_Ride.gpx')));
+
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/gpx'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.gpx',
             'extension' => 'gpx',
             'type' => FileUploader::ROUTE_FILE,
@@ -139,8 +153,11 @@ class FileFactory extends Factory
 
     public function archive()
     {
+        $path = 'archive/' . Str::random(40) . '.zip';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/zip/archive_created_2022_01_15_18_01_16.zip')));
+
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/zip'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.zip',
             'extension' => 'zip',
             'type' => FileUploader::ARCHIVE,
@@ -150,8 +167,11 @@ class FileFactory extends Factory
 
     public function activityPoints()
     {
+        $path = 'activityPoints/' . Str::random(40) . '.tar.gz';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/points/points.tar.gz')));
+
         return $this->state(fn (array $attributes) => [
-            'path' => Str::after('/tests/' . $this->faker->file(base_path('tests/assets/points'), storage_path('tests'), false), 'tests/'),
+            'path' => $path,
             'filename' => $this->faker->word . '.tar.gz',
             'extension' => 'tar.gz',
             'type' => FileUploader::ACTIVITY_FILE_POINT_JSON,
