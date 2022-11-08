@@ -30,7 +30,7 @@ class BasicAnalysisTest extends BaseAnalysisTestCase
             'End Latitude' => ['endLatitude', 52.025594, 52.025596],
             'End Longitude' => ['endLongitude', -0.80107, -0.80105],
             'Distance' => ['distance', 9220, 9240],
-            'Duration' => ['duration', 1980, 1990],
+            'Duration' => ['duration', 1981, 1991],
             'Started At' => ['startedAt', Carbon::make('2022-11-05 00:05:08')],
             'Finished At' => ['finishedAt', Carbon::make('2022-11-05 00:38:10')],
             'Average Cadence' => ['averageCadence', null],
@@ -46,7 +46,7 @@ class BasicAnalysisTest extends BaseAnalysisTestCase
             'Average Watts' => ['averageWatts', null],
             'Kilojoules' => ['kilojoules', null],
             'Average Speed' => ['averageSpeed', 4.65, 4.67],
-            'Moving Time' => ['movingTime', 1960, 1970],
+            'Moving Time' => ['movingTime', 1975, 1985],
             'Max Speed' => ['maxSpeed', 12.08, 12.10],
 
             'Points 0 - Latitude' => ['latitude', 52.055603, null, 0, 52.055603],

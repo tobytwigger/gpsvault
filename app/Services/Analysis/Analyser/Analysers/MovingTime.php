@@ -24,7 +24,7 @@ class MovingTime extends AnalyserContract implements PointAnalyser
      *
      * @var float
      */
-    private float $tolerance = 0.35;
+    private float $tolerance = 0.25;
 
     public function canRun(Analysis $analysis): bool
     {
