@@ -9,9 +9,11 @@ use App\Models\Activity;
 use App\Services\ActivityImport\ActivityImporter;
 use App\Services\File\FileUploader;
 use App\Services\File\Upload;
+use App\Services\Filepond\FilePondFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ActivityController extends Controller
@@ -43,7 +45,8 @@ class ActivityController extends Controller
      */
     public function store(StoreActivityRequest $request)
     {
-        $file = Upload::uploadedFile($request->file('file'), Auth::user(), FileUploader::ACTIVITY_FILE);
+        $filepondFile = FilePondFile::fromArray($request->input('file'));
+        $file = Upload::filePondFile($filepondFile, Auth::user(), FileUploader::ACTIVITY_FILE);
 
         $activity = ActivityImporter::for(Auth::user())
             ->withName($request->input('name'))
@@ -75,7 +78,7 @@ class ActivityController extends Controller
      * @param Activity $activity
      * @return RedirectResponse
      */
-    public function update(UpdateActivityRequest $request, Activity $activity, FileUploader $fileUploader)
+    public function update(UpdateActivityRequest $request, Activity $activity)
     {
         $importer = ActivityImporter::update($activity);
         if ($request->has('name')) {
@@ -83,6 +86,11 @@ class ActivityController extends Controller
         }
         if ($request->has('description')) {
             $importer->withDescription($request->input('description'));
+        }
+        if ($request->has('file')) {
+            $filepondFile = FilePondFile::fromArray($request->input('file'));
+            $file = Upload::filePondFile($filepondFile, Auth::user(), FileUploader::ACTIVITY_FILE);
+            $importer->withActivityFile($file);
         }
         $activity = $importer->save();
 

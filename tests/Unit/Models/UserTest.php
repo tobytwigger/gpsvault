@@ -62,8 +62,8 @@ class UserTest extends TestCase
 
         $this->assertContainsOnlyInstancesOf(File::class, $user->files);
         $this->assertCount(10, $user->files);
-        $retrievedFiles = $user->files;
-        foreach ($files as $file) {
+        $retrievedFiles = $user->files()->orderBy('id')->get();
+        foreach ($files->sortBy('id') as $file) {
             $this->assertTrue($file->is($retrievedFiles->shift()));
         }
         foreach ($files2 as $file) {

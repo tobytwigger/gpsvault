@@ -83,6 +83,23 @@ export default {
                 convertUnit(value).from(this.getSystemUnit(unit)).to(this.getUserUnit(unit))
             ), unit: this.getUserUnit(unit)}
         },
+        convertToSystem(value, unit) {
+            if(value === null) {
+                return null;
+            }
+            if(this.unitCasts.hasOwnProperty(unit)) {
+                return this.unitCasts[unit](value);
+            }
+            if(!this.hasSystemUnit(unit) || !this.hasUserUnit(unit)) {
+                throw new Error('Unit ' + unit + ' is not defined');
+            }
+            if(this.getSystemUnit(unit) === this.getUserUnit(unit)) {
+                return {value: value, unit: this.getSystemUnit(unit)};
+            }
+            return {value: this.round(
+                    convertUnit(value).from(this.getUserUnit(unit)).to(this.getSystemUnit(unit))
+                ), unit: this.getSystemUnit(unit)}
+        },
         round(value) {
             return Math.round((value + Number.EPSILON) * 100) / 100
         },

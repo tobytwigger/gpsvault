@@ -38,12 +38,9 @@
                             :error-messages="form.errors.hasOwnProperty('caption') ? [form.errors.caption] : []"
                         ></v-textarea>
 
-                        <v-file-input
+                        <c-file-input
                             v-if="oldFile === null"
-                            show-size
-                            counter
                             multiple
-                            truncate-length="30"
                             v-model="form.files"
                             id="files"
                             name="files"
@@ -51,7 +48,7 @@
                             hint="Upload any files to store with the activity."
                             :error="form.errors.hasOwnProperty('files')"
                             :error-messages="form.errors.hasOwnProperty('files') ? [form.errors.files] : []"
-                        ></v-file-input>
+                        ></c-file-input>
                     </v-form>
 
                 </v-card-text>
@@ -79,8 +76,10 @@
 </template>
 
 <script>
+import CFileInput from '../CFileInput';
 export default {
     name: "CFileFormDialog",
+    components: {CFileInput},
     props: {
         activity: {
             required: true,

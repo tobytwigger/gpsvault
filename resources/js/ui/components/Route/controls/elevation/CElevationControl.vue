@@ -34,6 +34,11 @@ export default {
         result: {
             required: false,
             default: null
+        },
+        selected: {
+            required: false,
+            type: Number,
+            default: null
         }
     },
     data() {
@@ -60,7 +65,6 @@ export default {
             });
 
             return {data: data, labels: labels};
-            // return data.filter((d, i) => i % this.graphScaleFactor === 0);
         }
     },
     methods: {
@@ -91,6 +95,7 @@ export default {
                                 displayColors: false,
                                 callbacks: {
                                     title: (tooltipItems) => {
+                                        this.$emit('update:selected', tooltipItems[0].dataIndex)
                                         return "Distance: " + tooltipItems[0].label + this.getUserUnit('distance')
                                     },
                                     label: (tooltipItem) => {

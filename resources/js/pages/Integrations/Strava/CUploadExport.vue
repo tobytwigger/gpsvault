@@ -48,9 +48,7 @@
                             :error-messages="form.errors.hasOwnProperty('notes') ? [form.errors.notes] : []"
                         ></v-textarea>
 
-                        <v-file-input
-                            show-size
-                            truncate-length="30"
+                        <c-file-input
                             v-model="form.file"
                             id="file"
                             name="file"
@@ -58,7 +56,7 @@
                             :hint="fileInputDescription"
                             :error="form.errors.hasOwnProperty('file')"
                             :error-messages="fileErrorMessages"
-                        ></v-file-input>
+                        ></c-file-input>
                     </v-form>
 
                 </v-card-text>
@@ -86,8 +84,10 @@
 </template>
 
 <script>
+import CFileInput from '../../../ui/components/CFileInput';
 export default {
     name: "CUploadExport",
+    components: {CFileInput},
     props: {
     },
     data() {

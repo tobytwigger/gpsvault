@@ -35,20 +35,18 @@
                             :error-messages="form.errors.hasOwnProperty('description') ? [form.errors.description] : []"
                         ></v-textarea>
 
-                        <v-file-input
+                        <c-file-input
                             v-if="oldActivity === null"
-                            show-size
-                            truncate-length="30"
                             v-model="form.file"
                             id="file"
                             :loading="checkingDuplicate"
                             name="file"
-                            @change="checkForDuplicateActivity"
+                            @input="checkForDuplicateActivity"
                             label="Activity File"
                             hint="Upload the gpx/tcx/fit file recording of your ride."
                             :error="form.errors.hasOwnProperty('file')"
                             :error-messages="fileErrorMessages"
-                        ></v-file-input>
+                        ></c-file-input>
                     </v-form>
 
                 </v-card-text>
@@ -77,9 +75,11 @@
 
 <script>
 import duplicateActivityChecker from '../../mixins/duplicateActivityChecker';
+import CFileInput from '../CFileInput';
 
 export default {
     name: "CActivityForm",
+    components: {CFileInput},
     mixins: [duplicateActivityChecker],
     props: {
         oldActivity: {

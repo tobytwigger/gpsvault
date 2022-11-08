@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CleanTempStorage extends Command
 {
@@ -30,7 +31,8 @@ class CleanTempStorage extends Command
     public function handle()
     {
         $files = collect(Storage::disk('temp')->allFiles())
-            ->filter(fn (string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()));
+            ->filter(fn (string $path) => Carbon::createFromTimestamp(Storage::disk('temp')->lastModified($path))->isBefore($this->expiry()))
+            ->filter(fn (string $path) => !Str::contains($path, '.gitignore'));
 
         $this->line(sprintf('Removing %u files from temp.', $files->count()));
 
