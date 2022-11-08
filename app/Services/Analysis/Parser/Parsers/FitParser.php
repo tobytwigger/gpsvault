@@ -75,7 +75,7 @@ class FitParser implements ParserContract
         }
 
         $getSessionData = function ($key, array $units = []) use ($fit) {
-            $data = data_get($fit->data_mesgs['session'], $key, null);
+            $data = data_get($fit->data_mesgs['session'] ?? [], $key, null);
             if ($data !== null && count($units) === 2) {
                 return (new $units[0]($data))->to($units[1])->getValue();
             }
