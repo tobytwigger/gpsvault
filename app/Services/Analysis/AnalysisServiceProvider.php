@@ -13,6 +13,7 @@ use App\Services\Analysis\Analyser\Analysers\MaxSpeed;
 use App\Services\Analysis\Analyser\Analysers\MovingTime;
 use App\Services\Analysis\Analyser\Analysers\Pace;
 use App\Services\Analysis\Analyser\Analysers\Points\CumulativeDistance;
+use App\Services\Analysis\Analyser\Analysers\Points\Elevation as PointElevation;
 use App\Services\Analysis\Analyser\Analysers\Points\Speed;
 use App\Services\Analysis\Analyser\Analysers\Temperature;
 use App\Services\Analysis\Analyser\Analysers\TimesAndDurations;
@@ -34,8 +35,11 @@ class AnalysisServiceProvider extends ServiceProvider
     {
         Analyser::registerAnalyser(CumulativeDistance::class)
             ->registerAnalyser(Speed::class)
+//            ->registerAnalyser(PointElevation::class)
+
             ->registerAnalyser(TimesAndDurations::class)
             ->registerAnalyser(Distance::class)
+            ->registerAnalyser(MovingTime::class)
             ->registerAnalyser(AverageSpeed::class)
             ->registerAnalyser(Elevation::class)
             ->registerAnalyser(Pace::class)
@@ -44,7 +48,6 @@ class AnalysisServiceProvider extends ServiceProvider
             ->registerAnalyser(Locations::class)
             ->registerAnalyser(MaxSpeed::class)
             ->registerAnalyser(Temperature::class)
-            ->registerAnalyser(MovingTime::class)
 //            ->registerAnalyser(Power::class)
 //            ->registerAnalyser(Calories::class)
 //            ->registerAnalyser(Energy::class)

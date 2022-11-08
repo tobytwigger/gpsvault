@@ -45,7 +45,7 @@ class BasicAnalysisTest extends BaseAnalysisTestCase
             'Calories' => ['calories', null],
             'Average Watts' => ['averageWatts', null],
             'Kilojoules' => ['kilojoules', null],
-            'Average Speed' => ['averageSpeed', 4.65, 4.67],
+            'Average Speed' => ['averageSpeed', 4.67, 4.70],
             'Moving Time' => ['movingTime', 1975, 1985],
             'Max Speed' => ['maxSpeed', 12.08, 12.10],
 

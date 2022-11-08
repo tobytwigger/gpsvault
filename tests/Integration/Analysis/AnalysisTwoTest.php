@@ -28,17 +28,16 @@ class AnalysisTwoTest extends BaseAnalysisTestCase
             'Min Altitude' => ['minAltitude', 57.6],
             'Max Heartrate' => ['maxHeartrate', null],
             'Duration' => ['duration', 394.0],
+            'Average Speed' => ['averageSpeed', 5.6480388014652485],
+            'Moving Time' => ['movingTime', 4497.0],
+            'Max Speed' => ['maxSpeed', 11.55],
 
-            // TODO Finish these
-//            'Calories' => ['maxHeartrate', 147.0],
-//            'Moving Time' => ['maxHeartrate', 147.0],
-//            'Max Speed' => ['maxHeartrate', 147.0],
-//            'Average Watts' => ['maxHeartrate', 147.0],
-//            'Kilojoules' => ['maxHeartrate', 147.0],
-//            'Average Watts' => ['maxHeartrate', 147.0],
-//            'Average Speed' => ['maxHeartrate', 147.0],
-//            'Cumulative Elevation Gain' => ['maxHeartrate', 147.0],
-//            'Cumulative Elevation Loss' => ['maxHeartrate', 147.0],
+//            'Calories' => ['calories', 147.0],
+//            'Average Watts' => ['averageWatts', 147.0],
+//            'Kilojoules' => ['kilojoules', 147.0],
+//            'Average Watts' => ['averageWatts', 147.0],
+//            'Cumulative Elevation Gain' => ['cumulativeELevationGain', 147.0],
+//            'Cumulative Elevation Loss' => ['cumulativeELevationLoss', 147.0],
         ];
     }
 
