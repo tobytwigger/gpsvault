@@ -3,13 +3,15 @@
 namespace App\Services\Analysis\Analyser\Analysers;
 
 use App\Services\Analysis\Analyser\Analysis;
+use App\Services\Analysis\Parser\Point;
 
-class AverageSpeed extends AnalyserContract
+class AverageSpeed extends AnalyserContract implements PointAnalyser
 {
+    protected array $speed = [];
+
     public function canRun(Analysis $analysis): bool
     {
-        return $analysis->getDuration() !== null
-            && $analysis->getDistance() !== null;
+        return count($this->speed) > 0 && $analysis->getAverageSpeed() === null;
     }
 
     /**
@@ -18,10 +20,16 @@ class AverageSpeed extends AnalyserContract
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $duration = $analysis->getDuration();
-        $distance = $analysis->getDistance();
-        $averageSpeed = $distance / $duration;
+        return $analysis->setAverageSpeed(
+            array_sum($this->speed)/count($this->speed)
+        );
+    }
 
-        return $analysis->setAverageSpeed(round($averageSpeed, 2));
+    public function processPoint(Point $point): Point
+    {
+        if($point->getSpeed()) {
+            $this->speed[] = $point->getSpeed();
+        }
+        return $point;
     }
 }

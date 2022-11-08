@@ -28,7 +28,6 @@
                     v-model="form.file"
                     id="activity-file"
                     name="file"
-                    accept="application/gpx+xml"
                     label="Activity file"
                     hint="Upload the raw recording of this ride."
                     :error="form.errors.hasOwnProperty('file')"

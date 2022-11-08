@@ -15,10 +15,10 @@ class FilePreviewTest extends TestCase
     {
         $this->authenticated();
         $path = 'preview-file-' . Str::random(10) . '.txt';
-        Storage::disk('tests')->put($path, 'Text Content');
+        Storage::disk('test-fake')->put($path, 'Text Content');
         $file = File::factory()->create([
             'path' => $path,
-            'disk' => 'tests',
+            'disk' => 'test-fake',
             'user_id' => $this->user->id,
             'filename' => 'filename.jpeg',
             'mimetype' => 'text/plain',

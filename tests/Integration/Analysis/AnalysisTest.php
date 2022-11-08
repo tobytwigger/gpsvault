@@ -16,7 +16,6 @@ class AnalysisTest extends TestCase
 
         $file = File::factory()->dartmoorDevilGpx()->create();
 
-        /** @var Analysis $analysis */
         $analysis = Analyser::analyse($file);
 
         $this->assertEquals(50.594223, $analysis->getStartLatitude());

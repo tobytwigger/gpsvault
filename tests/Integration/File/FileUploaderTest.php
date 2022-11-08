@@ -36,8 +36,8 @@ class FileUploaderTest extends TestCase
     {
         $contents = 'This is a test';
         $path = Str::random('20') . '.txt';
-        Storage::disk('tests')->put($path, $contents);
-        $uploadedFile = new UploadedFile(Storage::disk('tests')->path($path), 'filename2.txt', 'text/plain');
+        Storage::disk('test-fake')->put($path, $contents);
+        $uploadedFile = new UploadedFile(Storage::disk('test-fake')->path($path), 'filename2.txt', 'text/plain');
 
         $user = User::factory()->create();
 

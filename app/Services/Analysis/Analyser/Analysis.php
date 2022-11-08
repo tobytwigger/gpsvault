@@ -260,7 +260,7 @@ class Analysis implements Arrayable, Jsonable
     }
 
     /**
-     * @return array
+     * @return array|Point[]
      */
     public function getPoints(): array
     {

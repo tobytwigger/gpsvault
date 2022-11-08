@@ -6,13 +6,14 @@ use App\Services\Analysis\Analyser\Analysis;
 
 class Pace extends AnalyserContract
 {
+
     /**
      * @param Analysis $analysis
      * @return Analysis
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $duration = $analysis->getDuration();
+        $duration = $analysis->getMovingTime();
         $distance = $analysis->getDistance();
         $pace = $duration / $distance;
 
@@ -21,7 +22,7 @@ class Pace extends AnalyserContract
 
     public function canRun(Analysis $analysis): bool
     {
-        return $analysis->getDuration() !== null
+        return $analysis->getMovingTime() !== null
             && $analysis->getDistance() !== null
             && $analysis->getDistance() !== 0.0
             && $analysis->getAveragePace() === null;
