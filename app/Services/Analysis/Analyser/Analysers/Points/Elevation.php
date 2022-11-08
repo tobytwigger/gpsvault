@@ -16,6 +16,11 @@ class Elevation extends AnalyserContract implements PointAnalyser
 
     private bool $processElevation = false;
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return false;
+    }
+
     protected function run(Analysis $analysis): Analysis
     {
         if($this->processElevation) {

@@ -17,6 +17,11 @@ class Speed extends AnalyserContract implements PointAnalyser
 
     private ?Carbon $previousTime = null;
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return false;
+    }
+
     protected function run(Analysis $analysis): Analysis
     {
         return $analysis;

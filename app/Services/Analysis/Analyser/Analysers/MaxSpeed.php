@@ -9,6 +9,11 @@ class MaxSpeed extends AnalyserContract implements PointAnalyser
 {
     private ?float $maxSpeed = null;
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return $this->maxSpeed !== null && $analysis->getMaxSpeed() === null;
+    }
+
     /**
      * @param Analysis $analysis
      * @return Analysis

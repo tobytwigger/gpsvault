@@ -17,6 +17,11 @@ class Distance extends AnalyserContract implements PointAnalyser
         $this->polyline = $polyline;
     }
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return $analysis->getDistance() === null;
+    }
+
     /**
      * @param Analysis $analysis
      * @return Analysis

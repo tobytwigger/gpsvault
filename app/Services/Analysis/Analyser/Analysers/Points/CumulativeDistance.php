@@ -16,6 +16,11 @@ class CumulativeDistance extends AnalyserContract implements PointAnalyser
 
     private ?float $cumulativeDistance = 0.0;
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return false;
+    }
+
     protected function run(Analysis $analysis): Analysis
     {
         return $analysis;

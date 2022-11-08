@@ -9,6 +9,11 @@ class Temperature extends AnalyserContract implements PointAnalyser
 {
     protected array $temperatures = [];
 
+    public function canRun(Analysis $analysis): bool
+    {
+        return $analysis->getAverageTemp() === null;
+    }
+
     /**
      * @param Analysis $analysis
      * @return Analysis

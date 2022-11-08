@@ -5,11 +5,14 @@ namespace App\Services\Analysis\Analyser\Analysers;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 
-class Heartrate extends AnalyserContract implements PointAnalyser
+class AverageHeartrate extends AnalyserContract implements PointAnalyser
 {
     protected array $heartRates = [];
 
-    protected ?float $maxHeartrate = null;
+    public function canRun(Analysis $analysis): bool
+    {
+        return $analysis->getAverageHeartrate() === null && !empty($this->heartRates);
+    }
 
     /**
      * @param Analysis $analysis
@@ -17,14 +20,9 @@ class Heartrate extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        if (!empty($this->heartRates)) {
-            $analysis->setAverageHeartrate(
-                round(array_sum($this->heartRates)/count($this->heartRates))
-            );
-        }
-        if ($this->maxHeartrate !== null) {
-            $analysis->setMaxHeartrate($this->maxHeartrate);
-        }
+        $analysis->setAverageHeartrate(
+            round(array_sum($this->heartRates)/count($this->heartRates))
+        );
 
         return $analysis;
     }
@@ -34,9 +32,6 @@ class Heartrate extends AnalyserContract implements PointAnalyser
         $heartRate = $point->getHeartRate();
         if ($heartRate !== null) {
             $this->heartRates[] = $heartRate;
-            if ($this->maxHeartrate === null || $this->maxHeartrate < $heartRate) {
-                $this->maxHeartrate = $heartRate;
-            }
         }
         return $point;
     }

@@ -5,13 +5,13 @@ namespace App\Services\Analysis\Analyser\Analysers;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 
-class Cadence extends AnalyserContract implements PointAnalyser
+class MaxHeartrate extends AnalyserContract implements PointAnalyser
 {
-    protected array $cadences = [];
+    protected ?float $maxHeartrate = null;
 
     public function canRun(Analysis $analysis): bool
     {
-        return !empty($this->cadences) && $analysis->getAverageCadence() === null;
+        return $analysis->getMaxHeartrate() === null && $this->maxHeartrate !== null;
     }
 
     /**
@@ -20,18 +20,16 @@ class Cadence extends AnalyserContract implements PointAnalyser
      */
     protected function run(Analysis $analysis): Analysis
     {
-        $analysis->setAverageCadence(
-            round(array_sum($this->cadences)/count($this->cadences))
-        );
+        $analysis->setMaxHeartrate($this->maxHeartrate);
 
         return $analysis;
     }
 
     public function processPoint(Point $point): Point
     {
-        $cadence = $point->getCadence();
-        if ($cadence !== null && $cadence !== 0.0) {
-            $this->cadences[] = $cadence;
+        $heartRate = $point->getHeartRate();
+        if ($heartRate !== null && ($this->maxHeartrate === null || $this->maxHeartrate < $heartRate)) {
+            $this->maxHeartrate = $heartRate;
         }
         return $point;
     }

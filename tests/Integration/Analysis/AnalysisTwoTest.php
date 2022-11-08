@@ -5,11 +5,6 @@ namespace Tests\Integration\Analysis;
 class AnalysisTwoTest extends BaseAnalysisTestCase
 {
 
-    /** @test */
-    public function todo_finish_commented_points(){
-        $this->markTestIncomplete();
-    }
-
     public function providesPointsToAnalyse(): array
     {
         return [
@@ -17,7 +12,7 @@ class AnalysisTwoTest extends BaseAnalysisTestCase
             'Start Longitude' => ['startLongitude', -0.80121],
             'End Latitude' => ['endLatitude', 52.03618],
             'End Longitude' => ['endLongitude', -0.77922],
-            'Average Pace' => ['averagePace', 0.04],
+            'Average Pace' => ['averagePace', 0.43],
             'Distance' => ['distance', 10451.72],
             'Started At' => ['startedAt', \Carbon\Carbon::make('2022-05-24 15:02:41')],
             'Finished At' => ['finishedAt', \Carbon\Carbon::make('2022-05-24 15:09:15')],

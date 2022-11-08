@@ -12,11 +12,6 @@ use Tests\TestCase;
 class BasicAnalysisTest extends BaseAnalysisTestCase
 {
 
-    /** @test */
-    public function todo_finish_commented_points(){
-        $this->markTestIncomplete();
-    }
-
     public function getFileName(): string
     {
         return 'analysis1.json';
