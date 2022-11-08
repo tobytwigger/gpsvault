@@ -41,7 +41,7 @@ class TcxParser implements ParserContract
 //        $analysis->setMaxHeartrate($averages['max_heart_rate']);
 //        $analysis->setAverageSpeed($file->getAverageSpeedInKPH() * 3.6);
 //        $analysis->setMaxSpeed($file->getMaxSpeedInKPH() * 3.6);
-//        $analysis->setCalories($file->getTotalCalories());
+        $analysis->setCalories($file->getTotalCalories());
 //        $analysis->setDistance($file->getTotalDistance());
 //        $analysis->setDuration($file->getTotalDuration());
 //        $analysis->setCumulativeElevationGain($file->getTotalAscentDescent()['ascent']);

@@ -93,7 +93,7 @@ class FitParser implements ParserContract
 //        $analysis->setAverageCadence($getSessionData('avg_cadence'));
 //        $analysis->setCumulativeElevationGain($getSessionData('total_ascent'));
 //        $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
-//        $analysis->setCalories($getSessionData('total_calories'));
+        $analysis->setCalories($getSessionData('total_calories'));
 //        $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
 
         return $analysis;
