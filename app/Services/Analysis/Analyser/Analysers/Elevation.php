@@ -17,7 +17,7 @@ class Elevation extends AnalyserContract implements PointAnalyser
 
     private ?float $elevationLoss = 0;
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         if ($point->getElevation() !== null) {
             if ($this->maxAltitude === null || $this->maxAltitude < $point->getElevation()) {
@@ -35,6 +35,7 @@ class Elevation extends AnalyserContract implements PointAnalyser
             }
             $this->previousElevation = $point->getElevation();
         }
+        return $point;
     }
 
     /**

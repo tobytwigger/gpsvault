@@ -29,7 +29,7 @@ class Heartrate extends AnalyserContract implements PointAnalyser
         return $analysis;
     }
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         $heartRate = $point->getHeartRate();
         if ($heartRate !== null) {
@@ -38,5 +38,6 @@ class Heartrate extends AnalyserContract implements PointAnalyser
                 $this->maxHeartrate = $heartRate;
             }
         }
+        return $point;
     }
 }

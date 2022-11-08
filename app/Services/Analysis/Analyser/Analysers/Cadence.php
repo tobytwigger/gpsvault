@@ -24,11 +24,12 @@ class Cadence extends AnalyserContract implements PointAnalyser
         return $analysis;
     }
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         $cadence = $point->getCadence();
         if ($cadence !== null && $cadence !== 0.0) {
             $this->cadences[] = $cadence;
         }
+        return $point;
     }
 }

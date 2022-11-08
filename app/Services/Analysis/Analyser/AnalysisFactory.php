@@ -20,9 +20,11 @@ class AnalysisFactory implements AnalysisFactoryContract
     public function runAnalysis(Analysis $analysis): Analysis
     {
         $analyser = $this->getChain();
+        $newPoints = [];
         foreach ($this->pointsFor($analysis) as $point) {
-            $analyser->preparePoint($point);
+            $newPoints[] = $analyser->preparePoint($point);
         }
+        $analysis->setPoints($newPoints);
 
         return $analyser->analyse($analysis);
     }

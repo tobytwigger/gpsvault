@@ -22,10 +22,11 @@ class MaxSpeed extends AnalyserContract implements PointAnalyser
         return $analysis;
     }
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         if ($this->maxSpeed === null || $this->maxSpeed < $point->getSpeed()) {
             $this->maxSpeed = $point->getSpeed();
         }
+        return $point;
     }
 }

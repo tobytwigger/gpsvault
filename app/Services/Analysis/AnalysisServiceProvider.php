@@ -10,7 +10,10 @@ use App\Services\Analysis\Analyser\Analysers\Elevation;
 use App\Services\Analysis\Analyser\Analysers\Heartrate;
 use App\Services\Analysis\Analyser\Analysers\Locations;
 use App\Services\Analysis\Analyser\Analysers\MaxSpeed;
+use App\Services\Analysis\Analyser\Analysers\MovingTime;
 use App\Services\Analysis\Analyser\Analysers\Pace;
+use App\Services\Analysis\Analyser\Analysers\Points\CumulativeDistance;
+use App\Services\Analysis\Analyser\Analysers\Points\Speed;
 use App\Services\Analysis\Analyser\Analysers\Temperature;
 use App\Services\Analysis\Analyser\Analysers\TimesAndDurations;
 use App\Services\Analysis\Analyser\AnalysisFactory;
@@ -29,7 +32,9 @@ class AnalysisServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Analyser::registerAnalyser(TimesAndDurations::class)
+        Analyser::registerAnalyser(CumulativeDistance::class)
+            ->registerAnalyser(Speed::class)
+            ->registerAnalyser(TimesAndDurations::class)
             ->registerAnalyser(Distance::class)
             ->registerAnalyser(AverageSpeed::class)
             ->registerAnalyser(Elevation::class)
@@ -39,7 +44,7 @@ class AnalysisServiceProvider extends ServiceProvider
             ->registerAnalyser(Locations::class)
             ->registerAnalyser(MaxSpeed::class)
             ->registerAnalyser(Temperature::class)
-//            ->registerAnalyser(MovingTime::class)
+            ->registerAnalyser(MovingTime::class)
 //            ->registerAnalyser(Power::class)
 //            ->registerAnalyser(Calories::class)
 //            ->registerAnalyser(Energy::class)

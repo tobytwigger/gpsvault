@@ -26,10 +26,11 @@ class Distance extends AnalyserContract implements PointAnalyser
         return $analysis->setDistance(round($this->polyline->getLength(new Vincenty()), 2));
     }
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
             $this->polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude()));
         }
+        return $point;
     }
 }

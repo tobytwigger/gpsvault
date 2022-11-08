@@ -24,11 +24,12 @@ class Temperature extends AnalyserContract implements PointAnalyser
         return $analysis;
     }
 
-    public function processPoint(Point $point): void
+    public function processPoint(Point $point): Point
     {
         $temperature = $point->getTemperature();
         if ($temperature !== null) {
             $this->temperatures[] = $temperature;
         }
+        return $point;
     }
 }
