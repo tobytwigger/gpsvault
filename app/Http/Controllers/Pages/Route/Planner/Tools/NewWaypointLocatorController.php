@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Pages\Route\Planner\Tools;
 
 use App\Services\Valhalla\Valhalla;
 use Illuminate\Http\Request;
+use Location\Coordinate;
+use Location\Distance\Vincenty;
+use Location\Line;
+use Location\Utility\PointToLineDistance;
 
 class NewWaypointLocatorController
 {
@@ -19,26 +23,43 @@ class NewWaypointLocatorController
             'lng' => 'required|numeric|min:-180|max:180',
         ]);
 
-        $fullLinestring = collect($request->input('geojson'))
-            ->map(fn (array $coords) => ['lat' => $coords['lat'], 'lon' => $coords['lng']]);
 
-        // Try putting it at index 1 (2nd pos).
-        $lowestCostIndex = null;
-        $lowestCost = null;
 
-        for ($i = 1; $i <= $fullLinestring->count() - 1; $i++) {
-            $indexes = clone $fullLinestring;
-            $indexes->splice($i, 0, [['lat' => $request->input('lat'), 'lon' => $request->input('lng')]]);
-            $response = (new Valhalla())->route($indexes->all());
-            $cost = $response['trip']['legs'][0]['summary']['cost'];
-            if ($lowestCost === null || $lowestCost > $cost) {
-                $lowestCost = $cost;
-                $lowestCostIndex = $i;
+        $fullLinestring = $request->input('geojson');
+
+        $smallestDistanceIndex = null;
+        $smallestDistance = null;
+// [1, 2, 3, 4, 5]
+//
+        for ($i = 1; $i <= count($fullLinestring) - 1; $i++) {
+
+            $segmentStart = new Coordinate(
+                $fullLinestring[$i-1]['lat'],
+                $fullLinestring[$i-1]['lng'],
+            );
+            $segmentEnd = new Coordinate(
+                $fullLinestring[$i]['lat'],
+                $fullLinestring[$i]['lng'],
+            );
+
+            $distance = (new PointToLineDistance(new Vincenty()))->getDistance(
+                new Coordinate($request->input('lat'), $request->input('lng')),
+                new Line($segmentStart, $segmentEnd)
+            );
+
+            if($smallestDistance === null || $distance < $smallestDistance) {
+                $smallestDistance = $distance;
+                $smallestDistanceIndex = $i;
             }
         }
 
+//        dd($smallestDistanceIndex, count($fullLinestring));
+//        if($smallestDistanceIndex === count($fullLinestring)) {
+//            $smallestDistanceIndex -= 1;
+//        }
+
         return [
-            'index' => $lowestCostIndex,
+            'index' => $smallestDistanceIndex,
         ];
     }
 }
