@@ -14,9 +14,12 @@ abstract class BaseAnalysisTestCase extends TestCase
 
     abstract public function providesPointsToAnalyse(): array;
 
-    protected function createAnalysis(string $filename): Analysis
+    abstract public function getFileName(): string;
+
+
+    protected function createAnalysis(): Analysis
     {
-        $analysisFile = json_decode(file_get_contents(__DIR__ . '/../../assets/analysis/' . $filename), true);
+        $analysisFile = json_decode(file_get_contents(__DIR__ . '/../../assets/analysis/' . $this->getFileName()), true);
         $analysis = new Analysis();
 
         if (array_key_exists('points', $analysisFile)) {
@@ -46,24 +49,36 @@ abstract class BaseAnalysisTestCase extends TestCase
      * @test
      * @dataProvider providesPointsToAnalyse
      */
-    public function it_analyses_a_set_of_points_correctly(Analysis $analysis, string $field, mixed $value, ?int $pointsIndex = null, mixed $initialValue = null){
+    public function it_analyses_a_set_of_points_correctly(string $field, mixed $lowerValue, mixed $upperValue = null, ?int $pointsIndex = null, mixed $initialValue = null){
+        $analysis = $this->createAnalysis();
+
         $methodName = 'get' . Str::ucfirst($field);
+
 
         if($pointsIndex === null) {
             $this->assertEquals($initialValue, $analysis->$methodName());
 
             $analysed = Analyser::runAnalysis($analysis);
 
-            $this->assertEquals($value, $analysed->$methodName());
+            if($upperValue !== null) {
+                $this->assertGreaterThan($lowerValue, $analysed->$methodName());
+                $this->assertLessThan($upperValue, $analysed->$methodName());
+            } else {
+                $this->assertEquals($lowerValue, $analysed->$methodName());
+            }
         } else {
             $this->assertIsArray($analysis->getPoints());
+
             $this->assertEquals($initialValue, $analysis->getPoints()[$pointsIndex]->$methodName());
 
             $analysed = Analyser::runAnalysis($analysis);
 
-            $this->assertEquals($initialValue, $analysis->getPoints()[$pointsIndex]->$methodName());
-
-            $this->assertEquals($value, $analysed->getPoints()[$pointsIndex]->$methodName());
+            if($upperValue !== null) {
+                $this->assertGreaterThan($lowerValue, $analysed->getPoints()[$pointsIndex]->$methodName());
+                $this->assertLessThan($upperValue, $analysed->getPoints()[$pointsIndex]->$methodName());
+            } else {
+                $this->assertEquals($lowerValue, $analysed->getPoints()[$pointsIndex]->$methodName());
+            }
         }
 
     }
