@@ -140,6 +140,8 @@ export default {
                         });
 
                     this.geojsonMarker.addTo(this.map);
+                } else if(this.geojsonMarker) {
+                    this.geojsonMarker.remove();
                 }
             }
         }

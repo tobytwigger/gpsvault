@@ -84,11 +84,13 @@ export default {
                 this.chart = new Chart(this.elevationCanvas.getContext('2d'), {
                     type: 'line',
                     options: {
+                        events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
                         scales: {
                             x: { type: 'linear' },
                             y: { type: 'linear', beginAtZero: true },
                         },
                         plugins: {
+                            clearSelected: {},
                             title: { align: "center", display: true, text: "Distance (" + this.getUserUnit('distance') + ") / Elevation (" + this.getUserUnit('elevation') + ")" },
                             legend: { display: false },
                             tooltip: {
@@ -109,6 +111,19 @@ export default {
                         interaction: { intersect: false, mode: 'index' },
                         tooltip: { position: 'nearest' },
                     },
+                    plugins: [
+                        {
+                            id: 'clearSelected',
+                            afterEvent: (chart, args, pluginOptions) => {
+                                const event = args.event;
+                                if (event.type === 'mouseout') {
+                                    console.log('CLEAR');
+                                    this.$emit('update:selected', null);
+                                    // process the event
+                                }
+                            },
+                        }
+                    ],
                     data: {
                         labels: this.elevationProfileDataset.labels,
                         datasets: [

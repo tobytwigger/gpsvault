@@ -13,3 +13,7 @@
     width: 100%;
     height: 300px;
 }
+
+.maplibregl-icon-lg {
+    font-size: 18px;
+}
