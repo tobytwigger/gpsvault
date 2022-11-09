@@ -11,6 +11,38 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Integrations\Strava\Client\Authentication\StravaToken
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $strava_client_id
+ * @property mixed $access_token
+ * @property mixed $refresh_token
+ * @property \Illuminate\Support\Carbon $expires_at
+ * @property bool $disabled
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read StravaClient $stravaClient
+ * @property-read User $user
+ * @method static Builder|StravaToken active()
+ * @method static Builder|StravaToken enabled()
+ * @method static \Database\Factories\StravaTokenFactory factory(...$parameters)
+ * @method static Builder|StravaToken forUser(int $userId)
+ * @method static Builder|StravaToken newModelQuery()
+ * @method static Builder|StravaToken newQuery()
+ * @method static Builder|StravaToken query()
+ * @method static Builder|StravaToken whereAccessToken($value)
+ * @method static Builder|StravaToken whereCreatedAt($value)
+ * @method static Builder|StravaToken whereDisabled($value)
+ * @method static Builder|StravaToken whereExpiresAt($value)
+ * @method static Builder|StravaToken whereId($value)
+ * @method static Builder|StravaToken whereRefreshToken($value)
+ * @method static Builder|StravaToken whereStravaClientId($value)
+ * @method static Builder|StravaToken whereUpdatedAt($value)
+ * @method static Builder|StravaToken whereUserId($value)
+ * @mixin \Eloquent
+ */
 class StravaToken extends Model
 {
     use HasFactory;

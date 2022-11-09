@@ -11,6 +11,7 @@ use App\Models\Waypoint;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use App\Services\Valhalla\Valhalla;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
@@ -73,9 +74,10 @@ class PlannerController extends Controller
                 'location' => new Point($point['lat'], $point['lng']),
                 'name' => $point['name'] ?? null,
                 'notes' => $point['notes'] ?? null,
+                'user_id' => Auth::id(),
             ];
             if (isset($point['id']) && $point['id']) {
-                $waypoint = Waypoint::findOrFail($point['id']);
+                $waypoint = Waypoint::where('user_id', Auth::id())->findOrFail($point['id']);
                 $waypoint->fill($waypointAttributes)->save();
             } else {
                 $waypoint = Waypoint::create($waypointAttributes);
