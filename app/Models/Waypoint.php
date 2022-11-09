@@ -11,7 +11,7 @@ class Waypoint extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'place_id', 'location', 'name', 'notes',
+        'place_id', 'location', 'name', 'notes', 'user_id'
     ];
 
     protected $postgisFields = [
@@ -29,4 +29,10 @@ class Waypoint extends Model
     {
         return $this->belongsTo(Place::class);
     }
+
+    public function routePathWaypoints()
+    {
+        return $this->hasMany(RoutePathWaypoint::class);
+    }
+
 }

@@ -83,6 +83,7 @@
             :result="result"
             :schema="schema"
             @update:schema="updateSchema"
+            :errors="errors"
         ></c-route-planner>
 
     </c-app-wrapper>
@@ -121,7 +122,8 @@ export default {
             },
             schemaUnsaved: false,
             recentlySaved: false,
-            isSaving: false
+            isSaving: false,
+            errors: {}
         }
     },
     watch: {
@@ -158,11 +160,21 @@ export default {
                 return w;
             })
             axios.post(route('planner.plan'), schema)
-                .then(response => this.result = response.data)
-                .catch(e => console.log(e))
+                .then(response => {
+                    this.errors = {}
+                    this.result = response.data;
+                })
+                .catch(e => {
+                    if(e.response.status === 422) {
+                        this.errors = e.response.data.errors;
+                    } else {
+                        this.errors = {generalError: [e.response.data.message]};
+                    }
+                })
                 .finally(() => this.searching = false);
         },
         save() {
+            console.log(this._calculateDataArray());
             this.isSaving = true;
             if(this.routeModel) {
                 this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
@@ -189,6 +201,7 @@ export default {
                 geojson: polyline.encode(this.result.coordinates.map(c => {
                     return [c[0], c[1]];
                 }), 6),
+                elevation: this.result.coordinates.map(c => c[2]),
                 waypoints: this.schema.waypoints.map(waypoint => {
                     // If custom waypoint, then we remove the ID
                     if(waypoint.unsaved ?? false) {
@@ -207,7 +220,7 @@ export default {
                 }),
                 distance: this.result.distance,
                 duration: this.result.time,
-                elevation_gain: this.elevation,
+                elevation_gain: this.result.elevation,
                 settings: {
                     use_roads: this.schema.use_roads,
                     use_hills: this.schema.use_hills

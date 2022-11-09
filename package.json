@@ -41,12 +41,12 @@
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
         "install": "^0.13.0",
-        "intro.js": "^4.3.0",
         "maplibre-gl": "^2.4.0",
         "npm": "^8.19.2",
         "vue-easy-lightbox": "^0.16.2",
         "vue-filepond": "^6.0.3",
         "vue-grid-layout": "^2.4.0",
+        "vue-shepherd": "^0.3.0",
         "vuedraggable": "^2.24.3",
         "vuetify": "^2.6.2",
         "vuetify-loader": "^1.7.3"

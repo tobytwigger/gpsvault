@@ -8,6 +8,37 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Tour
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $name
+ * @property string|null $description
+ * @property string|null $notes
+ * @property \Illuminate\Support\Carbon|null $marked_as_started_at
+ * @property \Illuminate\Support\Carbon|null $marked_as_finished_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $distance
+ * @property-read mixed $elevation_gain
+ * @property-read mixed $human_ended_at
+ * @property-read mixed $human_started_at
+ * @method static \Database\Factories\TourFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereMarkedAsFinishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereMarkedAsStartedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tour whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Tour extends Model
 {
     use HasFactory;

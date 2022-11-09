@@ -11,6 +11,7 @@ use App\Models\Waypoint;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use App\Services\Valhalla\Valhalla;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
@@ -55,14 +56,14 @@ class PlannerController extends Controller
         ]);
 
         $linestring = GooglePolylineEncoder::decodeValue($request->input('geojson'), 6);
-        $elevation = (new Valhalla())->elevationForLineString($request->input('geojson'));
+        $elevation = $request->input('elevation');
 
         $path = RoutePath::create([
             'route_id' => $route->id,
             'distance' => $request->input('distance', 0),
             'duration' => $request->input('duration', 0),
             'elevation_gain' => $request->input('elevation_gain', 0),
-            'linestring' => new LineString(Arr::map($linestring, fn (array $point, int $index) => new Point($point[0], $point[1], $elevation['range_height'][$index][1]))),
+            'linestring' => new LineString(Arr::map($linestring, fn (array $point, int $index) => new Point($point[0], $point[1], $elevation[$index]))),
             'settings' => $request->input('settings'),
         ]);
 
@@ -73,9 +74,10 @@ class PlannerController extends Controller
                 'location' => new Point($point['lat'], $point['lng']),
                 'name' => $point['name'] ?? null,
                 'notes' => $point['notes'] ?? null,
+                'user_id' => Auth::id(),
             ];
             if (isset($point['id']) && $point['id']) {
-                $waypoint = Waypoint::findOrFail($point['id']);
+                $waypoint = Waypoint::where('user_id', Auth::id())->findOrFail($point['id']);
                 $waypoint->fill($waypointAttributes)->save();
             } else {
                 $waypoint = Waypoint::create($waypointAttributes);

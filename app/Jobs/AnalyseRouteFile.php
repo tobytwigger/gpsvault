@@ -65,6 +65,7 @@ class AnalyseRouteFile implements ShouldQueue
         foreach ($this->getOptimisedPoints($analysis) as $point) {
             $waypoint = Waypoint::create([
                 'location' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLat(), $point->getLng()),
+                'user_id' => $this->route->user_id
             ]);
             $rpw = RoutePathWaypoint::create([
                 'route_path_id' => $routePath->id,

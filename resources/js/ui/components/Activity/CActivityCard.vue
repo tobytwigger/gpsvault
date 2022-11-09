@@ -51,6 +51,7 @@
 
         <v-card-actions>
             <v-btn
+                :class="{'tour-viewSingleActivityButton': hints}"
                 color="deep-purple lighten-2"
                 text
                 id="viewButton"
