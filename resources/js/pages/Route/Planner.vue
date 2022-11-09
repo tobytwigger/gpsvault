@@ -83,6 +83,7 @@
             :result="result"
             :schema="schema"
             @update:schema="updateSchema"
+            :errors="errors"
         ></c-route-planner>
 
     </c-app-wrapper>
@@ -121,7 +122,8 @@ export default {
             },
             schemaUnsaved: false,
             recentlySaved: false,
-            isSaving: false
+            isSaving: false,
+            errors: {}
         }
     },
     watch: {
@@ -158,8 +160,15 @@ export default {
                 return w;
             })
             axios.post(route('planner.plan'), schema)
-                .then(response => this.result = response.data)
-                .catch(e => console.log(e))
+                .then(response => {
+                    this.errors = {}
+                    this.result = response.data;
+                })
+                .catch(e => {
+                    if(e.response.status === 422) {
+                        this.errors = e.response.data.errors;
+                    }
+                })
                 .finally(() => this.searching = false);
         },
         save() {

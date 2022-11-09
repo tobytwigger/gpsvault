@@ -34,6 +34,16 @@
                     </div>
 
                     <v-list
+                        v-if="Object.keys(errors).length > 0"
+                    >
+                        <v-list-item v-for="error in Object.keys(errors)">
+                            <v-list-item-content>
+                                <span class="red--text">{{errors[error][0]}}</span>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-list
                         subheader
                         two-line
                     >
@@ -149,6 +159,13 @@ export default {
         draggable
     },
     props: {
+        errors: {
+            required: false,
+            type: Object,
+            default: () => {
+                return {};
+            }
+        },
         schema: {
             required: false,
 //            required: true,
