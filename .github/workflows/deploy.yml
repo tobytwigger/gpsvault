@@ -21,10 +21,10 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Setup node
-        uses: actions/setup-node@v2
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: 16
 
       - name: Install npm dependencies
         run: npm ci
