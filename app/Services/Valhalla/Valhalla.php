@@ -3,6 +3,7 @@
 namespace App\Services\Valhalla;
 
 use Illuminate\Support\Facades\Http;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Valhalla
 {
@@ -11,7 +12,11 @@ class Valhalla
         $fullUrl = 'https://valhalla1.openstreetmap.de' . $url;
         $response = Http::send($method, $fullUrl, $options);
         if ($response->failed()) {
-            throw $response->toException();
+            throw new HttpException($response->json('status_code'), sprintf(
+                'Error code %s. An error occured planning your route: %s.',
+                $response->json('error_code'),
+                $response->json('error'),
+            ));
         }
 
         return $response;

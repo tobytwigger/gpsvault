@@ -20,5 +20,6 @@ export default {
 
         Vue.mixin(GlobalMixin);
 
+
     }
 }

@@ -167,6 +167,8 @@ export default {
                 .catch(e => {
                     if(e.response.status === 422) {
                         this.errors = e.response.data.errors;
+                    } else {
+                        this.errors = {generalError: [e.response.data.message]};
                     }
                 })
                 .finally(() => this.searching = false);
@@ -199,6 +201,7 @@ export default {
                 geojson: polyline.encode(this.result.coordinates.map(c => {
                     return [c[0], c[1]];
                 }), 6),
+                elevation: this.result.coordinates.map(c => c[2]),
                 waypoints: this.schema.waypoints.map(waypoint => {
                     // If custom waypoint, then we remove the ID
                     if(waypoint.unsaved ?? false) {

@@ -42,7 +42,7 @@
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                                data-hint="You can add a new activity here"
+                                id="tour-newActivityButton"
                                 icon
                                 v-bind="attrs"
                                 v-on="on"
@@ -69,10 +69,11 @@ import CPaginationIterator from 'ui/components/CPaginationIterator';
 import CJobStatus from '../../ui/components/CJobStatus';
 import units from '../../ui/mixins/units';
 import moment from 'moment/moment';
+import shepherd from '../../ui/mixins/shepherd';
 export default {
     name: "Index",
     components: {CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
-    mixins: [units],
+    mixins: [units, shepherd],
     props: {
         activities: {
             required: true,
@@ -81,7 +82,11 @@ export default {
     },
     data() {
         return {
-            layout: 'cards'
+            layout: 'cards',
+            tourSteps: [
+                this._createStep('#tour-newActivityButton', 'You can add a new activity here', 'left'),
+                this._createStep('.tour-viewSingleActivityButton', 'Click to view an activity', 'top'),
+            ]
         }
     },
     methods: {
