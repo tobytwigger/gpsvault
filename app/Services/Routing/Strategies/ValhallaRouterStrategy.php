@@ -14,14 +14,15 @@ class ValhallaRouterStrategy implements RouterStrategy
 {
     public function route(Collection $waypoints, RouteOptions $options): RouteResult
     {
-        [$linestring, $elevation, $distance, $time] = $this->getFullRoute($waypoints, $options);
+        [$linestring, $elevation, $distance, $time, $elevationGain] = $this->getFullRoute($waypoints, $options);
 
         return new RouteResult(
             collect($linestring)->map(fn ($location, $index) => [
                 $location[0], $location[1], $elevation[$index][1], $elevation[$index][0], // [0] is the distance through the route!
             ])->all(),
             $distance,
-            $time
+            $time,
+            $elevationGain
         );
     }
 
@@ -62,6 +63,17 @@ class ValhallaRouterStrategy implements RouterStrategy
                 ->elevationForLineString(GooglePolylineEncoder::encode($chunkedPoints->all(), 6))['range_height']);
         }
 
-        return [$linestring, $elevation, $distance, $time];
+        $elevationGain = array_reduce($elevation, function($elevationData, $elevationItem) {
+            if($elevationData['previous'] !== null) {
+                $gain = $elevationItem[1] - $elevationData['previous'];
+                if($gain > 0) {
+                    $elevationData['gain'] += $gain;
+                }
+            }
+            $elevationData['previous'] = $elevationItem[1];
+            return $elevationData;
+        }, ['previous' => null, 'gain' => 0.0])['gain'];
+
+        return [$linestring, $elevation, $distance, $time, $elevationGain];
     }
 }

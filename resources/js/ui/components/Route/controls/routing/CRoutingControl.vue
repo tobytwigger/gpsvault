@@ -36,7 +36,7 @@
                     <v-list
                         v-if="Object.keys(errors).length > 0"
                     >
-                        <v-list-item v-for="error in Object.keys(errors)">
+                        <v-list-item v-for="error in Object.keys(errors)" :key="error">
                             <v-list-item-content>
                                 <span class="red--text">{{errors[error][0]}}</span>
                             </v-list-item-content>
@@ -58,6 +58,13 @@
                             <v-list-item-content>
                                 <v-list-item-title>{{routeTime}}</v-list-item-title>
                                 <v-list-item-subtitle>Duration</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-content>
+                                <v-list-item-title>{{elevationGain}}</v-list-item-title>
+                                <v-list-item-subtitle>Elevation</v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
@@ -233,6 +240,14 @@ export default {
             let hours = floor(duration.asHours())
             let minutes = floor(duration.asMinutes() % 60)
             return hours + 'h ' + minutes + 'm';
+        },
+        elevationGain() {
+            if(!this.result?.elevation) {
+                return '0m';
+            }
+            let gain = this.convert(this.result.elevation, 'elevation');
+
+            return gain.value + ' ' + gain.unit;
         }
     },
     methods: {

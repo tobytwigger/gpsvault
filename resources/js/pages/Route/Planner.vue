@@ -172,6 +172,7 @@ export default {
                 .finally(() => this.searching = false);
         },
         save() {
+            console.log(this._calculateDataArray());
             this.isSaving = true;
             if(this.routeModel) {
                 this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
@@ -216,7 +217,7 @@ export default {
                 }),
                 distance: this.result.distance,
                 duration: this.result.time,
-                elevation_gain: this.elevation,
+                elevation_gain: this.result.elevation,
                 settings: {
                     use_roads: this.schema.use_roads,
                     use_hills: this.schema.use_hills

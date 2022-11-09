@@ -21,7 +21,7 @@ class RoutePath extends Model
 
     protected $casts = [
         'distance' => 'float',
-        'elevation' => 'float',
+        'elevation_gain' => 'float',
         'duration' => 'float',
         'settings' => 'array',
     ];
