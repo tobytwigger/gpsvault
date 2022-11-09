@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div style="height: 500px" ref="map"></div>
+        <div style="height: 800px" ref="map"></div>
         <div id="elevation-control">
-            <c-elevation-control :coordinates="elevationCoordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
+            <c-elevation-control :coordinates="geojson.coordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
         </div>
     </div>
 </template>
@@ -11,6 +11,7 @@
 import maplibregl from 'maplibre-gl';
 import ElevationControl from './../Route/controls/elevation/ElevationControl';
 import CElevationControl from './../Route/controls/elevation/CElevationControl';
+import {cloneDeep} from 'lodash';
 
 export default {
     name: "CMap",
@@ -160,13 +161,17 @@ export default {
             if(this.geojson === null) {
                 return null;
             }
+
+            let geojson = cloneDeep(this.geojson);
+            geojson.coordinates = this.geojson.coordinates.map(c => [c[0], c[1], c[2]]);
+
             return {
                 "name":"NewFeatureType",
                 "type":"FeatureCollection",
                 "features":[
                     {
                         "type":"Feature",
-                        "geometry":this.geojson,
+                        "geometry":geojson,
                         "properties":null
                     }
                 ]};
@@ -180,7 +185,7 @@ export default {
         elevationProfileDataset() {
             const data = [];
 
-            this.geojson.coordinates.forEach((coords, index) => {
+            this.elevationGeojson.coordinates.forEach((coords, index) => {
                 if (coords.length === 3) {
                     data.push(coords[2]);
                 }
@@ -188,12 +193,6 @@ export default {
 
             return data.filter((d, i) => i % this.graphScaleFactor === 0);
         },
-        elevationCoordinates() {
-            return this.geojson.coordinates.map((coords, index) => {
-                coords[3] = index;
-                return coords;
-            });
-        }
     }
 }
 </script>
