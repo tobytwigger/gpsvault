@@ -163,4 +163,10 @@ class StatsTest extends TestCase
     {
         $this->markTestSkipped();
     }
+
+    /** @test */
+    public function todo_it_creates_a_linestring_with_cumulative_distances(){
+        $this->markTestSkipped();
+    }
+
 }

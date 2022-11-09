@@ -24,6 +24,12 @@ class ClientAuthController extends Controller
 
         $token = $authenticator->exchangeCode($request->input('code'), $client);
 
+        abort_if(
+            Auth::user()->hasAdditionalData('strava_athlete_id') && $token->getAthleteId() !== (int) Auth::user()->getAdditionalData('strava_athlete_id'),
+            403,
+            'You must use the same account to log in to all clients'
+        );
+
         $savedToken = StravaToken::makeFromStravaTokenResponse($token, $client->id);
         $savedToken->save();
 
