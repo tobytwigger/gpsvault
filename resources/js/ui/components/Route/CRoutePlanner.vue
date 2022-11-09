@@ -5,7 +5,7 @@
             <c-routing-control :schema.sync="_schema" :result="result"></c-routing-control>
         </div>
         <div id="elevation-control">
-            <c-elevation-control :result="result" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
+            <c-elevation-control :coordinates="result.coordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
         </div>
     </div>
 </template>
