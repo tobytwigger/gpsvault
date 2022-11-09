@@ -55,6 +55,7 @@
         "twigger/laravel-job-status": "^1.0.2"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.12",
         "brianium/paratest": "^6.4",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.21",
