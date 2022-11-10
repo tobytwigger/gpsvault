@@ -24,12 +24,12 @@ export default {
     },
     computed: {
         geojson() {
-            if(this.stats.linestring === null) {
-                return null;
-            }
+            console.log(this.stats.linestringWithDistance)
             return {
                 type: 'LineString',
-                coordinates: this.stats.linestring.map(l => l.coordinates)
+                coordinates: (this.stats.linestringWithDistance !== null
+                    ? this.stats.linestringWithDistance
+                    : this.stats?.linestring?.map(l => l.coordinates)) ?? null
             };
         }
     }

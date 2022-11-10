@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     /* Routes */
     Route::get('/route/search', [\App\Http\Controllers\Pages\Route\RouteSearchController::class, 'search'])->name('route.search');
+    Route::redirect('/route/planner', '/route/planner/create');
     Route::resource('route', \App\Http\Controllers\Pages\Route\RouteController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
     Route::prefix('route/{route}')->group(function () {
         Route::get('download', [\App\Http\Controllers\Pages\Route\RouteDownloadController::class, 'downloadRoute'])->name('route.download');
@@ -105,6 +106,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     /* Client Authentication */
+    Route::get('client/{client}/start-login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'initiateLogin'])->name('strava.client.login.start');
     Route::get('client/{client}/login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'login'])->name('strava.client.login');
     Route::post('client/{client}/logout', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'logout'])->name('strava.client.logout');
 

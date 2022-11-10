@@ -9,7 +9,7 @@
                     id="elevation-canvas-container"
                 >
                 </v-card>
-                <div v-if="result.coordinates.length === 0">
+                <div v-if="coordinates.length === 0">
                     No route
                 </div>
             </v-col>
@@ -31,9 +31,10 @@ export default {
         draggable
     },
     props: {
-        result: {
+        coordinates: {
             required: false,
-            default: null
+            type: Array,
+            default: () => []
         },
         selected: {
             required: false,
@@ -48,7 +49,7 @@ export default {
         }
     },
     watch: {
-        result: {
+        coordinates: {
             deep: true,
             handler: function(val) {
                 this.setupChart();
@@ -59,7 +60,7 @@ export default {
         elevationProfileDataset() {
             const data = [];
             const labels = [];
-            this.result.coordinates.forEach((coords, index) => {
+            this.coordinates.forEach((coords, index) => {
                 labels.push(this.convert(coords[3], 'distance').value);
                 data.push(this.convert(coords[2], 'elevation').value);
             });
@@ -75,7 +76,7 @@ export default {
                 this.elevationCanvas.remove();
             }
 
-            if(this.result.coordinates.length > 0) {
+            if(this.coordinates.length > 0) {
                 this.elevationCanvas = document.createElement('canvas');
                 this.elevationCanvas.height = 250;
 
@@ -84,11 +85,13 @@ export default {
                 this.chart = new Chart(this.elevationCanvas.getContext('2d'), {
                     type: 'line',
                     options: {
+                        events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
                         scales: {
                             x: { type: 'linear' },
                             y: { type: 'linear', beginAtZero: true },
                         },
                         plugins: {
+                            clearSelected: {},
                             title: { align: "center", display: true, text: "Distance (" + this.getUserUnit('distance') + ") / Elevation (" + this.getUserUnit('elevation') + ")" },
                             legend: { display: false },
                             tooltip: {
@@ -109,6 +112,16 @@ export default {
                         interaction: { intersect: false, mode: 'index' },
                         tooltip: { position: 'nearest' },
                     },
+                    plugins: [
+                        {
+                            id: 'clearSelected',
+                            afterEvent: (chart, args, pluginOptions) => {
+                                if (args.event.type === 'mouseout') {
+                                    this.$emit('update:selected', null);
+                                }
+                            },
+                        }
+                    ],
                     data: {
                         labels: this.elevationProfileDataset.labels,
                         datasets: [

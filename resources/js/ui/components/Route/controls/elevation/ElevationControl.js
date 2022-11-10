@@ -50,7 +50,7 @@ class ElevationControl {
         this._hideSidebar.bind(this);
         this._showSidebar.bind(this);
 
-        this._elevationButton = this._createButton('maplibregl-ctrl-icon maplibregl-ctrl-zoom-in', (e) => {
+        this._elevationButton = this._createButton('mdi maplibregl-icon-lg mdi-elevation-rise', (e) => {
             if(this._sidebarIsShowing) {
                 this._hideSidebar();
                 this._sidebarIsShowing = false;
@@ -61,7 +61,7 @@ class ElevationControl {
         });
 
         let span = window.document.createElement('span');
-        span.className = 'maplibregl-ctrl-icon mapboxgl-ctrl-icon';
+        span.className = 'mdi maplibregl-icon-lg mapboxgl-ctrl-icon';
         span.setAttribute('aria-hidden', 'true');
         this._elevationButton.appendChild(span);
 
@@ -74,14 +74,14 @@ class ElevationControl {
 
     _hideSidebar() {
         this._sidebar.hidden = true;
-        this._elevationButton.classList.remove('maplibregl-ctrl-zoom-out')
-        this._elevationButton.classList.add('maplibregl-ctrl-zoom-in');
+        this._elevationButton.classList.remove('mdi-close-circle-outline')
+        this._elevationButton.classList.add('mdi-elevation-rise');
     }
 
     _showSidebar() {
         this._sidebar.hidden = false;
-        this._elevationButton.classList.add('maplibregl-ctrl-zoom-out')
-        this._elevationButton.classList.remove('maplibregl-ctrl-zoom-in');
+        this._elevationButton.classList.add('mdi-close-circle-outline')
+        this._elevationButton.classList.remove('mdi-elevation-rise');
     }
 
     getDefaultPosition() {

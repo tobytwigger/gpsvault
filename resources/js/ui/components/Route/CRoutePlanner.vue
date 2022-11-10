@@ -2,10 +2,10 @@
     <div>
         <div style="height: 800px" ref="map"></div>
         <div id="routing-control">
-            <c-routing-control :schema.sync="_schema" :result="result"></c-routing-control>
+            <c-routing-control :errors="errors" :schema.sync="_schema" :result="result"></c-routing-control>
         </div>
         <div id="elevation-control">
-            <c-elevation-control :result="result" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
+            <c-elevation-control :coordinates="result.coordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
         </div>
     </div>
 </template>
@@ -28,6 +28,13 @@ export default {
     components: {CElevationControl, CRoutingControl},
     mixins: [units],
     props: {
+        errors: {
+            required: false,
+            type: Object,
+            default: () => {
+                return {};
+            }
+        },
         result: {
             required: false,
             type: Object,
@@ -140,6 +147,8 @@ export default {
                         });
 
                     this.geojsonMarker.addTo(this.map);
+                } else if(this.geojsonMarker) {
+                    this.geojsonMarker.remove();
                 }
             }
         }

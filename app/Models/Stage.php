@@ -7,6 +7,41 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
+/**
+ * App\Models\Stage
+ *
+ * @property int $id
+ * @property int $stage_number
+ * @property string|null $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $date
+ * @property bool $is_rest_day
+ * @property int $tour_id
+ * @property int|null $route_id
+ * @property int|null $activity_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Activity|null $activity
+ * @property-read \App\Models\Route|null $route
+ * @property-read \App\Models\Tour $tour
+ * @method static \Database\Factories\StageFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage ordered(string $direction = 'asc')
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereActivityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereIsRestDay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereRouteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereStageNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereTourId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Stage whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Stage extends Model implements Sortable
 {
     use HasFactory, SortableTrait;

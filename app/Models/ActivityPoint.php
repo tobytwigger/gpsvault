@@ -39,7 +39,7 @@ class ActivityPoint extends Model
     ];
 
     protected $casts = [
-
+        'cumulative_distance' => 'float'
     ];
 
     public function stats()

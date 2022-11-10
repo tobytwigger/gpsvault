@@ -1,7 +1,7 @@
 export default class {
 
     router(waypoints, callback, context, options) {
-        var timedOut = false,
+        let timedOut = false,
             wps = [],
             url,
             timer,
@@ -35,7 +35,7 @@ export default class {
 
 
         axios.get(url, L.bind(function (err, resp) {
-            var data;
+            let data;
 
             clearTimeout(timer);
             if (!timedOut) {
@@ -56,16 +56,16 @@ export default class {
     }
 
     buildRouteUrl(waypoints, options) {
-        var locs = [],
+        let locs = [],
             locationKey,
             hint;
-        var transitM = options.transitmode || this._transitmode;
-        var streetName = options.street;
-        var costingOptions = this._costingOptions;
+        let transitM = options.transitmode || this._transitmode;
+        let streetName = options.street;
+        let costingOptions = this._costingOptions;
         this._transitmode = transitM;
 
-        for (var i = 0; i < waypoints.length; i++) {
-            var loc;
+        for (let i = 0; i < waypoints.length; i++) {
+            let loc;
             locationKey = this._locationKey(waypoints[i].latLng).split(',');
             if(i === 0 || i === waypoints.length-1){
                 loc = {
@@ -83,7 +83,7 @@ export default class {
             locs.push(loc);
         }
 
-        var params = JSON.stringify({
+        let params = JSON.stringify({
             locations: locs,
             costing: transitM,
             street: streetName,

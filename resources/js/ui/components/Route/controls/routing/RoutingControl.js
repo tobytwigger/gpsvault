@@ -50,7 +50,7 @@ class RoutingControl {
         this._hideSidebar.bind(this);
         this._showSidebar.bind(this);
 
-        this._routingButton = this._createButton('maplibregl-ctrl-icon maplibregl-ctrl-zoom-in', (e) => {
+        this._routingButton = this._createButton('mdi maplibregl-icon-lg mdi-routes', (e) => {
             if(this._sidebarIsShowing) {
                 this._hideSidebar();
                 this._sidebarIsShowing = false;
@@ -61,7 +61,7 @@ class RoutingControl {
         });
 
         let span = window.document.createElement('span');
-        span.className = 'maplibregl-ctrl-icon mapboxgl-ctrl-icon';
+        span.className = 'mdi maplibregl-icon-lg mapboxgl-ctrl-icon';
         span.setAttribute('aria-hidden', 'true');
         this._routingButton.appendChild(span);
 
@@ -74,14 +74,14 @@ class RoutingControl {
 
     _hideSidebar() {
         this._sidebar.hidden = true;
-        this._routingButton.classList.remove('maplibregl-ctrl-zoom-out')
-        this._routingButton.classList.add('maplibregl-ctrl-zoom-in');
+        this._routingButton.classList.remove('mdi-close-circle-outline')
+        this._routingButton.classList.add('mdi-routes');
     }
 
     _showSidebar() {
         this._sidebar.hidden = false;
-        this._routingButton.classList.add('maplibregl-ctrl-zoom-out')
-        this._routingButton.classList.remove('maplibregl-ctrl-zoom-in');
+        this._routingButton.classList.add('mdi-close-circle-outline')
+        this._routingButton.classList.remove('mdi-routes');
     }
 
     getDefaultPosition() {

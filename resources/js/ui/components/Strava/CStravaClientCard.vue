@@ -334,18 +334,19 @@ export default {
             return this.client.client_id;
         },
         stravaLoginUrl() {
-            let stravaUrl = this.$vuetify.breakpoint.mobile
-                ? new URL('https://www.strava.com/oauth/mobile/authorize')
-                : new URL('https://www.strava.com/oauth/authorize');
-
-            stravaUrl.searchParams.append('client_id', this.client.client_id);
-            stravaUrl.searchParams.append('redirect_uri', route('strava.client.login', this.client.id));
-            stravaUrl.searchParams.append('response_type', 'code');
-            stravaUrl.searchParams.append('approval_prompt', 'auto');
-            stravaUrl.searchParams.append('scope', 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write');
-            stravaUrl.searchParams.append('state', 12345);
-
-            return stravaUrl.toString();
+            return route('strava.client.login.start', {client: this.client.id, mobile: this.$vuetify.breakpoint.mobile});
+            // let stravaUrl =
+            //     ? new URL('https://www.strava.com/oauth/mobile/authorize')
+            //     : new URL('https://www.strava.com/oauth/authorize');
+            //
+            // stravaUrl.searchParams.append('client_id', this.client.client_id);
+            // stravaUrl.searchParams.append('redirect_uri', route('strava.client.login', this.client.id));
+            // stravaUrl.searchParams.append('response_type', 'code');
+            // stravaUrl.searchParams.append('approval_prompt', 'auto');
+            // stravaUrl.searchParams.append('scope', 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write');
+            // stravaUrl.searchParams.append('state', 12345);
+            //
+            // return stravaUrl.toString();
         }
     },
     methods: {

@@ -18,6 +18,7 @@ Vue.use(JobStatus, {
     url: '/_api'
 });
 
+
 applyPolyfills().then(() => {
     defineCustomElements(window);
 });

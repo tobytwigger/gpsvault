@@ -66,8 +66,13 @@ class ActivityController extends Controller
      */
     public function show(Activity $activity)
     {
+        $activity->load(['files', 'stats']);
+        foreach($activity->stats as $stat) {
+            $stat->append('linestringWithDistance');
+        }
+        
         return Inertia::render('Activity/Show', [
-            'activity' => $activity->load(['files', 'stats']),
+            'activity' => $activity,
         ]);
     }
 

@@ -1,18 +1,22 @@
 <template>
     <div>
-        <div style="height: 500px" ref="map"></div>
-        <canvas ref="canvas" height="250"></canvas>
+        <div style="height: 800px" ref="map"></div>
+        <div id="elevation-control">
+            <c-elevation-control :coordinates="geojson.coordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
+        </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
 import maplibregl from 'maplibre-gl';
-import { Chart, registerables} from 'chart.js';
-import 'chartjs-adapter-moment';
+import ElevationControl from './../Route/controls/elevation/ElevationControl';
+import CElevationControl from './../Route/controls/elevation/CElevationControl';
+import {cloneDeep} from 'lodash';
 
 export default {
     name: "CMap",
     components: {
+        CElevationControl
     },
     props: {
         geojson: {
@@ -28,13 +32,11 @@ export default {
     data() {
         return {
             map: null,
-            chart: null,
+            selectedIndex: null,
+            geojsonMarker: null,
             // How many points to compress into one point.
             graphScaleFactor: 10
         }
-    },
-    created() {
-        Chart.register(...registerables);
     },
     mounted() {
         this.map = new maplibregl.Map({
@@ -77,9 +79,6 @@ export default {
             },
         });
 
-        this.setupChart();
-
-
         this.map.on('load', () => {
 
             this.map.addControl(
@@ -87,6 +86,10 @@ export default {
                     showZoom: true,
                     showCompass: false
                 })
+            );
+
+            this.map.addControl(
+                new ElevationControl()
             );
 
 
@@ -128,35 +131,28 @@ export default {
                 padding: 20
             });
         },
-        setupChart() {
-            let context = this.$refs.canvas.getContext('2d');
+    },
 
-            this.chart = new Chart(context, {
-                type: 'line',
-                options: {
-                    tooltips: {
-                        intersect: false,
-                    },
-                    legend: {
-                        display: false,
-                    },
-                    scales: {
-                        x: {display: true},
-                        y: {display: true}
+    watch: {
+        selectedIndex: {
+            deep: true,
+            handler: function(selectedIndex) {
+                if(selectedIndex !== null) {
+                    if(this.geojsonMarker) {
+                        this.geojsonMarker.remove();
                     }
-                },
-                data: {
-                    labels: this.elevationProfileDataset.map((e, i) => i.toString()),
-                    datasets: [
-                        {
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1,
-                            data: this.elevationProfileDataset
-                        }
-                    ]
+
+                    this.geojsonMarker = new maplibregl.Marker()
+                        .setLngLat({
+                            lng: this.geojson.coordinates[selectedIndex][0],
+                            lat: this.geojson.coordinates[selectedIndex][1]
+                        });
+
+                    this.geojsonMarker.addTo(this.map);
+                } else if(this.geojsonMarker) {
+                    this.geojsonMarker.remove();
                 }
-            });
+            }
         }
     },
 
@@ -165,13 +161,17 @@ export default {
             if(this.geojson === null) {
                 return null;
             }
+
+            let geojson = cloneDeep(this.geojson);
+            geojson.coordinates = this.geojson.coordinates.map(c => [c[0], c[1], c[2]]);
+
             return {
                 "name":"NewFeatureType",
                 "type":"FeatureCollection",
                 "features":[
                     {
                         "type":"Feature",
-                        "geometry":this.geojson,
+                        "geometry":geojson,
                         "properties":null
                     }
                 ]};
@@ -185,14 +185,14 @@ export default {
         elevationProfileDataset() {
             const data = [];
 
-            this.geojson.coordinates.forEach((coords, index) => {
+            this.elevationGeojson.coordinates.forEach((coords, index) => {
                 if (coords.length === 3) {
                     data.push(coords[2]);
                 }
             });
 
             return data.filter((d, i) => i % this.graphScaleFactor === 0);
-        }
+        },
     }
 }
 </script>

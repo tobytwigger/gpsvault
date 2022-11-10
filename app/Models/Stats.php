@@ -12,7 +12,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 
+/**
+ *  * @property LineString|null $linestring
+
+ */
 class Stats extends Model
 {
     use HasFactory, HasAdditionalData, PostgisTrait;
@@ -157,6 +163,18 @@ class Stats extends Model
         }
 
         return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_point->getLat(), $this->end_point->getLng());
+    }
+
+    public function getLinestringWithDistanceAttribute()
+    {
+        $cumulativeDistancePoints = $this->activityPoints()->orderBy('order')->select('cumulative_distance')->get()->pluck('cumulative_distance');
+        if($cumulativeDistancePoints->count() < $this->linestring->count()) {
+            $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
+        }
+
+        return collect($this->linestring->getPoints())
+            ->map(fn(Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->toArray();
     }
 
     public static function default()

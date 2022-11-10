@@ -29,8 +29,7 @@ class NewWaypointLocatorController
 
         $smallestDistanceIndex = null;
         $smallestDistance = null;
-// [1, 2, 3, 4, 5]
-//
+
         for ($i = 1; $i <= count($fullLinestring) - 1; $i++) {
 
             $segmentStart = new Coordinate(
@@ -52,11 +51,6 @@ class NewWaypointLocatorController
                 $smallestDistanceIndex = $i;
             }
         }
-
-//        dd($smallestDistanceIndex, count($fullLinestring));
-//        if($smallestDistanceIndex === count($fullLinestring)) {
-//            $smallestDistanceIndex -= 1;
-//        }
 
         return [
             'index' => $smallestDistanceIndex,

@@ -14,6 +14,62 @@ use Illuminate\Support\Str;
 use Linkeys\UrlSigner\Models\Link;
 use Linkeys\UrlSigner\Support\LinkRepository\LinkRepository;
 
+/**
+ * App\Integrations\Strava\Client\Models\StravaClient
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property string|null $name
+ * @property string|null $description
+ * @property mixed $client_id
+ * @property mixed $client_secret
+ * @property bool $enabled
+ * @property bool $public
+ * @property mixed $webhook_verify_token
+ * @property string|null $invitation_link_uuid
+ * @property int $used_15_min_calls
+ * @property int $used_daily_calls
+ * @property int $limit_15_min
+ * @property int $limit_daily
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read string|null $invitation_link
+ * @property-read bool|null $invitation_link_expired
+ * @property-read \DateTimeInterface|null $invitation_link_expires_at
+ * @property-read bool $is_connected
+ * @property-read User $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|User[] $sharedUsers
+ * @property-read int|null $shared_users_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|StravaToken[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static Builder|StravaClient connected(int $userId)
+ * @method static Builder|StravaClient enabled()
+ * @method static Builder|StravaClient excluding(array $excluding)
+ * @method static \Database\Factories\StravaClientFactory factory(...$parameters)
+ * @method static Builder|StravaClient forUser(int $userId)
+ * @method static Builder|StravaClient newModelQuery()
+ * @method static Builder|StravaClient newQuery()
+ * @method static Builder|StravaClient public()
+ * @method static Builder|StravaClient query()
+ * @method static Builder|StravaClient whereClientId($value)
+ * @method static Builder|StravaClient whereClientSecret($value)
+ * @method static Builder|StravaClient whereCreatedAt($value)
+ * @method static Builder|StravaClient whereDescription($value)
+ * @method static Builder|StravaClient whereEnabled($value)
+ * @method static Builder|StravaClient whereId($value)
+ * @method static Builder|StravaClient whereInvitationLinkUuid($value)
+ * @method static Builder|StravaClient whereLimit15Min($value)
+ * @method static Builder|StravaClient whereLimitDaily($value)
+ * @method static Builder|StravaClient whereName($value)
+ * @method static Builder|StravaClient wherePublic($value)
+ * @method static Builder|StravaClient whereUpdatedAt($value)
+ * @method static Builder|StravaClient whereUsed15MinCalls($value)
+ * @method static Builder|StravaClient whereUsedDailyCalls($value)
+ * @method static Builder|StravaClient whereUserId($value)
+ * @method static Builder|StravaClient whereWebhookVerifyToken($value)
+ * @method static Builder|StravaClient withSpaces()
+ * @mixin \Eloquent
+ */
 class StravaClient extends Model
 {
     use HasFactory;

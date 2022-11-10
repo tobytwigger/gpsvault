@@ -32,6 +32,14 @@ Vue.component('grid-layout', VueGridLayout.GridLayout);
 Vue.component('grid-item', VueGridLayout.GridItem);
 Vue.mixin({methods: { route }});
 
+import VueShepherdPlugin from 'vue-shepherd';
+import 'shepherd.js/dist/css/shepherd.css';
+Vue.use(VueShepherdPlugin);
+
+Vue.prototype.$tour = new Vue.prototype.$shepherd({
+    useModalOverlay: true,
+})
+
 
 
 /**
