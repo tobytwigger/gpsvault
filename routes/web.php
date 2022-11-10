@@ -106,6 +106,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     /* Client Authentication */
+    Route::get('client/{client}/start-login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'initiateLogin'])->name('strava.client.login.start');
     Route::get('client/{client}/login', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'login'])->name('strava.client.login');
     Route::post('client/{client}/logout', [\App\Integrations\Strava\Http\Controllers\Client\ClientAuthController::class, 'logout'])->name('strava.client.logout');
 
