@@ -2,7 +2,7 @@
     <div>
         <v-row v-if="hasStats">
             <v-col>
-                <c-stats v-model="selectedCharts" :selectable="true" :schema="statSchema" data-hint="You can toggle the data below to show it in the graph." data-scroll-to="element">
+                <c-stats v-model="selectedCharts" :selectable="true" :schema="processedSchema" data-hint="You can toggle the data below to show it in the graph." data-scroll-to="element">
                     <template v-slot:append="{selected, toggleStatGroup}">
                         <v-list-item>
                             <v-list-item-icon>
@@ -113,6 +113,31 @@ export default {
         allStats() {
             return this.activity.stats;
         },
+        processedSchema() {
+            // let missingItems = {};
+            // for(let activityPointIndex in this.rawChartData) {
+            //     if(activityPointIndex > 5) {
+            //         continue;
+            //     }
+            //     console.log(this.rawChartData[activityPointIndex]);
+            //     for(let key in this.rawChartData[activityPointIndex]) {
+            //         if(this.rawChartData[activityPointIndex][key] === null) {
+            //             missingItems[key] = (missingItems[key] ?? 0) + 1;
+            //         }
+            //     }
+            //     console.log(missingItems);
+            // }
+            // // console.log(missingItems);
+            // this.statSchema.map(s => {
+            //     // console.log(missingItems[s.label]);
+            //     if(missingItems.hasOwnProperty(s.label) && missingItems[s.label] < 2 && 0 < 0.05) {
+            //         s.disabled = false;
+            //         // console.log((missingItems[s.label]));
+            //     }
+            //     return s;
+            // });
+            return this.statSchema;
+        }
     },
     watch: {
         parsingChartData(val) {

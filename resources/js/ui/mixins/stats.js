@@ -164,6 +164,7 @@ export default {
                     icon: 'mdi-gauge',
                     title: 'Speed',
                     label: 'speed',
+                    disabled: true,
                     data: [
                         {value: this.maxSpeed, label: 'max'},
                         {value: this.avgSpeed, label: 'avg'},
@@ -174,6 +175,7 @@ export default {
                     icon: 'mdi-image-filter-hdr',
                     title: 'Elevation',
                     label: 'elevation',
+                    disabled: true,
                     data: [
                         {value: this.elevationGain, label: 'gain'},
                         {value: this.minAltitude, label: 'min'},
@@ -184,6 +186,7 @@ export default {
                     icon: 'mdi-heart',
                     title: 'Heartrate',
                     label: 'heart_rate',
+                    disabled: true,
                     data: [
                         {value: this.maxHeartrate, label: 'max'},
                         {value: this.avgHeartrate, label: 'avg'},
@@ -204,6 +207,7 @@ export default {
                     icon: 'mdi-reload',
                     title: 'Cadence',
                     label: 'cadence',
+                    disabled: true,
                     data: [
                         {value: this.avgCadence, label: 'avg'},
                     ]
@@ -212,6 +216,7 @@ export default {
                     icon: 'mdi-thermometer',
                     title: 'Temperature',
                     label: 'temperature',
+                    disabled: true,
                     data: [
                         {value: this.averageTemperature, label: 'avg'},
                     ]

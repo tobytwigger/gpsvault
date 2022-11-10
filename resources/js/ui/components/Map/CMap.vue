@@ -128,7 +128,7 @@ export default {
             }, new maplibregl.LngLatBounds(coordinates[0], coordinates[0]));
 
             this.map.fitBounds(bounds, {
-                padding: 20
+                padding: 20, maxDuration: 0.1
             });
         },
     },
