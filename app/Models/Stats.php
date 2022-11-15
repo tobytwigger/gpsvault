@@ -167,6 +167,9 @@ class Stats extends Model
 
     public function getLinestringWithDistanceAttribute()
     {
+        if($this->linestring === null) {
+            return null;
+        }
         $cumulativeDistancePoints = $this->activityPoints()->orderBy('order')->select('cumulative_distance')->get()->pluck('cumulative_distance');
         if($cumulativeDistancePoints->count() < $this->linestring->count()) {
             $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
