@@ -21,13 +21,13 @@
                 <v-list-item-subtitle>{{ stat.label }}</v-list-item-subtitle>
             </v-list-item-content>
 
-            <v-list-item-action v-if="selectable && !group.disabled">
-                <v-btn icon @click="toggleStatGroup(group.label, $event)" :color="selected.indexOf(group.label) > -1 ? 'primary' : 'secondary'">
-                    <v-icon>mdi-arrow-right-circle</v-icon>
-                </v-btn>
-<!--                    <v-icon color="grey lighten-1">mdi-chart-line</v-icon>-->
-<!--                </v-switch>-->
-            </v-list-item-action>
+<!--            <v-list-item-action v-if="selectable && !group.disabled">-->
+<!--                <v-btn icon @click="toggleStatGroup(group.label, $event)" :color="selected.indexOf(group.label) > -1 ? 'primary' : 'secondary'">-->
+<!--                    <v-icon>mdi-arrow-right-circle</v-icon>-->
+<!--                </v-btn>-->
+<!--&lt;!&ndash;                    <v-icon color="grey lighten-1">mdi-chart-line</v-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                </v-switch>&ndash;&gt;-->
+<!--            </v-list-item-action>-->
         </v-list-item>
         <slot name="append" v-bind:selected="selected" v-bind:toggle-stat-group="toggleStatGroup">
 
