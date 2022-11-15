@@ -2,8 +2,6 @@
     <div>
         <v-row v-if="hasStats">
             <v-col>
-
-
                 <v-tabs
                     vertical
                     v-model="selectedTab"
@@ -14,7 +12,7 @@
                     </v-tab>
 
                     <v-tab-item :value="'tab-' + s.label" v-for="s of statSchema" :key="'tab-content-' + s.label">
-                        <c-stat-analysis :stat-id="stats?.id" :stat-schema="s" :activity="activity">
+                        <c-stat-analysis v-if="'tab-' + s.label === selectedTab" :stat-id="stats?.id" :stat-schema="s" :activity="activity">
 
                         </c-stat-analysis>
                     </v-tab-item>

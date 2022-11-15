@@ -5,6 +5,13 @@
                 <c-stats :schema="[statSchema]"></c-stats>
             </v-col>
         </v-row>
+        <v-row>
+            <v-switch
+                v-show="!loading && chartInformation !== null && !statSchema.disabled"
+                v-model="useDistance"
+                :label="(useDistance ? 'Distance vs ' : 'Time vs ') + statSchema.title"
+            ></v-switch>
+        </v-row>
         <v-row no-gutters v-if="!statSchema.disabled">
             <v-col>
                 <hr/>
@@ -17,7 +24,7 @@
             <v-card
                 max-width="600"
                 width="600"
-                class="mx-auto"
+                class="mx-auto px-6 my-auto py-6"
                 :id="chartContainerId"
                 v-show="!loading && chartInformation !== null && !statSchema.disabled"
             >
@@ -56,13 +63,19 @@ export default {
             loading: false,
             chart: null,
             chartInformation: null,
-            mapCanvas: null
+            mapCanvas: null,
+            useDistance: false
+        }
+    },
+    watch: {
+        useDistance() {
+            this.loadChartData();
         }
     },
     methods: {
         loadChartData() {
             this.loading = true;
-            axios.get(route('stats.points', {stats: this.statId, fields: [this.statSchema.pointLabel, 'time']}))
+            axios.get(route('stats.points', {stats: this.statId, fields: [this.statSchema.pointLabel, this.useDistance ? 'cumulative_distance' : 'time']}))
                 .then(response => {
                     if ((response.data?.length ?? 0) > 0) {
                         this.loading = false;
@@ -91,7 +104,6 @@ export default {
             }
         },
         calculateChartInformation(activityPoints) {
-
             if(activityPoints === null) {
                 return {
                     data: {
@@ -104,18 +116,21 @@ export default {
             const labels = [];
 
             activityPoints.forEach(p => {
-                if (p.time) {
+                if (this.useDistance === false && p.time) {
                     labels.push(moment(p.time).unix() * 1000);
                     data.push(p[this.statSchema.pointLabel]);
                 }
+                if (this.useDistance === true && p.cumulative_distance) {
+                    labels.push(this.convert(p.cumulative_distance, 'distance').value);
+                    data.push(p[this.statSchema.pointLabel]);
+                }
             });
-            console.log(labels);
 
             return {
                 options: {
                     events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
                     scales: {
-                        x: {
+                        x: this.useDistance ? {type: 'linear'} : {
                             type: 'time',
                             time: {
                                 unit: 'minute'
@@ -127,7 +142,10 @@ export default {
                         title: {
                             align: "center",
                             display: true,
-                            text: "Distance (" + this.getUserUnit('distance') + ") / Elevation (" + this.getUserUnit('elevation') + ")"
+                            text: (this.useDistance
+                                    ? "Distance (" + this.getUserUnit('distance') + ") / "
+                                    : "Time / ")
+                            + this.statSchema.title + " (" + this.getUserUnit(this.statSchema.label) + ")",
                         },
                         legend: {display: false},
                         tooltip: {
@@ -135,10 +153,13 @@ export default {
                             callbacks: {
                                 title: (tooltipItems) => {
                                     this.$emit('update:selected', tooltipItems[0].dataIndex)
-                                    return "Distance: " + tooltipItems[0].label + this.getUserUnit('distance')
+                                    if(this.useDistance) {
+                                        return "Distance: " + tooltipItems[0].label + this.getUserUnit('distance');
+                                    }
+                                    return "Time: " + tooltipItems[0].label;
                                 },
                                 label: (tooltipItem) => {
-                                    return "Elevation: " + tooltipItem.raw + this.getUserUnit('elevation')
+                                    return this.statSchema.title + " : " + tooltipItem.raw + this.getUserUnit('elevation');
                                 },
                             }
                         }
@@ -154,7 +175,7 @@ export default {
                         {
                             fill: true,
                             borderColor: this.statSchema.lineColour ?? '#66ccff',
-                            backgroundColor: '#66ccffcc',
+                            backgroundColor: (this.statSchema.lineColour ?? '#66ccff') + 'cc',
                             tension: 0.1,
                             pointRadius: 0,
                             spanGaps: true,

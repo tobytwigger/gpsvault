@@ -38,12 +38,13 @@ class StatsPointsController extends Controller
 
         $ids = $stats->activityPoints()->orderBy('time')->select('id')->get();
 
-        $n = $ids->count() / 50; // Keep all multiples of n
+        $n = $ids->count() / 150; // Keep all multiples of n
 
-        $filteredIds = [];
+        $filteredIds = [$ids->first()->id];
         for ($i =0; $i < $ids->count(); $i+=$n) {
             $filteredIds[] = $ids[$i]->id;
         }
+        $filteredIds[] = $ids->last()->id;
 
         return ActivityPoint::query()
             ->orderBy('time', 'ASC')
