@@ -190,6 +190,7 @@ export default {
                     icon: 'mdi-heart',
                     title: 'Heartrate',
                     label: 'heart_rate',
+                    lineColour: '#9e1a1a',
                     pointLabel: 'heart_rate',
                     disabled: false,
                     data: [
