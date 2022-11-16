@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class LogIntoStravaTest extends TestCase
 {
-
     /** @test */
     public function you_must_be_authenticated()
     {
@@ -33,24 +32,15 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_returns_403_if_you_do_not_have_permission()
-    {
-        $this->authenticated();
-        $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
-
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertStatus(403);
-        $response->assertSeeText('This action is unauthorized.');
-    }
-
-    /** @test */
     public function it_returns_403_if_you_do_not_have_access_to_the_client()
     {
         $this->authenticated();
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create();
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
+        session()->put('stravaState', '12345');
+
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code', 'state' => '12345']));
         $response->assertStatus(403);
         $response->assertSeeText('You do not have access to this client.');
     }
@@ -65,8 +55,9 @@ class LogIntoStravaTest extends TestCase
             'user_id' => $this->user->id,
             'strava_client_id' => $client->id,
         ]);
+        session()->put('stravaState', '12345');
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code', 'state' => '12345']));
         $response->assertStatus(403);
         $response->assertSeeText('You are already logged into this client.');
     }
@@ -80,6 +71,7 @@ class LogIntoStravaTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
         $expiresAt = Carbon::now()->addDay();
+        session()->put('stravaState', '12345');
 
         $stravaToken = StravaTokenResponse::create(
             $expiresAt,
@@ -93,9 +85,10 @@ class LogIntoStravaTest extends TestCase
         $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
+        session()->put('stravaState', '12345');
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code', 'state' => '12345']));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
@@ -130,9 +123,10 @@ class LogIntoStravaTest extends TestCase
         $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
+        session()->put('stravaState', '12345');
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code', 'state' => '12345']));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
@@ -166,9 +160,10 @@ class LogIntoStravaTest extends TestCase
         $authenticator->exchangeCode('secret-code', Argument::that(fn ($arg) => $arg instanceof StravaClient && $arg->is($client)))
             ->willReturn($stravaToken);
         $this->app->instance(Authenticator::class, $authenticator->reveal());
+        session()->put('stravaState', '12345');
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code']));
-        $response->assertRedirect(route('strava.client.index'));
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'code' => 'secret-code', 'state' => '12345']));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseHas('strava_tokens', [
             'user_id' => $this->user->id,
@@ -187,7 +182,17 @@ class LogIntoStravaTest extends TestCase
         $this->user->givePermissionTo('manage-strava-clients');
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
-        $response = $this->get(route('strava.client.login', ['client' => $client->id]));
+        $response = $this->get(route('strava.client.login', ['client' => $client->id, 'state' => '12345']));
         $response->assertSessionHasErrors(['code' => 'The code field is required.']);
+    }
+
+    /** @test */
+    public function todo_it_throws_an_exception_if_the_state_does_not_match(){
+        $this->markTestIncomplete();
+    }
+
+    /** @test */
+    public function todo_it_throws_an_exception_if_the_state_is_not_given(){
+        $this->markTestIncomplete();
     }
 }

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class BackupDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_the_backup()
     {
@@ -47,11 +46,11 @@ class BackupDestroyTest extends TestCase
         $this->authenticated();
 
         $backup = File::factory()->archive()->create(['user_id' => $this->user->id]);
-        Storage::disk('tests')->assertExists($backup->path);
+        Storage::disk('test-fake')->assertExists($backup->path);
 
         $response = $this->delete(route('backup.destroy', $backup));
         $response->assertRedirect(route('backup.index'));
 
-        Storage::disk('tests')->assertMissing($backup->path);
+        Storage::disk('test-fake')->assertMissing($backup->path);
     }
 }

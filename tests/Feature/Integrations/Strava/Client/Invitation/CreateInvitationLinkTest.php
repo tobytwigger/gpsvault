@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class CreateInvitationLinkTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -59,7 +58,7 @@ class CreateInvitationLinkTest extends TestCase
         $this->assertNull($client->invitation_link_uuid);
 
         $response = $this->post(route('strava.client.invite', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $client->refresh();
         $link = Link::where('uuid', $client->invitation_link_uuid)->firstOrFail();

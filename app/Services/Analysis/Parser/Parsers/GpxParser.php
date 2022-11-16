@@ -6,14 +6,23 @@ use App\Models\File;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use phpGPX\phpGPX;
+use Ramsey\Uuid\Uuid;
 
 class GpxParser implements ParserContract
 {
     public function read(File $file): Analysis
     {
         $gpx = new phpGPX();
-        $file = $gpx->load($file->fullPath());
+        if ($file->disk === 's3') {
+            $localPath = Uuid::getFactory()->uuid4();
+            Storage::disk('local')->put($localPath, $file->getFileContents());
+            $file = $gpx->load(Storage::disk('local')->path($localPath));
+            Storage::delete($localPath);
+        } else {
+            $file = $gpx->load($file->fullPath());
+        }
         $points = collect();
 
         foreach ($file->tracks as $track) {

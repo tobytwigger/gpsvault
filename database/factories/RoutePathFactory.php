@@ -20,9 +20,10 @@ class RoutePathFactory extends Factory
     public function definition()
     {
         return [
-            'linestring' => new LineString(collect()->range(1, 6)->map(fn () => new Point($this->faker->latitude, $this->faker->longitude))->all()),
+            'linestring' => new LineString(collect()->range(1, 6)->map(fn () => new Point($this->faker->latitude, $this->faker->longitude, $this->faker->numberBetween(0, 500)))->all()),
             'distance' => $this->faker->randomFloat(),
             'elevation_gain' => $this->faker->randomFloat(),
+            'duration' => $this->faker->randomFloat(),
             'route_id' => Route::factory(),
         ];
     }

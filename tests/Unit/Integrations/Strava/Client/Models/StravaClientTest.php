@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class StravaClientTest extends TestCase
 {
-
     /** @test */
     public function it_adds_a_user_id_on_creation()
     {

@@ -16,16 +16,18 @@
                 </v-tooltip>
             </v-list-item-icon>
 
-            <v-list-item-content v-for="stat in group.data" :key="stat.value.unit + stat.label">
+            <v-list-item-content v-for="stat in padData(group.data)" :key="stat.id ?? stat.value.unit + stat.label">
                 <v-list-item-title>{{ stat.value.value }} {{ stat.value.unit }}</v-list-item-title>
                 <v-list-item-subtitle>{{ stat.label }}</v-list-item-subtitle>
             </v-list-item-content>
 
-            <v-list-item-action v-if="selectable && !group.disabled">
-                <v-switch :value="selected.indexOf(group.label) > -1" @change="toggleStatGroup(group.label, $event)">
-                    <v-icon color="grey lighten-1">mdi-chart-line</v-icon>
-                </v-switch>
-            </v-list-item-action>
+<!--            <v-list-item-action v-if="selectable && !group.disabled">-->
+<!--                <v-btn icon @click="toggleStatGroup(group.label, $event)" :color="selected.indexOf(group.label) > -1 ? 'primary' : 'secondary'">-->
+<!--                    <v-icon>mdi-arrow-right-circle</v-icon>-->
+<!--                </v-btn>-->
+<!--&lt;!&ndash;                    <v-icon color="grey lighten-1">mdi-chart-line</v-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                </v-switch>&ndash;&gt;-->
+<!--            </v-list-item-action>-->
         </v-list-item>
         <slot name="append" v-bind:selected="selected" v-bind:toggle-stat-group="toggleStatGroup">
 
@@ -63,6 +65,19 @@ export default {
         }
     },
     methods: {
+        padData(data) {
+            while(data.length < this.numberOfColumns) {
+                data.push({
+                    id: Math.random(),
+                    value: {
+                        value: null,
+                        unit: null
+                    },
+                    label: null
+                })
+            }
+            return data;
+        },
         toggleStatGroup(label, selected) {
             let opts = this.selected;
             if(selected) {
@@ -90,6 +105,13 @@ export default {
                 this.$emit('input', val)
             }
         },
+        numberOfColumns() {
+            let cols = 0;
+            for(let group of this.schema) {
+                cols = cols > group.data.length ? cols : group.data.length;
+            }
+            return cols;
+        }
     }
 }
 </script>

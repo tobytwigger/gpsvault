@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class DestroyClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -57,7 +56,7 @@ class DestroyClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
 
         $response = $this->delete(route('strava.client.destroy', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertNull(StravaClient::find($client->id));
     }

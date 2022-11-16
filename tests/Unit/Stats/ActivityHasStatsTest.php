@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class ActivityHasStatsTest extends TestCase
 {
-
     /** @test */
     public function stats_can_be_attached_to_an_activity()
     {
@@ -67,7 +66,7 @@ class ActivityHasStatsTest extends TestCase
         $activity = Activity::factory()->create(['file_id' => File::factory()->activityFile()->create()->id]);
         $activity->analyse();
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $activity->is($job->model));
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $activity->is($job->activity));
     }
 
     /** @test */

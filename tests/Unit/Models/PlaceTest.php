@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class PlaceTest extends TestCase
 {
-
     /** @test */
     public function it_has_many_routes()
     {
@@ -21,7 +20,7 @@ class PlaceTest extends TestCase
 
         $place->routes()->attach([$route1->id, $route2->id]);
 
-        $this->assertCount(2, $place->routes);
+        $this->assertCount(2, $place->routes()->orderBy('id')->get());
         $this->assertTrue($route1->is($place->routes[0]));
         $this->assertTrue($route2->is($place->routes[1]));
     }

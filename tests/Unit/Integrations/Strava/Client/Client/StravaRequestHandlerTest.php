@@ -16,9 +16,14 @@ use Tests\TestCase;
 
 class StravaRequestHandlerTest extends TestCase
 {
+    /** @test */
+    public function todo_if_a_client_is_set_it_will_only_use_that_client()
+    {
+        $this->markTestSkipped();
+    }
 
     /** @test */
-    public function unauthenticated_request_makes_a_request()
+    public function todo_unauthenticated_request_makes_a_request()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();
@@ -41,7 +46,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_makes_a_request_with_an_available_client()
+    public function todo_request_makes_a_request_with_an_available_client()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();
@@ -68,7 +73,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_updates_rate_limits_on_successful_response()
+    public function todo_request_updates_rate_limits_on_successful_response()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();
@@ -106,7 +111,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_updates_rate_limits_on_429_exception()
+    public function todo_request_updates_rate_limits_on_429_exception()
     {
         $this->markTestSkipped();
         $this->expectException(ClientNotAvailable::class);
@@ -152,7 +157,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_throws_an_exception_that_isnt_a_429_and_updates_rate_limits()
+    public function todo_request_throws_an_exception_that_isnt_a_429_and_updates_rate_limits()
     {
         $this->markTestSkipped();
         $this->expectException(\Exception::class);
@@ -199,7 +204,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_tries_with_other_available_clients_if_first_client_throws_rate_limit_exception()
+    public function todo_request_tries_with_other_available_clients_if_first_client_throws_rate_limit_exception()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();
@@ -259,7 +264,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function request_throws_an_exception_if_all_clients_are_full_or_throw_rate_limit_exception()
+    public function todo_request_throws_an_exception_if_all_clients_are_full_or_throw_rate_limit_exception()
     {
         $this->markTestSkipped();
         $this->expectException(ClientNotAvailable::class);
@@ -325,7 +330,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function decode_response_decodes_a_response()
+    public function todo_decode_response_decodes_a_response()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();
@@ -347,7 +352,7 @@ class StravaRequestHandlerTest extends TestCase
     }
 
     /** @test */
-    public function get_guzzle_client_returns_the_guzzle_client()
+    public function todo_get_guzzle_client_returns_the_guzzle_client()
     {
         $this->markTestSkipped();
         $user = User::factory()->create();

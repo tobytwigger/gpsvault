@@ -9,15 +9,13 @@ use Tests\TestCase;
 
 class AnalysisTest extends TestCase
 {
-
     /** @test */
-    public function it_analyses_a_gpx_file()
+    public function todo_it_analyses_a_gpx_file()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Simplify to only give raw data and retest. Test both s3 and local disks');
 
         $file = File::factory()->dartmoorDevilGpx()->create();
 
-        /** @var Analysis $analysis */
         $analysis = Analyser::analyse($file);
 
         $this->assertEquals(50.594223, $analysis->getStartLatitude());
@@ -51,9 +49,9 @@ class AnalysisTest extends TestCase
     }
 
     /** @test */
-    public function it_analyses_a_fit_file()
+    public function todo_it_analyses_a_fit_file()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Simplify to only give raw data and retest');
 
         $file = File::factory()->dartmoorDevilFit()->create();
 
@@ -90,8 +88,8 @@ class AnalysisTest extends TestCase
     }
 
     /** @test */
-    public function it_analyses_a_tcx_file()
+    public function todo_it_analyses_a_tcx_file()
     {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Simplify to only give raw data and retest');
     }
 }

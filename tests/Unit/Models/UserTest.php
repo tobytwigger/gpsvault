@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_related_models_on_delete()
     {
@@ -35,7 +34,7 @@ class UserTest extends TestCase
         $activities = Activity::factory()->count(5)->create(['user_id' => $user->id]);
 
         $this->assertContainsOnlyInstancesOf(Activity::class, $user->activities);
-        $retrievedActivities = $user->activities;
+        $retrievedActivities = $user->activities()->orderBy('id')->get();
         foreach ($activities as $activity) {
             $this->assertTrue($activity->is($retrievedActivities->shift()));
         }
@@ -63,12 +62,17 @@ class UserTest extends TestCase
 
         $this->assertContainsOnlyInstancesOf(File::class, $user->files);
         $this->assertCount(10, $user->files);
-        $retrievedFiles = $user->files;
-        foreach ($files as $file) {
+        $retrievedFiles = $user->files()->orderBy('id')->get();
+        foreach ($files->sortBy('id') as $file) {
             $this->assertTrue($file->is($retrievedFiles->shift()));
         }
         foreach ($files2 as $file) {
             $this->assertTrue($file->is($retrievedFiles->shift()));
         }
+    }
+
+    /** @test */
+    public function todo_it_creates_dashboards_on_user_creation(){
+        $this->markTestIncomplete();
     }
 }

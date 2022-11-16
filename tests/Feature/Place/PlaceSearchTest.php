@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class PlaceSearchTest extends TestCase
 {
-
     /** @test */
     public function it_filters_by_those_not_part_of_the_given_route_id()
     {

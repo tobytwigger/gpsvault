@@ -3,7 +3,8 @@
         <template v-slot:activator="{trigger,showing}">
             <slot name="activator" v-bind:trigger="trigger" v-bind:showing="showing"></slot>
         </template>
-        Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
+
+        {{description}}
 
         <v-form @submit.prevent="confirmPassword">
             <v-text-field
@@ -32,6 +33,10 @@ export default {
         title: {
             required: true,
             type: String
+        },
+        description: {
+            required: false,
+            type: String,
         },
         buttonText: {
             required: true,

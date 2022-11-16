@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\GenerateActivityThumbnail;
 use App\Services\Geocoding\Geocoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
@@ -10,10 +11,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
+use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
+use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 
+/**
+ *  * @property LineString|null $linestring
+
+ */
 class Stats extends Model
 {
-    use HasFactory, HasAdditionalData;
+    use HasFactory, HasAdditionalData, PostgisTrait;
 
     protected $appends = [
         'human_started_at',
@@ -21,6 +29,8 @@ class Stats extends Model
     ];
 
     protected $fillable = [
+        'linestring',
+
         'integration',
 
         'stats_id',
@@ -58,14 +68,10 @@ class Stats extends Model
         'average_watts',
         // The average energy output in kjoules
         'kilojoules',
-        // The start latitude
-        'start_latitude',
-        // The start longitude
-        'start_longitude',
-        // The end latitude
-        'end_latitude',
-        // The end longitude
-        'end_longitude',
+        // The starting point
+        'start_point',
+        // The end point
+        'end_point',
         // The average heartrate in bpm
         'average_heartrate',
         // The max heartrate in bpm
@@ -91,13 +97,30 @@ class Stats extends Model
         'average_temp' => 'float',
         'average_watts' => 'float',
         'kilojoules' => 'float',
-        'start_latitude' => 'float',
-        'start_longitude' => 'float',
-        'end_latitude' => 'float',
-        'end_longitude' => 'float',
         'max_heartrate' => 'float',
         'average_heartrate' => 'float',
         'calories' => 'float',
+    ];
+
+    protected $postgisFields = [
+        'linestring',
+        'start_point',
+        'end_point',
+    ];
+
+    protected $postgisTypes = [
+        'linestring' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
+        'start_point' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
+        'end_point' => [
+            'geomtype' => 'geography',
+            'srid' => 4326,
+        ],
     ];
 
     final public function __construct(array $attributes = [])
@@ -107,6 +130,16 @@ class Stats extends Model
 
     protected static function booted()
     {
+        static::created(function (Stats $stats) {
+            if ($stats->linestring !== null) {
+                GenerateActivityThumbnail::dispatch($stats);
+            }
+        });
+        static::saved(function (Stats $stats) {
+            if ($stats->wasChanged('linestring')) {
+                GenerateActivityThumbnail::dispatch($stats);
+            }
+        });
     }
 
     public function model(): MorphTo
@@ -116,20 +149,35 @@ class Stats extends Model
 
     public function getHumanStartedAtAttribute()
     {
-        if (!$this->start_latitude || !$this->start_longitude) {
+        if (!$this->start_point) {
             return null;
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_latitude, $this->start_longitude);
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->start_point->getLat(), $this->start_point->getLng());
     }
 
     public function getHumanEndedAtAttribute()
     {
-        if (!$this->end_latitude || !$this->end_longitude) {
+        if (!$this->end_point) {
             return null;
         }
 
-        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_latitude, $this->end_longitude);
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->end_point->getLat(), $this->end_point->getLng());
+    }
+
+    public function getLinestringWithDistanceAttribute()
+    {
+        if($this->linestring === null) {
+            return null;
+        }
+        $cumulativeDistancePoints = $this->activityPoints()->orderBy('order')->select('cumulative_distance')->get()->pluck('cumulative_distance');
+        if($cumulativeDistancePoints->count() < $this->linestring->count()) {
+            $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
+        }
+
+        return collect($this->linestring->getPoints())
+            ->map(fn(Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->toArray();
     }
 
     public static function default()
@@ -153,8 +201,8 @@ class Stats extends Model
         $query->orderByPreference();
     }
 
-    public function waypoints()
+    public function activityPoints()
     {
-        return $this->hasMany(Waypoint::class);
+        return $this->hasMany(ActivityPoint::class);
     }
 }

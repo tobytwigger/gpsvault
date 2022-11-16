@@ -21,46 +21,6 @@
                 View
             </v-btn>
 
-            <v-spacer></v-spacer>
-
-            <slot name="icons" v-bind:place="place"></slot>
-
-            <v-tooltip bottom v-if="place.url">
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        link
-                        :href="place.url"
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-earth</v-icon>
-                    </v-btn>
-                </template>
-                View Website
-            </v-tooltip>
-
-            <v-tooltip bottom v-if="place.user_id === $page.props.user.id && edit">
-                <template v-slot:activator="{ on, attrs }">
-                    <c-place-form :old-place="place" title="Edit place" button-text="Update">
-                        <template v-slot:activator="{trigger,showing}">
-
-                            <v-btn
-                                icon
-                                v-bind="attrs"
-                                v-on="on"
-                                :disabled="showing"
-                                @click="trigger"
-                            >
-                                <v-icon>mdi-pencil</v-icon>
-                            </v-btn>
-                        </template>
-                    </c-place-form>
-                </template>
-                Edit Place
-            </v-tooltip>
-
-
         </v-card-actions>
 
     </v-card>

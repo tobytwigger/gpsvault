@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class FileTest extends TestCase
 {
-
     /** @test */
     public function it_has_a_relationship_with_a_user()
     {
@@ -35,7 +34,7 @@ class FileTest extends TestCase
     /** @test */
     public function it_hashes_the_file_contents_on_save()
     {
-        Storage::disk('tests')->put('hashing.txt', 'abc123');
+        Storage::disk('test-fake')->put('hashing.txt', 'abc123');
         $hash = md5('abc123');
         $file = File::factory()->create([
             'path' => 'hashing.txt',
@@ -43,7 +42,7 @@ class FileTest extends TestCase
             'extension' => 'txt',
             'type' => FileUploader::ACTIVITY_FILE,
             'mimetype' => 'text/plain',
-            'disk' => 'tests',
+            'disk' => 'test-fake',
             'hash' => null,
         ]);
 

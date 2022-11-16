@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class UpdateClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -80,7 +79,7 @@ class UpdateClientTest extends TestCase
             ['client_secret' => 'secret-123-updated', 'name' => 'name123-updated', 'description' => 'desc123-updated']
         );
 
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $client->refresh();
         $this->assertEquals('name123-updated', $client->name);
@@ -106,7 +105,7 @@ class UpdateClientTest extends TestCase
             ['client_id' => 123456]
         );
 
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $client->refresh();
         $this->assertEquals(123, $client->client_id);

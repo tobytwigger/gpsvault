@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class LogOutOfStravaTest extends TestCase
 {
-
     /** @test */
     public function you_must_be_authenticated()
     {
@@ -26,17 +25,6 @@ class LogOutOfStravaTest extends TestCase
 
         $response = $this->post(route('strava.client.logout', $client->id));
         $response->assertStatus(404);
-    }
-
-    /** @test */
-    public function it_returns_403_if_you_do_not_have_permission()
-    {
-        $this->authenticated();
-        $client = StravaClient::factory()->create(['user_id' => $this->user->id]);
-
-        $response = $this->post(route('strava.client.logout', $client));
-        $response->assertStatus(403);
-        $response->assertSeeText('This action is unauthorized.');
     }
 
     /** @test */
@@ -81,7 +69,7 @@ class LogOutOfStravaTest extends TestCase
         StravaToken::factory()->count(2)->create(['strava_client_id' => $client->id]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertDatabaseCount('strava_tokens', 4);
     }
 
@@ -98,7 +86,7 @@ class LogOutOfStravaTest extends TestCase
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseCount('strava_tokens', 0);
     }
@@ -115,7 +103,7 @@ class LogOutOfStravaTest extends TestCase
         ]);
 
         $response = $this->post(route('strava.client.logout', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertDatabaseCount('strava_tokens', 0);
     }

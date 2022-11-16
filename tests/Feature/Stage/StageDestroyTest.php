@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class StageDestroyTest extends TestCase
 {
-
     /** @test */
     public function destroy_deletes_a_stage()
     {

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class EnableClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -57,7 +56,7 @@ class EnableClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'enabled' => true]);
 
         $response = $this->post(route('strava.client.enable', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->enabled);
     }
 
@@ -69,7 +68,7 @@ class EnableClientTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'enabled' => false]);
 
         $response = $this->post(route('strava.client.enable', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->enabled);
     }
 }

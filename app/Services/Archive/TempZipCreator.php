@@ -24,8 +24,8 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
         $archivePath = sprintf('%s/result.zip', $fullPath);
 
         $zipFile = new ZipFile();
-        foreach ($files as $file) {
-            $zipFile->addFile($file);
+        foreach ($files as $newName => $file) {
+            $zipFile->addFile($file, $newName);
         }
         $zipFile->saveAsFile($archivePath);
 
@@ -51,9 +51,9 @@ class TempZipCreator extends \App\Services\Archive\Contracts\ZipCreator
                 return [$fileResource->getNewPath() => $fileResource->fullPath()];
             })
             ->merge(collect($metaPaths)
-            ->mapWithKeys(function (string $path, string $file) {
-                return [sprintf('%s.json', $file) => $path];
-            }))
+                ->mapWithKeys(function (string $path, string $file) {
+                    return [sprintf('%s.json', $file) => $path];
+                }))
             ->all();
     }
 }

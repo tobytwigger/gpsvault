@@ -6,7 +6,7 @@ const requireComponent = require.context(
     // Whether or not to look in subfolders
     true,
     // The regular expression used to match base component filenames. V*.vue
-    /V[A-Z]\w+\.(vue|js)$/
+    /[A-Z]\w+\.(vue|js)$/
 );
 
 export default {
@@ -19,6 +19,7 @@ export default {
         })
 
         Vue.mixin(GlobalMixin);
+
 
     }
 }

@@ -52,6 +52,15 @@ class PlaceController extends Controller
         return redirect()->back(fallback: route('place.show', $place));
     }
 
+    public function destroy(Place $place)
+    {
+        abort_if($place->user_id !== Auth::id(), 403, 'You do not own this place.');
+
+        $place->delete();
+
+        return redirect()->route('place.index');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

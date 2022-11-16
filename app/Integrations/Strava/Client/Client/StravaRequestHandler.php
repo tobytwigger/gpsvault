@@ -4,7 +4,9 @@ namespace App\Integrations\Strava\Client\Client;
 
 use App\Integrations\Strava\Client\Authentication\Authenticator;
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
+use App\Integrations\Strava\Client\Exceptions\StravaException;
 use App\Integrations\Strava\Client\Exceptions\StravaRateLimited;
+use App\Integrations\Strava\Client\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 use Exception;
 use GuzzleHttp\Client as GuzzleClient;
@@ -20,6 +22,13 @@ class StravaRequestHandler
 
     private User $user;
 
+    public ?StravaClientModel $client = null;
+
+    public function withClient(StravaClientModel $client)
+    {
+        $this->client = $client;
+    }
+
     public function __construct(Authenticator $authenticator, User $user, GuzzleClient $guzzleClient)
     {
         $this->guzzleClient = $guzzleClient;
@@ -32,24 +41,34 @@ class StravaRequestHandler
         return $this->guzzleClient->request($method, $uri, $options);
     }
 
+    /**
+     * @throws ClientNotAvailable
+     * @throws StravaException
+     */
     public function request(string $method, string $uri, array $options = []): ResponseInterface
     {
         $excluded = [];
+
+        if ($this->client !== null) {
+            return $this->handleRequest($this->client, $method, $uri, $options);
+        }
         for ($i=0;$i<20;$i++) {
             $client = $this->user->availableClient($excluded);
             $excluded[] = $client->id;
 
             try {
                 return $this->handleRequest($client, $method, $uri, $options);
-            } catch (StravaRateLimited $e) {
-                continue;
+            } catch (\Throwable $e) {
+                if (!($e instanceof StravaRateLimited)) {
+                }
             }
         }
+        
 
         throw new ClientNotAvailable();
     }
 
-    private function handleRequest(\App\Integrations\Strava\Client\Models\StravaClient $client, string $method, string $uri, array $options = []): ResponseInterface
+    private function handleRequest(StravaClientModel $client, string $method, string $uri, array $options = []): ResponseInterface
     {
         try {
             $response = $this->guzzleClient->request($method, $uri, array_merge([
@@ -72,7 +91,7 @@ class StravaRequestHandler
         }
     }
 
-    private function updateRateLimits(ResponseInterface $response, \App\Integrations\Strava\Client\Models\StravaClient $client)
+    private function updateRateLimits(ResponseInterface $response, StravaClientModel $client)
     {
         if ($response->hasHeader('X-RateLimit-Usage')) {
             $usage = explode(',', Arr::first($response->getHeader('X-RateLimit-Usage')));

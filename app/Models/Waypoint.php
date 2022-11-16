@@ -2,57 +2,37 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 class Waypoint extends Model
 {
-    use PostgisTrait;
+    use HasFactory, PostgisTrait;
 
-    protected $table = 'waypoints';
+    protected $fillable = [
+        'place_id', 'location', 'name', 'notes', 'user_id'
+    ];
 
     protected $postgisFields = [
-        'points',
+        'location',
     ];
 
     protected $postgisTypes = [
-        'points' => [
+        'location' => [
             'geomtype' => 'geography',
             'srid' => 4326,
         ],
     ];
 
-    protected $fillable = [
-        'points',
-        'elevation',
-        'time',
-        'cadence',
-        'temperature',
-        'heart_rate',
-        'speed',
-        'grade',
-        'battery',
-        'calories',
-        'cumulative_distance',
-        'stats_id',
-    ];
-
-    protected $casts = [
-
-    ];
-
-    public function stats()
+    public function place()
     {
-        return $this->belongsTo(Stats::class);
+        return $this->belongsTo(Place::class);
     }
 
-    public function getLongitudeAttribute()
+    public function routePathWaypoints()
     {
-        return $this->points->getLng();
+        return $this->hasMany(RoutePathWaypoint::class);
     }
 
-    public function getLatitudeAttribute()
-    {
-        return $this->points->getLat();
-    }
 }

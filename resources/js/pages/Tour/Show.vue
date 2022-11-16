@@ -58,14 +58,41 @@
             </v-tab-item>
 
             <v-tab-item value="tab-stages">
-                <v-btn color="secondary" :disabled="stageForm.processing" :loading="stageForm.processing" @click="createStage">
-                    Add a stage
-                </v-btn>
-                <v-row>
-                    <v-col :key="stage.id" v-for="stage in tour.stages" cols="12" xl="3" md="4" sm="6">
-                        <c-stage-card :stage="stage"></c-stage-card>
-                    </v-col>
-                </v-row>
+                <v-container>
+                    <v-row v-if="tour.stages.length === 0">
+                        <v-col>
+                            <c-stage-wizard :tour="tour"></c-stage-wizard>
+                        </v-col>
+                    </v-row>
+                    <v-row v-else>
+                        <v-col>
+                            <c-stage-summary :tour="tour">
+
+                            </c-stage-summary>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-timeline dense>
+                                <v-slide-x-reverse-transition
+                                    group
+                                    hide-on-leave
+                                >
+                                    <v-timeline-item
+                                        :key="stage.id"
+                                        v-for="stage in tour.stages"
+                                        small
+                                        fill-dot
+                                    >
+                                        <c-stage-card :stage="stage"></c-stage-card>
+                                    </v-timeline-item>
+                                </v-slide-x-reverse-transition>
+                            </v-timeline>
+
+                        </v-col>
+                    </v-row>
+                </v-container>
 
             </v-tab-item>
         </v-tabs-items>
@@ -100,10 +127,14 @@ import CTourMap from 'ui/components/Tour/CTourMap';
 import CDeleteTourButton from 'ui/components/Tour/CDeleteTourButton';
 import CTourForm from '../../ui/components/Tour/CTourForm';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
+import CStageWizard from '../../ui/components/Stage/CStageWizard';
+import CStageSummary from '../../ui/components/Stage/CStageSummary';
 
 export default {
     name: "Show",
     components: {
+        CStageSummary,
+        CStageWizard,
         CActivityLocationSummary,
         CTourForm,
         CDeleteTourButton, CTourMap, CStageCard, CPaginationIterator, CStageTable, CStageForm, CAppWrapper},
@@ -116,20 +147,9 @@ export default {
     data() {
         return {
             tab: null,
-            stageForm: this.$inertia.form({
-                stage_number: null,
-            })
+
         }
     },
-    methods: {
-        createStage() {
-            this.stageForm.post(route('tour.stage.store', this.tour.id), {
-                onSuccess: () => {
-                    this.stageForm.reset();
-                }
-            });
-        }
-    }
 }
 </script>
 

@@ -23,6 +23,10 @@ class CreateStagesTable extends Migration
             $table->unsignedBigInteger('route_id')->nullable();
             $table->unsignedBigInteger('activity_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('tour_id')->references('id')->on('tours')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('route_id')->references('id')->on('routes')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('activity_id')->references('id')->on('activities')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

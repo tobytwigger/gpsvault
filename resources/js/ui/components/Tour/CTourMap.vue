@@ -1,34 +1,29 @@
 <template>
     <div>
-        <div v-if="loading">Loading map</div>
-        <div v-else-if="geojson === null">No route could be plotted</div>
-        <c-map :geojson="geojson" v-else></c-map>
+        <div v-if="geojson.length === 0">No route could be plotted</div>
+        <c-map-many-geojson :geojson="geojson" v-else></c-map-many-geojson>
     </div>
 </template>
 
 <script>
 import CMap from '../Map/CMap';
+import CMapManyGeojson from '../Map/CMapManyGeojson';
 export default {
     name: "CTourMap",
-    components: {CMap},
+    components: {CMapManyGeojson, CMap},
     props: {
         tour: {
             required: true,
             type: Object
         }
     },
-    data() {
-        return {
-            loading: true,
-            geojson: null
+    computed: {
+        geojson() {
+            return this.tour.stages.map(stage => {
+                return (stage?.route?.path?.linestring ?? []).map(ls => [ls.coordinates[1], ls.coordinates[0]])
+            })
         }
     },
-    mounted() {
-        axios.get(route('tour.geojson', this.tour.id))
-            .then(response => this.geojson = response.data)
-            .then(() => this.loading = false);
-    },
-
 }
 </script>
 

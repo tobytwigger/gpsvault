@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RemoveFromClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -64,7 +63,7 @@ class RemoveFromClientTest extends TestCase
             'user_id' => $users[1]->id,
         ]);
 
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertCount(3, $client->sharedUsers()->get());
     }

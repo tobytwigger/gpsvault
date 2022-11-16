@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class LeaveClientTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -70,7 +69,7 @@ class LeaveClientTest extends TestCase
 
         $this->assertCount(1, $client->sharedUsers()->get());
         $response = $this->delete(route('strava.client.leave', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
 
         $this->assertCount(0, $client->sharedUsers()->get());
     }

@@ -20,9 +20,11 @@ return new class() extends Migration {
             $table->text('phone_number')->nullable();
             $table->string('email')->nullable();
             $table->text('address')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->point('location');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

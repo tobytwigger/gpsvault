@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class ActivityShowTest extends TestCase
 {
-
     /** @test */
     public function it_shows_the_activity()
     {

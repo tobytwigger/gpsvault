@@ -1,7 +1,44 @@
 <template>
-    <c-app-wrapper title="New Route" :header-action="true">
+    <c-app-wrapper :title="this.routeModel?.name ? this.routeModel.name : 'New Route'" :header-action="true">
 
         <template #headerActions>
+
+            <v-alert
+                outlined
+                type="warning"
+                border="left"
+                v-if="schema?.waypoints?.length < 2"
+            >
+                Add a start and end point to start planning
+            </v-alert>
+
+            <v-alert
+                outlined
+                type="warning"
+                border="left"
+                v-else-if="schemaUnsaved"
+            >
+                You have unsaved changes.
+            </v-alert>
+
+            <v-snackbar
+                v-model="recentlySaved"
+                :timeout="3500"
+            >
+                Your route has been saved.
+
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                        color="blue"
+                        text
+                        v-bind="attrs"
+                        @click="recentlySaved = false"
+                    >
+                        Close
+                    </v-btn>
+                </template>
+            </v-snackbar>
+
             <v-tooltip bottom v-if="routeModel">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -17,6 +54,12 @@
                 <span>View</span>
             </v-tooltip>
 
+            <v-progress-circular
+                indeterminate
+                v-if="searching"
+                color="primary"
+            ></v-progress-circular>
+
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -25,26 +68,22 @@
                         v-bind="attrs"
                         v-on="on"
                         @click="save"
+                        :disabled="!schemaUnsaved"
+                        :loading="isSaving"
                     >
-                        <v-icon>mdi-content-save</v-icon>
+                        <v-icon >mdi-content-save</v-icon>
                     </v-btn>
                 </template>
                 <span>Save</span>
             </v-tooltip>
+
         </template>
 
-<!--
-- On click, add a point via an API
-
-- Pass it the start and finish
-
-
--->
         <c-route-planner
-            :geojson.sync="geojson"
-            :distance.sync="distance"
-            :time.sync="time"
-            :routePoints.sync="routePoints"
+            :result="result"
+            :schema="schema"
+            @update:schema="updateSchema"
+            :errors="errors"
         ></c-route-planner>
 
     </c-app-wrapper>
@@ -52,8 +91,9 @@
 
 <script>
 import CAppWrapper from '../../ui/layouts/CAppWrapper';
-import CRoutePlanner from '../../ui/components/Map/CRoutePlanner';
-import L from 'leaflet';
+import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
+import polyline from '@mapbox/polyline';
+import {cloneDeep, isEqual} from 'lodash';
 
 export default {
     name: "Planner",
@@ -67,50 +107,151 @@ export default {
     },
     data() {
         return {
-            routePoints: [],
-            geojson: null,
-            distance: 0,
-            time: 0
+            searching: false,
+            result: {
+                coordinates: [],
+                distance: 0,
+                time: 0,
+                elevation: 0
+            },
+            schema: {
+                waypoints: [],
+                use_roads: 0.3,
+                use_hills: 0.5,
+                name: 'New Route'
+            },
+            schemaUnsaved: false,
+            recentlySaved: false,
+            isSaving: false,
+            errors: {}
+        }
+    },
+    watch: {
+        schemaUnsaved(isUnsaved) {
+            window.onbeforeunload = this.schemaUnsaved ? function() {
+                return true;
+            } : null;
         }
     },
     methods: {
+        updateSchema(schema, needsSaving = true) {
+            if(needsSaving && !isEqual(schema, this.schema)) {
+                this.schemaUnsaved = true;
+            }
+            this.schema = schema;
+            if(this.schema?.waypoints?.length > 1) {
+                this.performSearch();
+            } else {
+                this.result = {
+                    coordinates: [],
+                    distance: 0,
+                    time: 0
+                };
+            }
+        },
+        performSearch() {
+            this.searching = true;
+            let schema = cloneDeep(this.schema);
+            schema.waypoints = schema.waypoints.map(w => {
+                w.location = {
+                    lat: w.location[0],
+                    lng: w.location[1]
+                };
+                return w;
+            })
+            axios.post(route('planner.plan'), schema)
+                .then(response => {
+                    this.errors = {}
+                    this.result = response.data;
+                })
+                .catch(e => {
+                    if(e.response.status === 422) {
+                        this.errors = e.response.data.errors;
+                    } else {
+                        this.errors = {generalError: [e.response.data.message]};
+                    }
+                })
+                .finally(() => this.searching = false);
+        },
         save() {
+            console.log(this._calculateDataArray());
+            this.isSaving = true;
             if(this.routeModel) {
-                this.$inertia.patch(route('planner.update', this.routeModel.id), {
-                    'geojson': this.geojson.coordinates.map(c => {
-                        return {lat: c[0], lng: c[1]};
-                    }),
-                    'points': this.routePoints.map(r => {
-                        return {lat: r.lat, lng: r.lng}
-                    })
-                })
-            } else if(this.geojson) {
-                this.$inertia.post(route('planner.store'), {
-                    name: 'New Route',
-                    'geojson': this.geojson.coordinates.map(c => {
-                        return {lat: c[0], lng: c[1]};
-                    }),
-                    'points': this.routePoints.map(r => {
-                        return {lat: r.lat, lng: r.lng}
-                    })
-                })
+                this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
+                    onSuccess: (page) => {
+                        this.schemaUnsaved = false;
+                        this.recentlySaved = true;
+                        this.isSaving = false;
+                    }
+                });
+            } else if(this.schema.waypoints.length > 1 && this.result.coordinates.length > 0) {
+                this.$inertia.post(route('planner.store'), this._calculateDataArray(), {
+                    onSuccess: (page) => {
+                        this.schemaUnsaved = false;
+                        this.recentlySaved = true;
+                        this.isSaving = false;
+                        this.$inertia.reload();
+                    }
+                });
+            }
+        },
+        _calculateDataArray() {
+            return {
+                name: this.schema.name,
+                geojson: polyline.encode(this.result.coordinates.map(c => {
+                    return [c[0], c[1]];
+                }), 6),
+                elevation: this.result.coordinates.map(c => c[2]),
+                waypoints: this.schema.waypoints.map(waypoint => {
+                    // If custom waypoint, then we remove the ID
+                    if(waypoint.unsaved ?? false) {
+                        delete waypoint.id;
+                        delete waypoint.unsaved;
+                    }
+
+                    return {
+                        id: waypoint.id ?? null,
+                        lat: waypoint.location[0],
+                        lng: waypoint.location[1],
+                        name: waypoint.name ?? null,
+                        notes: waypoint.notes ?? null,
+                        place_id: waypoint.place_id
+                    }
+                }),
+                distance: this.result.distance,
+                duration: this.result.time,
+                elevation_gain: this.result.elevation,
+                settings: {
+                    use_roads: this.schema.use_roads,
+                    use_hills: this.schema.use_hills
+                }
             }
         }
     },
     mounted() {
+        if(this.schema.waypoints.length > 1) {
+            this.performSearch();
+        }
+        console.log((this.routeModel?.path?.waypoints ?? []))
         if(this.routeModel) {
-            this.routePoints = this.routeModel.route_points.map(r => {
-                return {lat: r.location.coordinates[1], lng: r.location.coordinates[0]}
-            })
-            this.geojson = this.routeModel.path?.linestring.map(l => {
-                return {lat: l.coordinates[1], lng: l.coordinates[0]}
-            })
-            console.log(this.routeModel);
+            this.updateSchema({
+                waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
+                    return {
+                        id: waypoint.id ?? null,
+                        location: [waypoint.location.coordinates[1], waypoint.location.coordinates[0]],
+                        name: waypoint.name ?? null,
+                        notes: waypoint.notes ?? null,
+                        place_id: waypoint.place_id ?? null
+                    }
+                }),
+                use_roads: this.routeModel?.path?.settings?.use_roads ?? 0.25,
+                use_hills: this.routeModel?.path?.settings?.use_hills ?? 0.4,
+                name: this.routeModel.name ?? 'New Route'
+            }, false)
         }
     }
 }
 </script>
 
 <style scoped>
-    @import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 </style>

@@ -15,16 +15,6 @@
                 <v-card-text>
                     <v-form @submit.prevent="submit">
 
-                        <v-switch
-                            id="is_rest_day"
-                            v-model="form.is_rest_day"
-                            label="Rest day?"
-                            hint="Is this a rest day?"
-                            name="is_rest_day"
-                            :error="form.errors.hasOwnProperty('is_rest_day')"
-                            :error-messages="form.errors.hasOwnProperty('is_rest_day') ? [form.errors.is_rest_day] : []"
-                        ></v-switch>
-
                         <v-text-field
                             id="stage_number"
                             v-model="form.stage_number"
@@ -56,16 +46,6 @@
                             :error="form.errors.hasOwnProperty('description')"
                             :error-messages="form.errors.hasOwnProperty('description') ? [form.errors.description] : []"
                         ></v-textarea>
-
-                        <v-date-picker
-                            id="date"
-                            v-model="form.date"
-                            label="Date"
-                            hint="A date for the stage"
-                            name="date"
-                            :error="form.errors.hasOwnProperty('date')"
-                            :error-messages="form.errors.hasOwnProperty('date') ? [form.errors.date] : []"
-                        ></v-date-picker>
 
                         <c-route-select
                             :error-messages="form.errors.hasOwnProperty('route_id') ? [form.errors.route_id] : []"
@@ -147,8 +127,6 @@ export default {
                 route_id: null,
                 tour_id: this.tourId,
                 activity_id: null,
-                date: null,
-                is_rest_day: false,
                 _method: this.oldStage ? 'patch' : 'post'
             })
         }
@@ -164,8 +142,6 @@ export default {
                 this.form.stage_number = this.oldStage.stage_number;
                 this.form.route_id = this.oldStage.route_id;
                 this.form.activity_id = this.oldStage.activity_id;
-                this.form.date = this.oldStage.date;
-                this.form.is_rest_day = this.oldStage.is_rest_day;
             }
         },
         submit() {

@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class RouteSearchTest extends TestCase
 {
-
     /** @test */
     public function it_returns_all_routes_sorted_by_updated_at_when_no_query_given()
     {
@@ -73,8 +72,6 @@ class RouteSearchTest extends TestCase
     /** @test */
     public function it_filters_by_name()
     {
-        $this->markTestSkipped('Failing');
-
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -90,8 +87,6 @@ class RouteSearchTest extends TestCase
     /** @test */
     public function filtering_is_not_case_sensitive()
     {
-        $this->markTestSkipped('Failing');
-
         $this->authenticated();
 
         $routes = Route::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);

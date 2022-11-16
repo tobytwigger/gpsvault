@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -39,6 +40,29 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'permissions' => Auth::check() ? Auth::user()->getDirectPermissions()->pluck('name') : [],
+            'bruit_api_key' => config('services.bruit.key'),
+            'integrations' => [
+                'strava' => [
+                    'connected' => $this->isConnectedToStrava(),
+                ],
+            ],
+            'csrf' => csrf_token()
         ]);
+    }
+
+    private function isConnectedToStrava(): bool
+    {
+        if (!Auth::check()) {
+            return false;
+        }
+        $clients = Auth::user()->ownedClients()->enabled()->get()
+            ->merge(
+                Auth::user()->sharedClients()->enabled()->get()
+            )->merge(
+                StravaClient::public()->enabled()->where('user_id', '!=', Auth::id())->get()
+            )
+            ->filter(fn (StravaClient $client) => $client->isConnected(Auth::id()));
+
+        return $clients->count() > 0;
     }
 }

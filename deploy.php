@@ -8,7 +8,7 @@ require 'contrib/php-fpm.php';
 // Config
 
 set('keep_releases', 3);
-set('repository', 'git@github.com:tobytwigger/cycle-store');
+set('repository', 'git@github.com:tobytwigger/gpsvault');
 
 add('shared_files', []);
 add('shared_dirs', []);
@@ -16,20 +16,22 @@ add('writable_dirs', []);
 
 // Hosts
 
-host('cycle.linkeys.app')
+host('gpsvault.co.uk')
     ->setSshMultiplexing(true)
     ->set('remote_user', 'ubuntu')
     ->set('branch', 'develop')
-    ->set('deploy_path', '/var/www/cycle.linkeys.app');
+    ->set('deploy_path', '/var/www/gpsvault');
 
 // Tasks
 
 task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
+    'horizon:publish',
     'assets:compile',
     'assets:upload',
     'artisan:migrate',
+    'permission:install',
     'artisan:storage:link',
     'artisan:cache:clear',
     'artisan:route:cache',
@@ -39,6 +41,12 @@ task('deploy', [
     'artisan:optimize',
     'deploy:publish',
 ]);
+
+task('horizon:publish', artisan('horizon:publish'));
+
+task('permission:install', artisan('permission:install'));
+
+task('meilisearch:install', artisan('meilisearch:install'));
 
 task('assets:compile', function () {
     runLocally('npm install');
@@ -57,7 +65,4 @@ after('deploy:failed', 'deploy:unlock');
 //after('deploy:success', function() {
 //    run('php {{release_path}}/artisan websockets:restart');
 //});
-after('deploy:success', function () {
-    run('sudo supervisorctl restart all');
-    run('sudo apachectl graceful');
-});
+after('deploy:success', artisan('horizon:terminate'));

@@ -5,11 +5,11 @@ namespace Tests\Feature\Settings;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Settings\DarkMode;
 use App\Settings\UnitSystem;
+use Settings\Exceptions\SettingUnauthorized;
 use Tests\TestCase;
 
 class SettingStoreTest extends TestCase
 {
-
     /** @test */
     public function dark_mode_can_be_updated()
     {
@@ -54,7 +54,8 @@ class SettingStoreTest extends TestCase
     /** @test */
     public function strava_client_id_cannot_be_updated_without_the_right_permission()
     {
-        $this->markTestSkipped();
+        $this->expectException(SettingUnauthorized::class);
+
         $this->authenticated();
 
         $client1 = StravaClient::factory()->create();
@@ -121,39 +122,5 @@ class SettingStoreTest extends TestCase
     {
         $this->get(route('settings.store'))
             ->assertRedirect(route('login'));
-    }
-
-    /** @test */
-    public function bruit_api_key_can_be_updated_with_the_right_permission()
-    {
-        $this->markTestSkipped();
-        $this->authenticated();
-
-        $this->user->givePermissionTo('manage-bruit-key');
-
-        $client1 = StravaClient::factory()->create();
-        $client2 = StravaClient::factory()->create();
-
-        \App\Settings\StravaClient::setValue($client1->id);
-
-        $response = $this->post(route('settings.store'), ['strava_client_id' => $client2->id]);
-
-        $this->assertEquals($client2->id, \App\Settings\StravaClient::getValue());
-    }
-
-    /** @test */
-    public function bruit_api_key_cannot_be_updated_without_the_right_permission()
-    {
-        $this->markTestSkipped();
-        $this->authenticated();
-
-        $client1 = StravaClient::factory()->create();
-        $client2 = StravaClient::factory()->create();
-
-        \App\Settings\StravaClient::setValue($client1->id);
-
-        $response = $this->post(route('settings.store'), ['strava_client_id' => $client2->id]);
-        $response->assertStatus(500);
-        $this->assertEquals($client1->id, \App\Settings\StravaClient::getValue());
     }
 }

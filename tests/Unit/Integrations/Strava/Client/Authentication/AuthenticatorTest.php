@@ -16,7 +16,6 @@ use Tests\TestCase;
 
 class AuthenticatorTest extends TestCase
 {
-
     /** @test */
     public function it_throws_an_exception_if_no_tokens_are_found_for_the_client()
     {

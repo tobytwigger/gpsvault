@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class ActivityImporterTest extends TestCase
 {
-
     /** @test */
     public function it_creates_an_activity()
     {

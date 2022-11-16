@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tests\Utils\MocksFilepond;
 
 class RouteStoreTest extends TestCase
 {
+    use MocksFilepond;
 
     /** @test */
     public function it_creates_an_route_from_a_file()
@@ -21,10 +23,10 @@ class RouteStoreTest extends TestCase
 
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test',
+            'file' => $file->toArray(), 'name' => 'Test',
         ]);
 
         $this->assertDatabaseCount('routes', 1);
@@ -46,10 +48,10 @@ class RouteStoreTest extends TestCase
 
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test',
+            'file' => $file->toArray(), 'name' => 'Test',
         ]);
 
         $this->assertDatabaseCount('routes', 1);
@@ -106,9 +108,9 @@ class RouteStoreTest extends TestCase
             ['description', Str::random(65570), 'The description must not be greater than 65535 characters.'],
             ['description', null, false],
             ['description', 'This is a valid namne', false],
-            ['file', fn () => UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml'), false],
+            ['file', fn () => $this->createFile('filename.gpx', 58, 'application/gpx+xml'), false],
             ['file', null, false],
-            ['file', 'This is not a file', 'The file must be a file.'],
+            ['file', 'This is not a file', 'The file is not an array'],
         ];
     }
 
@@ -116,7 +118,7 @@ class RouteStoreTest extends TestCase
     public function you_must_be_authenticated()
     {
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
             'file' => $file,
@@ -132,13 +134,13 @@ class RouteStoreTest extends TestCase
 
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('route.store'), [
-            'file' => $file, 'name' => 'Test',
+            'file' => $file->toArray(), 'name' => 'Test',
         ]);
 
-        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseRouteFile::class, fn (AnalyseRouteFile $job) => $job->route->file->filename === 'filename.gpx');
     }
 
     /** @test */
@@ -159,7 +161,7 @@ class RouteStoreTest extends TestCase
         $this->authenticated();
         Storage::fake('test-fake');
 
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
         $response = $this->post(route('route.store'), ['file' => $file]);
 
         Bus::assertNotDispatched(AnalyseRouteFile::class);

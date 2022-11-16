@@ -12,7 +12,7 @@ class GeocodingServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton('nominatim', fn () => new Nominatim('https://nominatim.openstreetmap.org/', ['User-Agent' => 'Cycle Store']));
+        $this->app->singleton('nominatim', fn () => new Nominatim('https://nominatim.openstreetmap.org/', ['User-Agent' => config('app.name')]));
 
         $this->app->bind(Geocoder::class, NominatimGeocoder::class);
         $this->app->extend(NominatimGeocoder::class, function (NominatimGeocoder $geocoder) {

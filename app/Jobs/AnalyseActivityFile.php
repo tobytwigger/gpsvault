@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Activity;
-use App\Models\Route;
 use App\Models\Stats;
 use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
@@ -12,42 +11,42 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 use JobStatus\Trackable;
+use MStaack\LaravelPostgis\Geometries\LineString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseActivityFile implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
-    public Activity|Route $model;
+    public Activity $activity;
 
     public $tries = 3;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Activity|Route $model)
+    public function __construct(Activity $activity)
     {
         $this->queue = 'stats';
-        $this->model = $model;
+        $this->activity = $activity;
     }
 
     public static function canSeeTracking(User $user = null, array $tags = []): bool
     {
         $activity = Activity::findOrFail($tags['activityId'] ?? null);
-        if($user !== null && $activity->user_id === $user->id) {
+        if ($user !== null && $activity->user_id === $user->id) {
             return true;
         }
+
         return false;
     }
 
     public function tags(): array
     {
         return [
-            'activityId' => $this->model->id,
+            'activityId' => $this->activity->id,
         ];
     }
 
@@ -61,13 +60,19 @@ class AnalyseActivityFile implements ShouldQueue
      */
     public function handle()
     {
-        if (!$this->model->hasFile()) {
-            throw new NotFoundHttpException(sprintf('Activity %u does not have a model associated with it.', $this->model->id));
-        }
-        $analysis = Analyser::analyse($this->model->file);
+        if (!$this->activity->hasFile()) {
+            $this->errorMessage(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
 
+            throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
+        }
+
+        $this->line('Starting analysis');
+        $analysis = Analyser::analyse($this->activity->file);
+        $this->successMessage('Analysis finished');
+
+        $this->line('Saving data');
         $stats = Stats::updateOrCreate(
-            ['integration' => 'php', 'stats_id' => $this->model->id, 'stats_type' => get_class($this->model)],
+            ['integration' => 'php', 'stats_id' => $this->activity->id, 'stats_type' => get_class($this->activity)],
             [
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),
@@ -86,10 +91,8 @@ class AnalyseActivityFile implements ShouldQueue
                 'average_temp' => $analysis->getAverageTemp(),
                 'average_watts' => $analysis->getAverageWatts(),
                 'kilojoules' => $analysis->getKilojoules(),
-                'start_latitude' => $analysis->getStartLatitude(),
-                'start_longitude' => $analysis->getStartLongitude(),
-                'end_latitude' => $analysis->getEndLatitude(),
-                'end_longitude' => $analysis->getEndLongitude(),
+                'start_point' => new \MStaack\LaravelPostgis\Geometries\Point($analysis->getStartLatitude(), $analysis->getStartLongitude()),
+                'end_point' => new \MStaack\LaravelPostgis\Geometries\Point($analysis->getEndLatitude(), $analysis->getEndLongitude()),
                 'min_altitude' => $analysis->getMinAltitude(),
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
@@ -97,34 +100,72 @@ class AnalyseActivityFile implements ShouldQueue
             ]
         );
 
+        $this->saveLinestring($stats, $analysis->getPoints());
+
         $this->savePoints($stats, $analysis->getPoints());
+
+        $this->successMessage('Saved data');
     }
 
     private function savePoints(Stats $stats, array $points)
     {
-        $stats->waypoints()->delete();
+        $stats->activityPoints()->delete();
 
-        foreach (collect($points)->chunk(1000) as $chunkedPoints) {
-            $stats->waypoints()->createMany($chunkedPoints->map(fn (Point $point) => [
-                'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-                'elevation' => $point->getElevation(),
-                'time' => $point->getTime(),
-                'cadence' => $point->getCadence(),
-                'temperature' => $point->getTemperature(),
-                'heart_rate' => $point->getHeartRate(),
-                'speed' => $point->getSpeed(),
-                'grade' => $point->getGrade(),
-                'battery' => $point->getBattery(),
-                'calories' => $point->getCalories(),
-                'cumulative_distance' => $point->getCumulativeDistance(),
-            ]));
+        $activityPoints = collect($points)->chunk(1000);
+        $percentage = 0;
+        $increase = 100 / ($activityPoints->count() < 1 ? 1 : $activityPoints->count());
+        $order = 0;
+
+        foreach ($activityPoints as $chunkedPoints) {
+            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
+                $toReturn = [
+                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                    'elevation' => $point->getElevation(),
+                    'time' => $point->getTime(),
+                    'cadence' => $point->getCadence(),
+                    'temperature' => $point->getTemperature(),
+                    'heart_rate' => $point->getHeartRate(),
+                    'speed' => $point->getSpeed(),
+                    'grade' => $point->getGrade(),
+                    'order' => $order,
+                    'battery' => $point->getBattery(),
+                    'calories' => $point->getCalories(),
+                    'cumulative_distance' => $point->getCumulativeDistance(),
+                ];
+                $order += 1;
+
+                return $toReturn;
+            }));
+
+            $percentage += $increase;
+            $this->percentage($percentage);
         }
     }
 
-    public function middleware()
+//    public function middleware()
+//    {
+//        return [
+//            (new WithoutOverlapping('FileAnalyser')),
+//        ];
+//    }
+
+    /**
+     * @param Stats $stats
+     * @param array|Point[] $points
+     */
+    private function saveLinestring(Stats $stats, array $points)
     {
-        return [
-            (new WithoutOverlapping('FileAnalyser')),
-        ];
+        $convertedPoints = [];
+
+        foreach ($points as $point) {
+            if ($point->getLatitude() && $point->getLongitude() && $point->getElevation()) {
+                $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+            }
+        }
+
+        if (count($convertedPoints) > 1) {
+            $stats->linestring = new LineString($convertedPoints);
+            $stats->save();
+        }
     }
 }

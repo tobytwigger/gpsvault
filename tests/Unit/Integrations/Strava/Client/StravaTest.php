@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class StravaTest extends TestCase
 {
-
     /** @test */
     public function it_resolves_a_factory_instance()
     {

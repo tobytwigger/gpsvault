@@ -10,19 +10,21 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tests\Utils\MocksFilepond;
 
 class ActivityStoreTest extends TestCase
 {
+    use MocksFilepond;
 
     /** @test */
     public function it_creates_an_activity_from_a_file()
     {
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file,
+            'file' => $file->toArray(),
         ]);
 
         $this->assertDatabaseCount('activities', 1);
@@ -43,24 +45,25 @@ class ActivityStoreTest extends TestCase
         Bus::fake(AnalyseActivityFile::class);
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file,
+            'file' => $file->toArray(),
         ]);
 
-        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->model instanceof Activity && $job->model->file->filename === 'filename.gpx');
+        Bus::assertDispatched(AnalyseActivityFile::class, fn (AnalyseActivityFile $job) => $job->activity->file->filename === 'filename.gpx');
     }
 
     /** @test */
     public function it_redirects_to_show_the_new_activity()
     {
+        Bus::fake();
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file,
+            'file' => $file->toArray(),
         ]);
 
         $this->assertDatabaseCount('activities', 1);
@@ -72,10 +75,10 @@ class ActivityStoreTest extends TestCase
     {
         $this->authenticated();
         Storage::fake('test-fake');
-        $file = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
         $response = $this->post(route('activity.store'), [
-            'file' => $file,
+            'file' => $file->toArray(),
             'name' => 'This is the activity name',
         ]);
 
@@ -97,9 +100,9 @@ class ActivityStoreTest extends TestCase
         $this->authenticated();
 
         Storage::fake('test-fake');
-        $fakeFile = UploadedFile::fake()->create('filename.gpx', 58, 'application/gpx+xml');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
 
-        $response = $this->post(route('activity.store'), array_merge([$key => $value], $key === 'file' ? [] : ['file' => $fakeFile]));
+        $response = $this->post(route('activity.store'), array_merge([$key => $value], $key === 'file' ? [] : ['file' => $file->toArray()]));
         if (!$error) {
             $response->assertSessionHasNoErrors();
         } else {
@@ -114,7 +117,7 @@ class ActivityStoreTest extends TestCase
             ['name', null, false],
             ['name', 'This is a valid namne', false],
             ['file', null, 'The file field is required.'],
-            ['file', 'This is not a file', 'The file must be a file.'],
+            ['file', 'This is not a file', 'The file is not an array'],
         ];
     }
 

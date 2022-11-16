@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class ActivityFileDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_the_activity_file()
     {

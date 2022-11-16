@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class StravaClientFactoryTest extends TestCase
 {
-
     /** @test */
     public function client_throws_an_exception_if_no_user_logged_in()
     {

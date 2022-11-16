@@ -21,6 +21,7 @@
         </include>
     </coverage>
     <php>
+        <server name="STATIC_MAP_DRIVER" value="fake" />
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
@@ -29,5 +30,6 @@
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
+        <server name="SCOUT_DRIVER" value="database"/>
     </php>
 </phpunit>

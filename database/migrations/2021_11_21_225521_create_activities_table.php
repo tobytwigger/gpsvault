@@ -18,8 +18,13 @@ class CreateActivitiesTable extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('file_id')->nullable();
             $table->text('linked_to')->nullable();
+            $table->unsignedBigInteger('thumbnail_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('thumbnail_id')->references('id')->on('files')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('file_id')->references('id')->on('files')->cascadeOnUpdate()->nullOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

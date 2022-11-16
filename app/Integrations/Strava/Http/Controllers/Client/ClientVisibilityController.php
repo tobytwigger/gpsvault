@@ -15,7 +15,7 @@ class ClientVisibilityController extends Controller
         $client->public = true;
         $client->save();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function makePrivate(StravaClient $client)
@@ -25,6 +25,6 @@ class ClientVisibilityController extends Controller
         $client->public = false;
         $client->save();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 }

@@ -26,12 +26,15 @@ abstract class AnalyserContract
         return $analysis;
     }
 
-    public function preparePoint(Point $point): void
+    public function preparePoint(Point $point): Point
     {
         if ($this instanceof PointAnalyser) {
-            $this->processPoint($point);
+            $point = $this->processPoint($point);
         }
-        $this->nextAnalyser?->preparePoint($point);
+        if($this->nextAnalyser !== null) {
+            $point = $this->nextAnalyser?->preparePoint($point);
+        }
+        return $point;
     }
 
     abstract protected function run(Analysis $analysis): Analysis;

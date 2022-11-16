@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueGridLayout from 'vue-grid-layout';
 
 /**
  * Lodash
@@ -22,13 +23,24 @@ window.axios.defaults.withCredentials = true;
  */
 import VueEasyLightbox from 'vue-easy-lightbox'
 import UiKit from 'ui/install';
-import 'leaflet/dist/leaflet.css';
 import {Link} from '@inertiajs/inertia-vue';
 
 Vue.use(UiKit);
 Vue.use(VueEasyLightbox);
 Vue.component('Link', Link);
+Vue.component('grid-layout', VueGridLayout.GridLayout);
+Vue.component('grid-item', VueGridLayout.GridItem);
 Vue.mixin({methods: { route }});
+
+import VueShepherdPlugin from 'vue-shepherd';
+import 'shepherd.js/dist/css/shepherd.css';
+Vue.use(VueShepherdPlugin);
+
+Vue.prototype.$tour = new Vue.prototype.$shepherd({
+    useModalOverlay: true,
+})
+
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -36,15 +48,15 @@ Vue.mixin({methods: { route }});
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo';
-window.Pusher = require('pusher-js');
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'cycle-store',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    wssPort: 6001,
-    disableStats: false,
-    enabledTransports: ['ws', 'wss']
-});
+// import Echo from 'laravel-echo';
+// window.Pusher = require('pusher-js');
+//
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: 'gps-vault',
+//     wsHost: window.location.hostname,
+//     wsPort: 6001,
+//     wssPort: 6001,
+//     disableStats: false,
+//     enabledTransports: ['ws', 'wss']
+// });

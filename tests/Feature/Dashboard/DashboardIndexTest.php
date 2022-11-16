@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class DashboardIndexTest extends TestCase
 {
-
     /** @test */
     public function it_returns_the_dashboard_component()
     {
@@ -15,6 +14,11 @@ class DashboardIndexTest extends TestCase
 
         $this->get(route('dashboard'))
             ->assertInertia(fn (Assert $page) => $page->component('Dashboard/Dashboard'));
+    }
+
+    /** @test */
+    public function todo_scaffolding(){
+        $this->markTestIncomplete('Add tests for creating default dashboards, viewing a dashboard etc.');
     }
 
     /** @test */

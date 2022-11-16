@@ -2,9 +2,7 @@ import {createInertiaApp, Link} from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import vuetify from './plugins/vuetify';
-    import Vue from 'vue';
-import L from 'leaflet';
-window.L = L;
+import Vue from 'vue';
 
 import Settings from '@tobytwigger/laravel-settings-vue/dist/index';
 import JobStatus from '@tobytwigger/laravel-job-status-vue';
@@ -19,6 +17,7 @@ Vue.use(JobStatus, {
     axios: axios,
     url: '/_api'
 });
+
 
 applyPolyfills().then(() => {
     defineCustomElements(window);

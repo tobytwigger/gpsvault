@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ActivitySearchTest extends TestCase
 {
-
     /** @test */
     public function it_returns_all_activities_sorted_by_updated_at_when_no_query_given()
     {
@@ -72,8 +71,6 @@ class ActivitySearchTest extends TestCase
     /** @test */
     public function it_filters_by_name()
     {
-        $this->markTestSkipped('Failing');
-
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -89,8 +86,6 @@ class ActivitySearchTest extends TestCase
     /** @test */
     public function filtering_is_not_case_sensitive()
     {
-        $this->markTestSkipped('Failing');
-
         $this->authenticated();
 
         $activities = Activity::factory()->count(5)->create(['user_id' => $this->user->id, 'name' => 'My name']);
@@ -112,6 +107,22 @@ class ActivitySearchTest extends TestCase
     /** @test */
     public function it_orders_the_results_by_updated_at()
     {
-        $this->markTestIncomplete();
+        $this->authenticated();
+
+        $activity1 = Activity::factory()->create(['user_id' => $this->user->id, 'updated_at' => now()->subDay()]);
+        $activity2 = Activity::factory()->create(['user_id' => $this->user->id, 'updated_at' => now()->subYear()]);
+        $activity3 = Activity::factory()->create(['user_id' => $this->user->id, 'updated_at' => now()->subSecond()]);
+        $activity4 = Activity::factory()->create(['user_id' => $this->user->id, 'updated_at' => now()->subMinutes(5)]);
+        $activity5 = Activity::factory()->create(['user_id' => $this->user->id, 'updated_at' => now()->subDays(2)]);
+
+        Activity::factory()->count(50)->create();
+        $response = $this->getJson(route('activity.search', ['query' => null]));
+        $response->assertJsonCount(5);
+
+        $this->assertEquals($activity3->id, $response->json()[0]['id']);
+        $this->assertEquals($activity4->id, $response->json()[1]['id']);
+        $this->assertEquals($activity1->id, $response->json()[2]['id']);
+        $this->assertEquals($activity5->id, $response->json()[3]['id']);
+        $this->assertEquals($activity2->id, $response->json()[4]['id']);
     }
 }

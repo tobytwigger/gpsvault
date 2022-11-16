@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava\Client\Client;
 
+use App\Integrations\Strava\Client\Models\StravaClient as StravaClientModel;
 use App\Models\User;
 
 abstract class Resource
@@ -14,5 +15,12 @@ abstract class Resource
     {
         $this->user = $user;
         $this->request = $request;
+    }
+
+    public function withClient(StravaClientModel $client)
+    {
+        $this->request->withClient($client);
+
+        return $this;
     }
 }

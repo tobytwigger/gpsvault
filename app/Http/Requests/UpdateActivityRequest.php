@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Services\Filepond\FilepondRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateActivityRequest extends FormRequest
@@ -26,6 +27,7 @@ class UpdateActivityRequest extends FormRequest
         return [
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
+            'file' => ['sometimes', 'nullable', app(FilepondRule::class)]
         ];
     }
 }

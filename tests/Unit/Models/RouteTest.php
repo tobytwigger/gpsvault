@@ -5,12 +5,13 @@ namespace Tests\Unit\Models;
 use App\Models\File;
 use App\Models\Place;
 use App\Models\Route;
+use App\Models\RoutePath;
 use App\Models\User;
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
 {
-
     /** @test */
     public function the_user_id_is_automatically_set_on_creation_if_null()
     {
@@ -80,6 +81,28 @@ class RouteTest extends TestCase
     /** @test */
     public function it_has_a_relationship_with_paths()
     {
-        $this->markTestIncomplete();
+        $route = Route::factory()->create();
+
+        $paths = RoutePath::factory()->count(5)->create(['route_id' => $route->id]);
+        $foundPaths = $route->routePaths;
+
+        $this->assertContainsOnlyInstancesOf(RoutePath::class, $foundPaths);
+
+        foreach ($paths as $path) {
+            $this->assertTrue($path->is($foundPaths->shift()));
+        }
+    }
+
+    /** @test */
+    public function the_path_attribute_is_the_most_recent_path()
+    {
+        $route = Route::factory()->create();
+
+        $paths = RoutePath::factory()->count(5)->create(['route_id' => $route->id]);
+        $mainPath = RoutePath::factory()->create(['route_id' => $route->id, 'created_at' => Carbon::now()->addSeconds(2)]);
+
+        $this->assertInstanceOf(RoutePath::class, $route->path);
+
+        $this->assertTrue($mainPath->is($route->path));
     }
 }

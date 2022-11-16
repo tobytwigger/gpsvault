@@ -11,11 +11,9 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('waypoints', function (Blueprint $table) {
+        Schema::create('activity_points', function (Blueprint $table) {
             $table->id();
             $table->point('points')->nullable();
-//            'latitude' => $this->getLatitude(),
-//            'longitude' => $this->getLongitude(),
             $table->float('elevation')->nullable();
             $table->dateTime('time')->nullable();
             $table->float('cadence')->nullable();
@@ -26,12 +24,11 @@ return new class() extends Migration {
             $table->float('battery')->nullable();
             $table->float('calories')->nullable();
             $table->float('cumulative_distance')->nullable();
+            $table->unsignedBigInteger('order')->nullable();
             $table->unsignedBigInteger('stats_id');
             $table->timestamps();
-        });
 
-        Schema::table('waypoints', function (Blueprint $table) {
-            $table->index(['stats_id']);
+            $table->foreign('stats_id')->references('id')->on('stats')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 
@@ -41,6 +38,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('waypoints');
+        Schema::dropIfExists('activity_points');
     }
 };

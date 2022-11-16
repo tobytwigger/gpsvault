@@ -36,7 +36,7 @@
         <v-card-text>
             <v-btn @click="$inertia.post(route('strava.client.logout', client.id))" v-if="client.is_connected">Logout</v-btn>
             <v-btn :href="stravaLoginUrl" v-else>
-                <v-img src="dist/images/strava_logo.svg" alt="Connect to Strava" />
+                <v-img src="/dist/images/strava_logo.svg" alt="Connect to Strava" />
             </v-btn>
         </v-card-text>
 
@@ -63,6 +63,43 @@
                     </v-tooltip>
                 </template>
             </c-strava-client-form>
+
+            <div>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            v-if="client.is_connected"
+                            icon
+                            link
+                            @click="testClient"
+                            :disabled="testingClient"
+                            :loading="testingClient"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon :color="testClientColour">mdi-test-tube</v-icon>
+                        </v-btn>
+                    </template>
+                    Test Client
+                </v-tooltip>
+
+                <v-snackbar
+                    v-model="showSnackbar"
+                >
+                    {{ clientSuccessString }}
+
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                            color="pink"
+                            text
+                            v-bind="attrs"
+                            @click="showSnackbar = false"
+                        >
+                            Close
+                        </v-btn>
+                    </template>
+                </v-snackbar>
+            </div>
 
             <div>
                 <c-confirmation-dialog key="disableClient" v-if="client.enabled" title="Disable client?" button-text="Disable" :loading="isDisabling" cancel-button-text="Nevermind" @confirm="disableClient" ref="disableClientDialog">
@@ -275,9 +312,21 @@ export default {
             isMakingPublic: false,
             isMakingPrivate: false,
             isLeaving: false,
+            testingClient: false,
+            clientWorks: null,
+            clientSuccessString: '',
+            showSnackbar: false
         }
     },
     computed: {
+        testClientColour() {
+            if(this.clientWorks === true) {
+                return 'green';
+            } else if(this.clientWorks === false) {
+                return 'red';
+            }
+            return 'theme--light';
+        },
         cardName() {
             if(this.client.name) {
                 return this.client.name + ' - ' + this.client.client_id;
@@ -285,25 +334,43 @@ export default {
             return this.client.client_id;
         },
         stravaLoginUrl() {
-            let stravaUrl = this.$vuetify.breakpoint.mobile
-                ? new URL('https://www.strava.com/oauth/mobile/authorize')
-                : new URL('https://www.strava.com/oauth/authorize');
-
-            stravaUrl.searchParams.append('client_id', this.client.client_id);
-            stravaUrl.searchParams.append('redirect_uri', route('strava.client.login', this.client.id));
-            stravaUrl.searchParams.append('response_type', 'code');
-            stravaUrl.searchParams.append('approval_prompt', 'auto');
-            stravaUrl.searchParams.append('scope', 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write');
-            stravaUrl.searchParams.append('state', 12345);
-
-            return stravaUrl.toString();
+            return route('strava.client.login.start', {client: this.client.id, mobile: this.$vuetify.breakpoint.mobile});
+            // let stravaUrl =
+            //     ? new URL('https://www.strava.com/oauth/mobile/authorize')
+            //     : new URL('https://www.strava.com/oauth/authorize');
+            //
+            // stravaUrl.searchParams.append('client_id', this.client.client_id);
+            // stravaUrl.searchParams.append('redirect_uri', route('strava.client.login', this.client.id));
+            // stravaUrl.searchParams.append('response_type', 'code');
+            // stravaUrl.searchParams.append('approval_prompt', 'auto');
+            // stravaUrl.searchParams.append('scope', 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write');
+            // stravaUrl.searchParams.append('state', 12345);
+            //
+            // return stravaUrl.toString();
         }
     },
     methods: {
+        testClient() {
+            this.testingClient = true;
+
+            axios.post(route('strava.client.test', this.client.id))
+                .then((response) => {
+                    this.clientWorks = true;
+                    this.clientSuccessString = 'You are logged in as ' + response.data.name;
+                })
+                .catch((error) => {
+                    this.clientWorks = true;
+                    this.clientSuccessString = 'Sorry, an error occured: ' + error.message;
+                })
+                .finally(() => {
+                    this.showSnackbar = true;
+                    this.testingClient = false;
+                    this.$inertia.reload();
+                })
+        },
         deleteClient() {
             let ref = this.$refs.deleteClientDialog;
             this.isDeleting = true;
-            console.log(ref);
             this.$inertia.delete(route('strava.client.destroy', this.client.id), {
                 onSuccess: () => {
                     this.isDeleting = false;

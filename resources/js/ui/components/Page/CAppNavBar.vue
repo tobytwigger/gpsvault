@@ -14,30 +14,17 @@
         <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
                 <v-btn
-                    v-if="showingHints === false"
                     fab
                     small
-                    @click="showingHints = true"
+                    @click="help"
                     class="mx-2"
                     v-bind="attrs"
                     v-on="on"
                 >
-                    <v-icon>mdi-lightbulb-off</v-icon>
-                </v-btn>
-                <v-btn
-                    v-else
-                    fab
-                    small
-                    @click="showingHints = false"
-                    class="mx-2"
-                    v-bind="attrs"
-                    v-on="on"
-                >
-                    <v-icon>mdi-lightbulb-on</v-icon>
+                    <v-icon>mdi-help-circle</v-icon>
                 </v-btn>
             </template>
-            <span v-if="showingHints === false">Show hints</span>
-            <span v-else>Hide hints</span>
+            <span>Show a tour of the page</span>
         </v-tooltip>
 
         <c-add-item class="mx-2"></c-add-item>
@@ -63,18 +50,10 @@ export default {
             type: String
         }
     },
-    data() {
-        return {
-            showingHints: false
-        }
-    },
-    watch: {
-        showingHints() {
-            if(this.showingHints) {
-                this.introJs().showHints();
-            } else {
-                this.introJs().hideHints();
-            }
+    methods: {
+        help() {
+            console.log(this.$tour);
+            this.$tour.start();
         }
     },
     computed: {

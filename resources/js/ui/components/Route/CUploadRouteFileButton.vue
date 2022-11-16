@@ -24,9 +24,7 @@
                 Upload the gpx file for this route.
             </v-card-text>
             <v-card-text>
-                <v-file-input
-                    show-size
-                    truncate-length="30"
+                <c-file-input
                     v-model="form.file"
                     id="route-file"
                     name="file"
@@ -34,7 +32,7 @@
                     hint="Upload the gpx file for this route."
                     :error="form.errors.hasOwnProperty('file')"
                     :error-messages="form.errors.hasOwnProperty('file') ? [form.errors.file] : []"
-                ></v-file-input>
+                ></c-file-input>
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -56,8 +54,10 @@
 </template>
 
 <script>
+import CFileInput from '../CFileInput';
 export default {
     name: "CUploadRouteFileButton",
+    components: {CFileInput},
     props: {
         routeModel: {
             required: true,

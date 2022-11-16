@@ -15,7 +15,6 @@ export default {
         },
         dataSources() {
             let sortingArr = this.$setting.stats_order_preference;
-            console.log(this.allStats);
             return this.allStats.map(s => s.integration).sort((a, b) => sortingArr.indexOf(a) - sortingArr.indexOf(b));
         },
         activeDataSource: {
@@ -66,16 +65,16 @@ export default {
             return this.convert(this.stats?.distance?.toString() || null, 'distance');
         },
         startLatitude() {
-            return {value: this.stats?.start_latitude.toString() || null, unit: 'lat'};
+            return {value: this.stats?.start_point?.coordinates[0].toString() || null, unit: 'lat'};
         },
         startLongitude() {
-            return {value: this.stats?.start_longitude.toString() || null, unit: 'long'};
+            return {value: this.stats?.start_point?.coordinates[1].toString() || null, unit: 'long'};
         },
         endLatitude() {
-            return {value: this.stats?.end_latitude.toString() || null, unit: 'lat'};
+            return {value: this.stats?.end_point?.coordinates[0].toString() || null, unit: 'lat'};
         },
         endLongitude() {
-            return {value: this.stats?.end_longitude.toString() || null, unit: 'long'};
+            return {value: this.stats?.end_point?.coordinates[1].toString() || null, unit: 'long'};
         },
         averageTemperature() {
             return this.convert(this.stats?.average_temp?.toString() || null, 'temperature');
@@ -147,6 +146,7 @@ export default {
                     title: 'Distance',
                     label: 'distance',
                     disabled: true,
+                    pointLabel: 'cumulative_distance',
                     data: [
                         {value: this.distance, label: 'total'},
                     ]
@@ -155,6 +155,7 @@ export default {
                     icon: 'mdi-clock',
                     title: 'Time',
                     label: 'time',
+                    pointLabel: 'time',
                     disabled: true,
                     data: [
                         {value: this.movingTime, label: 'moving'},
@@ -165,6 +166,8 @@ export default {
                     icon: 'mdi-gauge',
                     title: 'Speed',
                     label: 'speed',
+                    pointLabel: 'speed',
+                    disabled: false,
                     data: [
                         {value: this.maxSpeed, label: 'max'},
                         {value: this.avgSpeed, label: 'avg'},
@@ -175,6 +178,8 @@ export default {
                     icon: 'mdi-image-filter-hdr',
                     title: 'Elevation',
                     label: 'elevation',
+                    pointLabel: 'elevation',
+                    disabled: false,
                     data: [
                         {value: this.elevationGain, label: 'gain'},
                         {value: this.minAltitude, label: 'min'},
@@ -185,6 +190,9 @@ export default {
                     icon: 'mdi-heart',
                     title: 'Heartrate',
                     label: 'heart_rate',
+                    lineColour: '#9e1a1a',
+                    pointLabel: 'heart_rate',
+                    disabled: false,
                     data: [
                         {value: this.maxHeartrate, label: 'max'},
                         {value: this.avgHeartrate, label: 'avg'},
@@ -194,7 +202,8 @@ export default {
                     icon: 'mdi-lightning-bolt',
                     title: 'Power',
                     label: 'calories',
-                    disabled: true,
+                    pointLabel: 'calories',
+                    disabled: false,
                     data: [
                         {value: this.avgWatts, label: 'max'},
                         {value: this.kilojoules, label: 'total'},
@@ -205,6 +214,8 @@ export default {
                     icon: 'mdi-reload',
                     title: 'Cadence',
                     label: 'cadence',
+                    pointLabel: 'cadence',
+                    disabled: false,
                     data: [
                         {value: this.avgCadence, label: 'avg'},
                     ]
@@ -213,6 +224,8 @@ export default {
                     icon: 'mdi-thermometer',
                     title: 'Temperature',
                     label: 'temperature',
+                    pointLabel: 'temperature',
+                    disabled: false,
                     data: [
                         {value: this.averageTemperature, label: 'avg'},
                     ]

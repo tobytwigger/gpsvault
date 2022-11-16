@@ -25,7 +25,7 @@ class ClientInvitationController extends Controller
         $client->invitation_link_uuid = $link->uuid;
         $client->save();
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function leave(Request $request, StravaClient $client)
@@ -35,7 +35,7 @@ class ClientInvitationController extends Controller
 
         $client->sharedUsers()->detach(Auth::id());
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function remove(Request $request, StravaClient $client)
@@ -56,7 +56,7 @@ class ClientInvitationController extends Controller
 
         $client->sharedUsers()->detach($request->input('user_id'));
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 
     public function accept(Request $request, StravaClient $client)
@@ -68,6 +68,6 @@ class ClientInvitationController extends Controller
 
         $client->sharedUsers()->attach(Auth::id());
 
-        return redirect()->route('strava.client.index');
+        return redirect()->route('integration.strava');
     }
 }

@@ -1,46 +1,36 @@
 <template>
 
-    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener" @update:bounds="updateBounds">
+<!--    <l-map style="height: 50vh" ref="map" :zoom="9" @ready="initialiseClickListener" @update:bounds="updateBounds">-->
 
-        <l-tile-layer
-            v-for="tileProvider in tileProviders"
-            :key="tileProvider.name"
-            :name="tileProvider.name"
-            :visible="tileProvider.visible"
-            :url="tileProvider.url"
-            :attribution="tileProvider.attribution"
-            layer-type="base"/>
+<!--        <l-tile-layer-->
+<!--            v-for="tileProvider in tileProviders"-->
+<!--            :key="tileProvider.name"-->
+<!--            :name="tileProvider.name"-->
+<!--            :visible="tileProvider.visible"-->
+<!--            :url="tileProvider.url"-->
+<!--            :attribution="tileProvider.attribution"-->
+<!--            layer-type="base"/>-->
 
-        <l-marker v-for="marker in markers" :key="'marker-' + marker.id" :draggable="false" :ref="'marker-' + marker.id"
-                  @ready="bindMarkerClickListener(marker.id)" :lat-lng="[marker.lng, marker.lat]">
-            <l-icon
-                :icon-size="[32,32]"
-                :icon-anchor="[32,32]"
-                :class-name="value === marker.id ? 'selectedMarker' : 'normalMarker'"
-                :icon-url="'/dist/images/leaflet/' + marker.icon + '.svg'"
-            />
-            <l-tooltip>{{ marker.title }}</l-tooltip>
-        </l-marker>
+<!--        <l-marker v-for="marker in markers" :key="'marker-' + marker.id" :draggable="false" :ref="'marker-' + marker.id"-->
+<!--                  @ready="bindMarkerClickListener(marker.id)" :lat-lng="[marker.lng, marker.lat]">-->
+<!--            <l-icon-->
+<!--                :icon-size="[32,32]"-->
+<!--                :icon-anchor="[32,32]"-->
+<!--                :class-name="value === marker.id ? 'selectedMarker' : 'normalMarker'"-->
+<!--                :icon-url="'/dist/images/leaflet/' + marker.icon + '.svg'"-->
+<!--            />-->
+<!--            <l-tooltip>{{ marker.title }}</l-tooltip>-->
+<!--        </l-marker>-->
 
-    </l-map>
-
+<!--    </l-map>-->
+    <div>Marker selector</div>
 </template>
 
 <script>
-import {LMap, LGeoJson, LTileLayer, LControl, LControlLayers, LMarker, LIcon, LTooltip} from "vue2-leaflet";
-import { icon } from 'leaflet';
 
 export default {
     name: "CMarkerSelector",
     components: {
-        LMap,
-        LGeoJson,
-        LTileLayer,
-        LControlLayers,
-        LControl,
-        LMarker,
-        LTooltip,
-        LIcon
     },
     props: {
         value: {

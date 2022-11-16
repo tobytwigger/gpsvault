@@ -7,7 +7,7 @@ use Tests\TestCase;
 class LoadStravaCommentsTest extends TestCase
 {
     /** @test */
-    public function incomplete()
+    public function todo_scaffolding_incomplete()
     {
         $this->markTestIncomplete();
     }

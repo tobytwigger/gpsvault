@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class UsesStravaTest extends TestCase
 {
-
     /** @test */
     public function strava_tokens_are_deleted_on_user_delete()
     {
@@ -83,7 +82,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_a_free_owned_client_if_you_have_permission()
+    public function todo_available_client_returns_a_free_owned_client_if_you_have_permission()
     {
         $this->markTestIncomplete();
 
@@ -108,7 +107,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_takes_into_account_exclusions_for_owned_clients()
+    public function todo_available_client_takes_into_account_exclusions_for_owned_clients()
     {
         $this->markTestIncomplete();
 
@@ -133,7 +132,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_a_free_shared_client_if_permission_and_do_not_have_free_owned_client()
+    public function todo_available_client_returns_a_free_shared_client_if_permission_and_do_not_have_free_owned_client()
     {
         $this->markTestIncomplete();
 
@@ -157,7 +156,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_takes_into_account_exclusions_for_shared_clients()
+    public function todo_available_client_takes_into_account_exclusions_for_shared_clients()
     {
         $this->markTestIncomplete();
 
@@ -181,7 +180,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_a_public_client_if_permission_and_no_manage_strava_permission()
+    public function todo_available_client_returns_a_public_client_if_permission_and_no_manage_strava_permission()
     {
         $this->markTestIncomplete();
 
@@ -208,7 +207,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_takes_into_account_exclusions_for_public_clients()
+    public function todo_available_client_takes_into_account_exclusions_for_public_clients()
     {
         $this->markTestIncomplete();
 
@@ -235,7 +234,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_a_public_client_if_permission_and_no_owned_or_shared_available_clients()
+    public function todo_available_client_returns_a_public_client_if_permission_and_no_owned_or_shared_available_clients()
     {
         $this->markTestIncomplete();
 
@@ -263,7 +262,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_the_system_client_if_no_public_permission()
+    public function todo_available_client_returns_the_system_client_if_no_public_permission()
     {
         $this->markTestIncomplete();
 
@@ -286,7 +285,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_returns_the_system_client_if_no_public_clients_available()
+    public function todo_available_client_returns_the_system_client_if_no_public_clients_available()
     {
         $this->markTestIncomplete();
 
@@ -305,7 +304,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_throws_an_exception_if_no_clients_found()
+    public function todo_available_client_throws_an_exception_if_no_clients_found()
     {
         $this->markTestIncomplete();
 
@@ -320,7 +319,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function available_client_throws_an_exception_if_system_client_is_full()
+    public function todo_available_client_throws_an_exception_if_system_client_is_full()
     {
         $this->markTestIncomplete();
 
@@ -338,7 +337,7 @@ class UsesStravaTest extends TestCase
     }
 
     /** @test */
-    public function it_ignores_clients_that_are_not_connected()
+    public function todo_it_ignores_clients_that_are_not_connected()
     {
         $this->markTestIncomplete();
 

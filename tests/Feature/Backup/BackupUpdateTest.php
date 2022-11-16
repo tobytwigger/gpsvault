@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class BackupUpdateTest extends TestCase
 {
-
     /** @test */
     public function an_backup_can_be_updated()
     {

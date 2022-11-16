@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TrainingCenterDatabase
+  xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd"
+  xmlns:ns5="http://www.garmin.com/xmlschemas/ActivityGoals/v1"
+  xmlns:ns3="http://www.garmin.com/xmlschemas/ActivityExtension/v2"
+  xmlns:ns2="http://www.garmin.com/xmlschemas/UserProfile/v2"
+  xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns4="http://www.garmin.com/xmlschemas/ProfileExtension/v1">
+  <Activities>
+    <Activity Sport="Biking">
+      <Id>2021-10-31T07:59:52Z</Id>
+      <Notes>GOTOES Export</Notes>
+      <Lap StartTime="2021-10-31T07:59:52Z">
+        <TotalTimeSeconds>1</TotalTimeSeconds>
+        <DistanceMeters>0.0131679297129</DistanceMeters>
+        <TriggerMethod>Manual</TriggerMethod>
+        <Track>
+          <Trackpoint>
+            <Time>2021-10-31T07:59:52Z</Time>
+            <Position>
+              <LatitudeDegrees>50.594223</LatitudeDegrees>
+              <LongitudeDegrees>-3.674998</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>46.6</AltitudeMeters>
+            <DistanceMeters>0</DistanceMeters>
+            <HeartRateBpm>
+             <Value>150</Value>
+            </HeartRateBpm>
+            <Cadence>65</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>0</ns3:Speed>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+          <Trackpoint>
+            <Time>2021-10-31T07:59:53Z</Time>
+            <Position>
+              <LatitudeDegrees>50.5942231</LatitudeDegrees>
+              <LongitudeDegrees>-3.6749981</LongitudeDegrees>
+            </Position>
+            <AltitudeMeters>46.7</AltitudeMeters>
+            <DistanceMeters>0.0131679297129</DistanceMeters>
+            <HeartRateBpm>
+             <Value>151</Value>
+            </HeartRateBpm>
+            <Cadence>66</Cadence>
+            <Extensions>
+              <ns3:TPX>
+                <ns3:Speed>0.00658396485646</ns3:Speed>
+              </ns3:TPX>
+            </Extensions>
+          </Trackpoint>
+        </Track>
+      </Lap>
+      <Creator xsi:type="Device_t">
+        <Name>--No GPS SELECTED--</Name>
+        <UnitId>0</UnitId>
+        <ProductID>0</ProductID>
+        <Version>
+          <VersionMajor>0</VersionMajor>
+          <VersionMinor>0</VersionMinor>
+          <BuildMajor>1</BuildMajor>
+          <BuildMinor>1</BuildMinor>
+        </Version>
+      </Creator>
+    </Activity>
+  </Activities>
+  <Author xsi:type="Application_t">
+    <Name>GOTOES STRAVA TOOLS</Name>
+    <Build>
+      <Version>
+        <VersionMajor>17</VersionMajor>
+        <VersionMinor>9</VersionMinor>
+        <BuildMajor>1</BuildMajor>
+        <BuildMinor>1</BuildMinor>
+      </Version>
+    </Build>
+    <LangID>en</LangID>
+    <PartNumber>1</PartNumber>
+  </Author>
+</TrainingCenterDatabase>

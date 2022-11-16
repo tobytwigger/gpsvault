@@ -19,16 +19,19 @@ export default {
     },
     data() {
         return {
-            loading: true,
-            geojson: null
+            loading: false,
         }
     },
-    mounted() {
-        axios.get(route('stats.geojson', this.stats.id))
-            .then(response => this.geojson = response.data)
-            .then(() => this.loading = false);
-    },
-
+    computed: {
+        geojson() {
+            return {
+                type: 'LineString',
+                coordinates: (this.stats.linestringWithDistance !== null
+                    ? this.stats.linestringWithDistance
+                    : this.stats?.linestring?.map(l => l.coordinates)) ?? null
+            };
+        }
+    }
 }
 </script>
 

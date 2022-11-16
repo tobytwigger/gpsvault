@@ -10,7 +10,6 @@ use Tests\TestCase;
 
 class NominatimGeocoderTest extends TestCase
 {
-
     /**
      * @test
      * @dataProvider nominatimParsingDataProvider

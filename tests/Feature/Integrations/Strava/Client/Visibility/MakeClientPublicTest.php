@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class MakeClientPublicTest extends TestCase
 {
-
     /** @test */
     public function it_returns_a_404_if_the_client_is_not_found()
     {
@@ -57,7 +56,7 @@ class MakeClientPublicTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'public' => true]);
 
         $response = $this->post(route('strava.client.public', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->public);
     }
 
@@ -69,7 +68,7 @@ class MakeClientPublicTest extends TestCase
         $client = StravaClient::factory()->create(['user_id' => $this->user->id, 'public' => false]);
 
         $response = $this->post(route('strava.client.public', $client));
-        $response->assertRedirect(route('strava.client.index'));
+        $response->assertRedirect(route('integration.strava'));
         $this->assertTrue($client->refresh()->public);
     }
 }

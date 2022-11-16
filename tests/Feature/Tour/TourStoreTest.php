@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class TourStoreTest extends TestCase
 {
-
     /** @test */
     public function it_creates_an_tour_from_a_name()
     {

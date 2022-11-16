@@ -75,7 +75,7 @@ class FitParser implements ParserContract
         }
 
         $getSessionData = function ($key, array $units = []) use ($fit) {
-            $data = data_get($fit->data_mesgs['session'], $key, null);
+            $data = data_get($fit->data_mesgs['session'] ?? [], $key, null);
             if ($data !== null && count($units) === 2) {
                 return (new $units[0]($data))->to($units[1])->getValue();
             }
@@ -84,17 +84,17 @@ class FitParser implements ParserContract
         };
         $analysis = new Analysis();
         $analysis->setPoints($points->all());
-        $analysis->setMovingTime($getSessionData('total_timer_time'));
-        $analysis->setDuration($getSessionData('total_elapsed_time'));
-        $analysis->setAverageSpeed($getSessionData('avg_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
-        $analysis->setMaxSpeed($getSessionData('max_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
-        $analysis->setDistance($getSessionData('total_distance', [KiloMeter::class, Meter::class]));
-        $analysis->setAverageHeartrate($getSessionData('avg_heart_rate'));
-        $analysis->setAverageCadence($getSessionData('avg_cadence'));
-        $analysis->setCumulativeElevationGain($getSessionData('total_ascent'));
-        $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
+//        $analysis->setMovingTime($getSessionData('total_timer_time'));
+//        $analysis->setDuration($getSessionData('total_elapsed_time'));
+//        $analysis->setAverageSpeed($getSessionData('avg_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
+//        $analysis->setMaxSpeed($getSessionData('max_speed', [KiloMeterPerHour::class, MeterPerSecond::class]));
+//        $analysis->setDistance($getSessionData('total_distance', [KiloMeter::class, Meter::class]));
+//        $analysis->setAverageHeartrate($getSessionData('avg_heart_rate'));
+//        $analysis->setAverageCadence($getSessionData('avg_cadence'));
+//        $analysis->setCumulativeElevationGain($getSessionData('total_ascent'));
+//        $analysis->setCumulativeElevationLoss($getSessionData('total_descent'));
         $analysis->setCalories($getSessionData('total_calories'));
-        $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
+//        $analysis->setMaxHeartrate($getSessionData('max_heart_rate'));
 
         return $analysis;
     }

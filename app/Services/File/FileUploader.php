@@ -4,6 +4,7 @@ namespace App\Services\File;
 
 use App\Models\File;
 use App\Models\User;
+use App\Services\Filepond\FilePondFile;
 use Exception;
 use GuzzleHttp\Psr7\MimeType;
 use Illuminate\Http\UploadedFile;
@@ -15,6 +16,8 @@ class FileUploader
     public const ACTIVITY_FILE = 'activity_file';
 
     public const ACTIVITY_MEDIA = 'activity_media';
+
+    public const MAP_THUMBNAIL = 'map_thumbnail';
 
     public const ARCHIVE = 'archive';
 
@@ -65,6 +68,32 @@ class FileUploader
 
         if ($uploadedFile->getClientOriginalExtension() === 'tcx') {
             Storage::disk($file->disk)->update($file->path, trim($file->getFileContents()));
+        }
+
+        return $file;
+    }
+
+    public function filePondFile(FilePondFile|array $filePondFile, User $user, string $type)
+    {
+        if(is_array($filePondFile)) {
+            $filePondFile = FilePondFile::fromArray($filePondFile);
+        }
+
+        $path = $filePondFile->store('activities', $user->disk());
+
+        $file = File::create([
+            'path' => $path,
+            'filename' => $filePondFile->getFilename(),
+            'size' => $filePondFile->getSize(),
+            'mimetype' => $filePondFile->getMimetype(),
+            'extension' => $filePondFile->getExtension(),
+            'disk' => $user->disk(),
+            'user_id' => $user->id,
+            'type' => $type,
+        ]);
+
+        if ($filePondFile->getExtension() === 'tcx') {
+            Storage::disk($file->disk)->put($file->path, trim($file->getFileContents()));
         }
 
         return $file;

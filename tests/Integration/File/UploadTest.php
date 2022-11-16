@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class UploadTest extends TestCase
 {
-
     /** @test */
     public function it_resolves_the_underlying_instance()
     {

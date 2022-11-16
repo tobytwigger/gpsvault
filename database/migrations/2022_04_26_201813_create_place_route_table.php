@@ -16,6 +16,9 @@ return new class() extends Migration {
             $table->unsignedBigInteger('route_id');
             $table->unsignedBigInteger('place_id');
             $table->timestamps();
+
+            $table->foreign('route_id')->references('id')->on('routes')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('place_id')->references('id')->on('places')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

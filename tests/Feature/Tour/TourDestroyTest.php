@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class TourDestroyTest extends TestCase
 {
-
     /** @test */
     public function it_deletes_the_tour()
     {

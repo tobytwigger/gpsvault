@@ -2,7 +2,7 @@
     <c-base-page :title="title">
         <c-sidebar v-model="showingSidebar"></c-sidebar>
 
-        <c-app-nav-bar title="Cycle Store" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
+        <c-app-nav-bar title="GPS Vault" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
 
         <v-main >
             <v-container style="height: 100%" fluid>
@@ -11,6 +11,8 @@
                         <v-toolbar
                             class="mt-2 mx-2"
                         >
+                            <slot name="prependActions"></slot>
+
                             <v-spacer></v-spacer>
 
                             <v-toolbar-title>{{ title }}</v-toolbar-title>
@@ -48,6 +50,7 @@
                 </v-row>
             </v-container>
         </v-main>
+
     </c-base-page>
 </template>
 
@@ -56,6 +59,7 @@
     import CAppNavBar from '../components/Page/CAppNavBar';
     import CSidebar from '../components/Page/CSidebar';
     import CBasePage from './CVuetifyWrapper';
+    import CFooter from '../components/Page/CFooter';
 
     export default {
         name: 'CAppWrapper',
@@ -77,6 +81,7 @@
         },
 
         components: {
+            CFooter,
             CBasePage,
             CSidebar,
             CAppNavBar,

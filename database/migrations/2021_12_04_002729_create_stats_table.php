@@ -31,13 +31,12 @@ class CreateStatsTable extends Migration
             $table->float('average_temp')->nullable();
             $table->float('average_watts')->nullable();
             $table->float('kilojoules')->nullable();
-            $table->float('start_latitude')->nullable();
-            $table->float('start_longitude')->nullable();
-            $table->float('end_latitude')->nullable();
-            $table->float('end_longitude')->nullable();
+            $table->point('start_point')->nullable();
+            $table->point('end_point')->nullable();
             $table->float('max_heartrate')->nullable();
             $table->float('average_heartrate')->nullable();
             $table->float('calories')->nullable();
+            $table->linestringZ('linestring')->nullable();
             $table->unsignedBigInteger('stats_id');
             $table->string('stats_type');
             $table->timestamps();

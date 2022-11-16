@@ -2,6 +2,7 @@
 
 namespace App\Integrations\Strava\Client;
 
+use App\Integrations\Strava\Client\Authentication\Authenticator;
 use App\Integrations\Strava\Client\Client\StravaClient;
 use App\Integrations\Strava\Client\Client\StravaRequestHandler;
 use App\Models\User;
@@ -30,6 +31,7 @@ class StravaClientFactory
         return new StravaClient(
             $user,
             app(StravaRequestHandler::class, [
+                'authenticator' => app(Authenticator::class, ['user' => $user]),
                 'user' => $user,
                 'guzzleClient' => new Client(['base_uri' => $this->config->get('services.strava.base_url')]),
             ])

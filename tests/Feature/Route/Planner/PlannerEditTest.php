@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class PlannerEditTest extends TestCase
 {
-
     /** @test */
     public function you_must_be_authenticated()
     {

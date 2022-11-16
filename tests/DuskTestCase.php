@@ -2,15 +2,52 @@
 
 namespace Tests;
 
+use App\Console\Commands\InstallPermissions;
+use App\Services\Geocoding\Geocoder;
+use Carbon\Carbon;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class DuskTestCase extends BaseTestCase
 {
-    use CreatesApplication, RefreshDatabase;
+    use CreatesApplication, DatabaseMigrations, ProphecyTrait;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Browser::$baseUrl = $this->baseUrl();
+
+        Browser::$storeScreenshotsAt = base_path('tests/Browser/screenshots');
+
+        Browser::$storeConsoleLogAt = base_path('tests/Browser/console');
+
+        Browser::$storeSourceAt = base_path('tests/Browser/source');
+
+        Browser::$userResolver = function () {
+            return Auth::user();
+        };
+
+        $geocoder = $this->prophesize(Geocoder::class);
+        $this->app->instance(Geocoder::class, $geocoder->reveal());
+
+        Artisan::call(InstallPermissions::class);
+        Carbon::setTestNow(Carbon::now());
+        config()->set('inertia.testing.page_paths', array_merge(
+            config()->get('inertia.testing.page_paths', []),
+            [realpath(__DIR__ . '/../resources/js/pages')],
+        ));
+        Storage::fake('test-fake');
+    }
 
     /**
      * Prepare for Dusk test execution.

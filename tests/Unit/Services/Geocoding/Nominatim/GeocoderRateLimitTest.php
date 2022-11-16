@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class GeocoderRateLimitTest extends TestCase
 {
-
     /** @test */
     public function it_allows_two_calls_per_second()
     {

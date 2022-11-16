@@ -37,4 +37,18 @@ return [
     'strava' => [
         'base_url' => 'https://www.strava.com/api/v3/',
     ],
+
+    'mapbox' => [
+        'username' => env('MAPBOX_USERNAME'),
+        'style_id' => env('MAPBOX_STYLE_ID'),
+        'strokeWidth' => 5,
+        'strokeColor' => 'f44',
+        'strokeOpacity' => 0.5,
+        'fillColor' => 'f44',
+        'fillOpacity' => 0.5,
+        'key' => env('MAPBOX_API_KEY'),
+        'position' => 'auto',
+        'width' => 344,
+        'height' => 200,
+    ],
 ];
