@@ -2,7 +2,9 @@
 
 namespace Tests\Browser\Pages;
 
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\Page as BasePage;
+use Spatie\Url\Url;
 
 abstract class Page extends BasePage
 {
@@ -17,4 +19,22 @@ abstract class Page extends BasePage
             '@element' => '#selector',
         ];
     }
+
+    /**
+     * Assert that the browser is on the page.
+     *
+     * @param  Browser  $browser
+     * @return void
+     */
+    public function assert(Browser $browser)
+    {
+        $browser->assertPathIs($this->url());
+    }
+
+    public function url()
+    {
+        return Url::fromString(route($this->routeName()))->getPath();
+    }
+
+    abstract public function routeName(): string;
 }
