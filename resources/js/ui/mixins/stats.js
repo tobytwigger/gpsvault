@@ -146,6 +146,7 @@ export default {
                     title: 'Distance',
                     label: 'distance',
                     disabled: true,
+                    pointLabel: 'cumulative_distance',
                     data: [
                         {value: this.distance, label: 'total'},
                     ]
@@ -154,6 +155,7 @@ export default {
                     icon: 'mdi-clock',
                     title: 'Time',
                     label: 'time',
+                    pointLabel: 'time',
                     disabled: true,
                     data: [
                         {value: this.movingTime, label: 'moving'},
@@ -164,6 +166,8 @@ export default {
                     icon: 'mdi-gauge',
                     title: 'Speed',
                     label: 'speed',
+                    pointLabel: 'speed',
+                    disabled: false,
                     data: [
                         {value: this.maxSpeed, label: 'max'},
                         {value: this.avgSpeed, label: 'avg'},
@@ -174,6 +178,8 @@ export default {
                     icon: 'mdi-image-filter-hdr',
                     title: 'Elevation',
                     label: 'elevation',
+                    pointLabel: 'elevation',
+                    disabled: false,
                     data: [
                         {value: this.elevationGain, label: 'gain'},
                         {value: this.minAltitude, label: 'min'},
@@ -184,6 +190,9 @@ export default {
                     icon: 'mdi-heart',
                     title: 'Heartrate',
                     label: 'heart_rate',
+                    lineColour: '#9e1a1a',
+                    pointLabel: 'heart_rate',
+                    disabled: false,
                     data: [
                         {value: this.maxHeartrate, label: 'max'},
                         {value: this.avgHeartrate, label: 'avg'},
@@ -193,7 +202,8 @@ export default {
                     icon: 'mdi-lightning-bolt',
                     title: 'Power',
                     label: 'calories',
-                    disabled: true,
+                    pointLabel: 'calories',
+                    disabled: false,
                     data: [
                         {value: this.avgWatts, label: 'max'},
                         {value: this.kilojoules, label: 'total'},
@@ -204,6 +214,8 @@ export default {
                     icon: 'mdi-reload',
                     title: 'Cadence',
                     label: 'cadence',
+                    pointLabel: 'cadence',
+                    disabled: false,
                     data: [
                         {value: this.avgCadence, label: 'avg'},
                     ]
@@ -212,6 +224,8 @@ export default {
                     icon: 'mdi-thermometer',
                     title: 'Temperature',
                     label: 'temperature',
+                    pointLabel: 'temperature',
+                    disabled: false,
                     data: [
                         {value: this.averageTemperature, label: 'avg'},
                     ]

@@ -24,7 +24,6 @@ export default {
     },
     computed: {
         geojson() {
-            console.log(this.stats.linestringWithDistance)
             return {
                 type: 'LineString',
                 coordinates: (this.stats.linestringWithDistance !== null

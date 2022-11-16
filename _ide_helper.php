@@ -19448,6 +19448,28 @@
      
 }
 
+    namespace Laravel\Dusk { 
+            /**
+     * 
+     *
+     */ 
+        class Browser {
+                    /**
+         * 
+         *
+         * @see \App\Providers\DuskServiceProvider::boot()
+         * @param string $name
+         * @static 
+         */ 
+        public static function docsScreenshot($name)
+        {
+                        return \Laravel\Dusk\Browser::docsScreenshot($name);
+        }
+         
+    }
+     
+}
+
 
 namespace  { 
             class App extends \Illuminate\Support\Facades\App {}
