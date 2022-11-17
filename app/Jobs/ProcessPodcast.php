@@ -3,12 +3,11 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 
 class ProcessPodcast implements ShouldQueue
 {
@@ -17,9 +16,22 @@ class ProcessPodcast implements ShouldQueue
     private bool $canPass;
 
     /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public $tries = 25;
+
+    /**
+     * The maximum number of unhandled exceptions to allow before failing.
+     *
+     * @var int
+     */
+    public $maxExceptions = 3;
+
+    /**
      * Create a new job instance.
      *
-     * @return void
      */
     public function __construct(bool $canPass = true)
     {
@@ -39,7 +51,6 @@ class ProcessPodcast implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      */
     public function handle()
     {
@@ -63,25 +74,25 @@ class ProcessPodcast implements ShouldQueue
             90 => 'Finished uploading',
             95 => 'Cleaning up',
         ];
-        $this->message('Uploading podcast');
+        $this->status()->message('Uploading podcast');
         $i = 0;
-        while($i < 99) {
+        while ($i < 99) {
             usleep(50000);
-            $this->percentage($i);
-            if(array_key_exists($i, $messages)) {
-                $this->message($messages[$i]);
+            $this->status()->setPercentage($i);
+            if (array_key_exists($i, $messages)) {
+                $this->status()->message($messages[$i]);
             }
             $this->checkForSignals();
             $i++;
         }
-        if($this->canPass === false) {
+        if ($this->canPass === false) {
             throw new \Exception('The uploaded file was too large. Please compress it and try again.');
         }
-        $this->successMessage('Your podcast has been uploaded!');
+        $this->status()->successMessage('Your podcast has been uploaded!');
     }
 
     public function onCancel()
     {
-        $this->message('Your podcast was not uploaded.');
+        $this->status()->message('Your podcast was not uploaded.');
     }
 }

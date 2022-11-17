@@ -33,7 +33,7 @@ class DispatchPodcast extends Command implements ShouldQueue
      */
     public function handle()
     {
-        ProcessPodcast::dispatch(!$this->option('fail'))->delay(now()->addSeconds(10));
+        ProcessPodcast::dispatch(!$this->option('fail'))->delay(now()->addSeconds(3));
 
         return 0;
     }

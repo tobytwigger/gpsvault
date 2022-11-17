@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::post('/podcast',function() {
-    ProcessPodcast::dispatch(true)->delay(now()->addSeconds(1));
+    ProcessPodcast::dispatch(false)->delay(now()->addSeconds(1));
 });
 
 Route::post('/podcast/fake',function() {
