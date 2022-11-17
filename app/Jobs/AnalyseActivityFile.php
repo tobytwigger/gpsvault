@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -61,16 +61,14 @@ class AnalyseActivityFile implements ShouldQueue
     public function handle()
     {
         if (!$this->activity->hasFile()) {
-            $this->errorMessage(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
-
             throw new NotFoundHttpException(sprintf('Activity %u does not have a file associated with it.', $this->activity->id));
         }
 
-        $this->line('Starting analysis');
+        $this->status()->line('Starting analysis');
         $analysis = Analyser::analyse($this->activity->file);
-        $this->successMessage('Analysis finished');
+        $this->status()->successMessage('Analysis finished');
 
-        $this->line('Saving data');
+        $this->status()->line('Saving data');
         $stats = Stats::updateOrCreate(
             ['integration' => 'php', 'stats_id' => $this->activity->id, 'stats_type' => get_class($this->activity)],
             [
@@ -104,7 +102,7 @@ class AnalyseActivityFile implements ShouldQueue
 
         $this->savePoints($stats, $analysis->getPoints());
 
-        $this->successMessage('Saved data');
+        $this->status()->successMessage('Saved data');
     }
 
     private function savePoints(Stats $stats, array $points)
@@ -138,7 +136,7 @@ class AnalyseActivityFile implements ShouldQueue
             }));
 
             $percentage += $increase;
-            $this->percentage($percentage);
+            $this->status()->setPercentage($percentage);
         }
     }
 

@@ -15,7 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 use Throwable;
 
 abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
