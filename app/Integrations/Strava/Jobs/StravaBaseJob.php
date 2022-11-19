@@ -18,7 +18,7 @@ use Illuminate\Queue\SerializesModels;
 use JobStatus\Concerns\Trackable;
 use Throwable;
 
-abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
+abstract class StravaBaseJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
@@ -26,19 +26,10 @@ abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
 
     protected $backoff = [60, 120, 180, 300];
 
-    /**
-     * The number of seconds after which the job's unique lock will be released.
-     *
-     * @var int
-     */
-    public $uniqueFor = 3600;
-
-    public function uniqueId()
-    {
-        return $this->activity->id;
-    }
-
-//    public $backoff = [1, 3, 5, 10, 15];
+//    public function uniqueId()
+//    {
+//        return $this->activity->id;
+//    }
 
     /**
      * Create a new job instance.
@@ -71,26 +62,13 @@ abstract class StravaBaseJob implements ShouldQueue, ShouldBeUnique
         return now()->addDays(3);
     }
 
-    public function failed(Throwable $e)
-    {
-        \Illuminate\Support\Facades\Log::error($e->getMessage());
-//        if ($e instanceof StravaRateLimited) {
-//            $time = Carbon::now()->addMinutes(15 - (Carbon::now()->minute % 15))
-//                ->seconds(0);
-//            $this->release(Carbon::now()->diffInSeconds($time));
-//            return;
-//        } elseif ($e instanceof ClientNotAvailable) {
-//            $this->release(180);
-//            return;
-//        }
-//        throw $e;
-    }
-
     abstract public function alias(): ?string;
 
     public function middleware()
     {
         // Throttle exceptions
-        return [(new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id)];
+        return [
+            (new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id)
+        ];
     }
 }
