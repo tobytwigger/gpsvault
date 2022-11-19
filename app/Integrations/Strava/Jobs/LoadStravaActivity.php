@@ -4,12 +4,10 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\Api\ApiImport;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 
 class LoadStravaActivity extends StravaBaseJob
 {
-    use Trackable;
-
     public function alias(): ?string
     {
         return 'load-strava-activity';
@@ -22,12 +20,8 @@ class LoadStravaActivity extends StravaBaseJob
     {
         $strava = Strava::client($this->activity->user);
 
-        try {
-            $activityData = $strava->activity()->getActivity($this->activity->getAdditionalData('strava_id'));
+        $activityData = $strava->activity()->getActivity($this->activity->getAdditionalData('strava_id'));
 
-            ApiImport::activity()->import($activityData, $this->activity->user);
-        } catch (\Throwable $e) {
-            dd($e);
-        }
+        ApiImport::activity()->import($activityData, $this->activity->user);
     }
 }

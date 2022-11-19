@@ -13,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 
 class CreateFullBackup implements ShouldQueue
 {
@@ -51,7 +51,7 @@ class CreateFullBackup implements ShouldQueue
      */
     public function handle()
     {
-        $this->line('Collecting data to back up.');
+        $this->status()->line('Collecting data to back up.');
         $zipCreator = ZipCreator::start($this->user);
 
         /* User */
@@ -63,7 +63,7 @@ class CreateFullBackup implements ShouldQueue
             $zipCreator->add($activity);
             $activityCount++;
         }
-        $this->line(sprintf('Added %u activities.', $activityCount));
+        $this->status()->line(sprintf('Added %u activities.', $activityCount));
 
         /* Route */
         $routeCount = 0;
@@ -71,7 +71,7 @@ class CreateFullBackup implements ShouldQueue
             $zipCreator->add($route);
             $routeCount++;
         }
-        $this->line(sprintf('Added %u routes.', $routeCount));
+        $this->status()->line(sprintf('Added %u routes.', $routeCount));
 
         /* Tour */
         $tourCount = 0;
@@ -79,22 +79,23 @@ class CreateFullBackup implements ShouldQueue
             $zipCreator->add($tour);
             $tourCount++;
         }
-        $this->line(sprintf('Added %u tours.', $tourCount));
+        $this->status()->line(sprintf('Added %u tours.', $tourCount));
 
+        sleep(5);
         $this->checkForSignals();
 
-        $this->line('Generating archive.');
+        $this->status()->line('Generating archive.');
 
         $file = $zipCreator->archive();
         $file->title = $file->title ?? 'Full backup ' . Carbon::now()->format('d/m/Y');
         $file->caption = $file->caption ?? 'Full backup taken at ' . Carbon::now()->format('d/m/Y H:i:s');
         $file->save();
 
-        $this->successMessage('Generated full backup of your data.');
+        $this->status()->successMessage('Generated full backup of your data.');
     }
 
     public function onCancel()
     {
-        $this->warningMessage('Cancelled without generating an archive.');
+        $this->status()->warningMessage('Cancelled without generating an archive.');
     }
 }
