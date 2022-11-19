@@ -13552,12 +13552,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tobytwigger/laravel-job-status.git",
-                "reference": "2031095eb645bf59866273741db1ba1815eeac48"
+                "reference": "467275e07b833b0078eed5c0e78029c41ae2d41a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tobytwigger/laravel-job-status/zipball/2031095eb645bf59866273741db1ba1815eeac48",
-                "reference": "2031095eb645bf59866273741db1ba1815eeac48",
+                "url": "https://api.github.com/repos/tobytwigger/laravel-job-status/zipball/467275e07b833b0078eed5c0e78029c41ae2d41a",
+                "reference": "467275e07b833b0078eed5c0e78029c41ae2d41a",
                 "shasum": ""
             },
             "require": {
@@ -13625,7 +13625,7 @@
                     "type": "buymeacoffee"
                 }
             ],
-            "time": "2022-11-19T00:50:12+00:00"
+            "time": "2022-11-19T01:39:34+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
