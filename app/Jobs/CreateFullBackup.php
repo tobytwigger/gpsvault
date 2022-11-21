@@ -81,7 +81,6 @@ class CreateFullBackup implements ShouldQueue
         }
         $this->status()->line(sprintf('Added %u tours.', $tourCount));
 
-        sleep(5);
         $this->checkForSignals();
 
         $this->status()->line('Generating archive.');

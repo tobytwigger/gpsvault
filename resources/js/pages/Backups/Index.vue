@@ -22,8 +22,6 @@
             </template>
         </c-pagination-iterator>
 
-        {{jobStatus}}
-
         <template #sidebar>
             <v-list>
                 <v-list-item>
