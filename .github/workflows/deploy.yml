@@ -13,6 +13,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    environment:
+      name: production
+      url: https://tools.swytchbike.com
+
+
     steps:
       - uses: actions/checkout@v2
 
