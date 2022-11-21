@@ -12,6 +12,19 @@
         @update:page="page = $event"
         @update:items-per-page="perPage = $event"
     >
+        <template v-slot:no-data>
+            <v-row v-if="layout === 'cards' && prepend">
+                <v-col
+                    cols="12"
+                    xl="3"
+                    md="4"
+                    sm="6"
+                >
+                    <slot name="prepend"></slot>
+                </v-col>
+            </v-row>
+            No data available
+        </template>
         <template v-slot:default="{ items, isExpanded, expand }">
             <v-row v-if="layout === 'cards'">
                 <v-col
