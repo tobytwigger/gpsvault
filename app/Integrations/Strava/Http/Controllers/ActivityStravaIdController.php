@@ -14,6 +14,8 @@ class ActivityStravaIdController extends Controller
             'strava_id' => 'required|numeric',
         ]);
 
+        $this->authorize('update', $activity);
+
         $activity->setAdditionalData('strava_id', $request->input('strava_id'));
 
         return $activity;

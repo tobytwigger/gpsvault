@@ -10,8 +10,15 @@ use Illuminate\Http\Request;
 class StageWizardController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Tour::class);
+    }
+
     public function __invoke(Tour $tour, Request $request)
     {
+        $this->authorize('update', $tour);
+
         $request->validate([
             'total_days' => 'required|numeric|min:1|max:1000'
         ]);

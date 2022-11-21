@@ -36,6 +36,7 @@ class SyncStatus
                 ->whereDoesntHave('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id'))
                 ->get(),
             'total_activities' => $this->user->activities()->count(),
+            'is_indexing' => $this->isIndexing()
         ];
     }
 
@@ -88,5 +89,13 @@ class SyncStatus
         return $this->user->activities()->whereIn('id', $activityIds)->select('id', 'name')->get()->map(fn (Activity $activity) => [
             'id' => $activity->id, 'name' => $activity->name,
         ]);
+    }
+
+    public function isIndexing(): bool
+    {
+        return JobStatus::forJobAlias('sync-activities')
+            ->whereNotStatus(['canceled', 'failed', 'succeeded'])
+            ->whereTag('user_id', $this->user->id)
+            ->exists();
     }
 }

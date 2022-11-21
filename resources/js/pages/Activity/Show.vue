@@ -47,9 +47,6 @@
                                 <div v-if="activity.description">
                                     {{ activity.description }}
                                 </div>
-                                <div v-else>
-                                    No description
-                                </div>
                             </v-col>
                         </v-row>
                         <v-row v-if="startedAt">
@@ -68,7 +65,11 @@
                     </v-col>
                     <v-col>
                         <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
-                        <div v-else>No stats available</div>
+                        <div v-else>
+                            <c-stats-loading>
+
+                            </c-stats-loading>
+                        </div>
                     </v-col>
                 </v-row>
                 <v-row v-if="images.length > 0">
@@ -264,10 +265,12 @@ import CActivityLocationSummary from '../../ui/components/CActivityLocationSumma
 import CJobStatus from '../../ui/components/CJobStatus';
 import CMap from '../../ui/components/Map/CMap';
 import CLinkStravaActivityForm from '../../ui/components/Strava/Sync/CLinkStravaActivityForm';
+import CStatsLoading from '../../ui/components/Activity/CStatsLoading';
 
 export default {
     name: "Show",
     components: {
+        CStatsLoading,
         CLinkStravaActivityForm,
         CMap,
         CJobStatus,

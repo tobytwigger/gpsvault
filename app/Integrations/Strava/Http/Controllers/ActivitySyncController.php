@@ -14,6 +14,8 @@ class ActivitySyncController extends Controller
 {
     public function __invoke(Activity $activity)
     {
+        $this->authorize('update', $activity);
+
         LoadStravaActivity::dispatch($activity);
         LoadStravaStats::dispatch($activity);
         LoadStravaComments::dispatch($activity);

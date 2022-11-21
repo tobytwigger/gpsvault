@@ -10,7 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
-use JobStatus\Trackable;
+use JobStatus\Concerns\Trackable;
 
 class ImportStravaExport
 {
@@ -46,7 +46,7 @@ class ImportStravaExport
 
     public function handle()
     {
-        $this->line('Extracting Strava archive');
+        $this->status()->line('Extracting Strava archive');
 
         Importer::import(
             ImportZip::fromTempArchivePath($this->zipPath),
@@ -55,6 +55,6 @@ class ImportStravaExport
 
         Storage::disk('temp')->delete($this->zipPath);
 
-        $this->successMessage(sprintf('Importing complete.'));
+        $this->status()->successMessage(sprintf('Importing complete.'));
     }
 }

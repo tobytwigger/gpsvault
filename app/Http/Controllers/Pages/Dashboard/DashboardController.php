@@ -27,8 +27,10 @@ class DashboardController extends Controller
 
     public function show(int $dashboardId)
     {
+        $dashboard = Dashboard::getById($dashboardId);
+        abort_if($dashboard->user_id !== Auth::id(), 403);
         return Inertia::render('Dashboard/Dashboard', [
-            'schema' => Dashboard::getById($dashboardId)->toSchema(),
+            'schema' => $dashboard->toSchema(),
             'dashboards' => Dashboard::getDashboardsForUser(Auth::user())
         ]);
     }
