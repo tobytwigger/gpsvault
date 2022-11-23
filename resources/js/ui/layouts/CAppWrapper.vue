@@ -2,9 +2,10 @@
     <c-base-page :title="title">
         <c-sidebar v-model="showingSidebar"></c-sidebar>
 
-        <c-app-nav-bar title="GPS Vault" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-app-nav-bar>
+        <c-app-nav-bar title="GPS Vault" :drawer="showingSidebar"
+                       @update:drawer="showingSidebar = $event"></c-app-nav-bar>
 
-        <v-main >
+        <v-main>
             <v-container style="height: 100%" fluid>
                 <v-row align="start">
                     <v-col>
@@ -19,28 +20,23 @@
 
                             <v-spacer></v-spacer>
 
-                            <c-sub-menu :menu-items="menuItems">
+                            <c-sub-menu :menu-items="menuItems" @sub-menu-click="callMenuAction">
+                                <template v-slot:activator="{ on: menu, attrs }">
+                                    <v-tooltip bottom>
+                                        <template v-slot:activator="{ on: tooltip }">
+                                            <v-btn
+                                                icon
 
+                                                v-bind="attrs"
+                                                v-on="{ ...tooltip, ...menu }"
+                                            >
+                                                <v-icon>mdi-dots-vertical</v-icon>
+                                            </v-btn>
+                                        </template>
+                                        <span>Menu</span>
+                                    </v-tooltip>
+                                </template>
                             </c-sub-menu>
-<!--                            <v-menu-->
-<!--                                bottom-->
-<!--                                left-->
-<!--                            >-->
-<!--                                <template v-slot:activator="{ on: menu, attrs }">-->
-<!--                                    <v-tooltip bottom>-->
-<!--                                        <template v-slot:activator="{ on: tooltip }">-->
-<!--                                            <v-btn-->
-<!--                                                icon-->
-
-<!--                                                v-bind="attrs"-->
-<!--                                                v-on="{ ...tooltip, ...menu }"-->
-<!--                                            >-->
-<!--                                                <v-icon>mdi-dots-vertical</v-icon>-->
-<!--                                            </v-btn>-->
-<!--                                        </template>-->
-<!--                                        <span>Menu</span>-->
-<!--                                    </v-tooltip>-->
-<!--                                </template>-->
                         </v-toolbar>
                     </v-col>
                 </v-row>
@@ -64,46 +60,48 @@
 </template>
 
 <script>
-    import { Head } from '@inertiajs/inertia-vue';
-    import CAppNavBar from '../components/Page/CAppNavBar';
-    import CSidebar from '../components/Page/CSidebar';
-    import CBasePage from './CVuetifyWrapper';
-    import CFooter from '../components/Page/CFooter';
-    import CSubMenu from '../components/CSubMenu';
+import {Head} from '@inertiajs/inertia-vue';
+import CAppNavBar from '../components/Page/CAppNavBar';
+import CSidebar from '../components/Page/CSidebar';
+import CBasePage from './CVuetifyWrapper';
+import CFooter from '../components/Page/CFooter';
+import CSubMenu from '../components/Page/CSubMenu';
 
-    export default {
-        name: 'CAppWrapper',
-        props: {
-            title: {
-                required: true,
-                type: String
-            },
-            menuItems: {
-                required: false,
-                type: Array,
-                default: () => []
-            }
+export default {
+    name: 'CAppWrapper',
+    props: {
+        title: {
+            required: true,
+            type: String
         },
+        menuItems: {
+            required: false,
+            type: Array,
+            default: () => []
+        }
+    },
 
-        components: {
-            CSubMenu,
-            CFooter,
-            CBasePage,
-            CSidebar,
-            CAppNavBar,
-            Head,
-        },
+    components: {
+        CSubMenu,
+        CFooter,
+        CBasePage,
+        CSidebar,
+        CAppNavBar,
+        Head,
+    },
 
-        data() {
-            return {
-                showingSidebar: false,
-                navigationRoutes: [
-                    // { component: markRaw({
-                    //     template: '<v-logout><jet-responsive-nav-link as="button">Log Out</jet-responsive-nav-link></v-logout>'
-                    // })},
-                    // {id: 'logout', title: 'Log Out'},
-                ]
+    data() {
+        return {
+            showingSidebar: false,
+            navigationRoutes: []
+        }
+    },
+    methods: {
+        callMenuAction(item) {
+            if(item.hasOwnProperty('action')) {
+                item.action();
             }
         }
     }
+}
 </script>

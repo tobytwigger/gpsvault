@@ -47,47 +47,50 @@ export default {
                         this.$inertia.reload();
                     }
                 },
-                { isDivider: true },
-                { name: "Menu Item 2" },
-                {
-                    name: "Sub 1",
-                    menu: [
-                        { name: "1.1" },
-                        { name: "1.2" },
-                        {
-                            name: "Sub-menu 2",
-                            menu: [
-                                { name: "2.1" },
-                                { name: "2.2" },
-                                {
-                                    name: "Sub-menu 3",
-                                    menu: [
-                                        { name: "3.1" },
-                                        { name: "3.2" },
-                                        {
-                                            name: "Sub-menu 4",
-                                            menu: [{ name: "4.1" }, { name: "4.2" }, { name: "4.3" }]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                { name: "Menu Item 3" },
-                { isDivider: true },
-                {
-                    name: "Menu Item 4",
-                    action: () => {
-                        console.log("menu-item-4");
-                    }
-                },
-                {
-                    name: "Menu Item 5",
-                    action: () => {
-                        console.log("menu-item-5");
-                    }
-                }
+                // { isDivider: true },
+                // { name: "Menu Item 2",
+                // action: () => {
+                //     console.log('test')
+                // }},
+                // {
+                //     name: "Sub 1",
+                //     menu: [
+                //         { name: "1.1" },
+                //         { name: "1.2" },
+                //         {
+                //             name: "Sub-menu 2",
+                //             menu: [
+                //                 { name: "2.1" },
+                //                 { name: "2.2" },
+                //                 {
+                //                     name: "Sub-menu 3",
+                //                     menu: [
+                //                         { name: "3.1" },
+                //                         { name: "3.2" },
+                //                         {
+                //                             name: "Sub-menu 4",
+                //                             menu: [{ name: "4.1" }, { name: "4.2" }, { name: "4.3" }]
+                //                         }
+                //                     ]
+                //                 }
+                //             ]
+                //         }
+                //     ]
+                // },
+                // { name: "Menu Item 3" },
+                // { isDivider: true },
+                // {
+                //     name: "Menu Item 4",
+                //     action: () => {
+                //         console.log("menu-item-4");
+                //     }
+                // },
+                // {
+                //     name: "Menu Item 5",
+                //     action: () => {
+                //         console.log("menu-item-5");
+                //     }
+                // }
             ]
         }
     },

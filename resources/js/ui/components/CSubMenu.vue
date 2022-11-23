@@ -77,7 +77,7 @@
 
 <script>
 export default {
-    name: "CSubMenu",
+    name: "CSubMenuTwo",
     template: `
 
   `,
@@ -93,23 +93,23 @@ export default {
         isSubMenu: { type: Boolean, default: false },
         transition: { type: String, default: "scale-transition" }
     },
-    methods: {
-        emitClickEvent(item) {
-            this.$emit("sub-menu-click", item);
-            this.openMenu = false;
-            this.menuOpened = false;
-        }
-    },
-    watch: {
-        menuOpened: function () {
-            this.isOpenOnHover = !this.menuOpened;
-        }
-    },
-    data: () => ({
-        openMenu: false,
-        isOpenOnHover: true,
-        menuOpened: false
-    })
+        methods: {
+            emitClickEvent(item) {
+                this.$emit("sub-menu-click", item);
+                this.openMenu = false;
+                this.menuOpened = false;
+            }
+        },
+        watch: {
+            menuOpened: function () {
+                this.isOpenOnHover = !this.menuOpened;
+            }
+        },
+        data: () => ({
+            openMenu: false,
+            isOpenOnHover: true,
+            menuOpened: false
+        })
 }
 </script>
 
