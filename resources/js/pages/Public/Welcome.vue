@@ -18,7 +18,7 @@
                             <h1 class="text-h1 font-weight-black black--text mb-4">
                                 GPS Vault
                             </h1>
-                            <h4 class="text-h3 subheading mb-4 black--text">
+                            <h4 class="text-h3 subheading black--text mb-4">
                                 Your cycling data, your way
                             </h4>
                             <v-btn
