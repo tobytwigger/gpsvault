@@ -19,26 +19,35 @@
 
                             <v-spacer></v-spacer>
 
-                            <slot name="headerActions"></slot>
+                            <c-sub-menu :menu-items="menuItems">
+
+                            </c-sub-menu>
+<!--                            <v-menu-->
+<!--                                bottom-->
+<!--                                left-->
+<!--                            >-->
+<!--                                <template v-slot:activator="{ on: menu, attrs }">-->
+<!--                                    <v-tooltip bottom>-->
+<!--                                        <template v-slot:activator="{ on: tooltip }">-->
+<!--                                            <v-btn-->
+<!--                                                icon-->
+
+<!--                                                v-bind="attrs"-->
+<!--                                                v-on="{ ...tooltip, ...menu }"-->
+<!--                                            >-->
+<!--                                                <v-icon>mdi-dots-vertical</v-icon>-->
+<!--                                            </v-btn>-->
+<!--                                        </template>-->
+<!--                                        <span>Menu</span>-->
+<!--                                    </v-tooltip>-->
+<!--                                </template>-->
                         </v-toolbar>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col>
                         <slot name="content">
-                            <v-row v-if="actionSidebar">
-                                <v-col cols="12" lg="8" xl="10">
-                                    <v-sheet elevation="3" rounded width="100%">
-                                        <slot></slot>
-                                    </v-sheet>
-                                </v-col>
-                                <v-col cols="12" md="4" xl="2" class="d-flex justify-lg-center">
-                                    <v-sheet elevation="3" rounded>
-                                        <slot name="sidebar"></slot>
-                                    </v-sheet>
-                                </v-col>
-                            </v-row>
-                            <v-row v-else>
+                            <v-row>
                                 <v-col cols="12">
                                     <v-sheet elevation="3" rounded width="100%">
                                         <slot></slot>
@@ -60,6 +69,7 @@
     import CSidebar from '../components/Page/CSidebar';
     import CBasePage from './CVuetifyWrapper';
     import CFooter from '../components/Page/CFooter';
+    import CSubMenu from '../components/CSubMenu';
 
     export default {
         name: 'CAppWrapper',
@@ -68,19 +78,15 @@
                 required: true,
                 type: String
             },
-            actionSidebar: {
+            menuItems: {
                 required: false,
-                type: Boolean,
-                default: false
-            },
-            headerAction: {
-                required: false,
-                type: Boolean,
-                default: false
-            },
+                type: Array,
+                default: () => []
+            }
         },
 
         components: {
+            CSubMenu,
             CFooter,
             CBasePage,
             CSidebar,
