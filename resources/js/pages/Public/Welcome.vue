@@ -274,9 +274,9 @@ export default {
 
 <style scoped>
     .features-coloured {
-        color: #ffffff
+        color: #30006a
     }
     i.features-coloured {
-        caret-color: #ffffff;
+        caret-color: #30006a;
     }
 </style>
