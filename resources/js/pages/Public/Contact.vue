@@ -1,68 +1,108 @@
 <template>
-    <c-auth-wrapper title="Contact">
+    <c-public-wrapper title="Contact">
 
-        <v-form @submit.prevent="submit">
-            <v-card>
-                <v-card-title class="justify-center">
-                    <span class="primary--text">Contact Us</span>
-                </v-card-title>
+        <div class="row">
+            <div class="col">
+                <v-parallax
+                    class="v-parallax-opaque-image"
+                    src="/dist/images/public/contact-hero.jpg"
+                >
+                    <v-row
+                        align="center"
+                        justify="center"
+                    >
+                        <v-col
+                            class="text-center"
+                            cols="12"
+                        >
+                                class="text-h2 font-weight-bold black--text mb-4"
+                                Contact Us
+                            </h1>
+                            <v-btn
+                                class="align-self-end"
+                                fab
+                                color="white"
+                                outlined
+                                @click="$vuetify.goTo('#email')"
+                            >
+                                <v-icon>mdi-chevron-double-down</v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </v-parallax>
+            </div>
+        </div>
 
-                <v-card-text>
-                    <v-text-field
-                        id="name"
-                        v-model="form.name"
-                        label="Name"
-                        hint="Your name (optional)"
-                        name="name"
-                        type="text"
-                        :error="form.errors.hasOwnProperty('name')"
-                        :error-messages="form.errors.hasOwnProperty('name') ? [form.errors.name] : []"
-                    ></v-text-field>
+        <v-row align="center"
+               justify="center">
+            <v-col cols="12"
+                    md="4"
+                    sm="8">
+                <section id="email">
+                    <v-form @submit.prevent="submit">
+                        <v-card>
+                            <v-card-text>
+                                <v-text-field
+                                    id="name"
+                                    v-model="form.name"
+                                    label="Name"
+                                    hint="Your name (optional)"
+                                    name="name"
+                                    type="text"
+                                    :error="form.errors.hasOwnProperty('name')"
+                                    :error-messages="form.errors.hasOwnProperty('name') ? [form.errors.name] : []"
+                                ></v-text-field>
 
-                    <v-text-field
-                        id="email"
-                        v-model="form.email"
-                        label="Email"
-                        hint="An email address we can get back to you at (optional)"
-                        name="email"
-                        type="email"
-                        :error="form.errors.hasOwnProperty('email')"
-                        :error-messages="form.errors.hasOwnProperty('email') ? [form.errors.email] : []"
-                    ></v-text-field>
+                                <v-text-field
+                                    id="email"
+                                    v-model="form.email"
+                                    label="Email"
+                                    hint="An email address we can get back to you at (optional)"
+                                    name="email"
+                                    type="email"
+                                    :error="form.errors.hasOwnProperty('email')"
+                                    :error-messages="form.errors.hasOwnProperty('email') ? [form.errors.email] : []"
+                                ></v-text-field>
 
-                    <v-text-field
-                        id="subject"
-                        v-model="form.subject"
-                        label="Subject"
-                        hint="Message Subject"
-                        required
-                        name="subject"
-                        type="text"
-                        :error="form.errors.hasOwnProperty('subject')"
-                        :error-messages="form.errors.hasOwnProperty('subject') ? [form.errors.subject] : []"
-                    ></v-text-field>
+                                <v-text-field
+                                    id="subject"
+                                    v-model="form.subject"
+                                    label="Subject *"
+                                    hint="Message Subject"
+                                    name="subject"
+                                    required
+                                    type="text"
+                                    :error="form.errors.hasOwnProperty('subject')"
+                                    :error-messages="form.errors.hasOwnProperty('subject') ? [form.errors.subject] : []"
+                                ></v-text-field>
 
-                    <v-textarea
-                        id="subject"
-                        v-model="form.content"
-                        label="Content"
-                        hint="Your message"
-                        name="content"
-                        :error="form.errors.hasOwnProperty('content')"
-                        :error-messages="form.errors.hasOwnProperty('content') ? [form.errors.content] : []"
-                    ></v-textarea>
+                                <v-textarea
+                                    id="content"
+                                    v-model="form.content"
+                                    label="Content *"
+                                    required
+                                    hint="Your message"
+                                    name="content"
+                                    :error="form.errors.hasOwnProperty('content')"
+                                    :error-messages="form.errors.hasOwnProperty('content') ? [form.errors.content] : []"
+                                ></v-textarea>
 
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn :loading="form.processing" :disabled="form.processing" aria-label="Send Email" block color="primary"
-                           type="submit">
-                        <v-icon>mdi-send</v-icon>
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-form>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-btn :loading="form.processing" :disabled="form.processing" aria-label="Send Email" block color="primary"
+                                       type="submit">
+                                    <v-icon>mdi-send</v-icon>
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-form>
+                </section>
+            </v-col>
+        </v-row>
 
-    </c-auth-wrapper>
+
+
+    </c-public-wrapper>
 </template>
 
 <script>

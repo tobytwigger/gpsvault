@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col">
                 <v-parallax
-                    dark
-                    src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+                    class="v-parallax-opaque-image"
+                    src="/dist/images/public/welcome-hero-three.png"
                 >
                     <v-row
                         align="center"
@@ -15,10 +15,10 @@
                             class="text-center"
                             cols="12"
                         >
-                            <h1 class="text-h2 font-weight-black mb-4">
+                            <h1 class="text-h1 font-weight-black black--text mb-4">
                                 GPS Vault
                             </h1>
-                            <h4 class="subheading mb-4">
+                            <h4 class="text-h3 subheading black--text mb-4">
                                 Your cycling data, your way
                             </h4>
                             <v-btn
@@ -57,7 +57,8 @@
                             class="mx-auto title font-weight-light mb-8"
                             max-width="720"
                         >
-                            Take control of your cycling data. From planning routes and tours to analysing activities and backing up your rides, your data stays safe and always accessible.
+                            Take control of your cycling data. From planning routes and tours to analysing activities
+                            and backing up your rides, your data stays safe and always accessible.
                         </v-responsive>
 
                         <div></div>
@@ -152,8 +153,9 @@
             <div class="col">
                 <section id="stats">
                     <v-parallax
+                        class="v-parallax-opaque-image"
                         :height="$vuetify.breakpoint.smAndDown ? 700 : 500"
-                        src="https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
+                        src="/dist/images/public/welcome-hero.jpg"
                     >
                         <v-container fill-height>
                             <v-row class="mx-auto">
@@ -166,13 +168,13 @@
                                     <div class="text-center" v-if="url !== null">
                                         <a :href="url" style="text-decoration: none; color: white" target="_blank">
                                             <v-icon
-                                                color="white"
                                                 style="cursor: pointer;"
-                                                class="display-3 text-white mb-4"
-                                            >{{icon}}</v-icon>
+                                                class="display-3 text-white mb-4 features-coloured"
+                                            >{{icon}}
+                                            </v-icon>
 
                                             <div
-                                                class="title font-weight-regular text-uppercase"
+                                                class="title font-weight-bold text-uppercase features-coloured"
                                             >
                                                 {{title}}
                                             </div>
@@ -180,12 +182,13 @@
                                     </div>
                                     <div class="text-center" v-else>
                                         <v-icon
-                                            color="white"
-                                            class="display-3 text-white mb-4"
-                                        >{{icon}}</v-icon>
+                                            features-coloured
+                                            class="display-3 text-white mb-4 features-coloured"
+                                        >{{icon}}
+                                        </v-icon>
 
                                         <div
-                                            class="title font-weight-regular text-uppercase"
+                                            class="title font-weight-bold text-uppercase features-coloured"
                                             v-text="title"
                                         ></div>
                                     </div>
@@ -210,32 +213,32 @@ export default {
             features: [
                 {
                     title: 'Analyse activities',
-                    icon: 'mdi-fountain-pen-tip',
+                    icon: 'mdi-bike',
                     text: 'Automatically upload new rides. Browse in depth analysis and stats.'
                 },
                 {
                     title: 'Strava',
-                    icon: 'mdi-cellphone',
+                    icon: 'mdi-power-plug',
                     text: 'Import all your rides from Strava, including photos.'
                 },
                 {
                     title: 'Routes',
-                    icon: 'mdi-pencil-box-outline',
+                    icon: 'mdi-routes',
                     text: 'Plan a route'
                 },
                 {
                     title: 'Multi-day tours',
-                    icon: 'mdi-image-size-select-actual',
+                    icon: 'mdi-campfire',
                     text: 'Plan a tour spanning multiple days'
                 },
                 {
                     title: 'Backups',
-                    icon: 'mdi-ice-pop',
+                    icon: 'mdi-safe',
                     text: 'Create a backup instantly at any time, and download it for safekeeping.'
                 },
                 {
                     title: 'Compare',
-                    icon: 'mdi-help-circle-outline',
+                    icon: 'mdi-compare',
                     text: 'Switch between datasets to see the differences between analysis by Strava and us.'
                 },
             ],
@@ -248,7 +251,7 @@ export default {
                 {
                     icon: 'mdi-github',
                     url: 'https://github.com/tobytwigger/gpsvault',
-                    title: 'View source code'
+                    title: 'Open Source'
                 },
                 {
                     icon: 'mdi-sd',
@@ -256,9 +259,9 @@ export default {
                     title: '20GB free storage'
                 },
                 {
-                    icon: 'mdi-lock',
+                    icon: 'mdi-lock-open',
                     url: null,
-                    title: 'Registration closed',
+                    title: 'Registration open',
                     // icon: 'mdi-lock-open-variant',
                     // url: route('register')
                     // title: 'Registration open'
@@ -270,5 +273,10 @@ export default {
 </script>
 
 <style scoped>
-
+    .features-coloured {
+        color: #30006a
+    }
+    i.features-coloured {
+        caret-color: #30006a;
+    }
 </style>

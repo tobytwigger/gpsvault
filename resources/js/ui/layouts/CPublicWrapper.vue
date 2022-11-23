@@ -5,6 +5,8 @@
 
         <v-main>
             <v-container class="fill-height" style="background-color: #f3f4f6;" fluid>
+                <slot name="alerts"></slot>
+
                 <slot></slot>
             </v-container>
         </v-main>
