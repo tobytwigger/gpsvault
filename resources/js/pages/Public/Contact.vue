@@ -15,7 +15,7 @@
                             class="text-center"
                             cols="12"
                         >
-                            <h1 class="text-h2 font-weight-bold black--text mb-4">
+                                class="text-h2 font-weight-bold black--text mb-4"
                                 Contact Us
                             </h1>
                             <v-btn
