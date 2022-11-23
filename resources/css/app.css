@@ -1,3 +1,4 @@
+/*Custom map stuff*/
 .maplibregl-custom-ctrl-sidebar {
     transition: transform 1s;
     z-index: 1;
@@ -14,4 +15,10 @@
 
 .maplibregl-icon-lg {
     font-size: 18px;
+}
+
+
+/*Makes the home screen banner image more opaque*/
+.v-parallax-opaque-image .v-parallax__image {
+    opacity: 0.65 !important;
 }
