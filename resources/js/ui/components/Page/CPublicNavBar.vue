@@ -10,7 +10,7 @@
         height="80"
     >
         <img
-            :src="'/dist/images/zero/logo.svg'"
+            :src="'/dist/images/public/logo.svg'"
             class="mr-3 hidden-xs-only"
             style="max-width: 46px;"
             width="100%"
@@ -18,7 +18,7 @@
         />
 
         <img
-            :src="'/dist/images/zero/zero-logo-' + ($vuetify.theme.isDark ? 'dark' : 'light') + '.svg'"
+            :src="'/dist/images/public/public-logo-' + ($vuetify.theme.isDark ? 'dark' : 'light') + '.svg'"
             style="max-width: 96px;"
             width="100%"
             @click="$inertia.visit(route('welcome'))"

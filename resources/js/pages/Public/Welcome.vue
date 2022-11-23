@@ -5,7 +5,8 @@
             <div class="col">
                 <v-parallax
                     dark
-                    src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+
+                    src="/dist/images/public/welcome-hero.jpg"
                 >
                     <v-row
                         align="center"
@@ -57,7 +58,8 @@
                             class="mx-auto title font-weight-light mb-8"
                             max-width="720"
                         >
-                            Take control of your cycling data. From planning routes and tours to analysing activities and backing up your rides, your data stays safe and always accessible.
+                            Take control of your cycling data. From planning routes and tours to analysing activities
+                            and backing up your rides, your data stays safe and always accessible.
                         </v-responsive>
 
                         <div></div>
@@ -153,7 +155,7 @@
                 <section id="stats">
                     <v-parallax
                         :height="$vuetify.breakpoint.smAndDown ? 700 : 500"
-                        src="https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"
+                        src="/dist/images/public/welcome-hero-two.jpg"
                     >
                         <v-container fill-height>
                             <v-row class="mx-auto">
@@ -169,7 +171,8 @@
                                                 color="white"
                                                 style="cursor: pointer;"
                                                 class="display-3 text-white mb-4"
-                                            >{{icon}}</v-icon>
+                                            >{{icon}}
+                                            </v-icon>
 
                                             <div
                                                 class="title font-weight-regular text-uppercase"
@@ -182,7 +185,8 @@
                                         <v-icon
                                             color="white"
                                             class="display-3 text-white mb-4"
-                                        >{{icon}}</v-icon>
+                                        >{{icon}}
+                                        </v-icon>
 
                                         <div
                                             class="title font-weight-regular text-uppercase"
