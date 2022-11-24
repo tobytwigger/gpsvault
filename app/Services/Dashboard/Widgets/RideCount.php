@@ -6,7 +6,6 @@ use App\Models\Activity;
 use App\Models\Stats;
 use App\Services\Dashboard\Contracts\Widget;
 use App\Services\Dashboard\Widgets\Traits\WidgetDateConstraints;
-use Carbon\Carbon;
 
 class RideCount extends Widget
 {

@@ -64,8 +64,9 @@ class ValhallaRouterStrategy implements RouterStrategy
         foreach (collect($linestring)->chunk(1000) as $index => $chunkedPoints) {
             $newElevation = (new Valhalla())
                 ->elevationForLineString(GooglePolylineEncoder::encode($chunkedPoints->all(), 6))['range_height'];
-            $modifiedElevation = array_map(function($elevationItem) use ($cumulativeDistance) {
+            $modifiedElevation = array_map(function ($elevationItem) use ($cumulativeDistance) {
                 $elevationItem[0] = $elevationItem[0] + $cumulativeDistance;
+
                 return $elevationItem;
             }, $newElevation);
             $cumulativeDistance += Arr::last($newElevation)[0];
@@ -73,14 +74,15 @@ class ValhallaRouterStrategy implements RouterStrategy
             $elevation = array_merge($elevation, $modifiedElevation);
         }
 
-        $elevationGain = array_reduce($elevation, function($elevationData, $elevationItem) {
-            if($elevationData['previous'] !== null) {
+        $elevationGain = array_reduce($elevation, function ($elevationData, $elevationItem) {
+            if ($elevationData['previous'] !== null) {
                 $gain = $elevationItem[1] - $elevationData['previous'];
-                if($gain > 0) {
+                if ($gain > 0) {
                     $elevationData['gain'] += $gain;
                 }
             }
             $elevationData['previous'] = $elevationItem[1];
+
             return $elevationData;
         }, ['previous' => null, 'gain' => 0.0])['gain'];
 

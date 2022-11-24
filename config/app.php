@@ -16,7 +16,7 @@ return [
     'force-https' => env('FORCE_HTTPS', false),
 
     'static-map' => [
-        'driver' => env('STATIC_MAP_DRIVER', 'mapbox')
+        'driver' => env('STATIC_MAP_DRIVER', 'mapbox'),
     ],
 
     'name' => env('APP_NAME', 'Laravel'),
@@ -203,7 +203,7 @@ return [
         //        \App\Integrations\Dropbox\DropboxServiceProvider::class,
         \App\Services\Geocoding\GeocodingServiceProvider::class,
         \App\Services\Dashboard\DashboardServiceProvider::class,
-        \App\Providers\DuskServiceProvider::class
+        \App\Providers\DuskServiceProvider::class,
 
     ],
 

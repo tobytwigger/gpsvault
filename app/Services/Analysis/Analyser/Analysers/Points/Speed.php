@@ -7,12 +7,9 @@ use App\Services\Analysis\Analyser\Analysers\PointAnalyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
-use Location\Coordinate;
-use Location\Distance\Vincenty;
 
 class Speed extends AnalyserContract implements PointAnalyser
 {
-
     private ?float $previousCumulativeDistance = 0.0;
 
     private ?Carbon $previousTime = null;
@@ -29,12 +26,12 @@ class Speed extends AnalyserContract implements PointAnalyser
 
     public function processPoint(Point $point): Point
     {
-        if($point->getSpeed() === null && $point->getCumulativeDistance() !== null && $point->getTime() !== null) {
+        if ($point->getSpeed() === null && $point->getCumulativeDistance() !== null && $point->getTime() !== null) {
             $speed = 0.0;
-            if($this->previousTime !== null && $this->previousCumulativeDistance !== null) {
+            if ($this->previousTime !== null && $this->previousCumulativeDistance !== null) {
                 $segmentDistance = $point->getCumulativeDistance() - $this->previousCumulativeDistance;
                 $segmentTime = $point->getTime()->diffInSeconds($this->previousTime);
-                if($segmentTime > 0.0) {
+                if ($segmentTime > 0.0) {
                     $speed = $segmentDistance / $segmentTime;
                 }
             }
@@ -42,6 +39,7 @@ class Speed extends AnalyserContract implements PointAnalyser
             $this->previousTime = $point->getTime();
             $this->previousCumulativeDistance = $point->getCumulativeDistance();
         }
+
         return $point;
     }
 }

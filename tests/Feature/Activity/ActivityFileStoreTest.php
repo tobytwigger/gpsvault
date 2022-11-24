@@ -3,7 +3,6 @@
 namespace Feature\Activity;
 
 use App\Models\Activity;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;

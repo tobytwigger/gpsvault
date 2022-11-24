@@ -45,7 +45,7 @@ class Handler extends ExceptionHandler
 
         if (!app()->environment(['local', 'testing']) && in_array($response->status(), [403, 404, 500, 503])) {
             return $this->toInertiaResponse($response, $request);
-        } else if ($response->status() === 419) {
+        } elseif ($response->status() === 419) {
             return back()->with([
                 'message' => 'The page expired, please try again.',
             ]);
@@ -58,7 +58,7 @@ class Handler extends ExceptionHandler
     {
         return Inertia::render('ErrorPage', [
             'status' => $response->status(),
-            'user' => Auth::user()
+            'user' => Auth::user(),
         ])
             ->toResponse($request)
             ->setStatusCode($response->status());

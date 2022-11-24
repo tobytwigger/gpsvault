@@ -11,7 +11,6 @@ use Illuminate\Support\ServiceProvider;
 
 class DashboardServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->app->singleton(WidgetStore::class);

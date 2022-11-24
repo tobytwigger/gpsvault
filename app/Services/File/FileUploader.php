@@ -75,7 +75,7 @@ class FileUploader
 
     public function filePondFile(FilePondFile|array $filePondFile, User $user, string $type)
     {
-        if(is_array($filePondFile)) {
+        if (is_array($filePondFile)) {
             $filePondFile = FilePondFile::fromArray($filePondFile);
         }
 

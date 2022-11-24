@@ -27,9 +27,10 @@ class AverageSpeed extends AnalyserContract implements PointAnalyser
 
     public function processPoint(Point $point): Point
     {
-        if($point->getSpeed()) {
+        if ($point->getSpeed()) {
             $this->speed[] = $point->getSpeed();
         }
+
         return $point;
     }
 }

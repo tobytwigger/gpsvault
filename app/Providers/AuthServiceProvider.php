@@ -23,13 +23,14 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('viewLarecipe', function($user = null, $documentation = null) {
-            if($user === null || $documentation === null) {
+        Gate::define('viewLarecipe', function ($user = null, $documentation = null) {
+            if ($user === null || $documentation === null) {
                 return true;
             }
-            if($documentation->title === 'Logging In Clients' && !$user->can('manage-strava-clients')) {
+            if ($documentation->title === 'Logging In Clients' && !$user->can('manage-strava-clients')) {
                 return false;
             }
+
             return true;
         });
     }

@@ -4,7 +4,6 @@ namespace App\Services\Dashboard\Contracts;
 
 abstract class Widget
 {
-
     protected array $settings = [];
 
     protected array $position = [];
@@ -45,11 +44,12 @@ abstract class Widget
         $instance->setId($id);
         $instance->setSettings($settings);
         $instance->setPosition($position);
+
         return $instance;
     }
 
     /**
-     * The Vue component representing the widget
+     * The Vue component representing the widget.
      *
      * @return string
      */
@@ -67,8 +67,7 @@ abstract class Widget
             'component' => $this->component(),
             'data' => $this->gatherData(),
             'position' => $this->position,
-            'id' => $this->id
+            'id' => $this->id,
         ];
     }
-
 }

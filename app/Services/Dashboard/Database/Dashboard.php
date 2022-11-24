@@ -5,7 +5,7 @@ namespace App\Services\Dashboard\Database;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Services\Dashboard\Database\Dashboard
+ * App\Services\Dashboard\Database\Dashboard.
  *
  * @property int $id
  * @property string $name
@@ -30,13 +30,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Dashboard extends Model implements \App\Services\Dashboard\Contracts\Dashboard
 {
-
     protected $fillable = [
-        'user_id', 'name', 'description', 'refresh_rate_in_seconds'
+        'user_id', 'name', 'description', 'refresh_rate_in_seconds',
     ];
 
     protected $casts = [
-        'refresh_rate_in_seconds' => 'float'
+        'refresh_rate_in_seconds' => 'float',
     ];
 
     public function widgets()
@@ -51,7 +50,7 @@ class Dashboard extends Model implements \App\Services\Dashboard\Contracts\Dashb
             'name' => $this->name,
             'description' => $this->description,
             'refresh_rate' => $this->refresh_rate_in_seconds,
-            'widgets' => $this->widgets->map->toSchema()
+            'widgets' => $this->widgets->map->toSchema(),
         ];
     }
 }

@@ -37,6 +37,7 @@ class PromoteUser extends Command
 //            dd(Permission::findByName($permissionName));
 //        }
         $this->line('Gave user permissions');
+
         return 0;
     }
 }

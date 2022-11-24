@@ -129,7 +129,7 @@ class FilePondFile implements Arrayable, Jsonable, \Stringable
             'size' => $this->getSize(),
             'mimetype' => $this->getMimetype(),
             'serverId' => $this->getServerId(),
-            'extension' => $this->getExtension()
+            'extension' => $this->getExtension(),
         ];
     }
 

@@ -38,7 +38,7 @@ class StatsPointsController extends Controller
 
         $ids = $stats->activityPoints()->orderBy('time')->select('id')->get();
 
-        if($ids->count() === 0) {
+        if ($ids->count() === 0) {
             return [];
         }
 

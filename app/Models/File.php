@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * App\Models\File
+ * App\Models\File.
  *
  * @property int $id
  * @property string $path

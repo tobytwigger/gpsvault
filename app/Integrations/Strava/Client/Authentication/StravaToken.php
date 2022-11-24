@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Integrations\Strava\Client\Authentication\StravaToken
+ * App\Integrations\Strava\Client\Authentication\StravaToken.
  *
  * @property int $id
  * @property int $user_id

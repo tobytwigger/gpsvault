@@ -36,7 +36,7 @@ class SyncStatus
                 ->whereDoesntHave('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id'))
                 ->get(),
             'total_activities' => $this->user->activities()->count(),
-            'is_indexing' => $this->isIndexing()
+            'is_indexing' => $this->isIndexing(),
         ];
     }
 

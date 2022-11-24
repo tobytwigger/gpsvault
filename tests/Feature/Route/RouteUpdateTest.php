@@ -5,7 +5,6 @@ namespace Tests\Feature\Route;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -73,17 +72,17 @@ class RouteUpdateTest extends TestCase
     public function validationDataProvider(): array
     {
         return [
-//            ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
-//            ['name', true, 'The name must be a string.'],
-//            ['name', 'This is a new name', false],
-//            ['description', Str::random(65536), 'The description must not be greater than 65535 characters.'],
-//            ['description', true, 'The description must be a string.'],
-//            ['description', 'This is a new description', false],
-//            ['notes', Str::random(65536), 'The notes must not be greater than 65535 characters.'],
-//            ['notes', true, 'The notes must be a string.'],
-//            ['notes', 'This is a new notes', false],
-//            ['file', fn () => $this->createFile('filename.gpx', 58, 'application/gpx+xml'), false],
-//            ['file', null, false],
+            //            ['name', Str::random(300), 'The name must not be greater than 255 characters.'],
+            //            ['name', true, 'The name must be a string.'],
+            //            ['name', 'This is a new name', false],
+            //            ['description', Str::random(65536), 'The description must not be greater than 65535 characters.'],
+            //            ['description', true, 'The description must be a string.'],
+            //            ['description', 'This is a new description', false],
+            //            ['notes', Str::random(65536), 'The notes must not be greater than 65535 characters.'],
+            //            ['notes', true, 'The notes must be a string.'],
+            //            ['notes', 'This is a new notes', false],
+            //            ['file', fn () => $this->createFile('filename.gpx', 58, 'application/gpx+xml'), false],
+            //            ['file', null, false],
             ['file', 'This is not a file', 'The file is not an array'],
         ];
     }

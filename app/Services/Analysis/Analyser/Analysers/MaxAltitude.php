@@ -21,6 +21,7 @@ class MaxAltitude extends AnalyserContract implements PointAnalyser
                 $this->maxAltitude = $point->getElevation();
             }
         }
+
         return $point;
     }
 

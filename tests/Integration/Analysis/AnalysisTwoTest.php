@@ -4,7 +4,6 @@ namespace Tests\Integration\Analysis;
 
 class AnalysisTwoTest extends BaseAnalysisTestCase
 {
-
     public function providesPointsToAnalyse(): array
     {
         return [
@@ -27,12 +26,12 @@ class AnalysisTwoTest extends BaseAnalysisTestCase
             'Moving Time' => ['movingTime', 4497.0],
             'Max Speed' => ['maxSpeed', 11.55],
 
-//            'Calories' => ['calories', 147.0],
-//            'Average Watts' => ['averageWatts', 147.0],
-//            'Kilojoules' => ['kilojoules', 147.0],
-//            'Average Watts' => ['averageWatts', 147.0],
-//            'Cumulative Elevation Gain' => ['cumulativeELevationGain', 147.0],
-//            'Cumulative Elevation Loss' => ['cumulativeELevationLoss', 147.0],
+            //            'Calories' => ['calories', 147.0],
+            //            'Average Watts' => ['averageWatts', 147.0],
+            //            'Kilojoules' => ['kilojoules', 147.0],
+            //            'Average Watts' => ['averageWatts', 147.0],
+            //            'Cumulative Elevation Gain' => ['cumulativeELevationGain', 147.0],
+            //            'Cumulative Elevation Loss' => ['cumulativeELevationLoss', 147.0],
         ];
     }
 

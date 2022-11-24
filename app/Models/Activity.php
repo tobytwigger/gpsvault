@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Searchable;
 
 /**
- * App\Models\Activity
+ * App\Models\Activity.
  *
  * @property int $id
  * @property string|null $name

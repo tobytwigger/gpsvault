@@ -11,7 +11,6 @@ use Location\Distance\Vincenty;
 
 class CumulativeDistance extends AnalyserContract implements PointAnalyser
 {
-
     private ?Point $previousPoint = null;
 
     private ?float $cumulativeDistance = 0.0;
@@ -28,8 +27,8 @@ class CumulativeDistance extends AnalyserContract implements PointAnalyser
 
     public function processPoint(Point $point): Point
     {
-        if($point->getCumulativeDistance() === null && $point->getLatitude() !== null && $point->getLongitude() !== null) {
-            if($this->previousPoint !== null) {
+        if ($point->getCumulativeDistance() === null && $point->getLatitude() !== null && $point->getLongitude() !== null) {
+            if ($this->previousPoint !== null) {
                 $coordinate1 = new Coordinate($this->previousPoint->getLatitude(), $this->previousPoint->getLongitude());
                 $coordinate2 = new Coordinate($point->getLatitude(), $point->getLongitude());
                 $calculator = new Vincenty();
@@ -38,6 +37,7 @@ class CumulativeDistance extends AnalyserContract implements PointAnalyser
             $point->setCumulativeDistance($this->cumulativeDistance);
             $this->previousPoint = $point;
         }
+
         return $point;
     }
 }

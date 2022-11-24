@@ -33,6 +33,7 @@ class AverageHeartrate extends AnalyserContract implements PointAnalyser
         if ($heartRate !== null) {
             $this->heartRates[] = $heartRate;
         }
+
         return $point;
     }
 }

@@ -27,7 +27,7 @@ class UpdateActivityRequest extends FormRequest
         return [
             'name' => 'sometimes|nullable|string|max:255',
             'description' => 'sometimes|nullable|string|max:65535',
-            'file' => ['sometimes', 'nullable', app(FilepondRule::class)]
+            'file' => ['sometimes', 'nullable', app(FilepondRule::class)],
         ];
     }
 }

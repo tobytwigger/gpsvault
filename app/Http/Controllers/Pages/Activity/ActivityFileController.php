@@ -10,7 +10,6 @@ use App\Services\File\FileUploader;
 use App\Services\File\Upload;
 use App\Services\Filepond\FilepondRule;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityFileController extends Controller

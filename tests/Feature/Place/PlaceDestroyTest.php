@@ -3,7 +3,6 @@
 namespace Tests\Feature\Place;
 
 use App\Models\Place;
-use App\Models\File;
 use Tests\TestCase;
 
 class PlaceDestroyTest extends TestCase
@@ -39,5 +38,4 @@ class PlaceDestroyTest extends TestCase
         $this->delete(route('place.destroy', $place))
             ->assertRedirect(route('login'));
     }
-
 }

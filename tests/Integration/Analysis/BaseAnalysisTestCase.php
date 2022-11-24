@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 abstract class BaseAnalysisTestCase extends TestCase
 {
-
     abstract public function providesPointsToAnalyse(): array;
 
     abstract public function getFileName(): string;
@@ -49,18 +48,19 @@ abstract class BaseAnalysisTestCase extends TestCase
      * @test
      * @dataProvider providesPointsToAnalyse
      */
-    public function it_analyses_a_set_of_points_correctly(string $field, mixed $lowerValue, mixed $upperValue = null, ?int $pointsIndex = null, mixed $initialValue = null){
+    public function it_analyses_a_set_of_points_correctly(string $field, mixed $lowerValue, mixed $upperValue = null, ?int $pointsIndex = null, mixed $initialValue = null)
+    {
         $analysis = $this->createAnalysis();
 
         $methodName = 'get' . Str::ucfirst($field);
 
 
-        if($pointsIndex === null) {
+        if ($pointsIndex === null) {
             $this->assertEquals($initialValue, $analysis->$methodName());
 
             $analysed = Analyser::runAnalysis($analysis);
 
-            if($upperValue !== null) {
+            if ($upperValue !== null) {
                 $this->assertGreaterThan($lowerValue, $analysed->$methodName());
                 $this->assertLessThan($upperValue, $analysed->$methodName());
             } else {
@@ -73,14 +73,12 @@ abstract class BaseAnalysisTestCase extends TestCase
 
             $analysed = Analyser::runAnalysis($analysis);
 
-            if($upperValue !== null) {
+            if ($upperValue !== null) {
                 $this->assertGreaterThan($lowerValue, $analysed->getPoints()[$pointsIndex]->$methodName());
                 $this->assertLessThan($upperValue, $analysed->getPoints()[$pointsIndex]->$methodName());
             } else {
                 $this->assertEquals($lowerValue, $analysed->getPoints()[$pointsIndex]->$methodName());
             }
         }
-
     }
-
 }

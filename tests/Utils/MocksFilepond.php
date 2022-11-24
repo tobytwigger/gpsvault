@@ -9,7 +9,6 @@ use Sopamo\LaravelFilepond\Filepond;
 
 trait MocksFilepond
 {
-
     public function createFile(string $filename, int $size, string $mimetype, ?string $contents = null): FilePondFile
     {
         $path = config('filepond.temporary_files_path', 'filepond') . DIRECTORY_SEPARATOR . Str::random();
@@ -25,5 +24,4 @@ trait MocksFilepond
             Str::afterLast($filename, '.')
         );
     }
-
 }

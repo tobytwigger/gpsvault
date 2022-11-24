@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Pages\Route\Planner\Tools;
 
-use App\Services\Valhalla\Valhalla;
 use Illuminate\Http\Request;
 use Location\Coordinate;
 use Location\Distance\Vincenty;
@@ -31,7 +30,6 @@ class NewWaypointLocatorController
         $smallestDistance = null;
 
         for ($i = 1; $i <= count($fullLinestring) - 1; $i++) {
-
             $segmentStart = new Coordinate(
                 $fullLinestring[$i-1]['lat'],
                 $fullLinestring[$i-1]['lng'],
@@ -46,7 +44,7 @@ class NewWaypointLocatorController
                 new Line($segmentStart, $segmentEnd)
             );
 
-            if($smallestDistance === null || $distance < $smallestDistance) {
+            if ($smallestDistance === null || $distance < $smallestDistance) {
                 $smallestDistance = $distance;
                 $smallestDistanceIndex = $i;
             }

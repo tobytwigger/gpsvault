@@ -8,7 +8,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * App\Models\Stage
+ * App\Models\Stage.
  *
  * @property int $id
  * @property int $stage_number

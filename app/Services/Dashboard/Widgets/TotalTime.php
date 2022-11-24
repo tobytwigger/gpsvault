@@ -33,8 +33,8 @@ class TotalTime extends Widget
                 ->where('started_at', '>', $this->getLowerBound())
                 ->where('finished_at', '<', $this->getUpperBound())
                 ->get()
-                ->unique(fn(Stats $stats) => $stats->stats_id)
-                ->sum(fn(Stats $stats) => $stats->duration) /(60*60)) . 'h',
+                ->unique(fn (Stats $stats) => $stats->stats_id)
+                ->sum(fn (Stats $stats) => $stats->duration) /(60*60)) . 'h',
         ];
     }
 }

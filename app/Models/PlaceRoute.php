@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\PlaceRoute
+ * App\Models\PlaceRoute.
  *
  * @property int $id
  * @property int $route_id

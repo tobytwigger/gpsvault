@@ -5,7 +5,6 @@ namespace Tests\Browser\Tests\Activity;
 use App\Models\User;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Activity\Index;
-use Tests\Browser\Pages\Public\Welcome;
 use Tests\DuskTestCase;
 
 class ActivityIndexTest extends DuskTestCase

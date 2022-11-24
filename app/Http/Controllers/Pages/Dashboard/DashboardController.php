@@ -19,9 +19,10 @@ class DashboardController extends Controller
             app(DefaultDashboardFactory::class)->syncDashboards(Auth::user());
             $dashboard = Dashboard::getMainDashboard(Auth::user());
         }
+
         return Inertia::render('Dashboard/Dashboard', [
             'schema' => $dashboard->toSchema(),
-            'dashboards' => Dashboard::getDashboardsForUser(Auth::user())
+            'dashboards' => Dashboard::getDashboardsForUser(Auth::user()),
         ]);
     }
 
@@ -29,9 +30,10 @@ class DashboardController extends Controller
     {
         $dashboard = Dashboard::getById($dashboardId);
         abort_if($dashboard->user_id !== Auth::id(), 403);
+
         return Inertia::render('Dashboard/Dashboard', [
             'schema' => $dashboard->toSchema(),
-            'dashboards' => Dashboard::getDashboardsForUser(Auth::user())
+            'dashboards' => Dashboard::getDashboardsForUser(Auth::user()),
         ]);
     }
 }

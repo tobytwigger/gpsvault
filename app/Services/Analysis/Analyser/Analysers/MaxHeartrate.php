@@ -31,6 +31,7 @@ class MaxHeartrate extends AnalyserContract implements PointAnalyser
         if ($heartRate !== null && ($this->maxHeartrate === null || $this->maxHeartrate < $heartRate)) {
             $this->maxHeartrate = $heartRate;
         }
+
         return $point;
     }
 }

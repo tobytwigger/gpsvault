@@ -2,7 +2,7 @@
 
 return [
     'default' => [
-        'yearly', 'monthly', 'all-time'
+        'yearly', 'monthly', 'all-time',
     ],
     'dashboards' => [
         'yearly' => [
@@ -14,24 +14,24 @@ return [
                     'key' => \App\Services\Dashboard\Widgets\TotalMileage::key(),
                     'settings' => ['period' => 'current-year'],
                     'position' => [
-                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\TotalTime::key(),
                     'settings' => ['period' => 'current-year'],
                     'position' => [
-                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\RideCount::key(),
                     'settings' => ['period' => 'current-year'],
                     'position' => [
-                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2
-                    ]
-                ]
-            ]
+                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2,
+                    ],
+                ],
+            ],
         ],
         'monthly' => [
             'name' => 'Monthly stats',
@@ -42,24 +42,24 @@ return [
                     'key' => \App\Services\Dashboard\Widgets\TotalMileage::key(),
                     'settings' => ['period' => 'current-month'],
                     'position' => [
-                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\TotalTime::key(),
                     'settings' => ['period' => 'current-month'],
                     'position' => [
-                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\RideCount::key(),
                     'settings' => ['period' => 'current-month'],
                     'position' => [
-                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2
-                    ]
-                ]
-            ]
+                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2,
+                    ],
+                ],
+            ],
         ],
         'all-time' => [
             'name' => 'All time stats',
@@ -70,24 +70,24 @@ return [
                     'key' => \App\Services\Dashboard\Widgets\TotalMileage::key(),
                     'settings' => ['period' => 'all-time'],
                     'position' => [
-                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 0, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\TotalTime::key(),
                     'settings' => ['period' => 'all-time'],
                     'position' => [
-                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1
-                    ]
+                        'x' => 1, 'y' => 0, 'w' => 1, 'h' => 1,
+                    ],
                 ],
                 [
                     'key' => \App\Services\Dashboard\Widgets\RideCount::key(),
                     'settings' => ['period' => 'all-time'],
                     'position' => [
-                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2
-                    ]
-                ]
-            ]
+                        'x' => 2, 'y' => 0, 'w' => 1, 'h' => 2,
+                    ],
+                ],
+            ],
         ],
-    ]
+    ],
 ];

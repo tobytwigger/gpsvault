@@ -2,16 +2,10 @@
 
 namespace Tests\Integration\Analysis;
 
-use App\Services\Analysis\Analyser\Analyser;
-use App\Services\Analysis\Analyser\Analysis;
-use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
-use Tests\TestCase;
 
 class BasicAnalysisTest extends BaseAnalysisTestCase
 {
-
     public function getFileName(): string
     {
         return 'analysis1.json';
@@ -97,5 +91,4 @@ class BasicAnalysisTest extends BaseAnalysisTestCase
             'Points Last - Calories' => ['calories', null, null, 1968],
         ];
     }
-
 }

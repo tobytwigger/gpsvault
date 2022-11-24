@@ -3,7 +3,6 @@
 namespace Feature\Route;
 
 use App\Models\Route;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;

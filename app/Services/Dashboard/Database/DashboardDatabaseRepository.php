@@ -48,7 +48,7 @@ class DashboardDatabaseRepository implements DashboardRepository
             'dashboard_id' => $dashboard->id,
             'widget_key' => $key,
             'settings' => $settings,
-            'position' => $position
+            'position' => $position,
         ]);
     }
 }

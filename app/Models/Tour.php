@@ -9,7 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Models\Tour
+ * App\Models\Tour.
  *
  * @property int $id
  * @property int $user_id

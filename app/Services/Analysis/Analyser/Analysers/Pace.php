@@ -6,7 +6,6 @@ use App\Services\Analysis\Analyser\Analysis;
 
 class Pace extends AnalyserContract
 {
-
     /**
      * @param Analysis $analysis
      * @return Analysis

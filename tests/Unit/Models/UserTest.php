@@ -72,7 +72,8 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function todo_it_creates_dashboards_on_user_creation(){
+    public function todo_it_creates_dashboards_on_user_creation()
+    {
         $this->markTestIncomplete();
     }
 }

@@ -33,6 +33,7 @@ class Cadence extends AnalyserContract implements PointAnalyser
         if ($cadence !== null && $cadence !== 0.0) {
             $this->cadences[] = $cadence;
         }
+
         return $point;
     }
 }

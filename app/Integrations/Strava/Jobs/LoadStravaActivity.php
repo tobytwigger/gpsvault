@@ -4,7 +4,6 @@ namespace App\Integrations\Strava\Jobs;
 
 use App\Integrations\Strava\Client\Strava;
 use App\Integrations\Strava\Import\Api\ApiImport;
-use JobStatus\Concerns\Trackable;
 
 class LoadStravaActivity extends StravaBaseJob
 {

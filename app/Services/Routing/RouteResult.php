@@ -23,7 +23,7 @@ class RouteResult
             'coordinates' => $this->waypoints,
             'distance' => $this->distance,
             'time' => $this->time,
-            'elevation' => $this->elevation
+            'elevation' => $this->elevation,
         ];
     }
 }

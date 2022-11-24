@@ -5,7 +5,6 @@ namespace Tests\Feature\Route;
 use App\Jobs\AnalyseRouteFile;
 use App\Models\File;
 use App\Models\Route;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

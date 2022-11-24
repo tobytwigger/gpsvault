@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Integrations\Strava\Models\StravaComment
+ * App\Integrations\Strava\Models\StravaComment.
  *
  * @property int $id
  * @property int $strava_id

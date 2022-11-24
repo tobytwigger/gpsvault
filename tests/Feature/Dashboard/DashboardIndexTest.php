@@ -17,7 +17,8 @@ class DashboardIndexTest extends TestCase
     }
 
     /** @test */
-    public function todo_scaffolding(){
+    public function todo_scaffolding()
+    {
         $this->markTestIncomplete('Add tests for creating default dashboards, viewing a dashboard etc.');
     }
 

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Scout\Searchable;
 
 /**
- * App\Models\Route
+ * App\Models\Route.
  *
  * @property int $id
  * @property string|null $name
@@ -77,7 +77,7 @@ class Route extends Model
     public function getCoverImageAttribute()
     {
         $routePath = $this->routePaths()->whereNotNull('thumbnail_id')->latest()->first();
-        if($routePath) {
+        if ($routePath) {
             return route('file.preview', $routePath->thumbnail);
         }
 

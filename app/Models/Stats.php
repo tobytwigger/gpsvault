@@ -17,7 +17,7 @@ use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
  *  * @property LineString|null $linestring
-
+ *
  */
 class Stats extends Model
 {
@@ -167,16 +167,16 @@ class Stats extends Model
 
     public function getLinestringWithDistanceAttribute()
     {
-        if($this->linestring === null) {
+        if ($this->linestring === null) {
             return null;
         }
         $cumulativeDistancePoints = $this->activityPoints()->orderBy('order')->select('cumulative_distance')->get()->pluck('cumulative_distance');
-        if($cumulativeDistancePoints->count() < $this->linestring->count()) {
+        if ($cumulativeDistancePoints->count() < $this->linestring->count()) {
             $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
         }
 
         return collect($this->linestring->getPoints())
-            ->map(fn(Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->map(fn (Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
             ->toArray();
     }
 

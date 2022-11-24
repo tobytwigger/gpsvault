@@ -36,6 +36,7 @@ class Distance extends AnalyserContract implements PointAnalyser
         if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
             $this->polyline->addPoint(new Coordinate($point->getLatitude(), $point->getLongitude()));
         }
+
         return $point;
     }
 }

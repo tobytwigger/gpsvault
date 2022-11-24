@@ -35,6 +35,7 @@ class Temperature extends AnalyserContract implements PointAnalyser
         if ($temperature !== null) {
             $this->temperatures[] = $temperature;
         }
+
         return $point;
     }
 }

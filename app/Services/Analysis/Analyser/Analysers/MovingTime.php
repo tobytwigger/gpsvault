@@ -2,17 +2,12 @@
 
 namespace App\Services\Analysis\Analyser\Analysers;
 
-use App\Services\Analysis\Analyser\Analysers\AnalyserContract;
-use App\Services\Analysis\Analyser\Analysers\PointAnalyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Point;
 use Carbon\Carbon;
-use Location\Coordinate;
-use Location\Distance\Vincenty;
 
 class MovingTime extends AnalyserContract implements PointAnalyser
 {
-
     private ?float $previousCumulativeDistance = 0.0;
 
     private ?Carbon $previousTime = null;
@@ -20,7 +15,7 @@ class MovingTime extends AnalyserContract implements PointAnalyser
     private float $movingTime = 0.0;
 
     /**
-     * How many meters off a point can be to be considered stopped
+     * How many meters off a point can be to be considered stopped.
      *
      * @var float
      */
@@ -34,14 +29,14 @@ class MovingTime extends AnalyserContract implements PointAnalyser
     protected function run(Analysis $analysis): Analysis
     {
         $analysis->setMovingTime($this->movingTime);
+
         return $analysis;
     }
 
     public function processPoint(Point $point): Point
     {
-
-        if($point->getCumulativeDistance() !== null && $point->getTime() !== null) {
-            if($point->getCumulativeDistance() - $this->tolerance > $this->previousCumulativeDistance
+        if ($point->getCumulativeDistance() !== null && $point->getTime() !== null) {
+            if ($point->getCumulativeDistance() - $this->tolerance > $this->previousCumulativeDistance
             || $point->getCumulativeDistance() + $this->tolerance < $this->previousCumulativeDistance) {
                 $timeDiff = $point->getTime()->diffInSeconds($this->previousTime);
                 $this->movingTime += $timeDiff;
@@ -49,6 +44,7 @@ class MovingTime extends AnalyserContract implements PointAnalyser
             $this->previousTime = $point->getTime();
             $this->previousCumulativeDistance = $point->getCumulativeDistance();
         }
+
         return $point;
     }
 }

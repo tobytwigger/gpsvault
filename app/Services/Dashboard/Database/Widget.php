@@ -6,7 +6,7 @@ use App\Services\Dashboard\WidgetStore;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Services\Dashboard\Database\Widget
+ * App\Services\Dashboard\Database\Widget.
  *
  * @property int $id
  * @property string $widget_key
@@ -31,17 +31,16 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Widget extends Model
 {
-
     protected $fillable = [
         'dashboard_id',
         'settings',
         'widget_key',
-        'position'
+        'position',
     ];
 
     protected $casts = [
         'settings' => 'array',
-        'position' => 'array'
+        'position' => 'array',
     ];
 
     public function dashboard()
@@ -53,5 +52,4 @@ class Widget extends Model
     {
         return app(WidgetStore::class)->get($this->widget_key)::create($this->id, $this->settings, $this->position)->toSchema();
     }
-
 }

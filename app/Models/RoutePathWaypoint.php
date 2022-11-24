@@ -7,7 +7,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * App\Models\RoutePathWaypoint
+ * App\Models\RoutePathWaypoint.
  *
  * @property int $id
  * @property int $route_path_id

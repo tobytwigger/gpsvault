@@ -2,13 +2,9 @@
 
 namespace App\Integrations\Strava\Jobs;
 
-use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
-use App\Integrations\Strava\Client\Exceptions\StravaRateLimited;
 use App\Models\Activity;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,7 +12,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use JobStatus\Concerns\Trackable;
-use Throwable;
 
 abstract class StravaBaseJob implements ShouldQueue
 {
@@ -68,7 +63,7 @@ abstract class StravaBaseJob implements ShouldQueue
     {
         // Throttle exceptions
         return [
-            (new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id)
+            (new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id),
         ];
     }
 }

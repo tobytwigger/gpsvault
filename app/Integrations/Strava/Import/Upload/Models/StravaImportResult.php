@@ -5,7 +5,7 @@ namespace App\Integrations\Strava\Import\Upload\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Integrations\Strava\Import\Upload\Models\StravaImportResult
+ * App\Integrations\Strava\Import\Upload\Models\StravaImportResult.
  *
  * @property int $id
  * @property string $type

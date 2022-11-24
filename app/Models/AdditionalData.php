@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\AdditionalData
+ * App\Models\AdditionalData.
  *
  * @property int $id
  * @property string $additional_data_type

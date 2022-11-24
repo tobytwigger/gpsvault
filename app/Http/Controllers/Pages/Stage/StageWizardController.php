@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class StageWizardController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(Tour::class);
@@ -20,10 +19,10 @@ class StageWizardController extends Controller
         $this->authorize('update', $tour);
 
         $request->validate([
-            'total_days' => 'required|numeric|min:1|max:1000'
+            'total_days' => 'required|numeric|min:1|max:1000',
         ]);
 
-        for($i=0;$i<$request->input('total_days');$i++) {
+        for ($i=0;$i<$request->input('total_days');$i++) {
             Stage::create([
                 'tour_id' => $tour->id,
             ]);
@@ -31,5 +30,4 @@ class StageWizardController extends Controller
 
         return redirect()->route('tour.show', $tour);
     }
-
 }

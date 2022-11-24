@@ -67,7 +67,7 @@ class ActivityController extends Controller
     public function show(Activity $activity)
     {
         $activity->load(['files', 'stats']);
-        foreach($activity->stats as $stat) {
+        foreach ($activity->stats as $stat) {
             $stat->append('linestringWithDistance');
         }
 

@@ -36,7 +36,7 @@ class ClientAuthController extends Controller
     {
         $request->validate([
             'code' => 'required|string',
-            'state' => 'required|string'
+            'state' => 'required|string',
         ]);
 
         abort_if($request->input('state') !== $request->session()->get('stravaState'), 403, 'The states do not match.');

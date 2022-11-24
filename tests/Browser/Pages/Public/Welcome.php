@@ -2,8 +2,6 @@
 
 namespace Tests\Browser\Pages\Public;
 
-use Laravel\Dusk\Browser;
-use Spatie\Url\Url;
 use Tests\Browser\Pages\Page;
 
 class Welcome extends Page

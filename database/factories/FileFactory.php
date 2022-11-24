@@ -34,6 +34,7 @@ class FileFactory extends Factory
     {
         $path = 'routeMedia/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
@@ -47,6 +48,7 @@ class FileFactory extends Factory
     {
         $path = 'activityMedia/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image2.jpeg')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
@@ -60,6 +62,7 @@ class FileFactory extends Factory
     {
         $path = 'activityFile/' . Str::random(40) . '.gpx';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/gpx/Afternoon_Ride.gpx')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.gpx',
@@ -73,6 +76,7 @@ class FileFactory extends Factory
     {
         $path = 'gpx_' . Str::uuid() . '.gpx';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/gpx.gpx')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'disk' => 'test-fake',
@@ -87,6 +91,7 @@ class FileFactory extends Factory
     {
         $path = 'fit_' . Str::uuid() . '.fit';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/fit.fit')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.fit',
@@ -101,6 +106,7 @@ class FileFactory extends Factory
     {
         $path = 'fit_' . Str::uuid() . '.tcx';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/parsing/tcx.tcx')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.tcx',
@@ -115,6 +121,7 @@ class FileFactory extends Factory
     {
         $path = 'dartmoorDevil/' . Str::random(40) . '.gpx';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/DartmoorDevil/Dartmoor_Devil.gpx')));
+
         return $this->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.gpx',

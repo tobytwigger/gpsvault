@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Activity;
 use Illuminate\Console\Command;
 use MeiliSearch\Client;
-use MeiliSearch\Exceptions\InvalidResponseBodyException;
 
 class SetupMeilisearch extends Command
 {
@@ -30,7 +28,7 @@ class SetupMeilisearch extends Command
      */
     public function handle()
     {
-        if(config('scout.driver') === 'meilisearch') {
+        if (config('scout.driver') === 'meilisearch') {
             $client = app(Client::class);
             $client->index('activities')->updateSortableAttributes(['updated_at']);
             $client->index('activities')->updateFilterableAttributes(['user_id']);

@@ -4,11 +4,9 @@ namespace App\Services\Dashboard;
 
 use App\Models\User;
 use App\Services\Dashboard\Contracts\DashboardRepository;
-use Illuminate\Support\Arr;
 
 class DefaultDashboardFactory
 {
-
     private DashboardRepository $repository;
 
     public function __construct(DashboardRepository $repository)
@@ -18,9 +16,9 @@ class DefaultDashboardFactory
 
     public function syncDashboards(User $user)
     {
-        foreach(config('dashboard.default', []) as $dashboard) {
+        foreach (config('dashboard.default', []) as $dashboard) {
             $dashboardData = $this->getDataFor($dashboard);
-            if(!$this->userHasDashboard($user, $dashboardData['name'])) {
+            if (!$this->userHasDashboard($user, $dashboardData['name'])) {
                 $this->createDashboard($user, $dashboardData);
             }
         }
@@ -39,10 +37,8 @@ class DefaultDashboardFactory
     private function createDashboard(User $user, array $dashboardData)
     {
         $dashboard = $this->repository->createDashboard($user, $dashboardData['name'], $dashboardData['description'], $dashboardData['refresh_rate_in_seconds']);
-        foreach($dashboardData['widgets'] as $widgetData) {
+        foreach ($dashboardData['widgets'] as $widgetData) {
             $this->repository->createWidget($dashboard, $widgetData['key'], $widgetData['settings'], $widgetData['position']);
         }
     }
-
-
 }

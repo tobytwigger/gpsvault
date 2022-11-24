@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Services\Filepond\FilePondFile;
 use App\Services\Filepond\FilepondRule;
 use Illuminate\Foundation\Http\FormRequest;
 

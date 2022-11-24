@@ -26,6 +26,7 @@ class ElevationLoss extends AnalyserContract implements PointAnalyser
             }
             $this->previousElevation = $point->getElevation();
         }
+
         return $point;
     }
 

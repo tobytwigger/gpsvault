@@ -31,9 +31,10 @@ abstract class AnalyserContract
         if ($this instanceof PointAnalyser) {
             $point = $this->processPoint($point);
         }
-        if($this->nextAnalyser !== null) {
+        if ($this->nextAnalyser !== null) {
             $point = $this->nextAnalyser?->preparePoint($point);
         }
+
         return $point;
     }
 

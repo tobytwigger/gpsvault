@@ -21,6 +21,7 @@ class MinAltitude extends AnalyserContract implements PointAnalyser
                 $this->minAltitude = $point->getElevation();
             }
         }
+
         return $point;
     }
 

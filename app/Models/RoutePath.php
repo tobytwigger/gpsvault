@@ -16,7 +16,7 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id'
+        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id',
     ];
 
     protected $casts = [

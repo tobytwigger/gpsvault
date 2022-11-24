@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * App\Integrations\Strava\Import\Upload\Models\StravaImport
+ * App\Integrations\Strava\Import\Upload\Models\StravaImport.
  *
  * @property int $id
  * @property int $user_id

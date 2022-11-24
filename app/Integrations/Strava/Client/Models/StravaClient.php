@@ -15,7 +15,7 @@ use Linkeys\UrlSigner\Models\Link;
 use Linkeys\UrlSigner\Support\LinkRepository\LinkRepository;
 
 /**
- * App\Integrations\Strava\Client\Models\StravaClient
+ * App\Integrations\Strava\Client\Models\StravaClient.
  *
  * @property int $id
  * @property int $user_id

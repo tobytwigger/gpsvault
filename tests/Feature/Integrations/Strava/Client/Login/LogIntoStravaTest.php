@@ -187,12 +187,14 @@ class LogIntoStravaTest extends TestCase
     }
 
     /** @test */
-    public function todo_it_throws_an_exception_if_the_state_does_not_match(){
+    public function todo_it_throws_an_exception_if_the_state_does_not_match()
+    {
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function todo_it_throws_an_exception_if_the_state_is_not_given(){
+    public function todo_it_throws_an_exception_if_the_state_is_not_given()
+    {
         $this->markTestIncomplete();
     }
 }

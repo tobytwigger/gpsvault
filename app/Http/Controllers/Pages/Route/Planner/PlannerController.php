@@ -9,7 +9,6 @@ use App\Models\RoutePath;
 use App\Models\RoutePathWaypoint;
 use App\Models\Waypoint;
 use App\Services\PolylineEncoder\GooglePolylineEncoder;
-use App\Services\Valhalla\Valhalla;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'connected' => $this->isConnectedToStrava(),
                 ],
             ],
-            'csrf' => csrf_token()
+            'csrf' => csrf_token(),
         ]);
     }
 

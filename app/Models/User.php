@@ -15,7 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * App\Models\User
+ * App\Models\User.
  *
  * @property int $id
  * @property string $name
@@ -122,7 +122,7 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::created(function(User $user) {
+        static::created(function (User $user) {
             app(DefaultDashboardFactory::class)->syncDashboards($user);
         });
 

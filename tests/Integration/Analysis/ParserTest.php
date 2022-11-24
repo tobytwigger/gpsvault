@@ -3,8 +3,6 @@
 namespace Tests\Integration\Analysis;
 
 use App\Models\File;
-use App\Services\Analysis\Analyser\Analyser;
-use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Parser\Parser;
 use Tests\TestCase;
 
