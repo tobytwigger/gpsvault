@@ -85,8 +85,11 @@
 </template>
 
 <script>
+import modal from '../../mixins/modal';
+
 export default {
     name: "CStravaClientForm",
+    mixins: [modal],
     props: {
         oldClient: {
             required: false,
@@ -104,7 +107,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 client_id: null,
                 client_secret: null,

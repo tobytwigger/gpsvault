@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <slot name="activator" v-bind:trigger="triggerDialog"  v-bind:showing="showDialog">
+        <slot name="activator" v-bind:trigger="triggerDialog" v-bind:showing="showDialog">
 
         </slot>
 
@@ -11,7 +11,7 @@
         >
             <v-card>
                 <v-card-title>
-                    Update activity {{activity.name}}
+                    Update activity {{ activity.name }}
                 </v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="submit">
@@ -52,58 +52,60 @@
 
 <script>
 
+import modal from '../../../mixins/modal';
+
 export default {
     name: "CLinkStravaActivityForm",
-        props: {
-            activity: {
-                required: false,
-                type: Object,
-                default: null
-            },
+    mixins: [modal],
+    props: {
+        activity: {
+            required: false,
+            type: Object,
+            default: null
         },
-        data() {
-            return {
-                showDialog: false,
-                loading: false,
-                strava_id: null
-            }
-        },
-        watch: {
-            activity: {
-                deep: true,
-                handler: function() {
-                    this.updateFromOldActivity();
-                }
-            }
-        },
-        mounted() {
-            this.updateFromOldActivity();
-        },
-        methods: {
-            updateFromOldActivity() {
-                if(this.activity && this.activity.additional_data?.strava_id) {
-                    this.strava_id = this.activity.additional_data.strava_id;
-                }
-            },
-            submit() {
-                this.loading = true;
-                axios.patch(
-                    route('strava.activity.link.update', this.activity.id),
-                    {strava_id: this.strava_id}
-                ).then(response => {
-                    this.$inertia.reload({
-                        onSuccess: () => {
-                            this.loading = false;
-                            this.showDialog = false;
-                            this.updateFromOldActivity();
-                        }
-                    });
-                });
-            },
-            triggerDialog() {
-                this.showDialog = true;
+    },
+    data() {
+        return {
+            loading: false,
+            strava_id: null
+        }
+    },
+    watch: {
+        activity: {
+            deep: true,
+            handler: function () {
+                this.updateFromOldActivity();
             }
         }
+    },
+    mounted() {
+        this.updateFromOldActivity();
+    },
+    methods: {
+        updateFromOldActivity() {
+            if (this.activity && this.activity.additional_data?.strava_id) {
+                this.strava_id = this.activity.additional_data.strava_id;
+            }
+        },
+        submit() {
+            this.loading = true;
+            axios.patch(
+                route('strava.activity.link.update', this.activity.id),
+                {strava_id: this.strava_id}
+            ).then(response => {
+                this.$inertia.reload({
+                    onSuccess: () => {
+                        this.loading = false;
+                        this.showDialog = false;
+                        this.updateFromOldActivity();
+                    }
+                });
+            });
+        },
+        triggerDialog() {
+            this.showDialog = true;
+        }
+    }
 }
 </script>
 

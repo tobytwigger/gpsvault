@@ -92,12 +92,16 @@ class ActivityController extends Controller
         if ($request->has('description')) {
             $importer->withDescription($request->input('description'));
         }
-        if ($request->hasFile('file')) {
+        if ($request->has('file') && $request->get('file') !== null) {
             $filepondFile = FilePondFile::fromArray($request->input('file'));
             $file = Upload::filePondFile($filepondFile, Auth::user(), FileUploader::ACTIVITY_FILE);
             $importer->withActivityFile($file);
         }
         $activity = $importer->save();
+
+        if ($request->has('file') && $request->get('file') !== null) {
+            $activity->analyse();
+        }
 
         return redirect()->route('activity.show', $activity);
     }

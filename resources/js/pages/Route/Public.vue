@@ -57,22 +57,6 @@
             </v-tab-item>
         </v-tabs-items>
 
-        <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <v-select
-                        class="pt-2"
-                        v-model="activeDataSource"
-                        item-text="integration"
-                        item-value="integration"
-                        :items="allStats"
-                        hint="Choose which data sets to show"
-                        label="Data Source"
-                        dense
-                    ></v-select>
-                </v-list-item>
-            </v-list>
-        </template>
     </c-public-wrapper>
 </template>
 

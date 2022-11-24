@@ -249,7 +249,7 @@ export default {
                 name: this.routeModel.name ?? 'New Route'
             }, false)
         }
-    }
+    },
 }
 </script>
 

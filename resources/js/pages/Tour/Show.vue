@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="tour.name ? tour.name : 'New Tour'" :action-sidebar="true">
+    <c-app-wrapper :title="tour.name ? tour.name : 'New Tour'" :menu-items="menuItems">
         <v-tabs
             v-model="tab"
             centered
@@ -97,22 +97,8 @@
             </v-tab-item>
         </v-tabs-items>
 
-        <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <c-delete-tour-button :tour="tour"></c-delete-tour-button>
-                </v-list-item>
-                <v-list-item>
-                    <c-tour-form :old-tour="tour" title="Edit tour" button-text="Update">
-                        <template v-slot:activator="{trigger,showing}">
-                            <v-btn :disabled="showing" @click="trigger">
-                                Edit Tour
-                            </v-btn>
-                        </template>
-                    </c-tour-form>
-                </v-list-item>
-            </v-list>
-        </template>
+        <c-tour-form :old-tour="tour" title="Edit tour" button-text="Update" v-model="showingTourEditForm"></c-tour-form>
+        <c-delete-tour-button :tour="tour" v-model="showingTourDeleteForm"></c-delete-tour-button>
 
     </c-app-wrapper>
 </template>
@@ -147,9 +133,30 @@ export default {
     data() {
         return {
             tab: null,
-
+            showingTourEditForm: false,
+            showingTourDeleteForm: false
         }
     },
+    computed: {
+        menuItems() {
+            return [
+                {
+                    title: 'Edit tour details',
+                    icon: 'mdi-pencil',
+                    action: () => {
+                        this.showingTourEditForm = true;
+                    }
+                },
+                {
+                    title: 'Delete tour',
+                    icon: 'mdi-delete',
+                    action: () => {
+                        this.showingTourDeleteForm = true;
+                    }
+                },
+            ]
+        }
+    }
 }
 </script>
 

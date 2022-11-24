@@ -47,8 +47,11 @@
 </template>
 
 <script>
+import modal from '../../mixins/modal';
+
 export default {
     name: "CDeleteRouteButton",
+    mixins: [modal],
     props: {
         routeModel: {
             required: true,
@@ -57,7 +60,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             loading: false
         }
     },

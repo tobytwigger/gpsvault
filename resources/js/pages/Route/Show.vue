@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="pageTitle" :action-sidebar="true">
+    <c-app-wrapper :title="pageTitle" :menu-items="menuItems">
         <v-tabs
             v-model="tab"
             centered
@@ -129,41 +129,9 @@
             </v-tab-item>
 
         </v-tabs-items>
+        <c-delete-route-button :route-model="routeModel" v-model="showingRouteDeleteForm"></c-delete-route-button>
+        <c-route-form :old-route="routeModel" title="Edit route" button-text="Update" v-model="showingRouteEditForm"></c-route-form>
 
-        <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <c-delete-route-button :route-model="routeModel"></c-delete-route-button>
-                </v-list-item>
-                <v-list-item v-if="!routeModel.file_id">
-                    <c-upload-route-file-button :route-model="routeModel"></c-upload-route-file-button>
-                </v-list-item>
-                <v-list-item v-if="routeModel.file_id">
-                    <v-btn link :href="route('file.download', routeModel.file_id)">
-                        Download route file
-                    </v-btn>
-                </v-list-item>
-                <v-list-item v-if="routeModel.file_id">
-                    <v-btn link :href="route('route.download', routeModel.id)">
-                        Download route
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <v-btn link :href="route('planner.edit', routeModel.id)">
-                        Edit Route
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <c-route-form :old-route="routeModel" title="Edit route" button-text="Update">
-                        <template v-slot:activator="{trigger,showing}">
-                            <v-btn :disabled="showing" @click="trigger">
-                                Edit Route Metadata
-                            </v-btn>
-                        </template>
-                    </c-route-form>
-                </v-list-item>
-            </v-list>
-        </template>
     </c-app-wrapper>
 </template>
 
@@ -202,7 +170,9 @@ export default {
     },
     data() {
         return {
-            tab: 'tab-summary'
+            tab: 'tab-summary',
+            showingRouteEditForm: false,
+            showingRouteDeleteForm: false
         }
     },
     methods: {
@@ -234,6 +204,44 @@ export default {
                 }
             }
             return null;
+        },
+        menuItems() {
+            return [
+                {
+                    title: 'Edit route',
+                    icon: 'mdi-pencil',
+                    href: route('planner.edit', this.routeModel.id),
+                    useInertia: false,
+                },
+                {
+                    title: 'Edit route details',
+                    icon: 'mdi-pencil',
+                    action: () => {
+                        this.showingRouteEditForm = true;
+                    }
+                },
+                {
+                    title: 'Delete route',
+                    icon: 'mdi-delete',
+                    action: () => {
+                        this.showingRouteDeleteForm = true;
+                    }
+                },
+                {isDivider: true},
+                {
+                    title: 'Download route backup',
+                    icon: 'mdi-download',
+                    href: route('route.download', this.routeModel.id),
+                    useInertia: false,
+                },
+                {
+                    title: 'Download route file',
+                    icon: 'mdi-download',
+                    disabled: this.routeModel.file_id === null,
+                    href: this.routeModel.file_id ? route('file.download', this.routeModel.file_id) : '#',
+                    useInertia: false
+                },
+            ];
         }
     }
 }

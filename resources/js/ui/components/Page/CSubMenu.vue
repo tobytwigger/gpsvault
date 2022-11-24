@@ -11,6 +11,7 @@
                     class='d-flex justify-space-between'
                     v-on="menu"
                     v-bind="attrs"
+                    :disabled="disabled"
                 >
 
                     <v-icon>
@@ -29,34 +30,51 @@
             <template
                 v-for="(item, index) in menuItems"
             >
-                <v-divider
+                <div
                     :key='index'
-                    v-if='item.isDivider'
-                />
-                <!--                    :is-offset-x=true-->
-                <!--                    :is-offset-y=false-->
-                <!--                    :is-open-on-hover=false-->
+                    v-if="(item.show ?? true)">
+                    <v-divider
+                        v-if='item.isDivider'
+                    />
 
-                <c-sub-menu
-                    :key='index'
-                    :menu-items='item.menu'
-                    :title='item.title'
-                    :icon="item.icon"
-                    @sub-menu-click='emitClickEvent'
-                    v-else-if='item.menu'
-                />
-                <v-list-item
-                    class='d-flex justify-space-between'
-                    :key='index'
-                    @click='emitClickEvent(item)'
-                    v-else
-                >
-                    <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
-                    <span>
-                        {{ item.title }}
-                    </span>
-                    <v-spacer></v-spacer>
-                </v-list-item>
+                    <c-sub-menu
+                        :disabled="item.disabled ?? false"
+                        :menu-items='item.menu'
+                        :title='item.title'
+                        :icon="item.icon"
+                        @sub-menu-click='emitClickEvent'
+                        v-else-if='item.menu'
+                    />
+
+                    <Link v-else-if="item.href && item.useInertia === true" :href="item.href" style="text-decoration: none">
+                        <v-list-item class='d-flex justify-space-between' :disabled="item.disabled">
+                            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                            <span>{{ item.title }}</span>
+                            <v-spacer></v-spacer>
+                        </v-list-item>
+                    </Link>
+
+                    <a v-else-if="item.href && item.useInertia === false" :target="(item.hrefTarget ?? '_self')" :href="(item.disabled ? '#' : item.href)" style="text-decoration: none">
+                        <v-list-item class='d-flex justify-space-between' :disabled="item.disabled">
+                            <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                            <span>{{ item.title }}</span>
+                            <v-spacer></v-spacer>
+                        </v-list-item>
+                    </a>
+
+                    <v-list-item
+                        v-else
+                        :disabled="item.disabled"
+                        class='d-flex justify-space-between'
+                        @click='emitClickEvent(item)'
+                    >
+                        <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                        <span>{{ item.title }}</span>
+                        <v-spacer></v-spacer>
+                    </v-list-item>
+
+
+                </div>
             </template>
         </v-list>
     </v-menu>
@@ -73,8 +91,16 @@ export default {
         },
         menuItems: {
             required: true,
-            type: Array
+            type: Array,
+            validator: (items) => items.filter((item) => {
+                return true;
+            }).length === items.length,
         },
+        disabled: {
+            required: false,
+            type: Boolean,
+            default: false
+        }
     },
     methods: {
         emitClickEvent(item) {

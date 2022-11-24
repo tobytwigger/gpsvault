@@ -76,11 +76,12 @@
 <script>
 import duplicateActivityChecker from '../../mixins/duplicateActivityChecker';
 import CFileInput from '../CFileInput';
+import modal from '../../mixins/modal';
 
 export default {
     name: "CActivityForm",
     components: {CFileInput},
-    mixins: [duplicateActivityChecker],
+    mixins: [duplicateActivityChecker, modal],
     props: {
         oldActivity: {
             required: false,
@@ -98,7 +99,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 name: null,
                 description: null,

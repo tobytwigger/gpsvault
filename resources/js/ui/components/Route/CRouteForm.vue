@@ -50,6 +50,7 @@
 
                         <c-file-input
                             v-model="form.file"
+                            v-if="oldRoute === null"
                             id="file"
                             name="file"
                             label="Route File"
@@ -86,9 +87,11 @@
 <script>
 
 import CFileInput from '../CFileInput';
+import modal from '../../mixins/modal';
 export default {
     name: "CRouteForm",
     components: {CFileInput},
+    mixins: [modal],
     props: {
         oldRoute: {
             required: false,
@@ -106,7 +109,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 name: null,
                 description: null,

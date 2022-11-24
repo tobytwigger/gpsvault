@@ -4,19 +4,6 @@
         persistent
         max-width="600"
     >
-<!--        <template v-slot:activator="{ on, attrs }">-->
-<!--            <v-btn-->
-<!--                color="error"-->
-<!--                v-bind="attrs"-->
-<!--                v-on="on"-->
-<!--                :loading="loading"-->
-<!--                :disabled="loading"-->
-<!--                data-hint="Delete this activity."-->
-<!--            >-->
-<!--                <v-icon>mdi-delete</v-icon>-->
-<!--                Delete Activity-->
-<!--            </v-btn>-->
-<!--        </template>-->
         <v-card>
             <v-card-title>
                 Deleting activity '{{activity.name}}'.
@@ -43,36 +30,25 @@
                     Delete
                 </v-btn>
             </v-card-actions>
-            </v-card>
-        </v-dialog>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
+import modal from '../../mixins/modal';
+
 export default {
     name: "CDeleteActivityButton",
+    mixins: [modal],
     props: {
         activity: {
             required: true,
             type: Object
         },
-        show: {
-            required: true,
-            type: Boolean
-        }
     },
     data() {
         return {
             loading: false
-        }
-    },
-    computed: {
-        showDialog: {
-            get() {
-                return this.show;
-            },
-            set(val) {
-                this.$emit('input', val);
-            }
         }
     },
     methods: {

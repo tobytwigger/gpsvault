@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :action-sidebar="true" title="Your Backups">
+    <c-app-wrapper title="Your Backups" :menu-items="menuItems">
 <!--        <c-job-status job="create-full-backup" :tags="{user_id: $page.props.user.id}" :poll-interval="2000" :onCompleted="$inertia.reload()">-->
 <!--            <template v-slot:incomplete>-->
 <!--                <v-progress-circular-->
@@ -9,11 +9,11 @@
 <!--            </template>-->
 <!--        </c-job-status>-->
 
-        <c-pagination-iterator :paginator="backups" item-key="id" :prepend="showLoadingBackup">
+        <c-pagination-iterator :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
             <template v-slot:prepend>
                 <c-loading-backup-card
                     :job-status="jobStatus"
-                    v-if="showLoadingBackup"
+                    v-if="isGeneratingBackup"
                     @cancel="cancel">
                 </c-loading-backup-card>
             </template>
@@ -21,44 +21,6 @@
                 <c-backup-card :backup="item"></c-backup-card>
             </template>
         </c-pagination-iterator>
-
-        <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <v-btn
-                        data-hint="You can add a new backup by clicking here"
-                        color="primary"
-                        link
-                        @click="createBackup"
-                    >
-                        Create a backup
-                    </v-btn>
-<!--                    <c-job-status job="create-full-backup" :tags="{user_id: $page.props.user.id}" :poll-interval="2000">-->
-<!--                        <template v-slot:incomplete>-->
-<!--                            <v-btn-->
-<!--                                data-hint="You can add a new backup by clicking here"-->
-<!--                                :disabled="true"-->
-<!--                                color="primary"-->
-<!--                                :loading="true"-->
-<!--                            >-->
-<!--                                Create a backup-->
-<!--                            </v-btn>-->
-
-<!--                        </template>-->
-<!--                        <v-btn-->
-<!--                            data-hint="You can add a new backup by clicking here"-->
-<!--                            color="primary"-->
-<!--                            link-->
-<!--                            @click="createBackup"-->
-<!--                        >-->
-<!--                            Create a backup-->
-<!--                        </v-btn>-->
-<!--                    </c-job-status>-->
-
-
-                </v-list-item>
-            </v-list>
-        </template>
     </c-app-wrapper>
 </template>
 
@@ -117,9 +79,21 @@ export default {
         paginator() {
             return this.backups;
         },
-        showLoadingBackup() {
+        isGeneratingBackup() {
             return this.jobStatus !== null
                 && this.jobStatus.status !== 'succeeded';
+        },
+        menuItems() {
+            return [
+                {
+                    title: 'Create Backup',
+                    disabled: this.isGeneratingBackup,
+                    icon: 'mdi-autorenew',
+                    action: () => {
+                        this.createBackup();
+                    }
+                }
+            ]
         }
     }
 }

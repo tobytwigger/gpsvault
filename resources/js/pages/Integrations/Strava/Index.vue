@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper title="Strava" :action-sidebar="true">
+    <c-app-wrapper title="Strava" :menu-items="menuItems">
         <v-tabs
             v-model="tab"
             centered
@@ -278,53 +278,12 @@
 
             </v-tab-item>
         </v-tabs-items>
-        <template #sidebar>
-            <v-list>
-                <v-list-item v-if="canManageClients">
-                    <c-strava-client-form title="Add new client" button-text="Create">
-                        <template v-slot:activator="{trigger, showing}">
-                            <v-btn
-                                data-hint="You can add a new client here"
-                                @click="trigger"
-                                :disabled="showing"
-                            >
-                                Create client
-                            </v-btn>
-                        </template>
-                    </c-strava-client-form>
-                </v-list-item>
-                <v-list-item v-if="canManageClients">
-                    <v-btn
-                        :href="route('larecipe.show', {version: '1.0', page: 'strava/logging-in-clients'})"
-                        data-hint="Get help creating a new client"
-                    >
-                        Get help creating a new client
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <v-btn
-                        data-hint="Sync Strava"
-                        @click="$inertia.post(route('strava.sync'))"
-                        :disabled="!isConnected"
-                    >
-                        Sync Strava
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <c-strava-import-form>
-                        <template v-slot:activator="{trigger, showing}">
-                            <v-btn
-                                data-hint="You can import the export of your Strava account to quickly syncronise your data."
-                                @click="trigger"
-                                :disabled="showing"
-                            >
-                                Import Strava data
-                            </v-btn>
-                        </template>
-                    </c-strava-import-form>
-                </v-list-item>
-            </v-list>
-        </template>
+
+
+        <c-strava-client-form title="Add new client" button-text="Create" v-model="showStravaClientForm"></c-strava-client-form>
+        <c-strava-import-form v-model="showStravaImportForm"></c-strava-import-form>
+
+
     </c-app-wrapper>
 </template>
 
@@ -376,6 +335,8 @@ export default {
     },
     data() {
         return {
+            showStravaImportForm: false,
+            showStravaClientForm: false,
             tab: null,
             isReloading: false
         }
@@ -458,6 +419,41 @@ export default {
                 )
             }
             return null;
+        },
+        menuItems() {
+            return [
+                {
+                    title: 'Add a new client',
+                    icon: 'mdi-plus',
+                    action: () => {
+                        this.showStravaClientForm = true;
+                    }
+                },
+                {
+                    title: 'Get help with clients',
+                    icon: 'mdi-help',
+                    href: route('larecipe.show', {version: '1.0', page: 'strava/logging-in-clients'}),
+                    hrefTarget: '_blank',
+                    useInertia: false
+                },
+                {isDivider: true},
+                {
+                    title: 'Sync Strava',
+                    disabled: !this.isConnected,
+                    icon: 'mdi-autorenew',
+                    action: () => {
+                        this.$inertia.post(route('strava.sync'))
+                    }
+                },
+                {isDivider: true},
+                {
+                    title: 'Import Strava download',
+                    icon: 'mdi-upload',
+                    action: () => {
+                        this.showStravaImportForm = true;
+                    }
+                },
+            ];
         }
     }
 }

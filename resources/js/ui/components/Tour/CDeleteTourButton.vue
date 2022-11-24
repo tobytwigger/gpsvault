@@ -4,18 +4,6 @@
         persistent
         max-width="600"
     >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="error"
-                v-bind="attrs"
-                v-on="on"
-                :loading="loading"
-                :disabled="loading"
-            >
-                <v-icon>mdi-delete</v-icon>
-                Delete Tour
-            </v-btn>
-        </template>
         <v-card>
             <v-card-title>
                 Deleting tour '{{tour.name}}'.
@@ -47,8 +35,11 @@
 </template>
 
 <script>
+import modal from '../../mixins/modal';
+
 export default {
     name: "CDeleteTourButton",
+    mixins: [modal],
     props: {
         tour: {
             required: true,
@@ -57,7 +48,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             loading: false
         }
     },

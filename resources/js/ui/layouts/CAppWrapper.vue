@@ -20,7 +20,9 @@
 
                             <v-spacer></v-spacer>
 
-                            <c-sub-menu :menu-items="menuItems" @sub-menu-click="callMenuAction">
+                            <slot name="headerActions"></slot>
+
+                            <c-sub-menu :menu-items="menuItems" v-if="menuItems.length > 0" @sub-menu-click="callMenuAction">
                                 <template v-slot:activator="{ on: menu, attrs }">
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{ on: tooltip }">

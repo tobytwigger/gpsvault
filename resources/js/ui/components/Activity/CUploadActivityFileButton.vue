@@ -4,18 +4,6 @@
         persistent
         max-width="600"
     >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="secondary"
-                v-bind="attrs"
-                v-on="on"
-                :loading="form.processing"
-                :disabled="form.processing"
-            >
-                <v-icon>mdi-upload</v-icon>
-                Upload activity file
-            </v-btn>
-        </template>
         <v-card>
             <v-card-title>
                 Upload activity file
@@ -55,8 +43,10 @@
 
 <script>
 import CFileInput from '../CFileInput';
+import modal from '../../mixins/modal';
 export default {
     name: "CUploadActivityFileButton",
+    mixins: [modal],
     components: {CFileInput},
     props: {
         activity: {
@@ -66,7 +56,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 file: null,
                 _method: 'patch'

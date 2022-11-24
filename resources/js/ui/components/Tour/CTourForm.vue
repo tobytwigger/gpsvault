@@ -74,8 +74,11 @@
 </template>
 
 <script>
+import modal from '../../mixins/modal';
+
 export default {
     name: "CTourForm",
+    mixins: [modal],
     props: {
         oldTour: {
             required: false,
@@ -93,7 +96,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 name: null,
                 description: null,

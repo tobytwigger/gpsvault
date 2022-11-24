@@ -52,14 +52,15 @@
 
 <script>
 import CFileInput from '../../CFileInput';
+import modal from '../../../mixins/modal';
 export default {
     name: "CStravaImportForm",
+    mixins: [modal],
     components: {CFileInput},
     props: {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 archive: null,
             })
