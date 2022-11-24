@@ -70,7 +70,7 @@ class ActivityController extends Controller
         foreach($activity->stats as $stat) {
             $stat->append('linestringWithDistance');
         }
-        
+
         return Inertia::render('Activity/Show', [
             'activity' => $activity,
         ]);
@@ -92,7 +92,7 @@ class ActivityController extends Controller
         if ($request->has('description')) {
             $importer->withDescription($request->input('description'));
         }
-        if ($request->has('file')) {
+        if ($request->hasFile('file')) {
             $filepondFile = FilePondFile::fromArray($request->input('file'));
             $file = Upload::filePondFile($filepondFile, Auth::user(), FileUploader::ACTIVITY_FILE);
             $importer->withActivityFile($file);
