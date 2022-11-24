@@ -10,6 +10,7 @@ use App\Models\Activity;
 use App\Models\File;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -91,7 +92,7 @@ class StravaOverviewController extends Controller
             'photos_needing_import' => Activity::whereHas('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id')->whereNotNull('value'))
                 ->with(['files'])->get()->map(function (Activity $activity) {
                     $photos = [];
-                    foreach ($activity->getAdditionalData('strava_photo_ids') ?? [] as $photoId) {
+                    foreach (Arr::wrap($activity->getAdditionalData('strava_photo_ids')) as $photoId) {
                         if ($activity->files->filter(fn (File $file) => Str::contains($file->filename, $photoId))->count() === 0) {
                             $photos[] = $photoId;
                         }
