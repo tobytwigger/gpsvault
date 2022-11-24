@@ -41,35 +41,35 @@ export default {
         return {
             menuItems: [
                 {
-                    name: 'Refresh',
+                    title: 'Refresh',
                     icon: 'mdi-autorenew',
                     action: () => {
                         this.$inertia.reload();
                     }
                 },
                 // { isDivider: true },
-                // { name: "Menu Item 2",
+                // { title: "Menu Item 2",
                 // action: () => {
                 //     console.log('test')
                 // }},
                 // {
-                //     name: "Sub 1",
+                //     title: "Sub 1",
                 //     menu: [
-                //         { name: "1.1" },
-                //         { name: "1.2" },
+                //         { title: "1.1" },
+                //         { title: "1.2" },
                 //         {
-                //             name: "Sub-menu 2",
+                //             title: "Sub-menu 2",
                 //             menu: [
-                //                 { name: "2.1" },
-                //                 { name: "2.2" },
+                //                 { title: "2.1" },
+                //                 { title: "2.2" },
                 //                 {
-                //                     name: "Sub-menu 3",
+                //                     title: "Sub-menu 3",
                 //                     menu: [
-                //                         { name: "3.1" },
-                //                         { name: "3.2" },
+                //                         { title: "3.1" },
+                //                         { title: "3.2" },
                 //                         {
-                //                             name: "Sub-menu 4",
-                //                             menu: [{ name: "4.1" }, { name: "4.2" }, { name: "4.3" }]
+                //                             title: "Sub-menu 4",
+                //                             menu: [{ title: "4.1" }, { title: "4.2" }, { title: "4.3" }]
                 //                         }
                 //                     ]
                 //                 }
@@ -77,16 +77,16 @@ export default {
                 //         }
                 //     ]
                 // },
-                // { name: "Menu Item 3" },
+                // { title: "Menu Item 3" },
                 // { isDivider: true },
                 // {
-                //     name: "Menu Item 4",
+                //     title: "Menu Item 4",
                 //     action: () => {
                 //         console.log("menu-item-4");
                 //     }
                 // },
                 // {
-                //     name: "Menu Item 5",
+                //     title: "Menu Item 5",
                 //     action: () => {
                 //         console.log("menu-item-5");
                 //     }

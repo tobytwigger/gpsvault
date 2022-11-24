@@ -1,5 +1,5 @@
 <template>
-    <c-app-wrapper :title="activity.name" :action-sidebar="true">
+    <c-app-wrapper :title="activity.name" :menu-items="menuItems">
         <v-tabs
             v-model="tab"
             centered
@@ -181,68 +181,71 @@
 
 
 
-        <template #sidebar>
-            <v-list>
-                <v-list-item>
-                    <c-delete-activity-button :activity="activity"></c-delete-activity-button>
-                </v-list-item>
-                <v-list-item v-if="!activity.file_id">
-                    <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
-                </v-list-item>
-                <v-list-item v-if="activity.file_id" data-hint="Download a gpx/fit file of this activity.">
-                    <v-btn link :href="route('file.download', activity.file_id)">
-                        Download activity file
-                    </v-btn>
-                </v-list-item>
-                <v-list-item v-if="activity.file_id" data-hint="Download a zip file with all the information about this activity.">
-                    <v-btn link :href="route('activity.download', activity.id)">
-                        Download activity
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update" data-hint="Edit this activity.">
-                        <template v-slot:activator="{trigger,showing}">
-                            <v-btn :disabled="showing" @click="trigger">
-                                Edit Activity
-                            </v-btn>
-                        </template>
-                    </c-activity-form>
-                </v-list-item>
-                <v-list-item>
-                    <v-select
-                        data-hint="Choose the source of the data we're displaying."
-                        class="pt-2"
-                        v-model="activeDataSource"
-                        item-text="integration"
-                        item-value="integration"
-                        :items="allStats"
-                        hint="Choose which data sets to show"
-                        label="Data Source"
-                        dense
-                    ></v-select>
-                </v-list-item>
-                <v-list-item v-if="activity.additional_data.strava_id">
-                    <v-btn @click="refreshStravaActivity" :loading="loadingStravaSync" :disabled="loadingStravaSync">
-                        Reload from Strava
-                    </v-btn>
-                </v-list-item>
-                <v-list-item>
-                    <v-btn link data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
-                       v-if="activity.additional_data.strava_id"
-                    >View on strava</v-btn>
-                </v-list-item>
-                <v-list-item v-if="activity.additional_data.strava_id">
-                    <c-link-strava-activity-form :activity="activity">
-                        <template v-slot:activator="{trigger, showing}">
-                            <v-btn @click="trigger"
-                                   :disabled="showing">
-                                Edit link to Strava
-                            </v-btn>
-                        </template>
-                    </c-link-strava-activity-form>
-                </v-list-item>
-            </v-list>
-        </template>
+<!--        <template #sidebar>-->
+<!--            <v-list>-->
+<!--                <v-list-item>-->
+<!--                    <c-delete-activity-button :activity="activity"></c-delete-activity-button>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item v-if="!activity.file_id">-->
+<!--                    <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item v-if="activity.file_id" data-hint="Download a gpx/fit file of this activity.">-->
+<!--                    <v-btn link :href="route('file.download', activity.file_id)">-->
+<!--                        Download activity file-->
+<!--                    </v-btn>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item v-if="activity.file_id" data-hint="Download a zip file with all the information about this activity.">-->
+<!--                    <v-btn link :href="route('activity.download', activity.id)">-->
+<!--                        Download activity-->
+<!--                    </v-btn>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item>-->
+<!--                    <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update" data-hint="Edit this activity.">-->
+<!--                        <template v-slot:activator="{trigger,showing}">-->
+<!--                            <v-btn :disabled="showing" @click="trigger">-->
+<!--                                Edit Activity-->
+<!--                            </v-btn>-->
+<!--                        </template>-->
+<!--                    </c-activity-form>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item>-->
+<!--                    <v-select-->
+<!--                        data-hint="Choose the source of the data we're displaying."-->
+<!--                        class="pt-2"-->
+<!--                        v-model="activeDataSource"-->
+<!--                        item-text="integration"-->
+<!--                        item-value="integration"-->
+<!--                        :items="allStats"-->
+<!--                        hint="Choose which data sets to show"-->
+<!--                        label="Data Source"-->
+<!--                        dense-->
+<!--                    ></v-select>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item v-if="activity.additional_data.strava_id">-->
+<!--                    <v-btn @click="refreshStravaActivity" :loading="loadingStravaSync" :disabled="loadingStravaSync">-->
+<!--                        Reload from Strava-->
+<!--                    </v-btn>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item>-->
+<!--                    <v-btn link data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"-->
+<!--                       v-if="activity.additional_data.strava_id"-->
+<!--                    >View on strava</v-btn>-->
+<!--                </v-list-item>-->
+<!--                <v-list-item v-if="activity.additional_data.strava_id">-->
+<!--                    <c-link-strava-activity-form :activity="activity">-->
+<!--                        <template v-slot:activator="{trigger, showing}">-->
+<!--                            <v-btn @click="trigger"-->
+<!--                                   :disabled="showing">-->
+<!--                                Edit link to Strava-->
+<!--                            </v-btn>-->
+<!--                        </template>-->
+<!--                    </c-link-strava-activity-form>-->
+<!--                </v-list-item>-->
+<!--            </v-list>-->
+<!--        </template>-->
+
+        <c-delete-activity-button :activity="activity" :show="showingActivityDeleteForm" @input="showingActivityDeleteForm = $event"></c-delete-activity-button>
+
     </c-app-wrapper>
 </template>
 
@@ -294,7 +297,96 @@ export default {
     data() {
         return {
             tab: 'tab-summary',
-            loadingStravaSync: false
+            loadingStravaSync: false,
+            showingActivityDeleteForm: false,
+            menuItems: [
+                {
+                    title: 'Delete activity',
+                    icon: 'mdi-delete',
+                    action: () => {
+                        this.showingActivityDeleteForm = true;
+                    }
+                },
+                {
+                    // v-if="!activity.file_id"
+                    title: 'Upload activity file',
+                    icon: 'mdi-delete',
+                    action: () => {
+                        // <c-upload-activity-file-button :activity="activity"></c-upload-activity-file-button>
+                        this.showingActivityDeleteForm = true;
+                    }
+                },
+                {
+                    // v-if="activity.file_id"
+                    title: 'Download activity file',
+                    icon: 'mdi-download',
+                    action: () => {
+                        //         <v-btn link :href="route('file.download', activity.file_id)">
+                        this.showingActivityDeleteForm = true;
+                    }
+                },
+                {
+                    title: 'Download activity backup',
+                    icon: 'mdi-download',
+                    action: () => {
+                        //         <v-btn link :href="route('activity.download', activity.id)">
+                        this.showingActivityDeleteForm = true;
+                    }
+                },
+                {
+                    title: 'Edit activity',
+                    icon: 'mdi-download',
+                    action: () => {
+                        //         <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update" data-hint="Edit this activity.">
+                        this.showingActivityDeleteForm = true;
+                    }
+                },
+                {
+                    title: 'Data source',
+                    icon: 'mdi-download',
+                    //         <v-select
+                    //             data-hint="Choose the source of the data we're displaying."
+                    //             class="pt-2"
+                    //             v-model="activeDataSource"
+                    //             item-text="integration"
+                    //             item-value="integration"
+                    //         :items="allStats"
+                    //         hint="Choose which data sets to show"
+                    //         label="Data Source"
+                    //         dense
+                    //         ></v-select>
+                },
+                {
+                    title: 'Update from Strava',
+                    icon: 'mdi-power-plug',
+                    action: () => {
+                        //         <v-btn @click="refreshStravaActivity" :loading="loadingStravaSync" :disabled="loadingStravaSync">
+                    }
+                },
+                //     <v-list-item v-if="activity.additional_data.strava_id">
+                {
+                    title: 'View Strava',
+                    icon: 'mdi-power-plug',
+                    action: () => {
+//         <v-btn link data-hint="Click to view the activity on Strava." :href="'https://www.strava.com/activities/' + activity.additional_data.strava_id"
+                        //         v-if="activity.additional_data.strava_id"
+                    }
+                },
+                //     <v-list-item v-if="activity.additional_data.strava_id">
+                {
+                    title: 'Edit link to Strava',
+                    icon: 'mdi-power-plug',
+                    action: () => {
+                        //         <template v-slot:activator="{trigger, showing}">
+                        //             <v-btn @click="trigger"
+                        //             :disabled="showing">
+                        //             Edit link to Strava
+                        //         </v-btn>
+                        //     </template>
+                        // </c-link-strava-activity-form>
+                    }
+                }
+            ]
         }
     },
     methods: {

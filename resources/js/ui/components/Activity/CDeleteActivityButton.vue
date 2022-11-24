@@ -4,19 +4,19 @@
         persistent
         max-width="600"
     >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="error"
-                v-bind="attrs"
-                v-on="on"
-                :loading="loading"
-                :disabled="loading"
-                data-hint="Delete this activity."
-            >
-                <v-icon>mdi-delete</v-icon>
-                Delete Activity
-            </v-btn>
-        </template>
+<!--        <template v-slot:activator="{ on, attrs }">-->
+<!--            <v-btn-->
+<!--                color="error"-->
+<!--                v-bind="attrs"-->
+<!--                v-on="on"-->
+<!--                :loading="loading"-->
+<!--                :disabled="loading"-->
+<!--                data-hint="Delete this activity."-->
+<!--            >-->
+<!--                <v-icon>mdi-delete</v-icon>-->
+<!--                Delete Activity-->
+<!--            </v-btn>-->
+<!--        </template>-->
         <v-card>
             <v-card-title>
                 Deleting activity '{{activity.name}}'.
@@ -54,12 +54,25 @@ export default {
         activity: {
             required: true,
             type: Object
+        },
+        show: {
+            required: true,
+            type: Boolean
         }
     },
     data() {
         return {
-            showDialog: false,
             loading: false
+        }
+    },
+    computed: {
+        showDialog: {
+            get() {
+                return this.show;
+            },
+            set(val) {
+                this.$emit('input', val);
+            }
         }
     },
     methods: {

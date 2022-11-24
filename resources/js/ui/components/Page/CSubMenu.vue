@@ -17,7 +17,7 @@
                         mdi-chevron-left
                     </v-icon>
                     <span>
-                        {{ name }}
+                        {{ title }}
                     </span>
                     <v-spacer></v-spacer>
                 </v-list-item>
@@ -40,7 +40,7 @@
                 <c-sub-menu
                     :key='index'
                     :menu-items='item.menu'
-                    :name='item.name'
+                    :title='item.title'
                     :icon="item.icon"
                     @sub-menu-click='emitClickEvent'
                     v-else-if='item.menu'
@@ -53,7 +53,7 @@
                 >
                     <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
                     <span>
-                        {{ item.name }}
+                        {{ item.title }}
                     </span>
                     <v-spacer></v-spacer>
                 </v-list-item>
@@ -67,7 +67,7 @@
 export default {
     name: "CSubMenu",
     props: {
-        name: {
+        title: {
             required: false,
             type: String,
         },
