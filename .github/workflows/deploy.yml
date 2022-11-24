@@ -15,7 +15,7 @@ jobs:
 
     environment:
       name: production
-      url: https://tools.swytchbike.com
+      url: https://gpsvault.co.uk
 
 
     steps:
