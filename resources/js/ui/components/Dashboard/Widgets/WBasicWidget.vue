@@ -11,7 +11,7 @@
 import Widget from '../Widget';
 import units from '../../../mixins/units';
 export default {
-    name: "WTotalMileage",
+    name: "WBasicWidget",
     mixins: [units],
     components: {Widget},
     props: {

@@ -26,7 +26,7 @@ class TotalTime extends Widget
         return [
             'widgetName' => 'Total time',
             'description' => 'riding ' . $this->getDurationText(),
-            'data' => (Stats::where('stats_type', Activity::class)
+            'data' => round((Stats::where('stats_type', Activity::class)
                 ->orderByPreference()
                 ->whereNotNull('duration')
                 ->select(['id', 'stats_id', 'duration'])
@@ -34,7 +34,7 @@ class TotalTime extends Widget
                 ->where('finished_at', '<', $this->getUpperBound())
                 ->get()
                 ->unique(fn (Stats $stats) => $stats->stats_id)
-                ->sum(fn (Stats $stats) => $stats->duration) /(60*60)) . 'h',
+                ->sum(fn (Stats $stats) => $stats->duration) /(60*60)), 2) . 'h',
         ];
     }
 }

@@ -3,11 +3,12 @@
         class="mx-auto"
         max-width="344"
         outlined
+        style="text-align: center;"
     >
 
         <v-list-item three-line>
             <v-list-item-content>
-                <div class="text-overline mb-4">
+                <div class="mb-4">
                     {{widgetName}}
                 </div>
 
