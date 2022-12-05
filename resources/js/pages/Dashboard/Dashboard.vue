@@ -73,7 +73,10 @@ export default {
     },
     computed: {
         dashboardTitle() {
-            return this.getDashboardWithId(this.selectedDashboardIndex)?.name ?? 'No dashboards found';
+            if(this.selectedDashboardIndex !== null && this.dashboards[this.selectedDashboardIndex]) {
+                return this.dashboards[this.selectedDashboardIndex].name;
+            }
+            return 'No dashboards found'
         },
     }
 }
