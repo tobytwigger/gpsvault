@@ -21,19 +21,10 @@ class DashboardController extends Controller
         }
 
         return Inertia::render('Dashboard/Dashboard', [
-            'schema' => $dashboard->toSchema(),
-            'dashboards' => Dashboard::getDashboardsForUser(Auth::user()),
+            'initialSelection' => $dashboard->id,
+            'dashboards' => Dashboard::getDashboardsForUser(Auth::user())
+                ->map->toSchema(),
         ]);
     }
-
-    public function show(int $dashboardId)
-    {
-        $dashboard = Dashboard::getById($dashboardId);
-        abort_if($dashboard->user_id !== Auth::id(), 403);
-
-        return Inertia::render('Dashboard/Dashboard', [
-            'schema' => $dashboard->toSchema(),
-            'dashboards' => Dashboard::getDashboardsForUser(Auth::user()),
-        ]);
-    }
+    
 }
