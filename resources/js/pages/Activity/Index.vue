@@ -1,6 +1,6 @@
 <template>
     <c-app-wrapper title="Your Activities">
-        <iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
+        <c-iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
                   layout="cards" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
@@ -17,7 +17,7 @@
                     </v-btn>
                 </td>
             </template>
-        </iterator>
+        </c-iterator>
 
         <template #headerActions>
             <c-job-status job="load-strava-activities" :tags="{user_id: $page.props.user.id}">
@@ -63,11 +63,11 @@ import units from '../../ui/mixins/units';
 import moment from 'moment/moment';
 import shepherd from '../../ui/mixins/shepherd';
 import CInfiniteScrollIterator from '../../ui/reusables/table/CInfiniteScrollIterator';
-import Iterator from '../../ui/reusables/table/Iterator';
+import CIterator from '../../ui/reusables/table/CIterator';
 export default {
     name: "Index",
     components: {
-        Iterator,
+        CIterator,
         CInfiniteScrollIterator, CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
     mixins: [units, shepherd],
     props: {

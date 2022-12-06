@@ -28,7 +28,7 @@
 import CInfiniteScrollIterator from './CInfiniteScrollIterator';
 import CPaginationIterator from './CPaginationIterator';
 export default {
-    name: "Iterator",
+    name: "CIterator",
     components: {CPaginationIterator, CInfiniteScrollIterator},
     props: {
         layout: {

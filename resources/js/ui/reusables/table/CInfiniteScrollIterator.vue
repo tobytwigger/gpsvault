@@ -68,14 +68,14 @@ export default {
     data() {
         return {
             items: [],
-            nextPageToLoad: 1,
             spinner: 'spiral'
         }
     },
     methods: {
         loadNextPage($state) {
+            console.log('loading next page');
             let data = {};
-            data[this.pageAttributeName] = this.nextPageToLoad;
+            data[this.pageAttributeName] = this.paginator.current_page + 1;
             data[this.perPageAttributeName] = 10;
             this.$inertia.get(this.paginator.path, data, {
                 replace: true,
@@ -84,9 +84,10 @@ export default {
                 onSuccess: () => {
                     this.items = this.items.concat(this.paginator.data);
                     this.nextPageToLoad += 1
-                    $state.loaded();
                     if(this.nextPageToLoad > this.paginator.last_page) {
                         $state.completed();
+                    } else {
+                        $state.loaded();
                     }
                 },
                 onError: () => {

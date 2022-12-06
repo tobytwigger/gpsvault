@@ -9,18 +9,18 @@
 <!--            </template>-->
 <!--        </c-job-status>-->
 
-        <c-pagination-iterator :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
+        <c-iterator :infinite-scroll="true" :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
             <template v-slot:prepend>
-                <c-loading-backup-card
-                    :job-status="jobStatus"
-                    v-if="isGeneratingBackup"
-                    @cancel="cancel">
-                </c-loading-backup-card>
+<!--                <c-loading-backup-card-->
+<!--                    :job-status="jobStatus"-->
+<!--                    v-if="isGeneratingBackup"-->
+<!--                    @cancel="cancel">-->
+<!--                </c-loading-backup-card>-->
             </template>
             <template v-slot:default="{item}">
                 <c-backup-card :backup="item"></c-backup-card>
             </template>
-        </c-pagination-iterator>
+        </c-iterator>
     </c-app-wrapper>
 </template>
 
@@ -35,11 +35,13 @@ import CBackupForm from 'ui/components/Backup/CBackupForm';
 import CJobStatus from '../../ui/components/CJobStatus';
 import usesJobStatus from '../../ui/mixins/usesJobStatus';
 import CLoadingBackupCard from '../../ui/components/Backup/CLoadingBackupCard';
+import CIterator from '../../ui/reusables/table/CIterator';
 
 export default {
     name: "Index",
     mixins: [usesJobStatus],
     components: {
+        CIterator,
         CLoadingBackupCard,
         CJobStatus,
         CBackupForm,
@@ -56,7 +58,7 @@ export default {
             deep: true,
             handler: function() {
                 if(this.jobStatus.status === 'succeeded') {
-                    this.$inertia.reload();
+                    // this.$inertia.reload();
                 }
             }
         }
