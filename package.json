@@ -46,6 +46,7 @@
         "vue-easy-lightbox": "^0.16.2",
         "vue-filepond": "^6.0.3",
         "vue-grid-layout": "^2.4.0",
+        "vue-mugen-scroll": "^0.2.6",
         "vue-shepherd": "^0.3.0",
         "vuedraggable": "^2.24.3",
         "vuetify": "^2.6.2",

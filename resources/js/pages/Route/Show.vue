@@ -145,7 +145,7 @@ import CRouteForm from 'ui/components/Route/CRouteForm';
 import CDeleteRouteButton from 'ui/components/Route/CDeleteRouteButton';
 import CUploadRouteFileButton from 'ui/components/Route/CUploadRouteFileButton';
 import CActivityLocationSummary from '../../ui/components/CActivityLocationSummary';
-import CPaginationIterator from '../../ui/components/CPaginationIterator';
+import CPaginationIterator from '../../ui/reusables/table/CPaginationIterator';
 import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
 

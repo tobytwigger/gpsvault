@@ -48,7 +48,7 @@
 
 <script>
 import CAppWrapper from 'ui/layouts/CAppWrapper';
-import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CRouteCard from 'ui/components/Route/CRouteCard';
 import CRouteForm from 'ui/components/Route/CRouteForm';
 

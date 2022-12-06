@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import CPaginationIterator from '../CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CPlaceCard from './CPlaceCard';
 import CMarkerSelector from '../Map/CMarkerSelector';
 

@@ -52,7 +52,7 @@
 
 <script>
 import CAppWrapper from 'ui/layouts/CAppWrapper';
-import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CTourCard from 'ui/components/Tour/CTourCard';
 import CTourForm from 'ui/components/Tour/CTourForm';
 export default {

@@ -35,7 +35,7 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CPlaceCard from 'ui/components/Place/CPlaceCard';
 import CPlaceForm from 'ui/components/Place/CPlaceForm';
-import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 export default {
     name: "Index",
     components: {CPaginationIterator, CPlaceForm, CPlaceCard, CAppWrapper},

@@ -29,7 +29,7 @@ import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CActivityCard from 'ui/components/Activity/CActivityCard';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
 import CBackupCard from 'ui/components/Backup/CBackupCard';
-import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CConfirmationDialog from 'ui/components/CConfirmationDialog';
 import CBackupForm from 'ui/components/Backup/CBackupForm';
 import CJobStatus from '../../ui/components/CJobStatus';

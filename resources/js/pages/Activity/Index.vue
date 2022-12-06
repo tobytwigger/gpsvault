@@ -1,6 +1,7 @@
 <template>
-    <c-app-wrapper title="Your Activities" :header-action="true">
-        <c-pagination-iterator :paginator="activities" item-key="id" :layout="layout" :list-headers="['Name', 'Distance', 'Date', 'View']">
+    <c-app-wrapper title="Your Activities">
+        <iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
+                  layout="cards" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
             </template>
@@ -16,16 +17,7 @@
                     </v-btn>
                 </td>
             </template>
-        </c-pagination-iterator>
-
-        <template #prependActions>
-            <v-btn v-if="layout === 'cards'" @click="layout = 'list'" icon>
-                <v-icon>mdi-view-list-outline</v-icon>
-            </v-btn>
-            <v-btn v-if="layout === 'list'" @click="layout = 'cards'" icon>
-                <v-icon>mdi-grid</v-icon>
-            </v-btn>
-        </template>
+        </iterator>
 
         <template #headerActions>
             <c-job-status job="load-strava-activities" :tags="{user_id: $page.props.user.id}">
@@ -65,14 +57,18 @@
 import CAppWrapper from 'ui/layouts/CAppWrapper';
 import CActivityCard from 'ui/components/Activity/CActivityCard';
 import CActivityForm from 'ui/components/Activity/CActivityForm';
-import CPaginationIterator from 'ui/components/CPaginationIterator';
+import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CJobStatus from '../../ui/components/CJobStatus';
 import units from '../../ui/mixins/units';
 import moment from 'moment/moment';
 import shepherd from '../../ui/mixins/shepherd';
+import CInfiniteScrollIterator from '../../ui/reusables/table/CInfiniteScrollIterator';
+import Iterator from '../../ui/reusables/table/Iterator';
 export default {
     name: "Index",
-    components: {CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
+    components: {
+        Iterator,
+        CInfiniteScrollIterator, CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
     mixins: [units, shepherd],
     props: {
         activities: {
@@ -82,7 +78,6 @@ export default {
     },
     data() {
         return {
-            layout: 'cards',
             tourSteps: [
                 this._createStep('#tour-newActivityButton', 'You can add a new activity here', 'left'),
                 this._createStep('.tour-viewSingleActivityButton', 'Click to view an activity', 'top'),
