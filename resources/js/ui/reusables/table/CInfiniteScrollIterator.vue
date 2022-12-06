@@ -60,10 +60,10 @@ export default {
             type: Array,
             default: () => []
         },
-        fetchItems: {
+        paginator: {
             required: true,
-            type: Function // Accepts a page parameter
-        }
+            type: Object
+        },
     },
     data() {
         return {
@@ -74,19 +74,25 @@ export default {
     },
     methods: {
         loadNextPage($state) {
-            this.fetchItems(this.nextPageToLoad)
-                .then(response => {
-                    console.log(response.data);
-                    this.items = this.items.concat(response.data.data);
-                    this.nextPageToLoad += 1;
+            let data = {};
+            data[this.pageAttributeName] = this.nextPageToLoad;
+            data[this.perPageAttributeName] = 10;
+            this.$inertia.get(this.paginator.path, data, {
+                replace: true,
+                preserveScroll: true,
+                preserveState: true,
+                onSuccess: () => {
+                    this.items = this.items.concat(this.paginator.data);
+                    this.nextPageToLoad += 1
                     $state.loaded();
-                    if(this.nextPageToLoad > response.data.last_page) {
+                    if(this.nextPageToLoad > this.paginator.last_page) {
                         $state.completed();
                     }
-                })
-                .catch(() => {
+                },
+                onError: () => {
                     $state.error();
-                })
+                },
+            });
         },
     }
 }

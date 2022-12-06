@@ -2,7 +2,7 @@
 
     <div>
 
-        <c-infinite-scroll-iterator :fetch-items="fetchItems" v-if="infiniteScroll" :layout="layout" :item-key="itemKey" :list-headers="listHeaders">
+        <c-infinite-scroll-iterator :paginator="paginator" v-if="infiniteScroll" :layout="layout" :item-key="itemKey" :list-headers="listHeaders">
             <template v-slot:default="attrs">
                 <slot name="default" v-bind="attrs"></slot>
             </template>
@@ -31,10 +31,6 @@ export default {
     name: "Iterator",
     components: {CPaginationIterator, CInfiniteScrollIterator},
     props: {
-        fetchItems: { // Must generate a promise
-            required: false,
-            type: Function
-        },
         layout: {
             required: false,
             type: String,

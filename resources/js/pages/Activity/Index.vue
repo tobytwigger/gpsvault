@@ -1,6 +1,6 @@
 <template>
     <c-app-wrapper title="Your Activities">
-        <iterator :paginator="activities" :fetch-items="fetchActivities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
+        <iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
                   layout="cards" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
@@ -81,7 +81,7 @@ export default {
             tourSteps: [
                 this._createStep('#tour-newActivityButton', 'You can add a new activity here', 'left'),
                 this._createStep('.tour-viewSingleActivityButton', 'Click to view an activity', 'top'),
-            ]
+            ],
         }
     },
     methods: {
@@ -90,9 +90,6 @@ export default {
                 return 'No Date';
             }
             return moment(value).format('DD/MM/YYYY');
-        },
-        fetchActivities(page) {
-            return axios.get(route('api.activity.index', {page: page, perPage: 10}));
         }
     }
 }
