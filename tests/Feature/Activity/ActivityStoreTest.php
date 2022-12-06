@@ -88,6 +88,25 @@ class ActivityStoreTest extends TestCase
         ]);
     }
 
+    /** @test */
+    public function a_description_can_be_set()
+    {
+        $this->authenticated();
+        Storage::fake('test-fake');
+        $file = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
+
+        $response = $this->post(route('activity.store'), [
+            'file' => $file->toArray(),
+            'description' => 'This is the activity description',
+        ]);
+
+        $this->assertDatabaseCount('activities', 1);
+        $this->assertDatabaseHas('activities', [
+            'name' => 'New Ride',
+            'description' => 'This is the activity description',
+        ]);
+    }
+
     /**
      * @test
      * @dataProvider validationDataProvider

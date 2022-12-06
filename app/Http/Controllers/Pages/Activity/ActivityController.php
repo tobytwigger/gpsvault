@@ -50,6 +50,7 @@ class ActivityController extends Controller
 
         $activity = ActivityImporter::for(Auth::user())
             ->withName($request->input('name'))
+            ->withDescription($request->input('description'))
             ->withActivityFile($file)
             ->import();
 

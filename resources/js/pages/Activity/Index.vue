@@ -1,7 +1,7 @@
 <template>
     <c-app-wrapper title="Your Activities">
         <iterator :paginator="activities" :fetch-items="fetchActivities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
-                  layout="cards" :infinite-scroll="false">
+                  layout="cards" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
             </template>

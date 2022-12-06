@@ -27,6 +27,7 @@ class StoreActivityRequest extends FormRequest
         return [
             'file' => ['required', app(FilepondRule::class)],
             'name' => 'sometimes|nullable|max:255',
+            'description' => 'sometimes|nullable|max:65000'
         ];
     }
 }
