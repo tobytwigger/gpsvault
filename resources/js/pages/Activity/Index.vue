@@ -1,7 +1,7 @@
 <template>
     <c-app-wrapper title="Your Activities">
-        <iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
-                  layout="cards" :infinite-scroll="true">
+        <iterator :paginator="activities" :fetch-items="fetchActivities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
+                  layout="cards" :infinite-scroll="false">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
             </template>
@@ -91,6 +91,9 @@ export default {
             }
             return moment(value).format('DD/MM/YYYY');
         },
+        fetchActivities(page) {
+            return axios.get(route('api.activity.index', {page: page, perPage: 10}));
+        }
     }
 }
 </script>

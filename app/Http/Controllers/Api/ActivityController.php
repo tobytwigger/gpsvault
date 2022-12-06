@@ -17,7 +17,7 @@ class ActivityController extends Controller
     {
         return Auth::user()->activities()
             ->orderByStat('started_at')
-            ->paginate(request()->input('perPage', 10));
+            ->paginate(request()->input('perPage', 8));
     }
 
 //    /**

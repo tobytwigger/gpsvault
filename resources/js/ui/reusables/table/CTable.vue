@@ -1,7 +1,10 @@
 <template>
     <div>
         <span v-if="loading && items.length === 0">
-            Loading...
+            Looking for items...
+        </span>
+        <span v-else-if="items.length === 0">
+            No items found
         </span>
         <div v-else>
             <v-simple-table>
