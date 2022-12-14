@@ -1,10 +1,22 @@
 <template>
     <c-app-wrapper title="Your Routes" :header-action="true">
-        <c-pagination-iterator :paginator="routes" item-key="id">
-            <template v-slot:default="{item}">
+        <c-iterator :api-route="route('api.route.index')" item-key="id" :infinite-scroll="true">
+            <template v-slot:default="{item, isFirst}">
                 <c-route-card :route-model="item"></c-route-card>
             </template>
-        </c-pagination-iterator>
+            <template v-slot:list="{item, isFirst}">
+                <td>{{item.name}}</td>
+                <td>{{convert(item.distance, 'distance')['value']}} {{convert(item.distance, 'distance')['unit']}}</td>
+                <td>
+                    {{ toDateTime(item.started_at) }}
+                </td>
+                <td>
+                    <v-btn @click="$inertia.visit(route('activity.show', item.id))" icon>
+                        <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                </td>
+            </template>
+        </c-iterator>
 
         <template #headerActions>
             <c-route-form title="Upload a Route" button-text="Upload">
@@ -55,12 +67,6 @@ import CRouteForm from 'ui/components/Route/CRouteForm';
 export default {
     name: "Index",
     components: {CRouteForm, CRouteCard, CPaginationIterator, CAppWrapper},
-    props: {
-        routes: {
-            required: true,
-            type: Object
-        }
-    }
 }
 </script>
 

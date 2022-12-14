@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class TestCase extends BaseTestCase
@@ -35,10 +36,16 @@ abstract class TestCase extends BaseTestCase
         Storage::fake('test-fake');
     }
 
-    public function authenticated(array $parameters = [])
+    public function authenticatedWithSanctum(array $parameters = [])
+    {
+        $this->user = $this->user ?? User::factory()->create($parameters);
+        
+        Sanctum::actingAs($this->user);
+    }
+    public function authenticated(array $parameters = [], ?string $guard = null)
     {
         $this->user = $this->user ?? User::factory()->create($parameters);
 
-        $this->be($this->user);
+        $this->be($this->user, $guard);
     }
 }

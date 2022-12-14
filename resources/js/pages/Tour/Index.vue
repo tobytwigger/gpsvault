@@ -13,11 +13,12 @@
 
 <!--        <v-tabs-items v-model="tab">-->
 <!--            <v-tab-item value="tab-planned">-->
-                <c-pagination-iterator :paginator="tours" item-key="id">
-                    <template v-slot:default="{item}">
-                        <c-tour-card :tour="item"></c-tour-card>
-                    </template>
-                </c-pagination-iterator>
+        <c-iterator :api-route="route('api.tour.index')" item-key="id" :infinite-scroll="true">
+            <template v-slot:default="{item}">
+                <c-tour-card :tour="item"></c-tour-card>
+            </template>
+        </c-iterator>
+
 <!--            </v-tab-item>-->
 
 <!--            <v-tab-item value="tab-completed">-->
@@ -58,12 +59,6 @@ import CTourForm from 'ui/components/Tour/CTourForm';
 export default {
     name: "Index",
     components: {CTourForm, CTourCard, CPaginationIterator, CAppWrapper},
-    props: {
-        tours: {
-            required: true,
-            type: Object
-        }
-    },
     data() {
         return {
             tab: null

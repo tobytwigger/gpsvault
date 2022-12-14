@@ -9,7 +9,7 @@
 <!--            </template>-->
 <!--        </c-job-status>-->
 
-        <c-iterator :infinite-scroll="true" :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
+        <c-iterator :infinite-scroll="true" :api-route="route('api.backup.index')" item-key="id" :prepend="isGeneratingBackup">
             <template v-slot:prepend>
 <!--                <c-loading-backup-card-->
 <!--                    :job-status="jobStatus"-->
@@ -48,10 +48,6 @@ export default {
         CConfirmationDialog, CPaginationIterator, CBackupCard, CActivityForm, CActivityCard, CAppWrapper
     },
     props: {
-        backups: {
-            required: true,
-            type: Object
-        }
     },
     watch: {
         jobStatus: {
@@ -78,9 +74,6 @@ export default {
         }
     },
     computed: {
-        paginator() {
-            return this.backups;
-        },
         isGeneratingBackup() {
             return this.jobStatus !== null
                 && this.jobStatus.status !== 'succeeded';

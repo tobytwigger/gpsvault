@@ -28,12 +28,7 @@ class BackupController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Backups/Index', [
-            'backups' => File::where('type', FileUploader::ARCHIVE)
-                ->where('user_id', Auth::id())
-                ->orderBy('created_at', 'DESC')
-                ->paginate(request()->input('perPage', 8)),
-        ]);
+        return Inertia::render('Backups/Index');
     }
 
     /**

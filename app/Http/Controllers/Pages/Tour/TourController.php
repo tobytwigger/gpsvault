@@ -24,11 +24,7 @@ class TourController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Tour/Index', [
-            'tours' => Tour::where('user_id', Auth::id())
-                ->orderBy('created_at', 'DESC')
-                ->paginate($request->input('perPage', 8)),
-        ]);
+        return Inertia::render('Tour/Index');
     }
 
     /**

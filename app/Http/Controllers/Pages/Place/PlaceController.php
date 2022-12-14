@@ -13,9 +13,7 @@ class PlaceController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Place/Index', [
-            'places' => Place::orderBy('name')->paginate(request()->input('perPage', 8)),
-        ]);
+        return Inertia::render('Place/Index');
     }
 
     public function show(Place $place)

@@ -1,9 +1,11 @@
 <template>
     <c-app-wrapper title="Places" :header-action="true">
-        <c-pagination-iterator :paginator="places" item-key="id">
+        <c-iterator :api-route="route('api.place.index')" item-key="id" :infinite-scroll="true">
             <template v-slot:default="{item}">
                 <c-place-card :place="item"></c-place-card>
             </template>
+        </c-iterator>
+
         </c-pagination-iterator>
 
         <template #headerActions>
@@ -39,12 +41,6 @@ import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 export default {
     name: "Index",
     components: {CPaginationIterator, CPlaceForm, CPlaceCard, CAppWrapper},
-    props: {
-        places: {
-            required: true,
-            type: Object
-        },
-    },
     data() {
         return {
             test: {lat: null, lng: null}

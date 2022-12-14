@@ -60,40 +60,38 @@ export default {
             type: Array,
             default: () => []
         },
-        paginator: {
+        apiRoute: {
             required: true,
-            type: Object
+            type: String
         },
     },
     data() {
         return {
             items: [],
-            spinner: 'spiral'
+            paginator: null,
+            spinner: 'spiral',
         }
     },
     methods: {
         loadNextPage($state) {
-            console.log('loading next page');
-            let data = {};
-            data[this.pageAttributeName] = this.paginator.current_page + 1;
-            data[this.perPageAttributeName] = 10;
-            this.$inertia.get(this.paginator.path, data, {
-                replace: true,
-                preserveScroll: true,
-                preserveState: true,
-                onSuccess: () => {
-                    this.items = this.items.concat(this.paginator.data);
-                    this.nextPageToLoad += 1
-                    if(this.nextPageToLoad > this.paginator.last_page) {
-                        $state.completed();
-                    } else {
-                        $state.loaded();
-                    }
-                },
-                onError: () => {
-                    $state.error();
-                },
-            });
+            if(this.paginator && (this.paginator?.current_page === this.paginator?.last_page)) {
+                $state.complete();
+            } else {
+                let data = {};
+                data[this.pageAttributeName] = (this.paginator?.current_page ?? 0) + 1;
+                data[this.perPageAttributeName] = 10;
+                axios.get(this.apiRoute, {params: data})
+                    .then(response => {
+                        this.paginator = response.data;
+                        this.items = this.items.concat(this.paginator.data);
+                        if(this.paginator.current_page >= this.paginator.last_page) {
+                            $state.complete();
+                        } else {
+                            $state.loaded();
+                        }
+                    })
+                    .catch(() => $state.error());
+            }
         },
     }
 }
