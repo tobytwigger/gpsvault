@@ -74,24 +74,37 @@ export default {
     },
     computed: {
         routeDistance() {
+            let distance = null;
             if(this.routeModel.main_path && this.routeModel.main_path.length > 0) {
-                let converted = this.convert(this.routeModel.main_path[0].distance, 'distance');
+                distance = this.routeModel.main_path[0].distance;
+            } else if(this.routeModel.path) {
+                distance = this.routeModel.path.distance;
+            }
+            if(distance !== null) {
+                let converted = this.convert(distance, 'distance');
                 if(converted) {
                     return converted.value + converted.unit;
                 }
             }
-            return '0' + this.getSystemUnit('distance');
+            return 'N/A';
         },
         routeTime() {
-            if(this.routeModel.main_path && this.routeModel.main_path.length > 0 && this.routeModel.main_path[0].duration) {
-                let duration = moment.duration(this.routeModel.main_path[0].duration, 's');
-                let hours = floor(duration.asHours())
-                let minutes = floor(duration.asMinutes() % 60)
-                return hours + 'h ' + minutes + 'm';
+            let duration = null;
+            if(this.routeModel.main_path && this.routeModel.main_path.length > 0) {
+                duration = this.routeModel.main_path[0].duration;
+            } else if(this.routeModel.path) {
+                duration = this.routeModel.path.duration;
             }
-            return '0h 0m';
+            if(duration !== null) {
+                let momentDuration = moment.duration(duration, 's');
+                if(momentDuration.asSeconds() > 0) {
+                    let hours = floor(momentDuration.asHours())
+                    let minutes = floor(momentDuration.asMinutes() % 60)
+                    return hours + 'h ' + minutes + 'm';
+                }
+            }
 
-
+            return 'N/A';
         }
     }
 }

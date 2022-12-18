@@ -58,7 +58,7 @@ class AnalyseRouteFile implements ShouldQueue
             'linestring' => $linestring,
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
-            'duration' => $this->getDuration(),
+            'duration' => $analysis->getDuration(),
         ]);
 
         $ids = [];
@@ -111,10 +111,5 @@ class AnalyseRouteFile implements ShouldQueue
         }
 
         return $newPoints;
-    }
-
-    private function getDuration(): int
-    {
-        return 0;
     }
 }

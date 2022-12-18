@@ -134,7 +134,7 @@ class Route extends Model
      */
     public function getPathAttribute()
     {
-        return $this->routePaths()->latest()->first()?->append('waypoints');
+        return $this->mainPath()->first()?->append('waypoints');
     }
 
     /**
