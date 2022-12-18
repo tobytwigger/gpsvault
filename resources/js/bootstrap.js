@@ -36,11 +36,14 @@ import VueShepherdPlugin from 'vue-shepherd';
 import 'shepherd.js/dist/css/shepherd.css';
 Vue.use(VueShepherdPlugin);
 
-Vue.prototype.$tour = new Vue.prototype.$shepherd({
-    useModalOverlay: true,
-})
-
-
+Vue.prototype.$showTour = {
+    onShow: null,
+    show() {
+        if(this.onShow) {
+            this.onShow();
+        }
+    }
+}
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

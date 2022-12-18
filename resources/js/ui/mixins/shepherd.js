@@ -1,7 +1,8 @@
 export default {
     data() {
         return {
-            tourSteps: []
+            tourSteps: [],
+            tourObject: null
         }
     },
     methods: {
@@ -40,8 +41,21 @@ export default {
     },
 
     mounted() {
-        for(let step of this.tourSteps) {
-            this.$tour.addStep(step);
+        this.tourObject = this.$shepherd({
+            useModalOverlay: true,
+        });
+        this.$showTour.onShow = () => {
+            if(this.tourObject !== null) {
+                this.tourObject.start();
+            }
         }
+
+        for(let step of this.tourSteps) {
+            this.tourObject.addStep(step);
+        }
+    },
+
+    destroyed() {
+        this.tourObject = null;
     }
 };
