@@ -150,7 +150,7 @@
                     <v-list-item-icon>
                         <v-icon>mdi-book-open-blank-variant</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-title>Documentation</v-list-item-title>
+                    <v-list-item-title>How-to guides</v-list-item-title>
                 </v-list-item>
             </Link>
             <Link :href="route('settings.index')" style="text-decoration: none">

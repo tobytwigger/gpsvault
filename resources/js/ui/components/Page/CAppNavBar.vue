@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         help() {
-            this.$tour.start();
+            this.$showTour.show();
         }
     },
     computed: {
