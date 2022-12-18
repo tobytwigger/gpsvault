@@ -2,8 +2,7 @@
     <div>
         <div>Location</div>
         <div>
-            <div style="height: 500px" ref="map"></div>
-            <canvas ref="canvas" height="250"></canvas>
+            <div style="height: 300px" ref="map"></div>
         </div>
     </div>
 
