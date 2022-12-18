@@ -4,12 +4,13 @@
         max-width="344"
         outlined
     >
-        <v-img
-            v-if="routeModel.cover_image"
-            :src="routeModel.cover_image"
-            height="200px"
-        ></v-img>
-
+        <Link :href="route('route.show', routeModel.id)">
+            <v-img
+                v-if="routeModel.cover_image"
+                :src="routeModel.cover_image"
+                height="200px"
+            ></v-img>
+        </Link>
 
         <v-card-title>
             {{routeModel.name}}

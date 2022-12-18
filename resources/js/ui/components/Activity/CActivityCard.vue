@@ -4,12 +4,13 @@
         max-width="344"
         outlined
     >
-        <v-img
-            v-if="activity.cover_image"
-            :src="activity.cover_image"
-            height="200px"
-        ></v-img>
-
+        <Link :href="route('activity.show', activity.id)">
+            <v-img
+                v-if="activity.cover_image"
+                :src="activity.cover_image"
+                height="200px"
+            ></v-img>
+        </Link>
 
         <v-card-title>
             {{activity.name}}
