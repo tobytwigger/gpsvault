@@ -5,13 +5,14 @@
     >
         <v-row
             justify="center"
-            no-gutters
         >
             <v-col
-                class="grey lighten-2 py-4 text-center"
+                class="grey lighten-2 text-center"
                 cols="12"
             >
-                 <strong>&copy;Toby Twigger</strong> - {{ new Date().getFullYear() }}
+                 <small>
+                     <strong>&copy;Toby Twigger</strong> - {{ new Date().getFullYear() }}. All rights reserved.
+                 </small>
             </v-col>
         </v-row>
     </v-footer>

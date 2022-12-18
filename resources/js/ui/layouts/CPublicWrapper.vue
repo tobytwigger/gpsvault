@@ -3,7 +3,7 @@
 
         <c-public-nav-bar :title="title" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-public-nav-bar>
 
-        <v-main>
+        <v-main style="padding-bottom: 0">
             <v-container class="fill-height" style="background-color: #f3f4f6;" fluid>
                 <slot name="alerts"></slot>
 
