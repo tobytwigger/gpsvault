@@ -1,5 +1,5 @@
 <template>
-    <c-form-section description="Which Strava client should be used by default by new users?." title="Strava Client">
+    <c-form-section description="Which Strava client should be used by default by new users?" title="Strava Client">
         <v-select
             id="strava_client_id"
             v-model="value"
