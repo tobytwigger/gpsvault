@@ -42,8 +42,6 @@
                     </v-list-item>
                 </v-list>
             </v-col>
-        </v-row>
-        <v-row>
             <v-col>
                 <c-location-input :value="{lat: place.location.coordinates[1], lng: place.location.coordinates[0]}" :disabled="true"></c-location-input>
             </v-col>
