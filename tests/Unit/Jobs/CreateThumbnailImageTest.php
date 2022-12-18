@@ -60,14 +60,15 @@ class CreateThumbnailImageTest extends TestCase
     }
 
     /** @test */
-    public function it_replaces_a_thumbnail_if_it_already_exists(){
+    public function it_replaces_a_thumbnail_if_it_already_exists()
+    {
         $this->assertDatabaseCount('files', 0);
 
         $oldThumbnail = File::factory()->thumbnail()->create();
         $file = File::factory()->image()->create([
             'title' => 'My file title',
             'caption' => 'This is my file caption',
-            'thumbnail_id' => $oldThumbnail->id
+            'thumbnail_id' => $oldThumbnail->id,
         ]);
         $this->assertDatabaseHas('files', ['id' => $oldThumbnail->id]);
 

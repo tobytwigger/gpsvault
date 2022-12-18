@@ -34,12 +34,12 @@ class CreateThumbnailForImages extends Command
     {
         $images = File::where('mimetype', 'LIKE', '%image%')
             ->whereNot('type', FileUploader::IMAGE_THUMBNAIL)
-            ->when(!$this->option('regenerate'), fn(Builder $query) => $query->whereNull('thumbnail_id'))
+            ->when(!$this->option('regenerate'), fn (Builder $query) => $query->whereNull('thumbnail_id'))
             ->get();
 
         $this->line(sprintf('Generating %u thumbnails.', $images->count()));
 
-        foreach($images as $image) {
+        foreach ($images as $image) {
             CreateThumbnailImage::dispatch($image);
         }
 

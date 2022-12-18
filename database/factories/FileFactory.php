@@ -33,15 +33,15 @@ class FileFactory extends Factory
 
     public function withThumbnail()
     {
-        return $this->state(fn(array $attributes) => [
-            'thumbnail_id' => File::factory()->thumbnail()
+        return $this->state(fn (array $attributes) => [
+            'thumbnail_id' => File::factory()->thumbnail(),
         ]);
     }
 
     public function withoutThumbnail()
     {
-        return $this->state(fn(array $attributes) => [
-            'thumbnail_id' => null
+        return $this->state(fn (array $attributes) => [
+            'thumbnail_id' => null,
         ]);
     }
 

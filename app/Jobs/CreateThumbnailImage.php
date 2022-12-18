@@ -67,7 +67,7 @@ class CreateThumbnailImage implements ShouldQueue
         $compressedFile->caption = $this->file->caption;
         $compressedFile->save();
 
-        if($this->file->thumbnail_id !== null) {
+        if ($this->file->thumbnail_id !== null) {
             $this->file->thumbnail()->delete();
         }
         $this->file->thumbnail_id = $compressedFile->id;
