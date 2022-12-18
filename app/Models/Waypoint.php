@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 /**
- * App\Models\Waypoint
+ * App\Models\Waypoint.
  *
  * @property int $id
  * @property int|null $place_id

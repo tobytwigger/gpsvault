@@ -9,7 +9,7 @@ use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\LineString;
 
 /**
- * App\Models\RoutePath
+ * App\Models\RoutePath.
  *
  * @property LineString $linestring The linestring representing the route
  * @property int $id
