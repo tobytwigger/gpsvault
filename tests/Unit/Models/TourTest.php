@@ -2,11 +2,14 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\Stage;
 use App\Models\Tour;
 use App\Services\Geocoding\Geocoder;
+use Illuminate\Support\Facades\Bus;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
@@ -56,6 +59,8 @@ class TourTest extends TestCase
     /** @test */
     public function it_appends_the_distance()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->has(
             RoutePath::factory()->state(fn ($attributes) => ['distance' => 50000])
@@ -72,6 +77,8 @@ class TourTest extends TestCase
     /** @test */
     public function it_appends_the_elevation_gain()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->has(
             RoutePath::factory()->state(fn ($attributes) => ['elevation_gain' => 1000])
@@ -88,6 +95,8 @@ class TourTest extends TestCase
     /** @test */
     public function it_appends_the_distance_and_ignores_any_stages_without_a_route()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $tour = Tour::factory()->create();
         $route1 = Route::factory()->has(
             RoutePath::factory()->state(fn ($attributes) => ['distance' => 50000])
@@ -105,6 +114,8 @@ class TourTest extends TestCase
     /** @test */
     public function human_started_at_returns_the_started_at_attribute_from_geocoder()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -124,6 +135,8 @@ class TourTest extends TestCase
     /** @test */
     public function human_started_at_returns_null_if_no_stages_have_a_path()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 51)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -140,6 +153,8 @@ class TourTest extends TestCase
     /** @test */
     public function human_ended_at_returns_the_ended_at_attribute_from_geocoder()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(4, 54)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
@@ -175,6 +190,8 @@ class TourTest extends TestCase
     /** @test */
     public function human_ended_at_uses_the_latest_stage_with_a_route_path()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(2, 52)->willReturn('Milton Keynes, UK');
         $this->app->instance(Geocoder::class, $geocoder->reveal());

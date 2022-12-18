@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Route;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
 use App\Models\Route;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class RouteDestroyTest extends TestCase
@@ -43,6 +46,8 @@ class RouteDestroyTest extends TestCase
     /** @test */
     public function it_deletes_attached_files()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
         $files = File::factory()->count(5)->routeMedia()->create();

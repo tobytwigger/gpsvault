@@ -2,9 +2,13 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
 use App\Models\User;
 use App\Services\File\FileUploader;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -118,5 +122,17 @@ class FileTest extends TestCase
 
         $response = TestResponse::fromBaseResponse($file->returnDownloadResponse());
         $response->assertDownload('hashing.txt');
+    }
+
+    /** @test */
+    public function it_deletes_a_thumbnail_file_when_it_is_deleted(){
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
+        $thumbnail = File::factory()->image()->create();
+        $file = File::factory()->image()->create(['thumbnail_id' => $thumbnail->id]);
+
+        $this->assertDatabaseCount('files', 2);
+        $file->delete();
+        $this->assertDatabaseCount('files', 0);
     }
 }

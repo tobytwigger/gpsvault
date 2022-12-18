@@ -2,8 +2,11 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Route;
 use App\Models\RoutePath;
+use Illuminate\Support\Facades\Bus;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
 use Tests\TestCase;
@@ -13,6 +16,8 @@ class RoutePathTest extends TestCase
     /** @test */
     public function it_can_be_saved_and_retrieved_in_the_database()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $route = Route::factory()->create();
 
         $linestring = new LineString([new Point(1, 2, 0), new Point(3, 4, 1), new Point(5, 6, 20)]);
@@ -42,6 +47,8 @@ class RoutePathTest extends TestCase
     /** @test */
     public function it_belongs_to_a_route()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $route = Route::factory()->create();
 
         $routePath = RoutePath::factory()->create([

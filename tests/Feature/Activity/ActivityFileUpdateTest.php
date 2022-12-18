@@ -2,9 +2,12 @@
 
 namespace Feature\Activity;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Activity;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -70,6 +73,8 @@ class ActivityFileUpdateTest extends TestCase
     /** @test */
     public function the_title_and_caption_can_be_updated()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
         $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);

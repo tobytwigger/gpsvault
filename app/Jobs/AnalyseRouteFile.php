@@ -58,7 +58,7 @@ class AnalyseRouteFile implements ShouldQueue
             'linestring' => $linestring,
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
-            'duration' => $analysis->getDuration(),
+            'duration' => $analysis->getDuration() ?? 0,
         ]);
 
         $ids = [];

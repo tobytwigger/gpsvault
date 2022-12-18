@@ -3,11 +3,14 @@
 namespace Unit\Jobs;
 
 use App\Jobs\AnalyseActivityFile;
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Activity;
 use App\Models\File;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Analyser\AnalysisFactoryContract;
+use Illuminate\Support\Facades\Bus;
 use Prophecy\Argument;
 use Tests\TestCase;
 
@@ -26,6 +29,8 @@ class AnalyseActivityFileTest extends TestCase
     /** @test */
     public function it_creates_stats_for_an_activity()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $activity = Activity::factory()->create([
             'file_id' => File::factory()->routeFile()->create()->id,
         ]);

@@ -2,10 +2,13 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -56,6 +59,8 @@ class UserTest extends TestCase
     /** @test */
     public function it_has_a_relationship_to_files()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+        
         $user = User::factory()->create();
         $files = File::factory()->activityPoints()->count(5)->create(['user_id' => $user->id]);
         $files2 = File::factory()->routeMedia()->count(5)->create(['user_id' => $user->id]);

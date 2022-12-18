@@ -4,12 +4,15 @@ namespace Tests\Unit\Models;
 
 use App\Integrations\Strava\Models\StravaComment;
 use App\Integrations\Strava\Models\StravaKudos;
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
 use App\Models\User;
 use App\Settings\StatsOrder;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class ActivityTest extends TestCase
@@ -27,6 +30,8 @@ class ActivityTest extends TestCase
     /** @test */
     public function it_deletes_related_models()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $file = File::factory()->activityFile()->create();
         $activity = Activity::factory()->create(['file_id' => $file->id]);
         Stats::factory()->activity($activity)->count(5)->create();

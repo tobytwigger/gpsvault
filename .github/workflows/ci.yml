@@ -2,7 +2,9 @@ name: Run CI Checks 🔎
 
 on:
   push:
-
+    branches-ignore:
+      - main
+      - develop
 jobs:
   ci:
     runs-on: ubuntu-latest

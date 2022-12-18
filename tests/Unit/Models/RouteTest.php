@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
 use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class RouteTest extends TestCase
@@ -81,6 +84,8 @@ class RouteTest extends TestCase
     /** @test */
     public function it_has_a_relationship_with_paths()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $route = Route::factory()->create();
 
         $paths = RoutePath::factory()->count(5)->create(['route_id' => $route->id]);
@@ -96,6 +101,8 @@ class RouteTest extends TestCase
     /** @test */
     public function the_path_attribute_is_the_most_recent_path()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $route = Route::factory()->create();
 
         $paths = RoutePath::factory()->count(5)->create(['route_id' => $route->id]);

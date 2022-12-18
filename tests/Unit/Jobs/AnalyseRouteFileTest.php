@@ -3,6 +3,8 @@
 namespace Unit\Jobs;
 
 use App\Jobs\AnalyseRouteFile;
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
 use App\Models\Route;
 use App\Models\RoutePathWaypoint;
@@ -10,6 +12,7 @@ use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Analyser\Analysis;
 use App\Services\Analysis\Analyser\AnalysisFactoryContract;
 use App\Services\Analysis\Parser\Point;
+use Illuminate\Support\Facades\Bus;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use Prophecy\Argument;
 use Tests\TestCase;
@@ -36,6 +39,8 @@ class AnalyseRouteFileTest extends TestCase
     /** @test */
     public function it_saves_a_path_for_the_route()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $route = Route::factory()->create([
             'file_id' => File::factory()->routeFile()->create()->id,
         ]);
@@ -55,6 +60,8 @@ class AnalyseRouteFileTest extends TestCase
     /** @test */
     public function it_maps_stats_across_to_the_model_correctly()
     {
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
         $analysisResult = (new Analysis())
             ->setDistance(500.88)
             ->setCumulativeElevationGain(10.4)

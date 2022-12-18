@@ -1,4 +1,4 @@
-name: Run Code Style Checks
+name: Run In-Depth CI Checks 🔎
 
 on:
   push:
@@ -25,10 +25,16 @@ jobs:
           args: --ignore-platform-reqs
 
       - name: Run php cs fixer
-        run: ./vendor/bin/php-cs-fixer fix --dry-run --using-cache=no
+        run: ./vendor/bin/php-cs-fixer fix --using-cache=no
 
       - name: Apply php-cs-fixer changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Apply php-cs-fixer changes
           file_pattern: app tests database config routes
+
+      - name: Run phpinsights
+        run: ./vendor/bin/sail artisan insights --no-interaction --format=github-actions
+
+      - name: Run tests
+        run: ./vendor/bin/sail artisan test --parallel

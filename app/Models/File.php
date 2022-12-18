@@ -81,6 +81,11 @@ class File extends Model
         static::deleting(function (File $file) {
             Storage::disk($file->disk)->delete($file->path);
         });
+        static::deleted(function (File $file) {
+            if($file->thumbnail_id !== null) {
+                $file->thumbnail->delete();
+            }
+        });
     }
 
     public function user()
