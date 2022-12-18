@@ -4,7 +4,7 @@
         <c-public-nav-bar :title="title" :drawer="showingSidebar" @update:drawer="showingSidebar = $event"></c-public-nav-bar>
 
         <v-main>
-            <v-container class="fill-height" style="background-color: #f3f4f6;" fluid>
+            <v-container class="fill-height" fluid>
                 <v-row
                     align="center"
                     class="fill-height"

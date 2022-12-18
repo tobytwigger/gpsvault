@@ -15,13 +15,13 @@
                             class="text-center"
                             cols="12"
                         >
-                            <h1 class="text-h2 font-weight-bold black--text mb-4">
+                            <h1 class="text-h1 font-weight-black mb-4" :class="{'black--text': !$vuetify.theme.dark, 'white--text': $vuetify.theme.dark}">
                                 Contact Us
                             </h1>
                             <v-btn
                                 class="align-self-end"
                                 fab
-                                color="white"
+                                :color="$vuetify.theme.dark ? 'white' : 'black'"
                                 outlined
                                 @click="$vuetify.goTo('#email')"
                             >
@@ -34,7 +34,8 @@
         </div>
 
         <v-row align="center"
-               justify="center">
+               justify="center"
+               class="mb-3">
             <v-col cols="12"
                     md="4"
                     sm="8">

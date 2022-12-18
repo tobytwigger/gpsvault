@@ -1,8 +1,8 @@
 <template>
     <c-public-wrapper title="Welcome">
 
-        <div class="row">
-            <div class="col">
+        <v-row no-gutters>
+            <v-col>
                 <v-parallax
                     class="v-parallax-opaque-image"
                     src="/dist/images/public/welcome-hero-three.png"
@@ -15,16 +15,16 @@
                             class="text-center"
                             cols="12"
                         >
-                            <h1 class="text-h1 font-weight-black black--text mb-4">
+                            <h1 class="text-h1 font-weight-black mb-4" :class="{'black--text': !$vuetify.theme.dark, 'white--text': $vuetify.theme.dark}">
                                 GPS Vault
                             </h1>
-                            <h4 class="text-h3 subheading black--text mb-4">
+                            <h4 class="text-h3 subheading mb-4" :class="{'black--text': !$vuetify.theme.dark, 'white--text': $vuetify.theme.dark}">
                                 Your cycling data, your way
                             </h4>
                             <v-btn
                                 class="align-self-end"
                                 fab
-                                color="white"
+                                :color="$vuetify.theme.dark ? 'white' : 'black'"
                                 outlined
                                 @click="$vuetify.goTo('#about')"
                             >
@@ -33,9 +33,8 @@
                         </v-col>
                     </v-row>
                 </v-parallax>
-            </div>
-        </div>
-
+            </v-col>
+        </v-row>
         <div class="row">
             <div class="col">
                 <section id="about">
@@ -85,7 +84,6 @@
 
                 <section
                     id="features"
-                    class="grey lighten-3"
                 >
                     <div class="py-12"></div>
 
@@ -110,7 +108,7 @@
                             >
                                 <v-card
                                     class="py-12 px-4"
-                                    color="grey lighten-5"
+                                    :color="'lighten-5 ' + ($vuetify.theme.dark ? 'black' : 'grey')"
                                     flat
                                 >
                                     <v-theme-provider dark>
@@ -149,8 +147,8 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
+        <v-row no-gutters>
+            <v-col>
                 <section id="stats">
                     <v-parallax
                         class="v-parallax-opaque-image"
@@ -197,8 +195,8 @@
                         </v-container>
                     </v-parallax>
                 </section>
-            </div>
-        </div>
+            </v-col>
+        </v-row>
     </c-public-wrapper>
 </template>
 
@@ -273,10 +271,10 @@ export default {
 </script>
 
 <style scoped>
-    .features-coloured {
-        color: #30006a
-    }
-    i.features-coloured {
-        caret-color: #30006a;
-    }
+    /*.features-coloured {*/
+    /*    color: #30006a*/
+    /*}*/
+    /*i.features-coloured {*/
+    /*    caret-color: #30006a;*/
+    /*}*/
 </style>

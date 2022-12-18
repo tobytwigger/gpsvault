@@ -7,7 +7,8 @@
             justify="center"
         >
             <v-col
-                class="grey lighten-2 text-center"
+                class="lighten-2 text-center"
+                :class="{'grey': !$vuetify.theme.dark, 'black': $vuetify.theme.dark}"
                 cols="12"
             >
                  <small>
