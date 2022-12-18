@@ -9,13 +9,13 @@
 <!--            </template>-->
 <!--        </c-job-status>-->
 
-        <c-iterator :infinite-scroll="true" :api-route="route('api.backup.index')" item-key="id" :prepend="isGeneratingBackup">
+        <c-iterator :infinite-scroll="true" :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
             <template v-slot:prepend>
-<!--                <c-loading-backup-card-->
-<!--                    :job-status="jobStatus"-->
-<!--                    v-if="isGeneratingBackup"-->
-<!--                    @cancel="cancel">-->
-<!--                </c-loading-backup-card>-->
+                <c-loading-backup-card
+                    :job-status="jobStatus"
+                    v-if="isGeneratingBackup"
+                    @cancel="cancel">
+                </c-loading-backup-card>
             </template>
             <template v-slot:default="{item}">
                 <c-backup-card :backup="item"></c-backup-card>
@@ -48,13 +48,17 @@ export default {
         CConfirmationDialog, CPaginationIterator, CBackupCard, CActivityForm, CActivityCard, CAppWrapper
     },
     props: {
+        backups: {
+            required: true,
+            type: Object
+        }
     },
     watch: {
         jobStatus: {
             deep: true,
-            handler: function() {
-                if(this.jobStatus.status === 'succeeded') {
-                    // this.$inertia.reload();
+            handler: function(oldVal) {
+                if(this.jobStatus.status === 'succeeded' && oldVal.status !== 'succeeded') {
+                    this.$inertia.reload();
                 }
             }
         }
@@ -69,9 +73,6 @@ export default {
         createBackup() {
             this.$inertia.post(route('backup.store'), {})
         },
-        test() {
-            console.log('HI');
-        }
     },
     computed: {
         isGeneratingBackup() {

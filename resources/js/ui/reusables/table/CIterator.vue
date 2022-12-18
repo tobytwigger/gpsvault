@@ -1,7 +1,10 @@
 <template>
 
     <div>
-        <c-infinite-scroll-iterator :api-route="apiRoute" v-if="infiniteScroll" :layout="layout" :item-key="itemKey" :list-headers="listHeaders">
+        <c-infinite-scroll-iterator :prepend="prepend" :paginator="paginator" v-if="infiniteScroll" :layout="layout" :item-key="itemKey" :list-headers="listHeaders">
+            <template v-slot:prepend>
+                <slot name="prepend"></slot>
+            </template>
             <template v-slot:default="attrs">
                 <slot name="default" v-bind="attrs"></slot>
             </template>
@@ -10,7 +13,7 @@
             </template>
         </c-infinite-scroll-iterator>
 
-        <c-pagination-iterator v-else-if="paginator" :layout="layout" :paginator="paginator" :item-key="itemKey" :list-headers="listHeaders">
+        <c-pagination-iterator v-else :layout="layout" :paginator="paginator" :item-key="itemKey" :list-headers="listHeaders">
             <template v-slot:default="attrs">
                 <slot name="default" v-bind="attrs"></slot>
             </template>
@@ -34,9 +37,14 @@ export default {
     name: "CIterator",
     components: {CPaginationIterator, CInfiniteScrollIterator},
     props: {
-        apiRoute: {
+        paginator: {
             required: true,
-            type: String
+            type: Object
+        },
+        prepend: {
+            required: false,
+            type: Boolean,
+            default: false
         },
         layout: {
             required: false,
@@ -48,11 +56,6 @@ export default {
             required: false,
             type: Boolean,
             default: false
-        },
-        paginator: {
-            required: false,
-            type: Object,
-            default: null
         },
         itemKey: {
             required: true,

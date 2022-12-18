@@ -14,6 +14,10 @@
                     <slot name="footer"></slot>
                 </template>
 
+                <template v-slot:prepend>
+                    <slot name="prepend"></slot>
+                </template>
+
             </c-grid-table>
 
         </div>
@@ -60,37 +64,56 @@ export default {
             type: Array,
             default: () => []
         },
-        apiRoute: {
+        paginator: {
             required: true,
-            type: String
+            type: Object
         },
+    },
+    mounted() {
     },
     data() {
         return {
-            items: [],
-            paginator: null,
+            items: this.paginator.data,
             spinner: 'spiral',
         }
     },
     methods: {
         loadNextPage($state) {
-            if(this.paginator && (this.paginator?.current_page === this.paginator?.last_page)) {
+            if(this.paginator && this.paginator?.next_page_url === null) {
                 $state.complete();
             } else {
                 let data = {};
                 data[this.pageAttributeName] = (this.paginator?.current_page ?? 0) + 1;
                 data[this.perPageAttributeName] = 10;
-                axios.get(this.apiRoute, {params: data})
-                    .then(response => {
-                        this.paginator = response.data;
-                        this.items = this.items.concat(this.paginator.data);
+                console.log(this.paginator.path, data);
+                this.$inertia.get(this.paginator.path, data, {
+                    preserveState: true,
+                    preserveScroll: true,
+                    onBefore: () => {
+                        console.log('as');
+                    },
+                    onSuccess: () => {
+                        console.log('HI');
+                        this.items = [...this.items, ...this.paginator.data];
                         if(this.paginator.current_page >= this.paginator.last_page) {
                             $state.complete();
+                            console.log('Done');
                         } else {
                             $state.loaded();
+                            console.log('loaded');
                         }
-                    })
-                    .catch(() => $state.error());
+                    },
+                    onError: (e) => {
+                        console.log('s');
+                        console.log(e)
+                        $state.error();
+                    },
+                    onFinish: (visit) => {
+                        console.log('done');
+                        console.log(visit);
+                        window.history.replaceState({}, this.$page.title, this.paginator?.path ?? this.$page.url);
+                    }
+                });
             }
         },
     }

@@ -40,7 +40,7 @@ export default {
         }
         this.jobStatusObserver = new JobStatusObserver(this.job, this.tags);
         this.jobStatusObserver
-            .poll(this.pollInterval)
+            .poll(10000)
             .onUpdated((jobStatus) => {
                 if(this.status === 'completed') {
                     this.$emit('onCompleted');

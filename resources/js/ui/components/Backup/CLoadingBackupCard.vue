@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import moment from 'moment';
-import * as convertUnit from 'convert-units';
 import CConfirmationDialog from '../CConfirmationDialog';
 import CBackupForm from './CBackupForm';
 

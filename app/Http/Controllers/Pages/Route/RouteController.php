@@ -28,7 +28,12 @@ class RouteController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Route/Index');
+        return Inertia::render('Route/Index', [
+            'routes' => Auth::user()->routes()
+                ->orderBy('updated_at', 'DESC')
+                ->with('mainPath')
+                ->paginate(request()->input('perPage', 8)),
+        ]);
     }
 
     /**

@@ -1,6 +1,6 @@
 <template>
     <c-app-wrapper title="Your Routes" :header-action="true">
-        <c-iterator :api-route="route('api.route.index')" item-key="id" :infinite-scroll="true">
+        <c-iterator :paginator="routes" item-key="id" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-route-card :route-model="item"></c-route-card>
             </template>
@@ -67,6 +67,12 @@ import CRouteForm from 'ui/components/Route/CRouteForm';
 export default {
     name: "Index",
     components: {CRouteForm, CRouteCard, CPaginationIterator, CAppWrapper},
+    props: {
+        routes: {
+            required: true,
+            type: Object
+        }
+    },
 }
 </script>
 

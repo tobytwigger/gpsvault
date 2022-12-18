@@ -1,6 +1,6 @@
 <template>
     <c-app-wrapper title="Your Activities">
-        <c-iterator :api-route="route('api.activity.index')" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
+        <c-iterator :paginator="activities" item-key="id" :list-headers="['Name', 'Distance', 'Date', 'View']"
                   layout="cards" :infinite-scroll="true">
             <template v-slot:default="{item, isFirst}">
                 <c-activity-card :activity="item" :hints="isFirst"></c-activity-card>
@@ -70,6 +70,12 @@ export default {
         CIterator,
         CInfiniteScrollIterator, CJobStatus, CPaginationIterator, CActivityForm, CActivityCard, CAppWrapper},
     mixins: [units, shepherd],
+    props: {
+        activities: {
+            required: true,
+            type: Object
+        }
+    },
     data() {
         return {
             tourSteps: [
