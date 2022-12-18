@@ -128,7 +128,7 @@ export default {
         items() {
             let elements = [
                 {name: 'Home', url: route('welcome')},
-                {name: 'Docs', url: route('documentation'), hardUrl: true},
+                {name: 'How-to guides', url: route('documentation'), hardUrl: true},
                 {name: 'Contact', url: route('contact')}
             ];
             if(!this.$page.props.user && !this.user) {
