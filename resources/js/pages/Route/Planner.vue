@@ -174,7 +174,6 @@ export default {
                 .finally(() => this.searching = false);
         },
         save() {
-            console.log(this._calculateDataArray());
             this.isSaving = true;
             if(this.routeModel) {
                 this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
@@ -232,7 +231,6 @@ export default {
         if(this.schema.waypoints.length > 1) {
             this.performSearch();
         }
-        console.log((this.routeModel?.path?.waypoints ?? []))
         if(this.routeModel) {
             this.updateSchema({
                 waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {

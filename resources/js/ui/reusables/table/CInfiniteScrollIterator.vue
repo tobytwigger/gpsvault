@@ -21,7 +21,7 @@
             </c-grid-table>
 
         </div>
-        <infinite-loading @infinite="loadNextPage" :spinner="spinner"></infinite-loading>
+        <infinite-loading :key="uniqueInifiniteLoadingId" @infinite="loadNextPage" :spinner="spinner"></infinite-loading>
 
     </div>
 
@@ -69,12 +69,24 @@ export default {
             type: Object
         },
     },
-    mounted() {
+    watch: {
+        paginator: {
+            deep: true,
+            handler: function() {
+                this.items = this.shouldMergeItems ? [...this.items, ...this.paginator.data] : this.paginator.data;
+                if(this.shouldMergeItems === false) {
+                    // Reset the infinite loading state
+                    this.uniqueInifiniteLoadingId = (Math.random() + 1).toString(36).substring(7);
+                }
+            }
+        }
     },
     data() {
         return {
+            uniqueInifiniteLoadingId: (Math.random() + 1).toString(36).substring(7),
             items: this.paginator.data,
             spinner: 'spiral',
+            shouldMergeItems: false
         }
     },
     methods: {
@@ -85,33 +97,25 @@ export default {
                 let data = {};
                 data[this.pageAttributeName] = (this.paginator?.current_page ?? 0) + 1;
                 data[this.perPageAttributeName] = 10;
-                console.log(this.paginator.path, data);
                 this.$inertia.get(this.paginator.path, data, {
                     preserveState: true,
                     preserveScroll: true,
                     onBefore: () => {
-                        console.log('as');
+                        this.shouldMergeItems = true;
                     },
                     onSuccess: () => {
-                        console.log('HI');
-                        this.items = [...this.items, ...this.paginator.data];
                         if(this.paginator.current_page >= this.paginator.last_page) {
                             $state.complete();
-                            console.log('Done');
                         } else {
                             $state.loaded();
-                            console.log('loaded');
                         }
+                        window.history.replaceState({}, this.$page.title, this.paginator?.path ?? this.$page.url);
                     },
-                    onError: (e) => {
-                        console.log('s');
-                        console.log(e)
+                    onError: () => {
                         $state.error();
                     },
-                    onFinish: (visit) => {
-                        console.log('done');
-                        console.log(visit);
-                        window.history.replaceState({}, this.$page.title, this.paginator?.path ?? this.$page.url);
+                    onFinish: () => {
+                        this.shouldMergeItems = false;
                     }
                 });
             }

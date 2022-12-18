@@ -24,7 +24,6 @@ export default {
 
     watch: {
         value(val) {
-            console.log(val);
             this.$vuetify.theme.dark = val;
         }
     },

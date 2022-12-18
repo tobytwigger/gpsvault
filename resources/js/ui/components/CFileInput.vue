@@ -127,7 +127,6 @@ export default {
 
             filepondsArray.forEach((filepond) => {
                 filepond.addEventListener('FilePond:processfile', e => {
-                    console.log(e.detail.file);
                     this.files.push(e.detail.file);
                 })
 

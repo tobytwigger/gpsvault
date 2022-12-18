@@ -52,7 +52,6 @@ export default {
     },
     methods: {
         help() {
-            console.log(this.$tour);
             this.$tour.start();
         }
     },

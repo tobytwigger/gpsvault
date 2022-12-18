@@ -131,7 +131,9 @@ export default {
         deleteBackup() {
             this.deleting = true;
             this.$inertia.delete(route('backup.destroy', this.backup.id), {
-                onFinish: () => this.deleting = false
+                onFinish: () => {
+                    this.deleting = false;
+                }
             })
         },
         toDateTime(value) {
