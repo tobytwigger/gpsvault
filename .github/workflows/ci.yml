@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - main
       - develop
+
+concurrency: ci-${{ github.ref }}
+
 jobs:
   ci:
     runs-on: ubuntu-latest
