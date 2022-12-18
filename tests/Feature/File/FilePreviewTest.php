@@ -32,7 +32,8 @@ class FilePreviewTest extends TestCase
     }
 
     /** @test */
-    public function it_previews_the_thumbnail_file_if_one_is_set(){
+    public function it_previews_the_thumbnail_file_if_one_is_set()
+    {
         $this->authenticated();
         $path = 'preview-file-' . Str::random(10) . '.txt';
         Storage::disk('test-fake')->put($path, 'Text Content');

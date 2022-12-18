@@ -7,7 +7,6 @@ use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
 use App\Models\User;
 use App\Services\File\FileUploader;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
@@ -125,7 +124,8 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_a_thumbnail_file_when_it_is_deleted(){
+    public function it_deletes_a_thumbnail_file_when_it_is_deleted()
+    {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
 
         $thumbnail = File::factory()->image()->create();

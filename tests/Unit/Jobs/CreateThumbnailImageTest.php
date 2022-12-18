@@ -10,15 +10,15 @@ use Tests\TestCase;
 
 class CreateThumbnailImageTest extends TestCase
 {
-
     /** @test */
-    public function it_creates_a_lower_resolution_image(){
-        $file = Model::withoutEvents(fn() => File::factory()->image()->create([
+    public function it_creates_a_lower_resolution_image()
+    {
+        $file = Model::withoutEvents(fn () => File::factory()->image()->create([
             'title' => 'My file title',
-            'caption' => 'This is my file caption'
+            'caption' => 'This is my file caption',
         ]));
 
-        $this->assertDatabaseCount( 'files', 1);
+        $this->assertDatabaseCount('files', 1);
 
         $this->assertEquals(1023, Image::make($file->getFileContents())->width());
         $this->assertEquals(682, Image::make($file->getFileContents())->height());
@@ -26,7 +26,7 @@ class CreateThumbnailImageTest extends TestCase
         $job = new  CreateThumbnailImage($file);
         $job->handle();
 
-        $this->assertDatabaseCount( 'files', 2);
+        $this->assertDatabaseCount('files', 2);
 
         $retrievedFile = File::orderBy('id', 'DESC')->first();
 
@@ -34,22 +34,22 @@ class CreateThumbnailImageTest extends TestCase
         $this->assertEquals('This is my file caption', $retrievedFile->caption);
         $this->assertEquals(344, Image::make($retrievedFile->getFileContents())->width());
         $this->assertEquals(229, Image::make($retrievedFile->getFileContents())->height());
-
     }
 
     /** @test */
-    public function it_creates_a_lower_resolution_image_on_a_file_being_saved(){
-        $this->assertDatabaseCount( 'files', 0);
+    public function it_creates_a_lower_resolution_image_on_a_file_being_saved()
+    {
+        $this->assertDatabaseCount('files', 0);
 
         $file = File::factory()->image()->create([
             'title' => 'My file title',
-            'caption' => 'This is my file caption'
+            'caption' => 'This is my file caption',
         ]);
 
         $this->assertEquals(1023, Image::make($file->getFileContents())->width());
         $this->assertEquals(682, Image::make($file->getFileContents())->height());
 
-        $this->assertDatabaseCount( 'files', 2);
+        $this->assertDatabaseCount('files', 2);
 
         $retrievedFile = File::orderBy('id', 'DESC')->first();
 
@@ -58,5 +58,4 @@ class CreateThumbnailImageTest extends TestCase
         $this->assertEquals(344, Image::make($retrievedFile->getFileContents())->width());
         $this->assertEquals(229, Image::make($retrievedFile->getFileContents())->height());
     }
-
 }

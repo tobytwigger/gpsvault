@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Route;
 
 use App\Models\Route;
 use Carbon\Carbon;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class RouteIndexTest extends TestCase

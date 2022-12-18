@@ -53,6 +53,6 @@ return [
     ],
     
     'images' => [
-        'driver' => 'gd'
-    ]
+        'driver' => 'gd',
+    ],
 ];

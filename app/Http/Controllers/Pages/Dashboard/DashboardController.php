@@ -26,5 +26,4 @@ class DashboardController extends Controller
                 ->map->toSchema(),
         ]);
     }
-    
 }

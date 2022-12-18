@@ -27,7 +27,7 @@ class FileFactory extends Factory
             'disk' => 'test-fake',
             'hash' => Str::random(32),
             'user_id' => fn () => User::factory(),
-            'thumbnail_id' => null
+            'thumbnail_id' => null,
         ];
     }
 
