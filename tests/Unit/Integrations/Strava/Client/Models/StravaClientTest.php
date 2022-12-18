@@ -370,9 +370,9 @@ class StravaClientTest extends TestCase
 
         $client1 = StravaClient::factory()->create();
         $client2 = StravaClient::factory()->create();
-        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client2->id, 'expires_at' => now()->addYear()]);
         $client3 = StravaClient::factory()->create();
-        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id]);
+        StravaToken::factory()->create(['user_id' => $user->id, 'strava_client_id' => $client3->id, 'expires_at' => now()->addYear()]);
 
         $this->assertCount(2, StravaClient::connected($user->id)->get());
 
