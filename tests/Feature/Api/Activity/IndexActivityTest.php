@@ -5,12 +5,10 @@ namespace Tests\Feature\Api\Activity;
 use App\Models\Activity;
 use App\Models\Stats;
 use Carbon\Carbon;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class IndexActivityTest extends TestCase
 {
-
     /** @test */
     public function index_loads_activities_ordered_by_date()
     {
@@ -64,5 +62,4 @@ class IndexActivityTest extends TestCase
     {
         $this->getJson(route('api.activity.index'))->assertUnauthorized();
     }
-
 }

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api\Place;
 
 use App\Models\Place;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class PlaceIndexTest extends TestCase

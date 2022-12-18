@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Backup;
 
 use App\Models\File;
 use Carbon\Carbon;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class BackupIndexTest extends TestCase

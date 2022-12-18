@@ -54,7 +54,7 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash', 'thumbnail_id'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash', 'thumbnail_id',
     ];
 
     protected $casts = [
@@ -73,8 +73,8 @@ class File extends Model
                 $file->hash = md5($file->getFileContents());
             }
         });
-        static::created(function(File $file) {
-            if(Str::contains($file->mimetype, 'image') && $file->type !== FileUploader::IMAGE_THUMBNAIL) {
+        static::created(function (File $file) {
+            if (Str::contains($file->mimetype, 'image') && $file->type !== FileUploader::IMAGE_THUMBNAIL) {
                 CreateThumbnailImage::dispatch($file);
             }
         });
@@ -82,7 +82,7 @@ class File extends Model
             Storage::disk($file->disk)->delete($file->path);
         });
         static::deleted(function (File $file) {
-            if($file->thumbnail_id !== null) {
+            if ($file->thumbnail_id !== null) {
                 $file->thumbnail->delete();
             }
         });

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class BackupController extends Controller
 {
-
     public function index()
     {
         return File::where('type', FileUploader::ARCHIVE)
@@ -17,5 +16,4 @@ class BackupController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(request()->input('perPage', 8));
     }
-
 }
