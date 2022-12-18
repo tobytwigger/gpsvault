@@ -13,7 +13,7 @@ class CreateThumbnailImageTest extends TestCase
     /** @test */
     public function it_creates_a_lower_resolution_image()
     {
-        $file = Model::withoutEvents(fn () => File::factory()->image()->create([
+        $file = Model::withoutEvents(fn () => File::factory()->image()->withoutThumbnail()->create([
             'title' => 'My file title',
             'caption' => 'This is my file caption',
         ]));
@@ -41,7 +41,7 @@ class CreateThumbnailImageTest extends TestCase
     {
         $this->assertDatabaseCount('files', 0);
 
-        $file = File::factory()->image()->create([
+        $file = File::factory()->image()->withoutThumbnail()->create([
             'title' => 'My file title',
             'caption' => 'This is my file caption',
         ]);
@@ -81,5 +81,22 @@ class CreateThumbnailImageTest extends TestCase
         $file->refresh();
         $this->assertNotEquals($file->thumbnail_id, $oldThumbnail->id);
         $this->assertDatabaseMissing('files', ['id' => $oldThumbnail->id]);
+    }
+
+    /** @test */
+    public function the_width_can_be_changed()
+    {
+        $file = Model::withoutEvents(fn () => File::factory()->image()->create());
+
+        $this->assertEquals(1023, Image::make($file->getFileContents())->width());
+        $this->assertEquals(682, Image::make($file->getFileContents())->height());
+
+        $job = new  CreateThumbnailImage($file, 200);
+        $job->handle();
+
+        $retrievedFile = File::orderBy('id', 'DESC')->first();
+
+        $this->assertEquals(200, Image::make($retrievedFile->getFileContents())->width());
+        $this->assertEquals(133, Image::make($retrievedFile->getFileContents())->height());
     }
 }

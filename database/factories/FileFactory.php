@@ -37,15 +37,21 @@ class FileFactory extends Factory
             'thumbnail_id' => File::factory()->thumbnail()
         ]);
     }
-    
+
+    public function withoutThumbnail()
+    {
+        return $this->state(fn(array $attributes) => [
+            'thumbnail_id' => null
+        ]);
+    }
+
     public function thumbnail()
     {
         $path = 'map_thumbnails/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
 
-        return $this->state(fn (array $attributes) => [
+        return $this->withoutThumbnail()->state(fn (array $attributes) => [
             'path' => $path,
-            'thumbnail_id' => null,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
             'type' => FileUploader::IMAGE_THUMBNAIL,
@@ -58,7 +64,7 @@ class FileFactory extends Factory
         $path = 'map_thumbnails/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
 
-        return $this->state(fn (array $attributes) => [
+        return $this->withThumbnail()->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
@@ -72,7 +78,7 @@ class FileFactory extends Factory
         $path = 'routeMedia/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
 
-        return $this->state(fn (array $attributes) => [
+        return $this->withThumbnail()->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',
@@ -86,7 +92,7 @@ class FileFactory extends Factory
         $path = 'activityMedia/' . Str::random(40) . '.jpeg';
         Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image2.jpeg')));
 
-        return $this->state(fn (array $attributes) => [
+        return $this->withThumbnail()->state(fn (array $attributes) => [
             'path' => $path,
             'filename' => $this->faker->word . '.jpeg',
             'extension' => 'jpeg',

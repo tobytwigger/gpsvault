@@ -63,7 +63,7 @@ class RouteFileUpdateTest extends TestCase
 
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $file = File::factory()->routeMedia()->create(['user_id' => $this->user->id]);
+        $file = File::factory()->routeMedia()->withoutThumbnail()->create(['user_id' => $this->user->id]);
         $route->files()->sync($file);
 
         $response = $this->put(route('route.file.update', [$route, $file]), [

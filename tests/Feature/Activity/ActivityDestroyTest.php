@@ -50,8 +50,8 @@ class ActivityDestroyTest extends TestCase
 
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
-        $files = File::factory()->count(5)->activityMedia()->create();
-        File::factory()->count(5)->activityMedia()->create();
+        $files = File::factory()->count(5)->activityMedia()->withoutThumbnail()->create();
+        File::factory()->count(5)->activityMedia()->withoutThumbnail()->create();
 
         $activity->files()->sync($files->pluck('id'));
 

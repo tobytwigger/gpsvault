@@ -2,9 +2,11 @@
 
 namespace Tests\Feature\Activity;
 
+use App\Jobs\CreateThumbnailImage;
 use App\Models\Activity;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class ActivityFileDestroyTest extends TestCase
