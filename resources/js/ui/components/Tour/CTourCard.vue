@@ -87,6 +87,7 @@ export default {
                 let converted = this.convert(value, 'distance');
                 return converted.value + converted.unit;
             }
+            return 'N/A';
         },
         convertElevation(value) {
             if(value) {
