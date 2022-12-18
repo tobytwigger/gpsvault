@@ -2,6 +2,7 @@
     <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
             <v-btn
+                class="mx-2"
                 v-if="bruitConfig"
                 fab
                 small
@@ -9,7 +10,7 @@
                 v-on="on"
             >
                 <bruit-io v-bind:config.prop="bruitConfig">
-                    <v-icon>mdi-bug</v-icon>
+                    <v-icon>mdi-comment-text</v-icon>
                 </bruit-io>
             </v-btn>
         </template>

@@ -9,7 +9,7 @@
 
         <v-spacer></v-spacer>
 
-        <c-feedback class="mx-2"></c-feedback>
+        <c-feedback></c-feedback>
 
         <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
