@@ -77,7 +77,7 @@ class ActivityFileUpdateTest extends TestCase
 
         $this->authenticated();
         $activity = Activity::factory()->create(['user_id' => $this->user->id]);
-        $file = File::factory()->activityMedia()->create(['user_id' => $this->user->id]);
+        $file = File::factory()->activityMedia()->withoutThumbnail()->create(['user_id' => $this->user->id]);
         $activity->files()->sync($file);
 
         $response = $this->put(route('activity.file.update', [$activity, $file]), [

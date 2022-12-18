@@ -39,7 +39,7 @@ abstract class TestCase extends BaseTestCase
     public function authenticatedWithSanctum(array $parameters = [])
     {
         $this->user = $this->user ?? User::factory()->create($parameters);
-        
+
         Sanctum::actingAs($this->user);
     }
     public function authenticated(array $parameters = [], ?string $guard = null)

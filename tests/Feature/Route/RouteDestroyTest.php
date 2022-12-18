@@ -50,8 +50,8 @@ class RouteDestroyTest extends TestCase
 
         $this->authenticated();
         $route = Route::factory()->create(['user_id' => $this->user->id]);
-        $files = File::factory()->count(5)->routeMedia()->create();
-        File::factory()->count(5)->routeMedia()->create();
+        $files = File::factory()->count(5)->routeMedia()->withoutThumbnail()->create();
+        File::factory()->count(5)->routeMedia()->withoutThumbnail()->create();
         $route->files()->sync($files->pluck('id'));
 
         $this->assertDatabaseCount('files', 10);

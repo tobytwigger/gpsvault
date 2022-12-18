@@ -24,7 +24,6 @@
             <slot name="actions"></slot>
         </v-card-actions>
     </v-card>
-    <!--                    'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash'-->
 </template>
 
 <script>

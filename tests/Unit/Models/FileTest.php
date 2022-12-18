@@ -128,7 +128,7 @@ class FileTest extends TestCase
     {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
 
-        $thumbnail = File::factory()->image()->create();
+        $thumbnail = File::factory()->thumbnail()->create();
         $file = File::factory()->image()->create(['thumbnail_id' => $thumbnail->id]);
 
         $this->assertDatabaseCount('files', 2);

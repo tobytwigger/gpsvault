@@ -11,7 +11,7 @@ class FilePreviewController extends Controller
     {
         $this->authorize('view', $file);
 
-        if ($file->thumbnail_id !== null) {
+        if ($file->thumbnail_id !== null && request()->input('highResolution', false) === false) {
             $file = $file->thumbnail;
         }
 

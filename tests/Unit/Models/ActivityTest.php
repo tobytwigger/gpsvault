@@ -32,12 +32,12 @@ class ActivityTest extends TestCase
     {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
 
-        $file = File::factory()->activityFile()->create();
+        $file = File::factory()->activityFile()->withoutThumbnail()->create();
         $activity = Activity::factory()->create(['file_id' => $file->id]);
         Stats::factory()->activity($activity)->count(5)->create();
         StravaComment::factory()->count(5)->create(['activity_id' => $activity->id]);
         StravaKudos::factory()->count(5)->create(['activity_id' => $activity->id]);
-        $files = File::factory()->activityMedia()->count(5)->create();
+        $files = File::factory()->activityMedia()->withoutThumbnail()->count(5)->create();
         $activity->files()->attach($files);
 
         $this->assertDatabaseCount('stats', 5);
