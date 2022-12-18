@@ -32,6 +32,30 @@ class FilePreviewTest extends TestCase
     }
 
     /** @test */
+    public function it_previews_the_thumbnail_file_if_one_is_set(){
+        $this->authenticated();
+        $path = 'preview-file-' . Str::random(10) . '.txt';
+        Storage::disk('test-fake')->put($path, 'Text Content');
+        $thumbnail = File::factory()->image()->create([
+            'user_id' => $this->user->id,
+            'type' => FileUploader::IMAGE_THUMBNAIL,
+        ]);
+        $file = File::factory()->create([
+            'thumbnail_id' => $thumbnail->id,
+            'path' => $path,
+            'disk' => 'test-fake',
+            'user_id' => $this->user->id,
+            'filename' => 'filename.jpeg',
+            'mimetype' => 'text/plain',
+            'extension' => 'txt',
+            'type' => FileUploader::ACTIVITY_MEDIA,
+        ]);
+        $response = $this->get(route('file.preview', $file));
+
+        $response->assertHeader('Content-Type', 'image/jpeg');
+    }
+
+    /** @test */
     public function you_can_only_preview_your_own_files()
     {
         $this->authenticated();

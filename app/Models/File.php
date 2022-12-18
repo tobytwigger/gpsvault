@@ -54,12 +54,11 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash', 'thumbnail_id', 'is_thumbnail'
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash', 'thumbnail_id'
     ];
 
     protected $casts = [
         'user_id' => 'integer',
-        'is_thumbnail' => 'boolean'
     ];
 
     protected static function booted()
