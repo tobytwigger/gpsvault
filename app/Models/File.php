@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Services\File\FileUploader;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -51,11 +54,12 @@ class File extends Model
     use HasFactory;
 
     protected $fillable = [
-        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash',
+        'path', 'filename', 'size', 'title', 'caption', 'mimetype', 'disk', 'extension', 'disk', 'user_id', 'type', 'hash', 'thumbnail_id', 'is_thumbnail'
     ];
 
     protected $casts = [
         'user_id' => 'integer',
+        'is_thumbnail' => 'boolean'
     ];
 
     protected static function booted()
@@ -68,6 +72,11 @@ class File extends Model
         static::creating(function (File $file) {
             if ($file->hash === null) {
                 $file->hash = md5($file->getFileContents());
+            }
+        });
+        static::created(function(File $file) {
+            if(Str::contains($file->mimetype, 'image') && $file->type !== FileUploader::IMAGE_THUMBNAIL) {
+                CreateThumbnailImage::dispatch($file);
             }
         });
         static::deleting(function (File $file) {
@@ -83,6 +92,11 @@ class File extends Model
     public function fullPath()
     {
         return Storage::disk($this->disk)->path($this->path);
+    }
+
+    public function thumbnail()
+    {
+        return $this->belongsTo(File::class, 'thumbnail_id');
     }
 
     public function getFileContents()

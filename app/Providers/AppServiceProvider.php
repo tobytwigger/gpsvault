@@ -8,6 +8,7 @@ use App\Settings\StravaClient;
 use App\Settings\UnitSystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Intervention\Image\Facades\Image;
 use Settings\Setting;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Setting::register(new DarkMode());
         Setting::register(new StravaClient());
         Setting::register(new StatsOrder());
+
+        Image::configure(['driver' => config('services.images.driver')]);
     }
 }

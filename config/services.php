@@ -51,4 +51,8 @@ return [
         'width' => 344,
         'height' => 200,
     ],
+    
+    'images' => [
+        'driver' => 'gd'
+    ]
 ];

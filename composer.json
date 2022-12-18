@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.1",
         "ext-curl": "*",
+        "ext-gd": "*",
         "ext-zlib": "*",
         "adriangibbons/php-fit-file-analysis": "^3.2",
         "barryvdh/laravel-debugbar": "^3.6",
@@ -23,6 +24,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0",
         "inertiajs/inertia-laravel": "^0.5.4",
+        "intervention/image": "^2.7",
         "kunalvarma05/dropbox-php-sdk": "^0.2.2",
         "larabug/larabug": "^2.4",
         "laravel/framework": "^9.23.0",

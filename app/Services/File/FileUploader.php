@@ -29,6 +29,8 @@ class FileUploader
 
     public const ROUTE_MEDIA = 'route_media';
 
+    public const IMAGE_THUMBNAIL = 'image_thumbnail';
+
     public function withContents(string $contents, string $filename, User $user, string $type): File
     {
         $path = sprintf('%s/%s', $type, $filename);

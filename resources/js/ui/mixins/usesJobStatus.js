@@ -21,7 +21,7 @@ export default {
             initialStatusLoad: false,
             statusError: null,
             jobStatusObserver: null,
-            pollInterval: 1000
+            pollInterval: 10000
         };
     },
     methods: {
