@@ -27,7 +27,22 @@ class FileFactory extends Factory
             'disk' => 'test-fake',
             'hash' => Str::random(32),
             'user_id' => fn () => User::factory(),
+            'thumbnail_id' => null
         ];
+    }
+
+    public function image()
+    {
+        $path = 'map_thumbnails/' . Str::random(40) . '.jpeg';
+        Storage::disk('test-fake')->put($path, file_get_contents(base_path('tests/assets/images/image1.jpeg')));
+
+        return $this->state(fn (array $attributes) => [
+            'path' => $path,
+            'filename' => $this->faker->word . '.jpeg',
+            'extension' => 'jpeg',
+            'type' => FileUploader::MAP_THUMBNAIL,
+            'mimetype' => 'image/jpeg',
+        ]);
     }
 
     public function routeMedia()
