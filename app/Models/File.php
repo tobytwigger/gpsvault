@@ -48,6 +48,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  * @method static \Illuminate\Database\Eloquent\Builder|File whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|File whereUserId($value)
  * @mixin \Eloquent
+ * @property int|null $thumbnail_id
+ * @property bool $is_thumbnail
+ * @property-read File|null $thumbnail
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereIsThumbnail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|File whereThumbnailId($value)
  */
 class File extends Model
 {

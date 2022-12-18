@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 9.39.0.
+ * Generated for Laravel 9.40.1.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -3079,108 +3079,154 @@
      */ 
         class Bus {
                     /**
-         * 
+         * Dispatch a command to its appropriate handler.
          *
+         * @param mixed $command
+         * @return mixed 
          * @static 
          */ 
         public static function dispatch($command)
         {
-                        /** @var \JobStatus\Dispatcher $instance */
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
                         return $instance->dispatch($command);
         }
                     /**
+         * Dispatch a command to its appropriate handler in the current process.
          * 
+         * Queueable jobs will be dispatched to the "sync" queue.
          *
+         * @param mixed $command
+         * @param mixed $handler
+         * @return mixed 
          * @static 
          */ 
         public static function dispatchSync($command, $handler = null)
         {
-                        /** @var \JobStatus\Dispatcher $instance */
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
                         return $instance->dispatchSync($command, $handler);
         }
                     /**
-         * 
+         * Dispatch a command to its appropriate handler in the current process without using the synchronous queue.
          *
+         * @param mixed $command
+         * @param mixed $handler
+         * @return mixed 
          * @static 
          */ 
         public static function dispatchNow($command, $handler = null)
         {
-                        /** @var \JobStatus\Dispatcher $instance */
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
                         return $instance->dispatchNow($command, $handler);
         }
                     /**
-         * 
+         * Attempt to find the batch with the given ID.
          *
-         * @static 
-         */ 
-        public static function dispatchToQueue($command)
-        {
-                        /** @var \JobStatus\Dispatcher $instance */
-                        return $instance->dispatchToQueue($command);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function hasCommandHandler($command)
-        {
-                        /** @var \JobStatus\Dispatcher $instance */
-                        return $instance->hasCommandHandler($command);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getCommandHandler($command)
-        {
-                        /** @var \JobStatus\Dispatcher $instance */
-                        return $instance->getCommandHandler($command);
-        }
-                    /**
-         * 
-         *
-         * @param array $pipes
-         * @return \Illuminate\Contracts\Bus\Dispatcher 
-         * @static 
-         */ 
-        public static function pipeThrough($pipes)
-        {
-                        /** @var \JobStatus\Dispatcher $instance */
-                        return $instance->pipeThrough($pipes);
-        }
-                    /**
-         * 
-         *
-         * @param array $map
-         * @return \Illuminate\Contracts\Bus\Dispatcher 
-         * @static 
-         */ 
-        public static function map($map)
-        {
-                        /** @var \JobStatus\Dispatcher $instance */
-                        return $instance->map($map);
-        }
-                    /**
-         * 
-         *
+         * @param string $batchId
+         * @return \Illuminate\Bus\Batch|null 
          * @static 
          */ 
         public static function findBatch($batchId)
         {
-                        /** @var \JobStatus\Dispatcher $instance */
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
                         return $instance->findBatch($batchId);
         }
                     /**
-         * 
+         * Create a new batch of queueable jobs.
          *
+         * @param \Illuminate\Support\Collection|array|mixed $jobs
+         * @return \Illuminate\Bus\PendingBatch 
          * @static 
          */ 
         public static function batch($jobs)
         {
-                        /** @var \JobStatus\Dispatcher $instance */
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
                         return $instance->batch($jobs);
+        }
+                    /**
+         * Create a new chain of queueable jobs.
+         *
+         * @param \Illuminate\Support\Collection|array $jobs
+         * @return \Illuminate\Foundation\Bus\PendingChain 
+         * @static 
+         */ 
+        public static function chain($jobs)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->chain($jobs);
+        }
+                    /**
+         * Determine if the given command has a handler.
+         *
+         * @param mixed $command
+         * @return bool 
+         * @static 
+         */ 
+        public static function hasCommandHandler($command)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->hasCommandHandler($command);
+        }
+                    /**
+         * Retrieve the handler for a command.
+         *
+         * @param mixed $command
+         * @return bool|mixed 
+         * @static 
+         */ 
+        public static function getCommandHandler($command)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->getCommandHandler($command);
+        }
+                    /**
+         * Dispatch a command to its appropriate handler behind a queue.
+         *
+         * @param mixed $command
+         * @return mixed 
+         * @throws \RuntimeException
+         * @static 
+         */ 
+        public static function dispatchToQueue($command)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->dispatchToQueue($command);
+        }
+                    /**
+         * Dispatch a command to its appropriate handler after the current process.
+         *
+         * @param mixed $command
+         * @param mixed $handler
+         * @return void 
+         * @static 
+         */ 
+        public static function dispatchAfterResponse($command, $handler = null)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        $instance->dispatchAfterResponse($command, $handler);
+        }
+                    /**
+         * Set the pipes through which commands should be piped before dispatching.
+         *
+         * @param array $pipes
+         * @return \Illuminate\Bus\Dispatcher 
+         * @static 
+         */ 
+        public static function pipeThrough($pipes)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->pipeThrough($pipes);
+        }
+                    /**
+         * Map a command to a handler.
+         *
+         * @param array $map
+         * @return \Illuminate\Bus\Dispatcher 
+         * @static 
+         */ 
+        public static function map($map)
+        {
+                        /** @var \Illuminate\Bus\Dispatcher $instance */
+                        return $instance->map($map);
         }
                     /**
          * Specify the jobs that should be dispatched instead of faked.
@@ -3468,30 +3514,6 @@
         {
                         /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
                         return $instance->hasDispatchedAfterResponse($command);
-        }
-                    /**
-         * Dispatch a command to its appropriate handler.
-         *
-         * @param mixed $command
-         * @return mixed 
-         * @static 
-         */ 
-        public static function dispatchAfterResponse($command)
-        {
-                        /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
-                        return $instance->dispatchAfterResponse($command);
-        }
-                    /**
-         * Create a new chain of queueable jobs.
-         *
-         * @param \Illuminate\Support\Collection|array $jobs
-         * @return \Illuminate\Foundation\Bus\PendingChain 
-         * @static 
-         */ 
-        public static function chain($jobs)
-        {
-                        /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
-                        return $instance->chain($jobs);
         }
                     /**
          * Dispatch an empty job batch for testing.
@@ -17872,6 +17894,70 @@
      
 }
 
+    namespace Intervention\Image\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Image {
+                    /**
+         * Overrides configuration settings
+         *
+         * @param array $config
+         * @return self 
+         * @static 
+         */ 
+        public static function configure($config = [])
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->configure($config);
+        }
+                    /**
+         * Initiates an Image instance from different input types
+         *
+         * @param mixed $data
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function make($data)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->make($data);
+        }
+                    /**
+         * Creates an empty image canvas
+         *
+         * @param int $width
+         * @param int $height
+         * @param mixed $background
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function canvas($width, $height, $background = null)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->canvas($width, $height, $background);
+        }
+                    /**
+         * Create new cached image and run callback
+         * (requires additional package intervention/imagecache)
+         *
+         * @param \Closure $callback
+         * @param int $lifetime
+         * @param boolean $returnObj
+         * @return \Image 
+         * @static 
+         */ 
+        public static function cache($callback, $lifetime = null, $returnObj = false)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->cache($callback, $lifetime, $returnObj);
+        }
+         
+    }
+     
+}
+
     namespace Jenssegers\Agent\Facades { 
             /**
      * 
@@ -23237,6 +23323,7 @@ namespace  {
             class View extends \Illuminate\Support\Facades\View {}
             class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class LaRecipe extends \BinaryTorch\LaRecipe\LaRecipe {}
+            class Image extends \Intervention\Image\Facades\Image {}
             class Agent extends \Jenssegers\Agent\Facades\Agent {}
             class Horizon extends \Laravel\Horizon\Horizon {}
             class UrlSigner extends \Linkeys\UrlSigner\Facade\UrlSigner {}
