@@ -24,7 +24,7 @@
                                 justify="center"
                             >
                                 <v-scale-transition>
-                                    <v-img :src="image.src" :alt="image.alt" @click="toggle" height="200" width="100"></v-img>
+                                    <v-img :src="image.thumbnail" :alt="image.alt" @click="toggle" height="200" width="100"></v-img>
                                 </v-scale-transition>
                             </v-row>
                         </v-card-text>

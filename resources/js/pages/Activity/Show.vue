@@ -267,7 +267,8 @@ export default {
                 .map(file => {
                     return {
                         alt: file.caption,
-                        src: route('file.preview', file.id)
+                        thumbnail: route('file.preview', file.id),
+                        src: route('file.preview', {file: file.id, highResolution: true})
                     }
                 });
         },
