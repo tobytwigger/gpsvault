@@ -74,7 +74,7 @@ class File extends Model
             }
         });
         static::created(function (File $file) {
-            if (Str::contains($file->mimetype, 'image') && $file->type !== FileUploader::IMAGE_THUMBNAIL) {
+            if ($file->thumbnail_id === null && Str::contains($file->mimetype, 'image') && $file->type !== FileUploader::IMAGE_THUMBNAIL) {
                 CreateThumbnailImage::dispatch($file);
             }
         });

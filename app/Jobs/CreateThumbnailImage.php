@@ -42,10 +42,14 @@ class CreateThumbnailImage implements ShouldQueue
             $this->file->user,
             FileUploader::IMAGE_THUMBNAIL
         );
+
         $compressedFile->title = $this->file->title;
         $compressedFile->caption = $this->file->caption;
         $compressedFile->save();
 
+        if($this->file->thumbnail_id !== null) {
+            $this->file->thumbnail()->delete();
+        }
         $this->file->thumbnail_id = $compressedFile->id;
         $this->file->save();
     }
