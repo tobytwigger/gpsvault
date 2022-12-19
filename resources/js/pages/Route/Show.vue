@@ -13,14 +13,14 @@
                 <v-icon>mdi-information</v-icon>
             </v-tab>
 
+            <v-tab href="#tab-timeline">
+                Timeline
+                <v-icon>mdi-timeline-text</v-icon>
+            </v-tab>
+
             <v-tab href="#tab-files">
                 Files
                 <v-icon>mdi-file-document-multiple</v-icon>
-            </v-tab>
-
-            <v-tab href="#tab-waypoints">
-                Places
-                <v-icon>mdi-map-marker</v-icon>
             </v-tab>
         </v-tabs>
 
@@ -61,9 +61,12 @@
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-route-map :places="places.data" v-if="routePath" :geojson="routePath"></c-route-map>
+                        <c-route-map :places="places" v-if="routePath" :geojson="routePath"></c-route-map>
                     </v-col>
                 </v-row>
+            </v-tab-item>
+            <v-tab-item value="tab-timeline">
+                <c-route-timeline :route-model="routeModel"></c-route-timeline>
             </v-tab-item>
             <v-tab-item value="tab-files">
                 <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file">
@@ -83,52 +86,53 @@
 
             <v-tab-item value="tab-waypoints">
 
-                <v-row
-                    align="center"
-                    justify="center">
-                    <v-col>
+<!--                <v-row-->
+<!--                    align="center"-->
+<!--                    justify="center">-->
+<!--                    <v-col>-->
 
-                        <c-pagination-iterator :paginator="places" item-key="id">
-                            <template v-slot:default="{item}">
-                                <c-place-card :place="item">
-                                    <template v-slot:icons>
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on, attrs }">
-                                                <v-btn
-                                                    icon
-                                                    @click="removeFromRoute(item)"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                >
-                                                    <v-icon>mdi-minus</v-icon>
-                                                </v-btn>
-                                            </template>
-                                            Remove from route
-                                        </v-tooltip>
-                                    </template>
-                                </c-place-card>
-                            </template>
-                        </c-pagination-iterator>
-                    </v-col>
-                </v-row>
+<!--                        <c-pagination-iterator :paginator="places" item-key="id">-->
+<!--                            <template v-slot:default="{item}">-->
+<!--                                <c-place-card :place="item">-->
+<!--                                    <template v-slot:icons>-->
+<!--                                        <v-tooltip bottom>-->
+<!--                                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                                <v-btn-->
+<!--                                                    icon-->
+<!--                                                    @click="removeFromRoute(item)"-->
+<!--                                                    v-bind="attrs"-->
+<!--                                                    v-on="on"-->
+<!--                                                >-->
+<!--                                                    <v-icon>mdi-minus</v-icon>-->
+<!--                                                </v-btn>-->
+<!--                                            </template>-->
+<!--                                            Remove from route-->
+<!--                                        </v-tooltip>-->
+<!--                                    </template>-->
+<!--                                </c-place-card>-->
+<!--                            </template>-->
+<!--                        </c-pagination-iterator>-->
+<!--                    </v-col>-->
+<!--                </v-row>-->
 
 
-                <v-row
-                    align="center"
-                    justify="center">
-                    <v-col>
-                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute" title="Search for a place" button-text="Add to route">
-                            <template v-slot:activator="{trigger,showing}">
-                                <v-btn :disabled="showing" @click="trigger">
-                                    Find Places
-                                </v-btn>
-                            </template>
-                        </c-place-search>
-                    </v-col>
-                </v-row>
+<!--                <v-row-->
+<!--                    align="center"-->
+<!--                    justify="center">-->
+<!--                    <v-col>-->
+<!--                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute" title="Search for a place" button-text="Add to route">-->
+<!--                            <template v-slot:activator="{trigger,showing}">-->
+<!--                                <v-btn :disabled="showing" @click="trigger">-->
+<!--                                    Find Places-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                        </c-place-search>-->
+<!--                    </v-col>-->
+<!--                </v-row>-->
             </v-tab-item>
 
         </v-tabs-items>
+
         <c-delete-route-button :route-model="routeModel" v-model="showingRouteDeleteForm"></c-delete-route-button>
         <c-route-form :old-route="routeModel" title="Edit route" button-text="Update" v-model="showingRouteEditForm"></c-route-form>
 
@@ -148,10 +152,12 @@ import CActivityLocationSummary from '../../ui/components/CActivityLocationSumma
 import CPaginationIterator from '../../ui/reusables/table/CPaginationIterator';
 import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
+import CRouteTimeline from '../../ui/components/Route/CRouteTimeline';
 
 export default {
     name: "Show",
     components: {
+        CRouteTimeline,
         CPlaceSearch,
         CPlaceCard,
         CPaginationIterator,
@@ -163,10 +169,6 @@ export default {
             required: true,
             type: Object
         },
-        places: {
-            required: true,
-            type: Object
-        }
     },
     data() {
         return {
@@ -193,6 +195,13 @@ export default {
         }
     },
     computed: {
+        places() {
+            if(this.routeModel.path) {
+                return this.routeModel.path.waypoints.filter(w => w.place_id !== null)
+                    .map(w => w.place)
+            }
+            return [];
+        },
         pageTitle() {
             return this.routeModel?.name ?? 'New Route';
         },

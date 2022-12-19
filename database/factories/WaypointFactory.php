@@ -23,4 +23,11 @@ class WaypointFactory extends Factory
             'location' => new Point(-0.770416, 52.027825),
         ];
     }
+
+    public function place(Place $place)
+    {
+        return $this->state(fn (array $attributes) => [
+            'place_id' => $place->id
+        ]);
+    }
 }

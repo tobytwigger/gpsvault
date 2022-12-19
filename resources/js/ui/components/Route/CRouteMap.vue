@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{markers}}
         <div v-if="loading">Loading map</div>
         <div v-else-if="geojson === null">No route could be plotted</div>
         <c-map :geojson="geojson" v-else></c-map>

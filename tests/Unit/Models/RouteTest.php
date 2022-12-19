@@ -66,22 +66,6 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function it_has_many_places()
-    {
-        $route = Route::factory()->create();
-
-        $place1 = Place::factory()->create();
-        $place2 = Place::factory()->create();
-        $place3 = Place::factory()->create();
-
-        $route->places()->attach([$place1->id, $place2->id]);
-
-        $this->assertCount(2, $route->places);
-        $this->assertTrue($place1->is($route->places[0]));
-        $this->assertTrue($place2->is($route->places[1]));
-    }
-
-    /** @test */
     public function it_has_a_relationship_with_paths()
     {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);

@@ -89,7 +89,7 @@ class RoutePath extends Model
 
     public function getWaypointsAttribute()
     {
-        return $this->routePathWaypoints()->ordered()->with('waypoint')->get()
+        return $this->routePathWaypoints()->ordered()->with('waypoint', 'waypoint.place')->get()
             ->map(fn (RoutePathWaypoint $pivot) => $pivot->waypoint);
     }
 

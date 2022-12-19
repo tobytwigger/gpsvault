@@ -2,26 +2,22 @@
 
 namespace Tests\Unit\Models;
 
+use App\Jobs\CreateThumbnailImage;
+use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Place;
 use App\Models\Route;
+use App\Models\RoutePath;
+use App\Models\User;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class PlaceTest extends TestCase
 {
-    /** @test */
-    public function it_has_many_routes()
+    public function it_has_a_user()
     {
-        /** @var Place $place */
-        $place = Place::factory()->create();
+        $user = User::factory()->create();
+        $place = Place::factory()->create(['user_id' => $user->id]);
 
-        $route1 = Route::factory()->create();
-        $route2 = Route::factory()->create();
-        $route3 = Route::factory()->create();
-
-        $place->routes()->attach([$route1->id, $route2->id]);
-
-        $this->assertCount(2, $place->routes()->orderBy('id')->get());
-        $this->assertTrue($route1->is($place->routes[0]));
-        $this->assertTrue($route2->is($place->routes[1]));
+        $this->assertTrue($user->is($place->user));
     }
 }
