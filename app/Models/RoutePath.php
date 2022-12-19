@@ -60,7 +60,7 @@ class RoutePath extends Model
     ];
 
     protected $appends = [
-        'human_started_at', 'human_ended_at'
+        'human_started_at', 'human_ended_at',
     ];
 
     protected $postgisFields = [

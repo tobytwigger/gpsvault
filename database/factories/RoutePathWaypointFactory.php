@@ -20,7 +20,7 @@ class RoutePathWaypointFactory extends Factory
     {
         return [
             'route_path_id' => RoutePath::factory(),
-            'waypoint_id' => Waypoint::factory()
+            'waypoint_id' => Waypoint::factory(),
         ];
     }
 }

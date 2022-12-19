@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Jobs\CreateThumbnailImage;
 use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
-use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\User;
