@@ -84,53 +84,6 @@
                 <c-manage-route-media :route-model="routeModel"></c-manage-route-media>
             </v-tab-item>
 
-            <v-tab-item value="tab-waypoints">
-
-<!--                <v-row-->
-<!--                    align="center"-->
-<!--                    justify="center">-->
-<!--                    <v-col>-->
-
-<!--                        <c-pagination-iterator :paginator="places" item-key="id">-->
-<!--                            <template v-slot:default="{item}">-->
-<!--                                <c-place-card :place="item">-->
-<!--                                    <template v-slot:icons>-->
-<!--                                        <v-tooltip bottom>-->
-<!--                                            <template v-slot:activator="{ on, attrs }">-->
-<!--                                                <v-btn-->
-<!--                                                    icon-->
-<!--                                                    @click="removeFromRoute(item)"-->
-<!--                                                    v-bind="attrs"-->
-<!--                                                    v-on="on"-->
-<!--                                                >-->
-<!--                                                    <v-icon>mdi-minus</v-icon>-->
-<!--                                                </v-btn>-->
-<!--                                            </template>-->
-<!--                                            Remove from route-->
-<!--                                        </v-tooltip>-->
-<!--                                    </template>-->
-<!--                                </c-place-card>-->
-<!--                            </template>-->
-<!--                        </c-pagination-iterator>-->
-<!--                    </v-col>-->
-<!--                </v-row>-->
-
-
-<!--                <v-row-->
-<!--                    align="center"-->
-<!--                    justify="center">-->
-<!--                    <v-col>-->
-<!--                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute" title="Search for a place" button-text="Add to route">-->
-<!--                            <template v-slot:activator="{trigger,showing}">-->
-<!--                                <v-btn :disabled="showing" @click="trigger">-->
-<!--                                    Find Places-->
-<!--                                </v-btn>-->
-<!--                            </template>-->
-<!--                        </c-place-search>-->
-<!--                    </v-col>-->
-<!--                </v-row>-->
-            </v-tab-item>
-
         </v-tabs-items>
 
         <c-delete-route-button :route-model="routeModel" v-model="showingRouteDeleteForm"></c-delete-route-button>
