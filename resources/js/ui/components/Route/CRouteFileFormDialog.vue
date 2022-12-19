@@ -77,9 +77,11 @@
 
 <script>
 import CFileInput from '../CFileInput';
+import modal from '../../mixins/modal';
 export default {
     name: "CRouteFileFormDialog",
     components: {CFileInput},
+    mixins: [modal],
     props: {
         routeModel: {
             required: true,
@@ -101,7 +103,6 @@ export default {
     },
     data() {
         return {
-            showDialog: false,
             form: this.$inertia.form({
                 files: null,
                 title: null,

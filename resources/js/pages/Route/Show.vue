@@ -69,18 +69,6 @@
                 <c-route-timeline :route-model="routeModel"></c-route-timeline>
             </v-tab-item>
             <v-tab-item value="tab-files">
-                <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file">
-                    <template v-slot:activator="{trigger,showing}">
-                        <v-btn
-                            color="secondary"
-                            @click.stop="trigger"
-                            :disabled="showing"
-                        >
-                            <v-icon>mdi-upload</v-icon>
-                            Upload file
-                        </v-btn>
-                    </template>
-                </c-route-file-form-dialog>
                 <c-manage-route-media :route-model="routeModel"></c-manage-route-media>
             </v-tab-item>
 
@@ -88,7 +76,8 @@
 
         <c-delete-route-button :route-model="routeModel" v-model="showingRouteDeleteForm"></c-delete-route-button>
         <c-route-form :old-route="routeModel" title="Edit route" button-text="Update" v-model="showingRouteEditForm"></c-route-form>
-
+        <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file" v-model="showingRouteUploadFileForm">
+        </c-route-file-form-dialog>
     </c-app-wrapper>
 </template>
 
@@ -127,7 +116,8 @@ export default {
         return {
             tab: 'tab-summary',
             showingRouteEditForm: false,
-            showingRouteDeleteForm: false
+            showingRouteDeleteForm: false,
+            showingRouteUploadFileForm: false
         }
     },
     methods: {
@@ -203,6 +193,12 @@ export default {
                     href: this.routeModel.file_id ? route('file.download', this.routeModel.file_id) : '#',
                     useInertia: false
                 },
+                {isDivider: true},
+                {
+                    title: 'Upload a media file',
+                    icon: 'mdi-upload',
+                    action: () => this.showingRouteUploadFileForm = true
+                }
             ];
         }
     }
