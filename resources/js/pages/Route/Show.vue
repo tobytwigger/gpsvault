@@ -13,14 +13,14 @@
                 <v-icon>mdi-information</v-icon>
             </v-tab>
 
+            <v-tab href="#tab-timeline">
+                Timeline
+                <v-icon>mdi-timeline-text</v-icon>
+            </v-tab>
+
             <v-tab href="#tab-files">
                 Files
                 <v-icon>mdi-file-document-multiple</v-icon>
-            </v-tab>
-
-            <v-tab href="#tab-waypoints">
-                Places
-                <v-icon>mdi-map-marker</v-icon>
             </v-tab>
         </v-tabs>
 
@@ -28,110 +28,83 @@
             <v-tab-item value="tab-summary">
                 <v-row>
                     <v-col>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="routeModel.description">
-                                    {{ routeModel.description }}
-                                </div>
-                                <div v-else>
-                                    No description
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="routeModel.notes">
-                                    {{ routeModel.notes }}
-                                </div>
-                                <div v-else>
-                                    No notes
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-<!--                                TODO-->
-<!--                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>-->
-                            </v-col>
-                        </v-row>
+                        <v-list flat>
+                            <v-list-item v-if="routeModel.description">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-text
+                                            </v-icon>
+                                        </template>
+                                        <span>Route description</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="routeModel.description"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="routeModel.notes">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-information-outline
+                                            </v-icon>
+                                        </template>
+                                        <span>Route notes</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="routeModel.notes"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="routeModel.path?.human_started_at && routeModel.path?.human_ended_at">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-map-marker
+                                            </v-icon>
+                                        </template>
+                                        <span>Route start/end points</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <c-activity-location-summary :started-at="routeModel.path.human_started_at" :ended-at="routeModel.path.human_ended_at"></c-activity-location-summary>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
                     </v-col>
                     <v-col>
-                        <span v-if="routeModel.distance">Distance: {{routeModel.distance}}m.</span>
+                        <c-stats :schema="statsSchema" :selectable="false"></c-stats>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="pa-8">
-                        <c-route-map :places="places.data" v-if="routePath" :geojson="routePath"></c-route-map>
+                        <c-route-map :places="places" v-if="routePath" :geojson="routePath"></c-route-map>
                     </v-col>
                 </v-row>
             </v-tab-item>
+            <v-tab-item value="tab-timeline">
+                <c-route-timeline :route-model="routeModel"></c-route-timeline>
+            </v-tab-item>
             <v-tab-item value="tab-files">
-                <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file">
-                    <template v-slot:activator="{trigger,showing}">
-                        <v-btn
-                            color="secondary"
-                            @click.stop="trigger"
-                            :disabled="showing"
-                        >
-                            <v-icon>mdi-upload</v-icon>
-                            Upload file
-                        </v-btn>
-                    </template>
-                </c-route-file-form-dialog>
                 <c-manage-route-media :route-model="routeModel"></c-manage-route-media>
             </v-tab-item>
 
-            <v-tab-item value="tab-waypoints">
-
-                <v-row
-                    align="center"
-                    justify="center">
-                    <v-col>
-
-                        <c-pagination-iterator :paginator="places" item-key="id">
-                            <template v-slot:default="{item}">
-                                <c-place-card :place="item">
-                                    <template v-slot:icons>
-                                        <v-tooltip bottom>
-                                            <template v-slot:activator="{ on, attrs }">
-                                                <v-btn
-                                                    icon
-                                                    @click="removeFromRoute(item)"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                >
-                                                    <v-icon>mdi-minus</v-icon>
-                                                </v-btn>
-                                            </template>
-                                            Remove from route
-                                        </v-tooltip>
-                                    </template>
-                                </c-place-card>
-                            </template>
-                        </c-pagination-iterator>
-                    </v-col>
-                </v-row>
-
-
-                <v-row
-                    align="center"
-                    justify="center">
-                    <v-col>
-                        <c-place-search ref="placeSearch" :route-id="routeModel.id" @addToRoute="addToRoute" title="Search for a place" button-text="Add to route">
-                            <template v-slot:activator="{trigger,showing}">
-                                <v-btn :disabled="showing" @click="trigger">
-                                    Find Places
-                                </v-btn>
-                            </template>
-                        </c-place-search>
-                    </v-col>
-                </v-row>
-            </v-tab-item>
-
         </v-tabs-items>
+
         <c-delete-route-button :route-model="routeModel" v-model="showingRouteDeleteForm"></c-delete-route-button>
         <c-route-form :old-route="routeModel" title="Edit route" button-text="Update" v-model="showingRouteEditForm"></c-route-form>
-
+        <c-route-file-form-dialog :route-model="routeModel" title="Upload a file" text="Upload a new file" v-model="showingRouteUploadFileForm">
+        </c-route-file-form-dialog>
     </c-app-wrapper>
 </template>
 
@@ -148,10 +121,16 @@ import CActivityLocationSummary from '../../ui/components/CActivityLocationSumma
 import CPaginationIterator from '../../ui/reusables/table/CPaginationIterator';
 import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
+import CRouteTimeline from '../../ui/components/Route/CRouteTimeline';
+import CStats from '../../ui/components/CStats';
+import units from '../../ui/mixins/units';
 
 export default {
     name: "Show",
+    mixins: [units],
     components: {
+        CStats,
+        CRouteTimeline,
         CPlaceSearch,
         CPlaceCard,
         CPaginationIterator,
@@ -163,36 +142,67 @@ export default {
             required: true,
             type: Object
         },
-        places: {
-            required: true,
-            type: Object
-        }
     },
     data() {
         return {
             tab: 'tab-summary',
             showingRouteEditForm: false,
-            showingRouteDeleteForm: false
+            showingRouteDeleteForm: false,
+            showingRouteUploadFileForm: false
         }
     },
     methods: {
         formatDateTime(dt) {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
-        },
-        addToRoute(place) {
-            this.$inertia.post(route('route.place.store', this.routeModel.id), {
-                place_id: place.id
-            }, {
-                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
-            });
-        },
-        removeFromRoute(place) {
-            this.$inertia.delete(route('route.place.destroy', [this.routeModel.id, place.id]), {
-                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
-            });
         }
     },
     computed: {
+        statsSchema() {
+            let schema = [];
+            if(this.routeModel.path?.distance) {
+                schema.push({
+                    icon: 'mdi-ruler',
+                    title: 'Distance',
+                    label: 'distance',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.distance, 'distance'), label: 'total'},
+                    ]
+                });
+            }
+            if(this.routeModel.path?.duration) {
+                schema.push({
+                    icon: 'mdi-clock',
+                    title: 'Time',
+                    label: 'time',
+                    pointLabel: 'time',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.duration, 'duration'), label: 'total'},
+                    ]
+                });
+            }
+            if(this.routeModel.path?.elevation_gain) {
+                schema.push({
+                    icon: 'mdi-image-filter-hdr',
+                    title: 'Elevation',
+                    label: 'elevation',
+                    pointLabel: 'elevation',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.elevation_gain, 'elevation'), label: 'gain'},
+                    ]
+                })
+            }
+            return schema;
+        },
+        places() {
+            if(this.routeModel.path) {
+                return this.routeModel.path.waypoints.filter(w => w.place_id !== null)
+                    .map(w => w.place)
+            }
+            return [];
+        },
         pageTitle() {
             return this.routeModel?.name ?? 'New Route';
         },
@@ -235,12 +245,18 @@ export default {
                     useInertia: false,
                 },
                 {
-                    title: 'Download route file',
+                    title: 'Download original route file',
                     icon: 'mdi-download',
                     disabled: this.routeModel.file_id === null,
                     href: this.routeModel.file_id ? route('file.download', this.routeModel.file_id) : '#',
                     useInertia: false
                 },
+                {isDivider: true},
+                {
+                    title: 'Upload a media file',
+                    icon: 'mdi-upload',
+                    action: () => this.showingRouteUploadFileForm = true
+                }
             ];
         }
     }

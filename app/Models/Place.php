@@ -75,10 +75,4 @@ class Place extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function routes()
-    {
-        return $this->belongsToMany(Route::class)
-            ->using(PlaceRoute::class);
-    }
 }

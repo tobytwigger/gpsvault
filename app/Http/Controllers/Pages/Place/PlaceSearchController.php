@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Pages\Place;
 
 use App\Http\Controllers\Controller;
 use App\Models\Place;
+use App\Models\Route;
+use App\Models\RoutePathWaypoint;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -21,10 +23,18 @@ class PlaceSearchController extends Controller
 
         return Place::when(
             $request->has('exclude_route_id') && $request->input('exclude_route_id'),
-            fn (Builder $query) => $query->whereDoesntHave(
-                'routes',
-                fn (Builder $subQuery) => $subQuery->where('routes.id', $request->input('exclude_route_id'))
-            )
+            function (Builder $query) use ($request) {
+                $route = Route::findOrFail($request->input('exclude_route_id'));
+                $path = $route->path;
+                $placeIds = !$path ? [] : $path
+                    ->routePathWaypoints()
+                    ->whereHas('waypoint', fn (Builder $subQuery) => $subQuery->whereNotNull('place_id'))
+                    ->with(['waypoint'])
+                    ->get()
+                    ->map(fn (RoutePathWaypoint $routePathWaypoint) => $routePathWaypoint->waypoint->place_id);
+
+                return $query->whereNotIn('id', $placeIds);
+            }
         )
             ->when(
                 $request->has(['southwest_lat', 'southwest_lng', 'northeast_lat', 'northeast_lng']),

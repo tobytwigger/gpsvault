@@ -116,12 +116,6 @@ class Route extends Model
         return $this->belongsTo(File::class);
     }
 
-    public function places()
-    {
-        return $this->belongsToMany(Place::class)
-            ->using(PlaceRoute::class);
-    }
-
     public function analyse()
     {
         dispatch(new AnalyseRouteFile($this));
@@ -134,7 +128,7 @@ class Route extends Model
      */
     public function getPathAttribute()
     {
-        return $this->mainPath()->first()?->append('waypoints');
+        return $this->mainPath()->first()?->append(['waypoints']);
     }
 
     /**

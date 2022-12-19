@@ -49,7 +49,7 @@ class CreateThumbnailImage implements ShouldQueue
 
         Image::load($temporaryLongPath)
             ->fit(Manipulations::FIT_MAX, $this->width, $this->width)
-            ->quality(0)
+            ->quality(25)
             ->optimize()
             ->save($temporaryOptimisedLongPath);
 

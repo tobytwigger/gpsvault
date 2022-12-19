@@ -54,7 +54,7 @@ class RouteFileController extends Controller
 
                 return $file;
             });
-        $route->files()->sync($files->pluck('id'));
+        $route->files()->syncWithoutDetaching($files->pluck('id'));
 
         return redirect()->route('route.show', $route);
     }

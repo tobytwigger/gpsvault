@@ -112,7 +112,9 @@ export default {
                 coordinates: [],
                 distance: 0,
                 time: 0,
-                elevation: 0
+                elevation: 0,
+                waypoint_distance: [],
+                waypoint_time: []
             },
             schema: {
                 waypoints: [],
@@ -201,7 +203,7 @@ export default {
                     return [c[0], c[1]];
                 }), 6),
                 elevation: this.result.coordinates.map(c => c[2]),
-                waypoints: this.schema.waypoints.map(waypoint => {
+                waypoints: this.schema.waypoints.map((waypoint, index) => {
                     // If custom waypoint, then we remove the ID
                     if(waypoint.unsaved ?? false) {
                         delete waypoint.id;
@@ -214,7 +216,9 @@ export default {
                         lng: waypoint.location[1],
                         name: waypoint.name ?? null,
                         notes: waypoint.notes ?? null,
-                        place_id: waypoint.place_id
+                        place_id: waypoint.place_id,
+                        distance: index === 0 ? 0 : this.result.waypoint_distance[index - 1],
+                        duration: index === 0 ? 0 : this.result.waypoint_time[index - 1]
                     }
                 }),
                 distance: this.result.distance,

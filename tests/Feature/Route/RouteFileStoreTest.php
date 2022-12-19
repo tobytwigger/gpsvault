@@ -145,6 +145,30 @@ class RouteFileStoreTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    /** @test */
+    public function many_files_can_be_uploaded_after_one_another()
+    {
+        $this->authenticated();
+        $route = Route::factory()->create(['user_id' => $this->user->id]);
+        Storage::fake('test-fake');
+        $file1 = $this->createFile('filename.gpx', 58, 'application/gpx+xml');
+        $file2 = $this->createFile('filename2.gpx', 58, 'application/gpx+xml');
+
+        $response = $this->post(route('route.file.store', $route), [
+            'files' => [$file1->toArray()],
+        ]);
+        $response->assertRedirect();
+
+        $this->assertCount(1, $route->refresh()->files);
+
+        $response = $this->post(route('route.file.store', $route), [
+            'files' => [$file2->toArray()],
+        ]);
+        $response->assertRedirect();
+
+        $this->assertCount(2, $route->refresh()->files);
+    }
+
     /**
      * @test
      * @dataProvider validationDataProvider

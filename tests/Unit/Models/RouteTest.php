@@ -5,7 +5,6 @@ namespace Tests\Unit\Models;
 use App\Jobs\CreateThumbnailImage;
 use App\Jobs\GenerateRouteThumbnail;
 use App\Models\File;
-use App\Models\Place;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\User;
@@ -63,22 +62,6 @@ class RouteTest extends TestCase
         foreach ($route->files as $file) {
             $this->assertTrue($files->shift()->is($file));
         }
-    }
-
-    /** @test */
-    public function it_has_many_places()
-    {
-        $route = Route::factory()->create();
-
-        $place1 = Place::factory()->create();
-        $place2 = Place::factory()->create();
-        $place3 = Place::factory()->create();
-
-        $route->places()->attach([$place1->id, $place2->id]);
-
-        $this->assertCount(2, $route->places);
-        $this->assertTrue($place1->is($route->places[0]));
-        $this->assertTrue($place2->is($route->places[1]));
     }
 
     /** @test */

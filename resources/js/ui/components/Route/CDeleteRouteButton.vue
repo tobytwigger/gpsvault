@@ -4,24 +4,12 @@
         persistent
         max-width="600"
     >
-        <template v-slot:activator="{ on, attrs }">
-            <v-btn
-                color="error"
-                v-bind="attrs"
-                v-on="on"
-                :loading="loading"
-                :disabled="loading"
-            >
-                <v-icon>mdi-delete</v-icon>
-                Delete Route
-            </v-btn>
-        </template>
         <v-card>
             <v-card-title>
-                Deleting route '{{route.name}}'.
+                Deleting route '{{routeModel.name}}'.
             </v-card-title>
             <v-card-text>
-                Are you sure you want to delete the route '{{route.name}}'? Once the route is deleted, all of its resources and
+                Are you sure you want to delete the route '{{routeModel.name}}'? Once the route is deleted, all of its resources and
                 data will be permanently deleted.
             </v-card-text>
             <v-card-text>

@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Jobs\GenerateRouteThumbnail;
+use App\Services\Geocoding\Geocoder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\LineString;
 
@@ -57,6 +59,10 @@ class RoutePath extends Model
         'settings' => 'array',
     ];
 
+    protected $appends = [
+        'human_started_at', 'human_ended_at',
+    ];
+
     protected $postgisFields = [
         'linestring',
     ];
@@ -89,7 +95,7 @@ class RoutePath extends Model
 
     public function getWaypointsAttribute()
     {
-        return $this->routePathWaypoints()->ordered()->with('waypoint')->get()
+        return $this->routePathWaypoints()->ordered()->with('waypoint', 'waypoint.place')->get()
             ->map(fn (RoutePathWaypoint $pivot) => $pivot->waypoint);
     }
 
@@ -101,5 +107,15 @@ class RoutePath extends Model
     public function thumbnail()
     {
         return $this->belongsTo(File::class, 'thumbnail_id');
+    }
+
+    public function getHumanStartedAtAttribute()
+    {
+        return app(Geocoder::class)->getPlaceSummaryFromPosition($this->linestring->getPoints()[0]->getLat(), $this->linestring->getPoints()[0]->getLng());
+    }
+
+    public function getHumanEndedAtAttribute()
+    {
+        return app(Geocoder::class)->getPlaceSummaryFromPosition(Arr::last($this->linestring->getPoints())->getLat(), Arr::last($this->linestring->getPoints())->getLng());
     }
 }
