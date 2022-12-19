@@ -28,10 +28,10 @@ class PlaceSearchController extends Controller
                 $path = $route->path;
                 $placeIds = !$path ? [] : $path
                     ->routePathWaypoints()
-                    ->whereHas('waypoint', fn(Builder $subQuery) => $subQuery->whereNotNull('place_id'))
+                    ->whereHas('waypoint', fn (Builder $subQuery) => $subQuery->whereNotNull('place_id'))
                     ->with(['waypoint'])
                     ->get()
-                    ->map(fn(RoutePathWaypoint $routePathWaypoint) => $routePathWaypoint->waypoint->place_id);
+                    ->map(fn (RoutePathWaypoint $routePathWaypoint) => $routePathWaypoint->waypoint->place_id);
 
                 return $query->whereNotIn('id', $placeIds);
             }

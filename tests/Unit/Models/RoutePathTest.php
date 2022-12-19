@@ -4,11 +4,9 @@ namespace Tests\Unit\Models;
 
 use App\Jobs\CreateThumbnailImage;
 use App\Jobs\GenerateRouteThumbnail;
-use App\Models\Activity;
 use App\Models\Route;
 use App\Models\RoutePath;
 use App\Models\RoutePathWaypoint;
-use App\Models\Stats;
 use App\Models\Waypoint;
 use App\Services\Geocoding\Geocoder;
 use Illuminate\Support\Facades\Bus;
@@ -75,7 +73,7 @@ class RoutePathTest extends TestCase
     {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
 
-        $linestring = new LineString([new Point(1,2,0),new Point(3,4,0),new Point(5,6,0),new Point(7,8,0)]);
+        $linestring = new LineString([new Point(1, 2, 0),new Point(3, 4, 0),new Point(5, 6, 0),new Point(7, 8, 0)]);
         $routePath = RoutePath::factory()->create(['linestring' => $linestring]);
         $geocoder = $this->prophesize(Geocoder::class);
         $geocoder->getPlaceSummaryFromPosition(1, 2)->willReturn('StartSummary');
@@ -89,10 +87,10 @@ class RoutePathTest extends TestCase
     {
         Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
 
-        $linestring = new LineString([new Point(1,2,0),new Point(3,4,0),new Point(5,6,0),new Point(7,8,0)]);
+        $linestring = new LineString([new Point(1, 2, 0),new Point(3, 4, 0),new Point(5, 6, 0),new Point(7, 8, 0)]);
         $routePath = RoutePath::factory()->create(['linestring' => $linestring]);
         $geocoder = $this->prophesize(Geocoder::class);
-        $geocoder->getPlaceSummaryFromPosition(7,8)->willReturn('EndSummary');
+        $geocoder->getPlaceSummaryFromPosition(7, 8)->willReturn('EndSummary');
         $this->app->instance(Geocoder::class, $geocoder->reveal());
 
         $this->assertEquals('EndSummary', $routePath->human_ended_at);

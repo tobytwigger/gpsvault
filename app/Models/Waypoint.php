@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 /**
- * App\Models\Waypoint
+ * App\Models\Waypoint.
  *
  * @property int $id
  * @property int|null $place_id
@@ -39,13 +39,13 @@ class Waypoint extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'place_id', 'location', 'name', 'notes', 'user_id', 'distance', 'duration', 'elevation_gain'
+        'place_id', 'location', 'name', 'notes', 'user_id', 'distance', 'duration', 'elevation_gain',
     ];
 
     protected $casts = [
         'distance' => 'float',
         'duration' => 'float',
-        'elevation_gain' => 'float'
+        'elevation_gain' => 'float',
     ];
 
     protected $postgisFields = [

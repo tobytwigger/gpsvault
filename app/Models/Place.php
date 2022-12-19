@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 /**
- * App\Models\Place
+ * App\Models\Place.
  *
  * @property int $id
  * @property string $name
@@ -75,5 +75,4 @@ class Place extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

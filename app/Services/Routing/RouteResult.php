@@ -29,7 +29,7 @@ class RouteResult
             'time' => $this->time,
             'elevation' => $this->elevation,
             'waypoint_distance' => $this->waypointDistance,
-            'waypoint_time' => $this->waypointTime
+            'waypoint_time' => $this->waypointTime,
         ];
     }
 }

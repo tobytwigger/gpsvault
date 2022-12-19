@@ -71,7 +71,7 @@ class RouteController extends Controller
     public function show(Route $route)
     {
         return Inertia::render('Route/Show', [
-            'routeModel' => $route->load(['files'])->append('path')
+            'routeModel' => $route->load(['files'])->append('path'),
         ]);
     }
 

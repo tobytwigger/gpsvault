@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 
 /**
- * App\Models\ActivityPoint
+ * App\Models\ActivityPoint.
  *
  * @property int $id
  * @property mixed|null $points

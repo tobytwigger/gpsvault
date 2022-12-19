@@ -30,7 +30,7 @@ class WaypointFactory extends Factory
     public function place(Place $place)
     {
         return $this->state(fn (array $attributes) => [
-            'place_id' => $place->id
+            'place_id' => $place->id,
         ]);
     }
 }
