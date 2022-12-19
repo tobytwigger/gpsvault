@@ -31,7 +31,16 @@
                         <v-list flat>
                             <v-list-item v-if="routeModel.description">
                                 <v-list-item-icon>
-                                    <v-icon>mdi-text</v-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-text
+                                            </v-icon>
+                                        </template>
+                                        <span>Route description</span>
+                                    </v-tooltip>
                                 </v-list-item-icon>
                                 <v-list-item-content>
                                     <v-list-item-title v-text="routeModel.description"></v-list-item-title>
@@ -39,17 +48,33 @@
                             </v-list-item>
                             <v-list-item v-if="routeModel.notes">
                                 <v-list-item-icon>
-                                    <v-icon>mdi-information-outline</v-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-information-outline
+                                            </v-icon>
+                                        </template>
+                                        <span>Route notes</span>
+                                    </v-tooltip>
                                 </v-list-item-icon>
                                 <v-list-item-content>
                                     <v-list-item-title v-text="routeModel.notes"></v-list-item-title>
                                 </v-list-item-content>
                             </v-list-item>
-<!--                            // Loop from and to-->
-
                             <v-list-item v-if="routeModel.path?.human_started_at && routeModel.path?.human_ended_at">
                                 <v-list-item-icon>
-                                    <v-icon>mdi-map-marker</v-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-map-marker
+                                            </v-icon>
+                                        </template>
+                                        <span>Route start/end points</span>
+                                    </v-tooltip>
                                 </v-list-item-icon>
                                 <v-list-item-content>
                                     <c-activity-location-summary :started-at="routeModel.path.human_started_at" :ended-at="routeModel.path.human_ended_at"></c-activity-location-summary>
