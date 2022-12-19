@@ -25,6 +25,20 @@ export default {
                 accommodation: 'deep-orange lighten-1',
                 other: 'grey lighten-2'
             }[type] ?? otherwise;
+        },
+        getEndpointIconUrl() {
+            return '/dist/images/map/flag-checkered.svg';
+        },
+        getTypeText(type) {
+            return {
+                food_drink: 'Food & Drink',
+                shops: 'Shop',
+                toilets: 'Toilet',
+                water: 'Water Refill',
+                tourist: 'Tourism',
+                accommodation: 'Accommodation',
+                other: 'Other'
+            }[type] ?? null;
         }
     }
 }

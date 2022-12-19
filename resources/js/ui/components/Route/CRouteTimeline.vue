@@ -4,42 +4,14 @@
             align-top
             :dense="$vuetify.breakpoint.smAndDown"
         >
-            <v-timeline-item
+            <c-route-timeline-card
                 v-for="(waypoint, waypointIndex) in waypoints"
                 :key="waypointIndex"
-                :color="waypoint.color"
-                fill-dot
-            >
-                <template v-slot:icon v-if="waypoint.icon">
-                    <img :src="waypoint.icon" />
-                </template>
+                :waypoint="waypoint"
+                :waypoint-index="waypointIndex"
+                :waypoint-count="waypoints.length"
+                :route-distance="routeModel.path.distance"></c-route-timeline-card>
 
-                <v-card
-                    :color="waypoint.color"
-                >
-                    <v-card-title class="text-h6">
-                        {{ waypoint.name ?? 'Waypoint #' + (waypointIndex + 1)}}
-                    </v-card-title>
-                    <v-card-text>
-                        Info about distance,
-                    </v-card-text>
-                    <v-card-text class="white text--primary">
-                        <p v-if="waypoint.notes">{{waypoint.notes}}</p>
-                        <div v-if="waypoint.place_id">
-                            Stuff about the place!
-                        </div>
-                        <v-btn
-                            v-if="waypoint.place_id"
-                            :href="route('place.show', waypoint.place_id)"
-                            :color="waypoint.color"
-                            class="mx-0"
-                            outlined
-                        >
-                            See more
-                        </v-btn>
-                    </v-card-text>
-                </v-card>
-            </v-timeline-item>
         </v-timeline>
         <!--                <v-row-->
         <!--                    align="center"-->
@@ -89,9 +61,11 @@
 
 <script>
 import mapIcons from '../../mixins/mapIcons';
+import CRouteTimelineCard from './CRouteTimelineCard';
 
 export default {
     name: "CRouteTimeline",
+    components: {CRouteTimelineCard},
     mixins: [mapIcons],
     props: {
         routeModel: {
@@ -102,17 +76,11 @@ export default {
     computed: {
         waypoints() {
             if(this.routeModel.path) {
-                return this.routeModel.path.waypoints.map(w => ({
-                    icon: this.getIconUrl(w.place?.type),
-                    color: this.getColor(w.place?.type),
-                    name: w.name,
-                    notes: w.notes,
-                    place_id: w.place_id
-                }));
+                return this.routeModel.path.waypoints;
             }
             return [];
         }
-    }
+    },
 }
 </script>
 

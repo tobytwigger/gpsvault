@@ -95,11 +95,6 @@ class ValhallaRouterStrategy implements RouterStrategy
             return $elevationData;
         }, ['previous' => null, 'gain' => 0.0])['gain'];
 
-        foreach($waypoints as $waypoint) {
-
-            dd($waypoint);
-        }
-
         return [$linestring, $elevation, $distance, $time, $elevationGain, $waypointDistance, $waypointTime];
     }
 }
