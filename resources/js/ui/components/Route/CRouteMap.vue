@@ -1,9 +1,8 @@
 <template>
     <div>
-        {{markers}}
         <div v-if="loading">Loading map</div>
         <div v-else-if="geojson === null">No route could be plotted</div>
-        <c-map :geojson="geojson" v-else></c-map>
+        <c-map :geojson="geojson" :markers="markers" v-else></c-map>
     </div>
 </template>
 
@@ -33,9 +32,9 @@ export default {
             return this.places.map(place => {
                 return {
                     id: place.id,
-                    lat: place.location.coordinates[0],
-                    lng: place.location.coordinates[1],
-                    icon: place.type,
+                    lat: place.location.coordinates[1],
+                    lng: place.location.coordinates[0],
+                    type: place.type,
                     title: place.name
                 }
             })

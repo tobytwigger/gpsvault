@@ -23,3 +23,4 @@ storage/tests/*
 docs/venv
 docs/site
 templates/zero-free-theme-v2.0.1/theme/node_modules
+/storage/app/temp/*

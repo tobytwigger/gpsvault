@@ -6,10 +6,10 @@
     >
         <v-card>
             <v-card-title>
-                Deleting route '{{route.name}}'.
+                Deleting route '{{routeModel.name}}'.
             </v-card-title>
             <v-card-text>
-                Are you sure you want to delete the route '{{route.name}}'? Once the route is deleted, all of its resources and
+                Are you sure you want to delete the route '{{routeModel.name}}'? Once the route is deleted, all of its resources and
                 data will be permanently deleted.
             </v-card-text>
             <v-card-text>

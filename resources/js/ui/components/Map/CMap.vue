@@ -12,9 +12,11 @@ import maplibregl from 'maplibre-gl';
 import ElevationControl from './../Route/controls/elevation/ElevationControl';
 import CElevationControl from './../Route/controls/elevation/CElevationControl';
 import {cloneDeep} from 'lodash';
+import mapIcons from '../../mixins/mapIcons';
 
 export default {
     name: "CMap",
+    mixins: [mapIcons],
     components: {
         CElevationControl
     },
@@ -116,10 +118,43 @@ export default {
             });
             this.map.addControl(new maplibregl.FullscreenControl({}));
             this.resetMapBounds();
+            this.addMarkers();
         });
     },
 
     methods: {
+        addMarkers() {
+            for(let markerIndex in this.markers) {
+                let marker = this.markers[markerIndex];
+
+                let markerEl = document.createElement('div');
+                markerEl.id = 'waypoint-' + marker.id;
+                markerEl.className = 'marker clickable';
+                markerEl.style.cursor = 'pointer';
+                markerEl.style.backgroundImage = 'url(' + this.getIconUrl(marker.type) + ')';
+                markerEl.style.width = '20px';
+                markerEl.style.height = '48px';
+
+                let placeTitle = document.createElement('span');
+                placeTitle.innerHTML = '<span style="font-weight: bold;">' + marker.title + ' </span>';
+
+                let seeMoreButton = document.createElement('a');
+                seeMoreButton.innerHTML = 'See more';
+                seeMoreButton.id = 'see-more-button-' + marker.id;
+                seeMoreButton.addEventListener('click', () => this.$inertia.get(route('place.show', marker.id)));
+
+                let container = document.createElement('div');
+                container.style.padding = '3px';
+                container.appendChild(placeTitle).appendChild(seeMoreButton);
+
+                let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(container);
+
+                let markerObject = new maplibregl.Marker({element: markerEl})
+                    .setLngLat([marker.lng, marker.lat])
+                    .setPopup(popup)
+                    .addTo(this.map);
+            }
+        },
         resetMapBounds() {
             let coordinates = this.normalGeojson.coordinates;
 

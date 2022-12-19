@@ -28,35 +28,37 @@
             <v-tab-item value="tab-summary">
                 <v-row>
                     <v-col>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="routeModel.description">
-                                    {{ routeModel.description }}
-                                </div>
-                                <div v-else>
-                                    No description
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="routeModel.notes">
-                                    {{ routeModel.notes }}
-                                </div>
-                                <div v-else>
-                                    No notes
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-<!--                                TODO-->
-<!--                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>-->
-                            </v-col>
-                        </v-row>
+                        <v-list flat>
+                            <v-list-item v-if="routeModel.description">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-text</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="routeModel.description"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="routeModel.notes">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-information-outline</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="routeModel.notes"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+<!--                            // Loop from and to-->
+
+                            <v-list-item v-if="routeModel.path?.human_started_at && routeModel.path?.human_ended_at">
+                                <v-list-item-icon>
+                                    <v-icon>mdi-map-marker</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <c-activity-location-summary :started-at="routeModel.path.human_started_at" :ended-at="routeModel.path.human_ended_at"></c-activity-location-summary>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
                     </v-col>
                     <v-col>
-                        <span v-if="routeModel.distance">Distance: {{routeModel.distance}}m.</span>
+                        <c-stats :schema="statsSchema" :selectable="false"></c-stats>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -95,10 +97,14 @@ import CPaginationIterator from '../../ui/reusables/table/CPaginationIterator';
 import CPlaceCard from '../../ui/components/Place/CPlaceCard';
 import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
 import CRouteTimeline from '../../ui/components/Route/CRouteTimeline';
+import CStats from '../../ui/components/CStats';
+import units from '../../ui/mixins/units';
 
 export default {
     name: "Show",
+    mixins: [units],
     components: {
+        CStats,
         CRouteTimeline,
         CPlaceSearch,
         CPlaceCard,
@@ -123,21 +129,48 @@ export default {
     methods: {
         formatDateTime(dt) {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
-        },
-        addToRoute(place) {
-            this.$inertia.post(route('route.place.store', this.routeModel.id), {
-                place_id: place.id
-            }, {
-                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
-            });
-        },
-        removeFromRoute(place) {
-            this.$inertia.delete(route('route.place.destroy', [this.routeModel.id, place.id]), {
-                onSuccess: (page) => this.$refs.placeSearch.loadPlaces()
-            });
         }
     },
     computed: {
+        statsSchema() {
+            let schema = [];
+            if(this.routeModel.path?.distance) {
+                schema.push({
+                    icon: 'mdi-ruler',
+                    title: 'Distance',
+                    label: 'distance',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.distance, 'distance'), label: 'total'},
+                    ]
+                });
+            }
+            if(this.routeModel.path?.duration) {
+                schema.push({
+                    icon: 'mdi-clock',
+                    title: 'Time',
+                    label: 'time',
+                    pointLabel: 'time',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.duration, 'duration'), label: 'total'},
+                    ]
+                });
+            }
+            if(this.routeModel.path?.elevation_gain) {
+                schema.push({
+                    icon: 'mdi-image-filter-hdr',
+                    title: 'Elevation',
+                    label: 'elevation',
+                    pointLabel: 'elevation',
+                    disabled: true,
+                    data: [
+                        {value: this.convert(this.routeModel.path?.elevation_gain, 'elevation'), label: 'gain'},
+                    ]
+                })
+            }
+            return schema;
+        },
         places() {
             if(this.routeModel.path) {
                 return this.routeModel.path.waypoints.filter(w => w.place_id !== null)
@@ -187,7 +220,7 @@ export default {
                     useInertia: false,
                 },
                 {
-                    title: 'Download route file',
+                    title: 'Download original route file',
                     icon: 'mdi-download',
                     disabled: this.routeModel.file_id === null,
                     href: this.routeModel.file_id ? route('file.download', this.routeModel.file_id) : '#',
