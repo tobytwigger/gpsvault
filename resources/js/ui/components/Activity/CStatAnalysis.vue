@@ -6,11 +6,42 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-switch
-                v-show="!loading && chartInformation !== null && !statSchema.disabled"
-                v-model="useDistance"
-                :label="(useDistance ? 'Distance vs ' : 'Time vs ') + statSchema.title"
-            ></v-switch>
+            <v-col style="text-align: center;">
+                <v-btn-toggle
+                    v-show="!loading && chartInformation !== null && !statSchema.disabled"
+                    v-model="useDistance"
+                    shaped
+                    mandatory
+                >
+                    <v-tooltip top>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn :value="true" v-bind="attrs"
+                                   v-on="on">
+                                <span class="hidden-xs-only">Plot against distance</span>
+
+                                <v-icon right>
+                                    mdi-ruler
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Plot '{{statSchema.title}}' from your ride against 'Distance'. This helps on rides with lots of stopping.</span>
+                    </v-tooltip>
+
+                    <v-tooltip top>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn :value="false" v-bind="attrs"
+                                   v-on="on">
+                                <span class="hidden-xs-only">Plot against time</span>
+
+                                <v-icon right>
+                                    mdi-clock
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Plot '{{statSchema.title}}' from your ride against 'Time'. This helps to see your actual progress.</span>
+                    </v-tooltip>
+                </v-btn-toggle>
+            </v-col>
         </v-row>
         <v-row no-gutters v-if="!statSchema.disabled">
             <v-col>

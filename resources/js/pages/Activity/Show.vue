@@ -42,26 +42,60 @@
 
                 <v-row>
                     <v-col>
-                        <v-row>
-                            <v-col class="px-8 pt-8">
-                                <div v-if="activity.description">
-                                    {{ activity.description }}
-                                </div>
-                            </v-col>
-                        </v-row>
-                        <v-row v-if="startedAt">
-                            <v-col>
-                                <v-chip class="ma-2">
-                                    <v-icon>mdi-map-marker</v-icon>
-                                    {{ startedAt.value }}
-                                </v-chip>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="px-8">
-                                <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
-                            </v-col>
-                        </v-row>
+
+                        <v-list flat>
+                            <v-list-item v-if="activity.description">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-text
+                                            </v-icon>
+                                        </template>
+                                        <span>Activity description</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="activity.description"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="startedAt">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-calendar-clock
+                                            </v-icon>
+                                        </template>
+                                        <span>Started at</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <v-list-item-title v-text="startedAt.value"></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item v-if="humanStartedAt && humanEndedAt">
+                                <v-list-item-icon>
+                                    <v-tooltip left>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-icon
+                                                v-bind="attrs"
+                                                v-on="on">
+                                                mdi-map-marker
+                                            </v-icon>
+                                        </template>
+                                        <span>Activity start/end points</span>
+                                    </v-tooltip>
+                                </v-list-item-icon>
+                                <v-list-item-content>
+                                    <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </v-list>
                     </v-col>
                     <v-col>
                         <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
@@ -70,11 +104,6 @@
 
                             </c-stats-loading>
                         </div>
-                    </v-col>
-                </v-row>
-                <v-row v-if="images.length > 0">
-                    <v-col>
-                        <c-image-gallery :images="images" :max-height="300"></c-image-gallery>
                     </v-col>
                 </v-row>
                 <v-row>
@@ -115,6 +144,7 @@
                             </v-subheader>
 
                             <v-list-item v-for="k in kudos" :key="k.id">
+                                <v-list-item-icon><v-icon>mdi-thumb-up</v-icon></v-list-item-icon>
                                 <v-list-item-content>
                                     <v-list-item-title>{{ k.name }}</v-list-item-title>
                                 </v-list-item-content>
@@ -161,27 +191,15 @@
                         ></v-progress-circular>
                     </template>
                 </c-job-status>
-                <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file">
-                    <template v-slot:activator="{trigger,showing}">
-                        <v-btn
-                            color="secondary"
-                            @click.stop="trigger"
-                            :disabled="showing"
-                            data-hint="Add a new file or image by clicking here."
-                        >
-                            <v-icon>mdi-upload</v-icon>
-                            Upload file
-                        </v-btn>
-                    </template>
-                </c-file-form-dialog>
                 <c-manage-activity-media :activity="activity"></c-manage-activity-media>
             </v-tab-item>
         </v-tabs-items>
 
+        <c-file-form-dialog :activity="activity" title="Upload a file" text="Upload a new file" v-model="showingUploadFileForm"></c-file-form-dialog>
         <c-delete-activity-button :activity="activity" v-model="showingActivityDeleteForm"></c-delete-activity-button>
         <c-upload-activity-file-button v-model="showingActivityUploadForm" :activity="activity"></c-upload-activity-file-button>
         <c-activity-form :old-activity="activity" title="Edit activity" button-text="Update" data-hint="Edit this activity." v-model="showingActivityEditForm"></c-activity-form>
-        <c-link-strava-activity-form v-model="showLinkStravaForm" :activity="activity"></c-link-strava-activity-form>
+        <c-link-strava-activity-form v-model="showingLinkStravaForm" :activity="activity"></c-link-strava-activity-form>
 
     </c-app-wrapper>
 </template>
@@ -238,7 +256,8 @@ export default {
             showingActivityDeleteForm: false,
             showingActivityUploadForm: false,
             showingActivityEditForm: false,
-            showLinkStravaForm: false
+            showingLinkStravaForm: false,
+            showingUploadFileForm: false
         }
     },
     methods: {
@@ -261,16 +280,6 @@ export default {
     computed: {
         allStats() {
             return this.activity.stats;
-        },
-        images() {
-            return this.activity.files.filter(file => file.mimetype.startsWith('image/'))
-                .map(file => {
-                    return {
-                        alt: file.caption,
-                        thumbnail: route('file.preview', file.id),
-                        src: route('file.preview', {file: file.id, highResolution: true})
-                    }
-                });
         },
         menuItems() {
             let createDataSourceMenuItem = (integration, title) => {
@@ -362,11 +371,19 @@ export default {
                             title: 'Edit link to Strava',
                             icon: 'mdi-power-plug',
                             action: () => {
-                                this.showLinkStravaForm = true;
+                                this.showingLinkStravaForm = true;
                             }
                         }
                     ]
-                }
+                },
+                {isDivider: true},
+                {
+                    title: 'Upload media file',
+                    icon: 'mdi-camera-plus',
+                    action: () => {
+                        this.showingUploadFileForm = true;
+                    }
+                },
             ];
         },
     }

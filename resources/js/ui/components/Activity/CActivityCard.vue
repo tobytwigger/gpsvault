@@ -90,11 +90,11 @@ export default {
     },
     methods: {
         convertDistance(value) {
-            `if(value === null) {
+            if(value === null) {
                 return 'No distance data';
             }
             let converted = this.convert(value, 'distance');
-            return converted.value + converted.unit;`
+            return converted.value + converted.unit;
         },
         toDateTime(value) {
             if (value === null) {
