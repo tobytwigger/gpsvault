@@ -20,11 +20,6 @@ class PlaceSearchController extends Controller
             'northeast_lat' => 'required_with:southwest_lat,southwest_lng,northeast_lng|numeric|min:-90|max:90',
             'northeast_lng' => 'required_with:southwest_lat,southwest_lng,northeast_lat|numeric|min:-180|max:180',
         ]);
-            // Route
-                // Route Paths
-                    // Waypoints
-                        // Place
-
 
         return Place::when(
             $request->has('exclude_route_id') && $request->input('exclude_route_id'),
