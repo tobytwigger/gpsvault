@@ -6,6 +6,8 @@ use App\Jobs\CreateThumbnailImage;
 use App\Jobs\GenerateRouteThumbnail;
 use App\Models\Route;
 use App\Models\RoutePath;
+use App\Models\RoutePathWaypoint;
+use App\Models\Waypoint;
 use Illuminate\Support\Facades\Bus;
 use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
@@ -41,7 +43,14 @@ class RoutePathTest extends TestCase
     /** @test */
     public function it_has_many_points()
     {
-        $this->markTestSkipped('Many-to-many route paths needed');
+        Bus::fake([GenerateRouteThumbnail::class, CreateThumbnailImage::class]);
+
+        $routePath = RoutePath::factory()->create();
+        $waypoint1 = Waypoint::factory()->create();
+        RoutePathWaypoint::factory()->create(['waypoint_id' => $waypoint1->id, 'route_path_id' => $routePath->id]);
+
+        $this->assertCount(1, $routePath->waypoints);
+        $this->assertEquals($waypoint1->id, $routePath->waypoints[0]->id);
     }
 
     /** @test */

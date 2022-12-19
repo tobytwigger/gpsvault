@@ -15,7 +15,7 @@ class ValhallaRouterStrategy implements RouterStrategy
 {
     public function route(Collection $waypoints, RouteOptions $options): RouteResult
     {
-        [$linestring, $elevation, $distance, $time, $elevationGain] = $this->getFullRoute($waypoints, $options);
+        [$linestring, $elevation, $distance, $time, $elevationGain, $waypointDistance, $waypointTime] = $this->getFullRoute($waypoints, $options);
 
         return new RouteResult(
             collect($linestring)->map(fn ($location, $index) => [
@@ -23,13 +23,20 @@ class ValhallaRouterStrategy implements RouterStrategy
             ])->all(),
             $distance,
             $time,
-            $elevationGain
+            $elevationGain,
+            $waypointDistance,
+            $waypointTime
         );
     }
 
     private function getFullRoute(Collection $waypoints, RouteOptions $options)
     {
         $linestring = [];
+
+        $waypointDistance = [];
+        $waypointTime = [];
+        $waypointElevation = [];
+
         $distance = 0;
         $time = 0;
 
@@ -54,6 +61,8 @@ class ValhallaRouterStrategy implements RouterStrategy
                 // Add in elevation
                 $distance += $leg['summary']['length'] * 1000;
                 $time += $leg['summary']['time'];
+                $waypointDistance[] = $distance;
+                $waypointTime[] = $time;
             }
 
             $previous = $chunkedWaypoints->last();
@@ -86,6 +95,11 @@ class ValhallaRouterStrategy implements RouterStrategy
             return $elevationData;
         }, ['previous' => null, 'gain' => 0.0])['gain'];
 
-        return [$linestring, $elevation, $distance, $time, $elevationGain];
+        foreach($waypoints as $waypoint) {
+
+            dd($waypoint);
+        }
+
+        return [$linestring, $elevation, $distance, $time, $elevationGain, $waypointDistance, $waypointTime];
     }
 }

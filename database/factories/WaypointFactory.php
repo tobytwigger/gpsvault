@@ -21,6 +21,9 @@ class WaypointFactory extends Factory
         return [
             'place_id' => Place::factory(),
             'location' => new Point(-0.770416, 52.027825),
+            'distance' => $this->faker->randomFloat(),
+            'elevation_gain' => $this->faker->randomFloat(),
+            'duration' => $this->faker->randomFloat(),
         ];
     }
 

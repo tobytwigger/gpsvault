@@ -39,7 +39,13 @@ class Waypoint extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'place_id', 'location', 'name', 'notes', 'user_id',
+        'place_id', 'location', 'name', 'notes', 'user_id', 'distance', 'duration', 'elevation_gain'
+    ];
+
+    protected $casts = [
+        'distance' => 'float',
+        'duration' => 'float',
+        'elevation_gain' => 'float'
     ];
 
     protected $postgisFields = [

@@ -74,6 +74,9 @@ class PlannerController extends Controller
                 'name' => $point['name'] ?? null,
                 'notes' => $point['notes'] ?? null,
                 'user_id' => Auth::id(),
+                'duration' => $point['duration'] ?? null,
+                'distance' => $point['distance'] ?? null,
+                'elevation_gain' => $point['elevation_gain'] ?? null
             ];
             if (isset($point['id']) && $point['id']) {
                 $waypoint = Waypoint::where('user_id', Auth::id())->findOrFail($point['id']);
