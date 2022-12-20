@@ -19,13 +19,11 @@ class RouteSearchController extends Controller
             return Route::search($request->input('query'))
                 ->where('user_id', Auth::id())
                 ->orderBy('updated_at', 'DESC')
-                ->take(15)
-                ->get();
+                ->paginate(request()->input('perPage', 15));
         }
 
         return Route::where('user_id', Auth::id())
             ->orderBy('updated_at', 'DESC')
-            ->take(15)
-            ->get();
+            ->paginate(request()->input('perPage', 15));
     }
 }

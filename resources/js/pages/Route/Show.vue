@@ -27,7 +27,7 @@
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-summary">
                 <v-row>
-                    <v-col>
+                    <v-col :sm="12" :md="6">
                         <v-list flat>
                             <v-list-item v-if="routeModel.description">
                                 <v-list-item-icon>

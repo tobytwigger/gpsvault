@@ -8,21 +8,19 @@
         <v-card
             class="mx-auto"
         >
-            <template slot="progress">
-                <v-progress-linear
-                    color="deep-purple"
-                    height="10"
-                    indeterminate
-                ></v-progress-linear>
-            </template>
-
             <v-img
                 v-if="stage.activity || stage.route"
                 height="250"
                 :src="stage.activity?.cover_image ?? stage.route?.cover_image"
             ></v-img>
 
-            <v-card-title>{{ stage.name ?? 'Unnamed' }}</v-card-title>
+            <v-card-title>
+                {{ stage.name ?? 'Stage ' + stage.stage_number }}
+                <span v-if="stage.is_rest_day">
+                    &nbsp;- Rest Day
+                </span>
+
+            </v-card-title>
 
             <v-card-text>
                 <v-row
@@ -55,25 +53,8 @@
                     </v-card-text>
                 </v-row>
 
-                <div class="my-4 text-subtitle-1">
-                    Stage {{ stage.stage_number }}
-                </div>
-
                 <div>{{ stage.description }}</div>
             </v-card-text>
-
-            <div v-if="!stage.is_rest_day && stage.route === null">
-
-                <v-divider class="mx-4"></v-divider>
-
-                <v-card elevation="0" class="pa-4">
-                    <v-card-title class="justify-center">Find or create a route</v-card-title>
-
-                    <v-card-text>
-                        <c-quick-route :old-stage="stage" :tour-id="stage.tour_id"></c-quick-route>
-                    </v-card-text>
-                </v-card>
-            </div>
 
             <v-card-actions>
                 <v-tooltip bottom v-if="stage.route_id">
@@ -90,6 +71,7 @@
                     </template>
                     View route '{{ stage.route.name }}'
                 </v-tooltip>
+                <c-link-route-button :stage="stage" v-else-if="!stage.is_rest_day"></c-link-route-button>
 
 
                 <v-tooltip bottom v-if="stage.activity_id">
@@ -106,6 +88,7 @@
                     </template>
                     View activity '{{ stage.activity.name }}'
                 </v-tooltip>
+                <c-link-activity-button :stage="stage" v-else-if="!stage.is_rest_day"></c-link-activity-button>
 
                 <v-spacer></v-spacer>
 
@@ -165,10 +148,15 @@ import CDeleteStageButton from './CDeleteStageButton';
 import CRouteSelect from '../Route/CRouteSelect';
 import CQuickRoute from './CQuickRoute';
 import CIsRestDayToggle from './CIsRestDayToggle';
+import CLinkRouteButton from './CLinkRouteButton';
+import CLinkActivityButton from './CLinkActivityButton';
 
 export default {
     name: "CStageCard",
-    components: {CIsRestDayToggle, CQuickRoute, CRouteSelect, CDeleteStageButton, CConfirmationDialog, CStageForm},
+    components: {
+        CLinkActivityButton,
+        CLinkRouteButton,
+        CIsRestDayToggle, CQuickRoute, CRouteSelect, CDeleteStageButton, CConfirmationDialog, CStageForm},
     mixins: [units],
     props: {
         stage: {

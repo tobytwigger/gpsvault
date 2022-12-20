@@ -3,7 +3,7 @@
     <v-navigation-drawer app clipped v-model="shouldShow" :permanent="!$vuetify.breakpoint.mobile">
         <v-list>
             <v-list-item style="justify-content: center;">
-                <v-list-item-avatar color="primary" >
+                <v-list-item-avatar color="primary" style="color: white;">
                     {{ $page.props.user.name.split(' ').map(i => i.charAt(0).toUpperCase()).join('') }}
                 </v-list-item-avatar>
             </v-list-item>

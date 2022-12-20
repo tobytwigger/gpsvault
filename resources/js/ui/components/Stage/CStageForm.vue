@@ -134,6 +134,14 @@ export default {
     mounted() {
         this.updateFromOldStage();
     },
+    watch: {
+        oldStage: {
+            deep: true,
+            handler: function() {
+                this.updateFromOldStage();
+            }
+        }
+    },
     methods: {
         updateFromOldStage() {
             if(this.oldStage) {
@@ -150,6 +158,7 @@ export default {
                     ? route('tour.stage.update', [this.tourId, this.oldStage.id])
                     : route('tour.stage.store', this.tourId),
                 {
+                    preserveScroll: true,
                     onSuccess: () => {
                         this.form.reset();
                         this.updateFromOldStage();

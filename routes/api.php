@@ -22,9 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::middleware('auth:sanctum')->as('api.')->group(function () {
-    Route::apiResource('activity', \App\Http\Controllers\Api\ActivityController::class)->only(['index']);
+    Route::apiResource('activity', \App\Http\Controllers\Api\ActivityController::class)->only(['index', 'show']);
     Route::apiResource('place', \App\Http\Controllers\Api\PlaceController::class)->only(['index']);
-    Route::apiResource('route', \App\Http\Controllers\Api\RouteController::class)->only(['index']);
+    Route::apiResource('route', \App\Http\Controllers\Api\RouteController::class)->only(['index', 'show']);
     Route::apiResource('tour', \App\Http\Controllers\Api\TourController::class)->only(['index']);
     Route::apiResource('backup', \App\Http\Controllers\Api\BackupController::class)->only(['index']);
 });

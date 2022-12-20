@@ -51,20 +51,21 @@
 <!--        </v-list-item>-->
 
         <v-card-actions>
-            <v-btn
-                :class="{'tour-viewSingleActivityButton': hints}"
-                color="deep-purple lighten-2"
-                text
-                id="viewButton"
-                :data-hint="hints ? 'View more information about your activity by clicking here.' : null"
-                @click="$inertia.get(route('activity.show', activity.id))"
-                ref="viewButton"
-            >
-                View
-            </v-btn>
+            <slot name="actions">
+                <v-btn
+                    :class="{'tour-viewSingleActivityButton': hints}"
+                    color="deep-purple lighten-2"
+                    text
+                    id="viewButton"
+                    :data-hint="hints ? 'View more information about your activity by clicking here.' : null"
+                    @click="$inertia.get(route('activity.show', activity.id))"
+                    ref="viewButton"
+                >
+                    View
+                </v-btn>
 
-            <v-spacer></v-spacer>
-
+               <v-spacer></v-spacer>
+            </slot>
         </v-card-actions>
 
     </v-card>

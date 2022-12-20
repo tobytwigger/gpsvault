@@ -3,15 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Activity::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -30,15 +37,16 @@ class ActivityController extends Controller
 //    {
 //    }
 //
-//    /**
-//     * Display the specified resource.
-//     *
-//     * @param  \App\Models\Activity  $activity
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function show(ActivityController $activity)
-//    {
-//    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Activity  $activity
+     * @return Response
+     */
+    public function show(Activity $activity)
+    {
+        return $activity;
+    }
 //
 //    /**
 //     * Update the specified resource in storage.

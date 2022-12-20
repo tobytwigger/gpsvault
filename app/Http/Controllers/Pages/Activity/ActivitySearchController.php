@@ -19,13 +19,11 @@ class ActivitySearchController extends Controller
             return Activity::search($request->input('query'))
                 ->where('user_id', Auth::id())
                 ->orderBy('updated_at', 'DESC')
-                ->take(15)
-                ->get();
+                ->paginate(request()->input('perPage', 15));
         }
 
         return Activity::where('user_id', Auth::id())
             ->orderBy('updated_at', 'DESC')
-            ->take(15)
-            ->get();
+            ->paginate(request()->input('perPage', 15));
     }
 }

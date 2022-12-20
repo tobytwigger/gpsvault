@@ -44,6 +44,27 @@ class StageStoreTest extends TestCase
     }
 
     /** @test */
+    public function the_new_stage_can_specify_to_be_put_earlier()
+    {
+        $this->authenticated();
+
+        $tour = Tour::factory()->create(['user_id' => $this->user->id]);
+        $stage1 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => 1]);
+        $stage2 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => 2]);
+        $stage3 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => 3]);
+        $stage4 = Stage::factory()->create(['tour_id' => $tour->id, 'stage_number' => 5]);
+
+        $response = $this->post(route('tour.stage.store', $tour->id), ['stage_number' => 2]);
+        $this->assertDatabaseCount('stages', 5);
+
+        $this->assertDatabaseHas('stages', ['id' => $stage1->id, 'stage_number' => 1]);
+        $this->assertDatabaseHas('stages', ['stage_number' => 2]);
+        $this->assertDatabaseHas('stages', ['id' => $stage2->id, 'stage_number' => 3]);
+        $this->assertDatabaseHas('stages', ['id' => $stage3->id, 'stage_number' => 4]);
+        $this->assertDatabaseHas('stages', ['id' => $stage4->id, 'stage_number' => 5]);
+    }
+
+    /** @test */
     public function a_403_is_returned_if_you_do_not_own_the_tour()
     {
         $this->authenticated();

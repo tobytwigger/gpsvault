@@ -41,7 +41,7 @@
                 </c-job-status>
 
                 <v-row>
-                    <v-col>
+                    <v-col :sm="12" :md="6">
 
                         <v-list flat>
                             <v-list-item v-if="activity.description">
