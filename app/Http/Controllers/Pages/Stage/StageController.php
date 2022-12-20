@@ -20,7 +20,7 @@ class StageController extends Controller
     public function store(Request $request, Tour $tour)
     {
         $request->validate([
-            'stage_number' => 'sometimes|nullable|numeric'
+            'stage_number' => 'sometimes|nullable|numeric',
         ]);
         if ($tour->user_id !== Auth::id()) {
             throw new AuthorizationException(null, 403);
@@ -29,7 +29,7 @@ class StageController extends Controller
             'tour_id' => $tour->id,
         ]);
 
-        if($request->has('stage_number') && $request->input('stage_number') !== null) {
+        if ($request->has('stage_number') && $request->input('stage_number') !== null) {
             $stage->setStageNumber($request->input('stage_number'));
         }
 

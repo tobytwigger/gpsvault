@@ -73,8 +73,6 @@ class RouteSearchTest extends TestCase
         $this->assertEquals($routes[7]->id, $json[2]['id']);
         $this->assertEquals($routes[8]->id, $json[3]['id']);
         $this->assertEquals($routes[9]->id, $json[4]['id']);
-
-
     }
 
     /** @test */

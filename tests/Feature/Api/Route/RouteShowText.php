@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Route;
 
 use App\Models\Route;
 use App\Models\User;
-use Carbon\Carbon;
 use Tests\TestCase;
 
 class RouteShowText extends TestCase
@@ -21,7 +20,8 @@ class RouteShowText extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_you_do_not_own_the_route(){
+    public function it_throws_an_exception_if_you_do_not_own_the_route()
+    {
         $this->authenticatedWithSanctum();
         $route = Route::factory()->create(['user_id' => User::factory()->create()->id]);
 

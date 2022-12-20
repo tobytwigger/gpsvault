@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Activity;
 
 use App\Models\Activity;
 use App\Models\User;
-use Carbon\Carbon;
 use Tests\TestCase;
 
 class ActivityShowText extends TestCase
@@ -21,7 +20,8 @@ class ActivityShowText extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_exception_if_you_do_not_own_the_activity(){
+    public function it_throws_an_exception_if_you_do_not_own_the_activity()
+    {
         $this->authenticatedWithSanctum();
         $activity = Activity::factory()->create(['user_id' => User::factory()->create()->id]);
 
