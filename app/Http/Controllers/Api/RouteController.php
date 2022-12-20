@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Route;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class RouteController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Route::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -31,15 +38,16 @@ class RouteController extends Controller
 //    {
 //    }
 //
-//    /**
-//     * Display the specified resource.
-//     *
-//     * @param  \App\Models\Activity  $activity
-//     * @return \Illuminate\Http\Response
-//     */
-//    public function show(ActivityController $activity)
-//    {
-//    }
+    /**
+     * Display the specified resource.
+     *
+     * @param Route $route
+     * @return Response
+     */
+    public function show(Route $route)
+    {
+        return $route;
+    }
 //
 //    /**
 //     * Update the specified resource in storage.

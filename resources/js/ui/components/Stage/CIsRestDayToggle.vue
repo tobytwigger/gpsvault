@@ -43,6 +43,7 @@ export default {
         return {
             form: this.$inertia.form({
                 is_rest_day: false,
+                route_id: null,
                 _method: 'patch'
             })
         }
@@ -53,7 +54,7 @@ export default {
     computed: {
         title() {
             if(this.oldStage.is_rest_day) {
-                return 'Convert stage to cycling day.';
+                return 'Convert stage to cycling day';
             }
             return 'Convert stage to rest day';
         },
@@ -67,7 +68,7 @@ export default {
             if(this.oldStage.is_rest_day) {
                 return 'This will keep all your notes and the stage description, but convert it to a cycling day so you can add a route.';
             }
-            return 'This will detach the route from this stage and convert the stage to a rest day.';
+            return 'This will detach the route from this stage and convert the stage to a rest day. It will not delete the route completely.';
         },
         icon() {
             if(this.oldStage.is_rest_day) {
@@ -84,6 +85,7 @@ export default {
             this.form.post(
                 route('tour.stage.update', [this.tourId, this.oldStage.id]),
                 {
+                    preserveScroll: true,
                     onSuccess: () => {
                         this.form.reset();
                         this.updateFromOldStage();

@@ -41,6 +41,7 @@ export default {
             this.showDialog = false;
             this.loading = true;
             this.$inertia.delete(route('tour.stage.destroy', [this.stage.tour_id, this.stage.id]), {
+                preserveScroll: true,
                 onFinish: () => this.loading = false
             });
         }

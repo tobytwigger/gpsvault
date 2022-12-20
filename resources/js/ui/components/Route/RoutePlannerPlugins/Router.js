@@ -43,7 +43,6 @@ export default class {
                     data = JSON.parse(resp.responseText);
                     this._routeDone(data, wps, callback, context);
                 } else {
-                    console.log("Error : " + err.response);
                     callback.call(context || callback, {
                         status: err.status,
                         message: err.response

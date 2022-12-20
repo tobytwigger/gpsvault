@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="geojson.length === 0">No route could be plotted</div>
-        <c-map-many-geojson :geojson="geojson" v-else></c-map-many-geojson>
+        <c-map-many-geojson :key="uniqueKey" :geojson="geojson" v-else></c-map-many-geojson>
     </div>
 </template>
 
@@ -16,6 +16,22 @@ export default {
             required: true,
             type: Object
         }
+    },
+    data() {
+        return {
+            uniqueKey: null
+        }
+    },
+    watch: {
+        tour: {
+            deep: true,
+            handler: function() {
+                this.uniqueKey = (Math.random() + 1).toString(36).substring(7);
+            }
+        }
+    },
+    mounted() {
+        this.uniqueKey = (Math.random() + 1).toString(36).substring(7);
     },
     computed: {
         geojson() {

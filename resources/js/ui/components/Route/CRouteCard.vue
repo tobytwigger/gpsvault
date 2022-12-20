@@ -44,15 +44,18 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn
-                color="deep-purple lighten-2"
-                text
-                @click="$inertia.get(route('route.show', routeModel.id))"
-            >
-                View
-            </v-btn>
+            <slot name="actions">
 
-            <v-spacer></v-spacer>
+                <v-btn
+                    color="deep-purple lighten-2"
+                    text
+                    @click="$inertia.get(route('route.show', routeModel.id))"
+                >
+                    View
+                </v-btn>
+
+                <v-spacer></v-spacer>
+            </slot>
 
         </v-card-actions>
 

@@ -19,12 +19,19 @@ class StageController extends Controller
 
     public function store(Request $request, Tour $tour)
     {
+        $request->validate([
+            'stage_number' => 'sometimes|nullable|numeric'
+        ]);
         if ($tour->user_id !== Auth::id()) {
             throw new AuthorizationException(null, 403);
         }
-        Stage::create([
+        $stage = Stage::create([
             'tour_id' => $tour->id,
         ]);
+
+        if($request->has('stage_number') && $request->input('stage_number') !== null) {
+            $stage->setStageNumber($request->input('stage_number'));
+        }
 
         return redirect()->route('tour.show', $tour);
     }
