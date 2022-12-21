@@ -7,7 +7,7 @@
                           :prepend="prepend">
 
                 <template v-slot:default="attrs">
-                    <slot name="default" v-bind="attrs"></slot>
+                    <slot name="default" v-bind="{...attrs, deleteItem: () => markItemDeleted(attrs.index)}"></slot>
                 </template>
 
                 <template v-slot:footer>
@@ -93,6 +93,9 @@ export default {
         }
     },
     methods: {
+        markItemDeleted(index) {
+            this.items.splice(index, 1);
+        },
         loadNextPage($state) {
             if(this.paginator && this.paginator?.next_page_url === null) {
                 $state.complete();

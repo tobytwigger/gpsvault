@@ -22,7 +22,7 @@ class Stats
         foreach ($this->getPoints($statsData, $timeData, $activity) as $chunkedPoints) {
             $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order, &$points) {
                 $toReturn = [
-                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
+                    'points' => $point->getLatitude() !== null && $point->getLongitude() !== null ? new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()) : null,
                     'elevation' => $point->getElevation(),
                     'time' => $point->getTime(),
                     'cadence' => $point->getCadence(),
@@ -35,7 +35,9 @@ class Stats
                     'calories' => $point->getCalories(),
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
-                $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
+                if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
+                    $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude());
+                }
                 $order += 1;
 
                 return $toReturn;

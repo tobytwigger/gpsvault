@@ -9,7 +9,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\SerializesModels;
 use JobStatus\Concerns\Trackable;
 
@@ -58,12 +57,4 @@ abstract class StravaBaseJob implements ShouldQueue
     }
 
     abstract public function alias(): ?string;
-
-    public function middleware()
-    {
-        // Throttle exceptions
-        return [
-            (new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id),
-        ];
-    }
 }
