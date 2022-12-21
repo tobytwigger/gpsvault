@@ -2,6 +2,10 @@
 
 namespace App\Integrations\Strava\Import\Api\Resources;
 
+use App\Integrations\Strava\Jobs\LoadStravaComments;
+use App\Integrations\Strava\Jobs\LoadStravaKudos;
+use App\Integrations\Strava\Jobs\LoadStravaPhotos;
+use App\Integrations\Strava\Jobs\LoadStravaStats;
 use App\Models\Activity as ActivityModel;
 use App\Models\Stats;
 use App\Models\User;
@@ -31,6 +35,8 @@ class Activity
             $activityData,
             $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => $existingActivity::class])
         );
+
+        $this->throwChildJobs($existingActivity);
 
         return $this;
     }
@@ -116,5 +122,20 @@ class Activity
         ]);
 
         return $stats;
+    }
+
+    private function throwChildJobs(ActivityModel $activity)
+    {
+        LoadStravaStats::dispatch($activity);
+
+        if($activity->getAdditionalData('strava_comment_count', 0) > 0) {
+            LoadStravaComments::dispatch($activity);
+        }
+        if($activity->getAdditionalData('strava_kudos_count', 0) > 0) {
+            LoadStravaKudos::dispatch($activity);
+        }
+        if($activity->getAdditionalData('strava_photo_count', 0) > 0) {
+            LoadStravaPhotos::dispatch($activity);
+        }
     }
 }

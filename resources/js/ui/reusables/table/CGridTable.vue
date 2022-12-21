@@ -27,7 +27,7 @@
                         md="4"
                         sm="6"
                     >
-                        <slot name="default" v-bind:item="item" v-bind:isFirst="index === 0"></slot>
+                        <slot name="default" v-bind:item="item" v-bind:isFirst="index === 0" v-bind:index="index"></slot>
                     </v-col>
                 </v-row>
                 <v-row>

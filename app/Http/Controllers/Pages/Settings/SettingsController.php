@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Pages\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Integrations\Strava\Client\Models\StravaClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Jenssegers\Agent\Agent;
@@ -19,6 +21,7 @@ class SettingsController extends Controller
     {
         return Inertia::render('Settings/Index', [
             'sessions' => $this->sessions($request)->all(),
+            'stravaClients' => Auth::user()->can('manage-global-settings') ? StravaClient::public()->enabled()->get() : []
         ]);
     }
 

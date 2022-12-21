@@ -63,7 +63,7 @@ class StravaRequestHandler
                 }
             }
         }
-        
+
 
         throw new ClientNotAvailable();
     }

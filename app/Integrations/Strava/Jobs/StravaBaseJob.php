@@ -58,12 +58,5 @@ abstract class StravaBaseJob implements ShouldQueue
     }
 
     abstract public function alias(): ?string;
-
-    public function middleware()
-    {
-        // Throttle exceptions
-        return [
-            (new ThrottlesExceptions(1, 1))->by($this->alias() . '--' . $this->activity->id),
-        ];
-    }
+    
 }

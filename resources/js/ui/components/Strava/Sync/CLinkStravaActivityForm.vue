@@ -13,6 +13,9 @@
                 <v-card-title>
                     Update activity {{ activity.name }}
                 </v-card-title>
+                <v-card-subtitle>
+                    You can find the ID of an activity by viewing that activity on Strava, and copying the number in the URL.
+                </v-card-subtitle>
                 <v-card-text>
                     <v-form @submit.prevent="submit">
                         <v-text-field
