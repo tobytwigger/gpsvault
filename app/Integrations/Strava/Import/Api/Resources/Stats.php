@@ -36,7 +36,7 @@ class Stats
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
                 if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
-                    $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude());
+                    $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation() ?? 0);
                 }
                 $order += 1;
 

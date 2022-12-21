@@ -267,6 +267,12 @@ export default {
         }
     },
 
+    mounted() {
+        setInterval(() => {
+            this.$inertia.reload();
+        }, 3000);
+    },
+
     methods: {
         reload() {
             this.$inertia.reload({
