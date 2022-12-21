@@ -34,6 +34,7 @@ class StravaImporter
     {
         $import = StravaImport::create(['user_id' => $user->id]);
         $results = new ImportResults();
+
         try {
             foreach ($this->importers() as $importer) {
                 $results->merge(
@@ -42,6 +43,7 @@ class StravaImporter
             }
         } catch (\Exception $e) {
             $import->delete();
+
             throw $e;
         }
         foreach ($results->all() as $result) {

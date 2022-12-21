@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->as('api.')->group(function () {
     Route::apiResource('tour', \App\Http\Controllers\Api\TourController::class)->only(['index']);
     Route::apiResource('backup', \App\Http\Controllers\Api\BackupController::class)->only(['index']);
 
-    Route::as('integration.')->group(function() {
-        Route::as('strava.')->group(function() {
+    Route::as('integration.')->group(function () {
+        Route::as('strava.')->group(function () {
             Route::resource('client', \App\Integrations\Strava\Http\Controllers\Api\StravaClientController::class)->only(['index', 'show']);
         });
     });

@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Integrations\Strava\Api;
 
-use App\Integrations\Strava\Client\Authentication\StravaToken;
-use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
 use Tests\TestCase;

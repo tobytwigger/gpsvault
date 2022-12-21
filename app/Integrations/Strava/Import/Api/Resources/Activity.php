@@ -36,8 +36,6 @@ class Activity
             $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => $existingActivity::class])
         );
 
-        $this->throwChildJobs($existingActivity);
-
         return $this;
     }
 
