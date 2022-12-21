@@ -60,7 +60,7 @@ class StravaOverviewController extends Controller
                             'client_secret' => $client->client_secret,
                             'created_at' => $client->created_at->toIso8601String(),
                             'updated_at' => $client->updated_at->toIso8601String(),
-                            'shared_users' => $client->sharedUsers->map(fn(User $user) => [
+                            'shared_users' => $client->sharedUsers->map(fn (User $user) => [
                                 'id' => $user->id, 'name' => $user->name, 'email' => $user->email,
                             ]),
                         ], $client->toArray());
@@ -80,6 +80,7 @@ class StravaOverviewController extends Controller
                             'is_connected' => $client->is_connected,
                         ];
                     }
+
                     return [
                         'type' => 'public',
                         'id' => $client->id,
@@ -94,7 +95,7 @@ class StravaOverviewController extends Controller
                     ];
                 });
         } else {
-            if($defaultClient === null) {
+            if ($defaultClient === null) {
                 $clientPaginator = new LengthAwarePaginator([], 0, request()->input('perPage', 1));
             } else {
                 $clientPaginator = new LengthAwarePaginator([$defaultClient], 1, request()->input('perPage', 1));

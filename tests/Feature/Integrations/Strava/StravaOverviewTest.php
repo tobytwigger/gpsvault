@@ -22,7 +22,8 @@ class StravaOverviewTest extends TestCase
     }
 
     /** @test */
-    public function todo_tests_for_the_paginator_copied_from_client_index(){
+    public function todo_tests_for_the_paginator_copied_from_client_index()
+    {
         $this->markTestIncomplete();
     }
 

@@ -6,15 +6,13 @@ use App\Integrations\Strava\Client\Authentication\StravaToken;
 use App\Integrations\Strava\Client\Exceptions\ClientNotAvailable;
 use App\Integrations\Strava\Client\Models\StravaClient;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class StravaClientIndexTest extends TestCase
 {
-
     /** @test */
-    public function index_loads_strava_clients(){
+    public function index_loads_strava_clients()
+    {
         $this->authenticatedWithSanctum();
         $this->user->givePermissionTo('manage-strava-clients');
 
@@ -44,7 +42,8 @@ class StravaClientIndexTest extends TestCase
     }
 
     /** @test */
-    public function index_paginates_activities(){
+    public function index_paginates_activities()
+    {
         $this->authenticatedWithSanctum();
         $this->user->givePermissionTo('manage-strava-clients');
 
@@ -67,7 +66,8 @@ class StravaClientIndexTest extends TestCase
     }
 
     /** @test */
-    public function index_does_not_return_clients_you_cant_access(){
+    public function index_does_not_return_clients_you_cant_access()
+    {
         $this->authenticatedWithSanctum();
         $this->user->givePermissionTo('manage-strava-clients');
 
@@ -98,7 +98,8 @@ class StravaClientIndexTest extends TestCase
     }
 
     /** @test */
-    public function index_returns_just_the_system_client_if_user_does_not_have_permission(){
+    public function index_returns_just_the_system_client_if_user_does_not_have_permission()
+    {
         $this->authenticatedWithSanctum();
         $this->user->revokePermissionTo('manage-strava-clients');
         $this->user->givePermissionTo('manage-global-settings');
@@ -122,7 +123,8 @@ class StravaClientIndexTest extends TestCase
     }
 
     /** @test */
-    public function index_returns_a_429_if_no_system_client_set_and_user_does_not_have_permission(){
+    public function index_returns_a_429_if_no_system_client_set_and_user_does_not_have_permission()
+    {
         $this->authenticatedWithSanctum();
         $this->user->revokePermissionTo('manage-strava-clients');
         $this->user->givePermissionTo('manage-global-settings');
@@ -145,9 +147,9 @@ class StravaClientIndexTest extends TestCase
     }
 
     /** @test */
-    public function you_must_be_authenticated(){
+    public function you_must_be_authenticated()
+    {
         $response = $this->getJson(route('api.integration.strava.client.index', ['perPage' => 1000, 'page' => 1]))
             ->assertUnauthorized();
     }
-
 }

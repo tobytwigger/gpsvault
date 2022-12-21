@@ -21,7 +21,7 @@ class SettingsController extends Controller
     {
         return Inertia::render('Settings/Index', [
             'sessions' => $this->sessions($request)->all(),
-            'stravaClients' => Auth::user()->can('manage-global-settings') ? StravaClient::public()->enabled()->get() : []
+            'stravaClients' => Auth::user()->can('manage-global-settings') ? StravaClient::public()->enabled()->get() : [],
         ]);
     }
 

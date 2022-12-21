@@ -128,13 +128,13 @@ class Activity
     {
         LoadStravaStats::dispatch($activity);
 
-        if($activity->getAdditionalData('strava_comment_count', 0) > 0) {
+        if ($activity->getAdditionalData('strava_comment_count', 0) > 0) {
             LoadStravaComments::dispatch($activity);
         }
-        if($activity->getAdditionalData('strava_kudos_count', 0) > 0) {
+        if ($activity->getAdditionalData('strava_kudos_count', 0) > 0) {
             LoadStravaKudos::dispatch($activity);
         }
-        if($activity->getAdditionalData('strava_photo_count', 0) > 0) {
+        if ($activity->getAdditionalData('strava_photo_count', 0) > 0) {
             LoadStravaPhotos::dispatch($activity);
         }
     }

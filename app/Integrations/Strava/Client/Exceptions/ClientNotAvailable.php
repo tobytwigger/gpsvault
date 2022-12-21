@@ -2,7 +2,6 @@
 
 namespace App\Integrations\Strava\Client\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
