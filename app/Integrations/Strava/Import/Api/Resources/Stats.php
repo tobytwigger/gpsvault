@@ -35,7 +35,7 @@ class Stats
                     'calories' => $point->getCalories(),
                     'cumulative_distance' => $point->getCumulativeDistance(),
                 ];
-                if($point->getLatitude() !== null && $point->getLongitude() !== null) {
+                if ($point->getLatitude() !== null && $point->getLongitude() !== null) {
                     $points[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude());
                 }
                 $order += 1;
