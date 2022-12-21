@@ -13,7 +13,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class StravaClientController extends Controller
 {
 
-    /** @test */
     public function index()
     {
         if (Auth::user()->can('manage-strava-clients')) {
@@ -70,7 +69,6 @@ class StravaClientController extends Controller
         }
     }
 
-    /** @test */
     public function show(StravaClient $client)
     {
         $canAccess = false;

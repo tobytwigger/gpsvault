@@ -125,5 +125,16 @@ class LimitedActivity
     private function throwChildJobs(ActivityModel $existingActivity, array $activityData)
     {
         LoadStravaActivity::dispatch($existingActivity);
+        LoadStravaStats::dispatch($existingActivity);
+
+        if ($this->getIntegerData($activityData, 'comment_count') > 0) {
+            LoadStravaComments::dispatch($existingActivity);
+        }
+        if ($this->getIntegerData($activityData, 'kudos_count') > 0) {
+            LoadStravaKudos::dispatch($existingActivity);
+        }
+        if ($this->getIntegerData($activityData, 'total_photo_count') > 0) {
+            LoadStravaPhotos::dispatch($existingActivity);
+        }
     }
 }
