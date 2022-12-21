@@ -2,10 +2,6 @@
 
 namespace App\Integrations\Strava\Import\Api\Resources;
 
-use App\Integrations\Strava\Jobs\LoadStravaComments;
-use App\Integrations\Strava\Jobs\LoadStravaKudos;
-use App\Integrations\Strava\Jobs\LoadStravaPhotos;
-use App\Integrations\Strava\Jobs\LoadStravaStats;
 use App\Models\Activity as ActivityModel;
 use App\Models\Stats;
 use App\Models\User;
@@ -121,5 +117,4 @@ class Activity
 
         return $stats;
     }
-
 }

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Auth;
 
 class StravaClientController extends Controller
 {
-
     public function index()
     {
         if (Auth::user()->can('manage-strava-clients')) {
