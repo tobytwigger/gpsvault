@@ -50,8 +50,7 @@ trait UsesStrava
             if ($client) {
                 return $client;
             }
-        }
-        if ($this->can('use-public-strava-clients')) {
+
             $client = StravaClient::public()->enabled()->withSpaces()->connected($this->id)->excluding($excluding)->first();
             if ($client) {
                 return $client;

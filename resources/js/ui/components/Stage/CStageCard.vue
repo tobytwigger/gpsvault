@@ -15,6 +15,31 @@
             ></v-img>
 
             <v-card-title>
+                <v-tooltip bottom v-if="stage.activity_id !== null">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon color="green" v-bind="attrs" v-on="on">mdi-check</v-icon>
+                    </template>
+                    Stage completed
+                </v-tooltip>
+                <v-tooltip bottom v-else-if="stage.is_rest_day">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon color="primary" v-bind="attrs" v-on="on">mdi-sleep</v-icon>
+                    </template>
+                    Rest day
+                </v-tooltip>
+                <v-tooltip bottom v-else-if="stage.route_id !== null">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon color="primary" v-bind="attrs" v-on="on">mdi-map-marker</v-icon>
+                    </template>
+                    Route planned
+                </v-tooltip>
+                <v-tooltip bottom v-else>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-icon color="warning" v-bind="attrs" v-on="on">mdi-map-marker-alert</v-icon>
+                    </template>
+                    Route not planned
+                </v-tooltip>
+                &nbsp;
                 {{ stage.name ?? 'Stage ' + stage.stage_number }}
                 <span v-if="stage.is_rest_day">
                     &nbsp;- Rest Day

@@ -12,6 +12,6 @@ class ClientNotAvailableTest extends TestCase
     {
         $exception = new ClientNotAvailable();
         $this->assertEquals('Strava rate limit exceeded. Please try again later.', $exception->getMessage());
-        $this->assertEquals(429, $exception->getCode());
+        $this->assertEquals(429, $exception->getStatusCode());
     }
 }

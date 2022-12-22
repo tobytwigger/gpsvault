@@ -185,7 +185,6 @@ class UsesStravaTest extends TestCase
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
-        $user->givePermissionTo('use-public-strava-clients');
 
         $client1 = StravaClient::factory()->create(['user_id' => $user->id]);
         $client2 = StravaClient::factory()->create(['user_id' => $user->id]);
@@ -212,7 +211,6 @@ class UsesStravaTest extends TestCase
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
-        $user->givePermissionTo('use-public-strava-clients');
 
         $client1 = StravaClient::factory()->create(['user_id' => $user->id]);
         $client2 = StravaClient::factory()->create(['user_id' => $user->id]);
@@ -240,7 +238,6 @@ class UsesStravaTest extends TestCase
 
         $user = User::factory()->create();
         $user->givePermissionTo('manage-strava-clients');
-        $user->givePermissionTo('use-public-strava-clients');
 
         $client1 = StravaClient::factory()->create(['user_id' => $user->id, 'limit_daily' => 5, 'used_daily_calls' => 100]);
         $client2 = StravaClient::factory()->create();
@@ -290,7 +287,6 @@ class UsesStravaTest extends TestCase
         $this->markTestIncomplete();
 
         $user = User::factory()->create();
-        $user->givePermissionTo('use-public-strava-clients');
 
         $client5 = StravaClient::factory()->full()->create(['public' => true]);
         $systemClient = StravaClient::factory()->create();

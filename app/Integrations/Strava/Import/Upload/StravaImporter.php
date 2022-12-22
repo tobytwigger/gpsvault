@@ -34,10 +34,17 @@ class StravaImporter
     {
         $import = StravaImport::create(['user_id' => $user->id]);
         $results = new ImportResults();
-        foreach ($this->importers() as $importer) {
-            $results->merge(
-                $importer->run($zip, $user)
-            );
+
+        try {
+            foreach ($this->importers() as $importer) {
+                $results->merge(
+                    $importer->run($zip, $user)
+                );
+            }
+        } catch (\Exception $e) {
+            $import->delete();
+
+            throw $e;
         }
         foreach ($results->all() as $result) {
             StravaImportResult::saveResult($import, $result['type'], $result['message'], $result['success'], $result['data']);

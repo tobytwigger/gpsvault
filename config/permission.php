@@ -162,7 +162,6 @@ return [
     'seed' => [
         'manage-global-settings',
         'manage-strava-clients',
-        'use-public-strava-clients',
         'viewWebSocketsDashboard',
         'manage-bruit-key',
     ],

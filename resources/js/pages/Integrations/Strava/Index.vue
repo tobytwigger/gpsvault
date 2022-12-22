@@ -10,6 +10,9 @@
             <v-tab href="#tab-connection">Connection Health
                 <v-icon>mdi-heart-pulse</v-icon>
             </v-tab>
+            <v-tab href="#tab-clients" v-if="canManageClients">Strava Clients
+                <v-icon>mdi-connection</v-icon>
+            </v-tab>
             <v-tab href="#tab-sync">Sync
                 <v-icon>mdi-autorenew</v-icon>
             </v-tab>
@@ -20,121 +23,25 @@
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-connection">
-                <div v-if="!canManageClients">
-                    <div v-if="!isConnected && clientIsAvailable">
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                        >
-                            Not connected
-                        </v-alert>
-                        <v-btn :href="stravaLoginUrl" v-if="stravaLoginUrl">
-                            <v-img src="/dist/images/strava_logo.svg" alt="Connect to Strava"/>
-                        </v-btn>
-                    </div>
-                    <div v-else-if="!isConnected && !clientIsAvailable">
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                        >
-                            No client is available
-                        </v-alert>
-                    </div>
-                    <div v-else-if="isConnected">
-                        <v-alert
-                            outlined
-                            type="success"
-                            prominent
-                            border="left"
-                            v-if="clientHasSpace"
-                        >
-                            Connected
-                        </v-alert>
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                            v-else
-                        >
-                            Available shortly, rate limits met
-                        </v-alert>
-                        <v-btn @click="logoutClient">Logout</v-btn>
-                    </div>
-                </div>
-                <div v-else>
-                    <div v-if="!isConnected && clientIsAvailable">
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                        >
-                            Not connected
-                            <c-strava-client-form title="Add new client" button-text="Create">
-                                <template v-slot:activator="{trigger, showing}">
-                                    <v-btn
-                                        data-hint="You can add a new client here"
-                                        @click="trigger"
-                                        :disabled="showing"
-                                    >
-                                        Create client
-                                    </v-btn>
-                                </template>
-                            </c-strava-client-form>
+                <v-container class="fill-height" fluid>
+                    <v-row
+                        align="center"
+                        class="fill-height"
+                        justify="center">
+                        <v-col
+                            cols="12"
+                            md="4"
+                            sm="8">
+                            <c-strava-connection-health :client-has-space="clientHasSpace" :client-is-available="isAvailable"
+                                :is-connected="isConnected" :default-client="defaultClient">
+                            </c-strava-connection-health>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-tab-item>
 
-                        </v-alert>
-                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients"
-                                              :public-clients="publicClients"></c-strava-client-list>
-                    </div>
-                    <div v-else-if="!isConnected && !clientIsAvailable">
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                        >
-                            No client is available
-                            <c-strava-client-form title="Add new client" button-text="Create">
-                                <template v-slot:activator="{trigger, showing}">
-                                    <v-btn
-                                        data-hint="You can add a new client here"
-                                        @click="trigger"
-                                        :disabled="showing"
-                                    >
-                                        Create client
-                                    </v-btn>
-                                </template>
-                            </c-strava-client-form>
-                        </v-alert>
-                    </div>
-                    <div v-else-if="isConnected">
-                        <v-alert
-                            outlined
-                            type="success"
-                            prominent
-                            border="left"
-                            v-if="clientHasSpace"
-                        >
-                            Connected
-                        </v-alert>
-                        <v-alert
-                            outlined
-                            type="warning"
-                            prominent
-                            border="left"
-                            v-else
-                        >
-                            Available shortly, rate limits met
-                        </v-alert>
-                        <c-strava-client-list :owned-clients="ownedClients" :shared-clients="sharedClients"
-                                              :public-clients="publicClients"></c-strava-client-list>
-                    </div>
-                </div>
+            <v-tab-item value="tab-clients">
+                <c-strava-client-list :clients="clients"></c-strava-client-list>
             </v-tab-item>
 
             <v-tab-item value="tab-sync">
@@ -180,7 +87,15 @@
                             two-line
                         >
                             <v-subheader>
-                                Loading from Strava. These numbers aren't yet accurate.
+                                <span v-if="syncIsOngoing">
+                                    Loading from Strava...
+                                </span>
+                                <span v-else-if="isConnected">
+                                    Start a sync from the menu
+                                </span>
+                                <span v-else>
+                                    Please connect your Strava account before syncing
+                                </span>
                                 <v-spacer></v-spacer>
                                 <v-btn @click="reload" icon :loading="isReloading">
                                     <v-icon>mdi-autorenew</v-icon>
@@ -295,24 +210,18 @@ import CSyncInformationItem from '../../../ui/components/Strava/Sync/CSyncInform
 import CLinkActivity from '../../../ui/components/Strava/Sync/CLinkActivity';
 import CStravaImportForm from '../../../ui/components/Strava/Import/CStravaImportForm';
 import CImportResult from '../../../ui/components/Strava/Import/CImportResult';
+import CStravaConnectionHealth from '../../../ui/components/Strava/CStravaConnectionHealth';
 
 export default {
     name: "Index",
     components: {
+        CStravaConnectionHealth,
         CImportResult,
         CStravaImportForm,
         CLinkActivity, CSyncInformationItem, CStravaClientList, CStravaClientForm, CAppWrapper
     },
     props: {
-        ownedClients: {
-            required: true,
-            type: Object
-        },
-        sharedClients: {
-            required: true,
-            type: Object
-        },
-        publicClients: {
+        clients: {
             required: true,
             type: Object
         },
@@ -331,6 +240,22 @@ export default {
         photos_needing_import: {
             required: true,
             type: Array
+        },
+        isAvailable: {
+            required: true,
+            type: Boolean
+        },
+        isConnected: {
+            required: true,
+            type: Boolean
+        },
+        clientHasSpace: {
+            required: true,
+            type: Boolean
+        },
+        defaultClient: {
+            required: true,
+            type: Object
         }
     },
     data() {
@@ -343,27 +268,6 @@ export default {
     },
 
     methods: {
-        createStravaLoginUrl(client) {
-            let stravaUrl = this.$vuetify.breakpoint.mobile
-                ? new URL('https://www.strava.com/oauth/mobile/authorize')
-                : new URL('https://www.strava.com/oauth/authorize');
-
-            stravaUrl.searchParams.append('client_id', client.client_id);
-            stravaUrl.searchParams.append('redirect_uri', route('strava.client.login', client.id));
-            stravaUrl.searchParams.append('response_type', 'code');
-            stravaUrl.searchParams.append('approval_prompt', 'auto');
-            stravaUrl.searchParams.append('scope', 'activity:read,read,read_all,profile:read_all,activity:read_all,activity:write');
-            stravaUrl.searchParams.append('state', 12345);
-
-            return stravaUrl.toString();
-        },
-        logoutClient() {
-            if (this.isConnected) {
-                this.$inertia.post(route('strava.client.logout', this.clients
-                    .filter(client => client.enabled)
-                    .filter(client => client.is_connected)[0].id));
-            }
-        },
         reload() {
             this.$inertia.reload({
                 onStart: () => this.isReloading = true,
@@ -383,42 +287,8 @@ export default {
         activitiesLinkedPercentage() {
             return (this.sync.activities_linked / (this.sync.total_activities === 0 ? 1 : this.sync.total_activities)) * 100;
         },
-        clients() {
-            let clients = [];
-            for (let data of this.ownedClients.data) {
-                clients.push(data);
-            }
-            for (let data of this.sharedClients.data) {
-                clients.push(data);
-            }
-            for (let data of this.publicClients.data) {
-                clients.push(data);
-            }
-            return clients;
-        },
         canManageClients() {
             return this.$page.props.permissions.indexOf('manage-strava-clients') > -1;
-        },
-        clientIsAvailable() {
-            return this.clients.filter(client => client.enabled).length > 0;
-        },
-        isConnected() {
-            return this.clients.filter(client => client.enabled).filter(client => client.is_connected).length > 0;
-        },
-        clientHasSpace() {
-            return this.clients.filter(client => client.enabled)
-                .filter(client => client.is_connected)
-                .filter(client => client.limit_15_min > client.used_15_min_calls)
-                .filter(client => client.limit_daily > client.used_daily_calls)
-                .length > 0;
-        },
-        stravaLoginUrl() {
-            if (this.clientIsAvailable) {
-                return this.createStravaLoginUrl(
-                    this.clients.filter(client => client.enabled)[0]
-                )
-            }
-            return null;
         },
         menuItems() {
             return [

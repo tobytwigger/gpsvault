@@ -2,13 +2,13 @@
 
 namespace App\Integrations\Strava\Client\Exceptions;
 
-use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-class ClientNotAvailable extends Exception
+class ClientNotAvailable extends HttpException
 {
     public function __construct($message = 'Strava rate limit exceeded. Please try again later.', $code = 429, ?Throwable $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($code, $message, $previous);
     }
 }
