@@ -34,7 +34,7 @@ class SyncStatus
             'activities' => $this->activitySyncingJobs(),
             'activities_linked' => $this->user->activities()->whereHasAdditionalData('strava_id')->count(),
             'unlinked_activities' => $this->user->activities()
-                ->whereDoesntHave('additionalData', fn(Builder $subquery) => $subquery->where('key', 'strava_id'))
+                ->whereDoesntHave('additionalData', fn (Builder $subquery) => $subquery->where('key', 'strava_id'))
                 ->get(),
             'total_activities' => $this->user->activities()->count(),
             'is_indexing' => $this->isIndexing(),
@@ -88,13 +88,13 @@ class SyncStatus
 
     private function getActivitiesFrom(JobRunCollection $jobRuns): Collection
     {
-        $activityIds = $jobRuns->map(fn(JobRun $jobRun) => $jobRun->getTagsAsArray()['activity_id'] ?? null);
+        $activityIds = $jobRuns->map(fn (JobRun $jobRun) => $jobRun->getTagsAsArray()['activity_id'] ?? null);
 //        $jobStatusIds = $jobStatuses->map(fn (JobStatus $jobStatus) => $jobStatus->id);
 //        $tags = JobStatusTag::whereIn('job_status_id', $jobStatusIds)->where('key', 'activity_id')->get();
 //        $activityIds = $tags->map(fn (JobStatusTag $tag) => $tag->value);
 
         return $this->user->activities()->whereIn('id', $activityIds)
-            ->select('id', 'name')->get()->map(fn(Activity $activity) => [
+            ->select('id', 'name')->get()->map(fn (Activity $activity) => [
                 'id' => $activity->id, 'name' => $activity->name,
             ]);
     }

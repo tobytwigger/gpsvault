@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Activity;
 use App\Models\Stats;
-use App\Models\User;
 use App\Services\Analysis\Analyser\Analyser;
 use App\Services\Analysis\Parser\Point;
 use Illuminate\Bus\Queueable;
