@@ -83,6 +83,7 @@ class Activity
 
     private function fillStats(array $activityData, Stats $stats): Stats
     {
+        $startedAt = isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : $stats->started_at;
         $stats->fill([
             'integration' => 'strava',
             'stats_id' => $this->activity->id,
@@ -91,7 +92,8 @@ class Activity
             'max_heartrate' => $activityData['max_heartrate'] ?? null,
             'calories' => $activityData['calories'] ?? null,
             'distance' => $activityData['distance'] ?? $stats->distance,
-            'started_at' => isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : $stats->started_at,
+            'started_at' => $startedAt,
+            'finished_at' => $startedAt instanceof Carbon ? $startedAt->addSeconds($activityData['elapsed_time'] ?? $stats->duration) : null,
             'duration' => $activityData['elapsed_time'] ?? $stats->duration,
             'average_speed' => $activityData['average_speed'] ?? $stats->average_speed,
             'min_altitude' => $activityData['elev_low'] ?? $stats->min_altitude,

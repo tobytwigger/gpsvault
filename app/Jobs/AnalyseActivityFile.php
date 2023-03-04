@@ -33,14 +33,9 @@ class AnalyseActivityFile implements ShouldQueue
         $this->activity = $activity;
     }
 
-    public static function canSeeTracking(User $user = null, array $tags = []): bool
+    public function users(): array
     {
-        $activity = Activity::findOrFail($tags['activityId'] ?? null);
-        if ($user !== null && $activity->user_id === $user->id) {
-            return true;
-        }
-
-        return false;
+        return [$this->activity->user_id];
     }
 
     public function tags(): array

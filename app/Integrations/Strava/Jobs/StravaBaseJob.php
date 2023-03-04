@@ -42,13 +42,9 @@ abstract class StravaBaseJob implements ShouldQueue
         ];
     }
 
-    public static function canSeeTracking(User $user = null, array $tags = []): bool
+    public function users(): array
     {
-        try {
-            return $user && $tags['user_id'] === $user->id;
-        } catch (ModelNotFoundException $e) {
-            return false;
-        }
+        return [$this->activity->user_id];
     }
 
     public function retryUntil()

@@ -55,7 +55,7 @@
         "splitbrain/php-archive": "^1.3",
         "tightenco/ziggy": "^1.0",
         "tobytwigger/laravel-settings": "^1.0.5",
-        "twigger/laravel-job-status": "dev-retries"
+        "twigger/laravel-job-status": "^1.3.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.12",
@@ -90,6 +90,9 @@
             "@php artisan horizon:publish --quiet --ansi",
             "@php artisan larecipe:install --quiet --ansi"
         ],
+        "post-update-cmd": [
+            "@php artisan job:install"
+        ],
         "post-install-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi"
         ],
@@ -111,7 +114,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "dev",

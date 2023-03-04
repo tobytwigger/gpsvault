@@ -41,6 +41,11 @@ class CreateFullBackup implements ShouldQueue
         ];
     }
 
+    public function users(): array
+    {
+        return [$this->user->id];
+    }
+
     public static function canSeeTracking($user = null, array $tags = []): bool
     {
         return (int) $tags['user_id'] === $user?->id;

@@ -164,5 +164,6 @@ return [
         'manage-strava-clients',
         'viewWebSocketsDashboard',
         'manage-bruit-key',
+        'viewJobStatus'
     ],
 ];

@@ -38,9 +38,9 @@ class SyncActivities implements ShouldQueue
         ];
     }
 
-    public static function canSeeTracking($user = null, array $tags = []): bool
+    public function users(): array
     {
-        return $user?->id === $tags['user_id'];
+        return [$this->user->id];
     }
 
     /**

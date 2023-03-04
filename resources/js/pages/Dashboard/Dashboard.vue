@@ -2,9 +2,10 @@
     <c-app-wrapper :title="dashboardTitle" :menu-items="menuItems">
         <v-tabs
             v-if="dashboards.length > 0"
-            vertical
             v-model="selectedDashboardIndex"
             icons-and-text
+            centered
+            grow
         >
             <v-tabs-slider></v-tabs-slider>
 
