@@ -50,7 +50,7 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id', 'cumulative_distance'
+        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id', 'cumulative_distance',
     ];
 
     protected $casts = [
@@ -62,7 +62,7 @@ class RoutePath extends Model
     ];
 
     protected $appends = [
-        'human_started_at', 'human_ended_at', 'linestring_with_distance'
+        'human_started_at', 'human_ended_at', 'linestring_with_distance',
     ];
 
     protected $postgisFields = [
