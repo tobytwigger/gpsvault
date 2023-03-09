@@ -10,6 +10,7 @@ class Valhalla
     public function request(string $method, string $url, array $options = [])
     {
         $fullUrl = 'https://valhalla1.openstreetmap.de' . $url;
+
         $response = Http::send($method, $fullUrl, $options);
         if ($response->failed()) {
             throw new HttpException($response->json('status_code'), sprintf(
@@ -50,7 +51,7 @@ class Valhalla
 
         $response = $this->request(
             'GET',
-            sprintf('/route?json=%s', json_encode($options))
+            sprintf('/route?json=%s', urlencode(json_encode($options)))
         );
 
         return $response->json();
@@ -62,11 +63,11 @@ class Valhalla
             'GET',
             sprintf(
                 '/height?json=%s',
-                json_encode([
+                urlencode(json_encode([
                     'range' => true,
                     'encoded_polyline' => $encodedPolyline,
                     'shape_format' => 'polyline6',
-                ])
+                ]))
             )
         );
 
@@ -79,11 +80,11 @@ class Valhalla
             'GET',
             sprintf(
                 '/sources_to_targets?json=%s',
-                json_encode([
+                urlencode(json_encode([
                     'sources' => $sources,
                     'targets' => $targets,
                     'costing' => 'bicycle',
-                ])
+                ]))
             )
         );
 
