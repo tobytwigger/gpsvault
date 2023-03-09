@@ -12,6 +12,8 @@ class PlannerRequest extends FormRequest
             'geojson' => 'required|string',
             'elevation' => 'required|array',
             'elevation.*' => 'required|numeric',
+            'cumulative_distance' => 'required|array',
+            'cumulative_distance.*' => 'required|numeric',
             'waypoints' => 'sometimes|array',
             'waypoints.*' => 'required|array',
             'waypoints.*.id' => 'sometimes|nullable|numeric|exists:waypoints,id',

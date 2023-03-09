@@ -210,7 +210,7 @@ export default {
             if(this.routeModel.path) {
                 return {
                     type: 'LineString',
-                    coordinates: this.routeModel.path.linestring.map(c => c.coordinates)
+                    coordinates: this.routeModel.path.linestring_with_distance
                 }
             }
             return null;

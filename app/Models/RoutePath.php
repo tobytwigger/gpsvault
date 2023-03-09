@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\LineString;
+use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
  * App\Models\RoutePath.
@@ -49,7 +50,7 @@ class RoutePath extends Model
     use HasFactory, PostgisTrait;
 
     protected $fillable = [
-        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id',
+        'linestring', 'distance', 'elevation_gain', 'route_id', 'duration', 'settings', 'thumbnail_id', 'cumulative_distance'
     ];
 
     protected $casts = [
@@ -57,10 +58,11 @@ class RoutePath extends Model
         'elevation_gain' => 'float',
         'duration' => 'float',
         'settings' => 'array',
+        'cumulative_distance' => 'array',
     ];
 
     protected $appends = [
-        'human_started_at', 'human_ended_at',
+        'human_started_at', 'human_ended_at', 'linestring_with_distance'
     ];
 
     protected $postgisFields = [
@@ -86,6 +88,21 @@ class RoutePath extends Model
                 GenerateRouteThumbnail::dispatch($routePath);
             }
         });
+    }
+
+    public function getLinestringWithDistanceAttribute()
+    {
+        if ($this->linestring === null) {
+            return null;
+        }
+        $cumulativeDistancePoints = collect($this->cumulative_distance);
+        if ($cumulativeDistancePoints->count() < $this->linestring->count()) {
+            $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
+        }
+
+        return collect($this->linestring->getPoints())
+            ->map(fn (Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->toArray();
     }
 
     public function routePathWaypoints()

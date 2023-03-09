@@ -203,6 +203,7 @@ export default {
                     return [c[0], c[1]];
                 }), 6),
                 elevation: this.result.coordinates.map(c => c[2]),
+                cumulative_distance: this.result.coordinates.map(c => c[3]),
                 waypoints: this.schema.waypoints.map((waypoint, index) => {
                     // If custom waypoint, then we remove the ID
                     if(waypoint.unsaved ?? false) {
