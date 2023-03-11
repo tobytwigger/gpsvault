@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loading">Loading map</div>
-        <div v-else-if="geojson === null">No route could be plotted</div>
+        <div v-else-if="geojson.coordinates === null">No route could be plotted</div>
         <c-map :geojson="geojson" v-else></c-map>
     </div>
 </template>
@@ -26,9 +26,7 @@ export default {
         geojson() {
             return {
                 type: 'LineString',
-                coordinates: (this.stats.linestringWithDistance !== null
-                    ? this.stats.linestringWithDistance
-                    : this.stats?.linestring?.map(l => l.coordinates)) ?? null
+                coordinates: this.stats.linestringWithDistance ?? null
             };
         }
     }
