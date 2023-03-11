@@ -12,11 +12,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use JobStatus\Concerns\Trackable;
 use Ramsey\Uuid\Uuid;
 
 class GenerateActivityThumbnail implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     private Stats $stats;
 
@@ -27,6 +28,13 @@ class GenerateActivityThumbnail implements ShouldQueue
     public function __construct(Stats $stats)
     {
         $this->stats = $stats;
+    }
+
+    public function tags()
+    {
+        return [
+            'activity' => $this->stats->model->id,
+        ];
     }
 
     /**
