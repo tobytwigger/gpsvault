@@ -165,5 +165,6 @@ return [
         'viewWebSocketsDashboard',
         'manage-bruit-key',
         'viewJobStatus',
+        'superadmin',
     ],
 ];

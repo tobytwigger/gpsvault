@@ -152,16 +152,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.261.7",
+            "version": "3.261.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2f0a97018eb9fd05bbd69a75a943ef15d0bbc785"
+                "reference": "d91e6f89a6c41e8df859b0d313150386cfee6f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2f0a97018eb9fd05bbd69a75a943ef15d0bbc785",
-                "reference": "2f0a97018eb9fd05bbd69a75a943ef15d0bbc785",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d91e6f89a6c41e8df859b0d313150386cfee6f6a",
+                "reference": "d91e6f89a6c41e8df859b0d313150386cfee6f6a",
                 "shasum": ""
             },
             "require": {
@@ -240,9 +240,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.9"
             },
-            "time": "2023-03-08T19:20:51+00:00"
+            "time": "2023-03-10T19:25:08+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -4474,34 +4474,37 @@
         },
         {
             "name": "league/csv",
-            "version": "9.8.0",
+            "version": "9.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/csv.git",
-                "reference": "9d2e0265c5d90f5dd601bc65ff717e05cec19b47"
+                "reference": "b4418ede47fbd88facc34e40a16c8ce9153b961b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/csv/zipball/9d2e0265c5d90f5dd601bc65ff717e05cec19b47",
-                "reference": "9d2e0265c5d90f5dd601bc65ff717e05cec19b47",
+                "url": "https://api.github.com/repos/thephpleague/csv/zipball/b4418ede47fbd88facc34e40a16c8ce9153b961b",
+                "reference": "b4418ede47fbd88facc34e40a16c8ce9153b961b",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "php": "^7.4 || ^8.0"
+                "php": "^8.1.2"
             },
             "require-dev": {
-                "ext-curl": "*",
+                "doctrine/collections": "^2.1.2",
                 "ext-dom": "*",
-                "friendsofphp/php-cs-fixer": "^v3.4.0",
-                "phpstan/phpstan": "^1.3.0",
-                "phpstan/phpstan-phpunit": "^1.0.0",
-                "phpstan/phpstan-strict-rules": "^1.1.0",
-                "phpunit/phpunit": "^9.5.11"
+                "ext-xdebug": "*",
+                "friendsofphp/php-cs-fixer": "^v3.14.3",
+                "phpbench/phpbench": "^1.2.8",
+                "phpstan/phpstan": "^1.10.4",
+                "phpstan/phpstan-deprecation-rules": "^1.1.2",
+                "phpstan/phpstan-phpunit": "^1.3.10",
+                "phpstan/phpstan-strict-rules": "^1.5.0",
+                "phpunit/phpunit": "^10.0.14"
             },
             "suggest": {
-                "ext-dom": "Required to use the XMLConverter and or the HTMLConverter classes",
+                "ext-dom": "Required to use the XMLConverter and the HTMLConverter classes",
                 "ext-iconv": "Needed to ease transcoding CSV using iconv stream filters"
             },
             "type": "library",
@@ -4554,7 +4557,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-04T00:13:07+00:00"
+            "time": "2023-03-11T15:57:12+00:00"
         },
         {
             "name": "league/flysystem",
@@ -10622,16 +10625,16 @@
         },
         {
             "name": "spatie/image-optimizer",
-            "version": "1.6.3",
+            "version": "1.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image-optimizer.git",
-                "reference": "9ed7a80f92310d162adb39f8ffe2622b5ae05d91"
+                "reference": "d997e01ba980b2769ddca2f00badd3b80c2a2512"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/9ed7a80f92310d162adb39f8ffe2622b5ae05d91",
-                "reference": "9ed7a80f92310d162adb39f8ffe2622b5ae05d91",
+                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/d997e01ba980b2769ddca2f00badd3b80c2a2512",
+                "reference": "d997e01ba980b2769ddca2f00badd3b80c2a2512",
                 "shasum": ""
             },
             "require": {
@@ -10671,9 +10674,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/image-optimizer/issues",
-                "source": "https://github.com/spatie/image-optimizer/tree/1.6.3"
+                "source": "https://github.com/spatie/image-optimizer/tree/1.6.4"
             },
-            "time": "2023-02-28T16:56:09+00:00"
+            "time": "2023-03-10T08:43:19+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",

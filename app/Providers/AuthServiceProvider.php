@@ -23,6 +23,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        Gate::before(fn ($user) => $user->can('superadmin') ? true : null);
+
         Gate::define('viewLarecipe', function ($user = null, $documentation = null) {
             if ($user === null || $documentation === null) {
                 return true;

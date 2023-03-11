@@ -44,9 +44,9 @@ class BackupController extends Controller
      */
     public function store(Request $request)
     {
-        if (JobStatus::forJobAlias('create-full-backup')
+        if (JobStatus::whereAlias('create-full-backup')
             ->whereTag('user_id', Auth::user()->id)
-            ->whereNotStatus(['succeeded', 'failed', 'cancelled'])
+            ->whereNotFinished()
             ->exists()) {
             throw new HttpException(403, 'A backup is already running');
         }

@@ -22,6 +22,8 @@
         <script src="{{ mix('dist/js/app.js') }}" defer></script>
     </head>
     <body class="font-sans antialiased">
+        @jobapi
+
         @inertia
 
         @env ('local')
