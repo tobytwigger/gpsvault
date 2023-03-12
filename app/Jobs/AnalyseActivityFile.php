@@ -40,13 +40,13 @@ class AnalyseActivityFile implements ShouldQueue
     public function tags(): array
     {
         return [
-            'activityId' => $this->activity->id,
+            'activity_id' => $this->activity->id,
         ];
     }
 
     public function alias(): string
     {
-        return 'analyse-activity';
+        return 'analyse-activity-file';
     }
 
     /**
