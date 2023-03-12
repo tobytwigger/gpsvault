@@ -341,9 +341,9 @@ export default {
                     this._schema = schema;
                 }
             });
-            let addAsPlaceBtn = this._createPopupButton('Add as a place', 'add-as-place-' + waypoint.id, (e) => console.log('Add as a place'));
+            // let addAsPlaceBtn = this._createPopupButton('Add as a place', 'add-as-place-' + waypoint.id, (e) => console.log('Add as a place'));
             let buttonDiv = document.createElement('div');
-            buttonDiv.appendChild(removeMarkerBtn).appendChild(addAsPlaceBtn);
+            buttonDiv.appendChild(removeMarkerBtn);//.appendChild(addAsPlaceBtn);
 
             let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(buttonDiv);
 
