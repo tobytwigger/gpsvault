@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use JobStatus\Concerns\Trackable;
 use Location\Coordinate;
 use Location\Polyline;
 use Location\Processor\Polyline\SimplifyBearing;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseRouteFile implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Trackable;
 
     public Route $route;
 
@@ -38,11 +39,24 @@ class AnalyseRouteFile implements ShouldQueue
         $this->route = $route;
     }
 
+    public function alias(): ?string
+    {
+        return 'analyse-route-file';
+    }
+
+    public function tags(): array
+    {
+        return [
+            'route_id' => $this->route->id,
+        ];
+    }
+
     /**
      * Execute the job.
      */
     public function handle()
     {
+        sleep(20);
         if ($this->route->file_id === null) {
             throw new NotFoundHttpException(sprintf('Route %u does not have a file associated with it.', $this->route->id));
         }
@@ -50,15 +64,22 @@ class AnalyseRouteFile implements ShouldQueue
 
         $linestring = new LineString(
             collect($analysis->getPoints())
-                ->map(fn (Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
+                ->map(fn(Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
                 ->all()
         );
+
+        $cumulativeDistance = collect($analysis->getPoints())
+            ->map(fn(Point $point) => $point->getCumulativeDistance())
+            ->all();
+
+        $this->status()->message(json_encode($cumulativeDistance));
 
         $routePath = $this->route->routePaths()->create([
             'linestring' => $linestring,
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
             'duration' => $analysis->getDuration() ?? 0,
+            'cumulative_distance' => $cumulativeDistance
         ]);
 
         $ids = [];
@@ -86,7 +107,7 @@ class AnalyseRouteFile implements ShouldQueue
 
         $polyline->addPoints(
             collect($analysis->getPoints())
-                ->map(fn (Point $point) => new Coordinate($point->getLatitude(), $point->getLongitude()))
+                ->map(fn(Point $point) => new Coordinate($point->getLatitude(), $point->getLongitude()))
                 ->all()
         );
 

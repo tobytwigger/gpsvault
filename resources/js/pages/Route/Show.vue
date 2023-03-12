@@ -26,7 +26,22 @@
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-summary">
-                <v-row>
+                <v-row v-if="!routeModel.path">
+                    <v-col v-if="jobStatus === null || jobStatus.status === 'succeeded'">
+                        <span v-if="routeModel.file_id">
+                            Route analysis incomplete. Please contact support at support@gpsvault.co.uk.
+                        </span>
+                        <span v-else>
+                            No path data available. Please edit the route to add a path.
+                        </span>
+                    </v-col>
+                    <v-col v-else>
+                        <c-loading-from-job-status :job-status="jobStatus">
+
+                        </c-loading-from-job-status>
+                    </v-col>
+                </v-row>
+                <v-row v-else>
                     <v-col :sm="12" :md="6">
                         <v-list flat>
                             <v-list-item v-if="routeModel.description">
@@ -124,11 +139,14 @@ import CPlaceSearch from '../../ui/components/Place/CPlaceSearch';
 import CRouteTimeline from '../../ui/components/Route/CRouteTimeline';
 import CStats from '../../ui/components/CStats';
 import units from '../../ui/mixins/units';
+import {client} from '@tobytwigger/laravel-job-status-js';
+import CLoadingFromJobStatus from '../../ui/components/Page/CLoadingFromJobStatus.vue';
 
 export default {
     name: "Show",
     mixins: [units],
     components: {
+        CLoadingFromJobStatus,
         CStats,
         CRouteTimeline,
         CPlaceSearch,
@@ -148,10 +166,45 @@ export default {
             tab: 'tab-summary',
             showingRouteEditForm: false,
             showingRouteDeleteForm: false,
-            showingRouteUploadFileForm: false
+            showingRouteUploadFileForm: false,
+            jobStatus: null,
+            listener: null
+        }
+    },
+    mounted() {
+        this.setupListeners();
+    },
+    beforeDestroy() {
+        this.removeListeners();
+    },
+    watch: {
+        jobStatus: {
+            deep: true,
+            handler: function(newVal, oldVal) {
+                if(newVal !== null && oldVal !== null && newVal?.status !== oldVal?.status) {
+                    this.$inertia.reload();
+                }
+            }
         }
     },
     methods: {
+        setupListeners() {
+            this.removeListeners();
+            this.listener = client.runs.search()
+                .whereAlias('analyse-route-file')
+                .whereTag('route_id', this.routeModel.id)
+                .listen()
+                .onUpdated((runs) => {
+                    this.jobStatus = runs.total > 0 ? runs.data[0] : null;
+                })
+                .start()
+        },
+        removeListeners() {
+            if(this.listener) {
+                this.listener.stop();
+                this.listener = null;
+            }
+        },
         formatDateTime(dt) {
             return moment(dt).format('DD/MM/YYYY HH:mm:ss');
         }
