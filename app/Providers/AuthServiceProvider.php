@@ -24,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(fn(User $user, string $ability) => $user->checkPermissionTo('superadmin') ? true : null);
+        Gate::before(fn (User $user, string $ability) => $user->checkPermissionTo('superadmin') ? true : null);
 
         Gate::define('viewLarecipe', function ($user = null, $documentation = null) {
             if ($user === null || $documentation === null) {
