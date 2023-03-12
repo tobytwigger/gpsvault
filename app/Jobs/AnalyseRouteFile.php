@@ -64,12 +64,12 @@ class AnalyseRouteFile implements ShouldQueue
 
         $linestring = new LineString(
             collect($analysis->getPoints())
-                ->map(fn(Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
+                ->map(fn (Point $point) => new PostgisPoint($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
                 ->all()
         );
 
         $cumulativeDistance = collect($analysis->getPoints())
-            ->map(fn(Point $point) => $point->getCumulativeDistance())
+            ->map(fn (Point $point) => $point->getCumulativeDistance())
             ->all();
 
         $this->status()->message(json_encode($cumulativeDistance));
@@ -79,7 +79,7 @@ class AnalyseRouteFile implements ShouldQueue
             'distance' => $analysis->getDistance(),
             'elevation_gain' => $analysis->getCumulativeElevationGain(),
             'duration' => $analysis->getDuration() ?? 0,
-            'cumulative_distance' => $cumulativeDistance
+            'cumulative_distance' => $cumulativeDistance,
         ]);
 
         $ids = [];
@@ -107,7 +107,7 @@ class AnalyseRouteFile implements ShouldQueue
 
         $polyline->addPoints(
             collect($analysis->getPoints())
-                ->map(fn(Point $point) => new Coordinate($point->getLatitude(), $point->getLongitude()))
+                ->map(fn (Point $point) => new Coordinate($point->getLatitude(), $point->getLongitude()))
                 ->all()
         );
 
