@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -23,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::before(fn ($user) => $user->can('superadmin') ? true : null);
+        Gate::before(fn(User $user, string $ability) => $user->checkPermissionTo('superadmin') ? true : null);
 
         Gate::define('viewLarecipe', function ($user = null, $documentation = null) {
             if ($user === null || $documentation === null) {
