@@ -51,12 +51,16 @@ class AnalyseRouteFile implements ShouldQueue
         ];
     }
 
+    public function users(): array
+    {
+        return [$this->route->user_id];
+    }
+
     /**
      * Execute the job.
      */
     public function handle()
     {
-        sleep(20);
         if ($this->route->file_id === null) {
             throw new NotFoundHttpException(sprintf('Route %u does not have a file associated with it.', $this->route->id));
         }

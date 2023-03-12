@@ -10,7 +10,7 @@
                 sm="8">
                 <v-card>
                     <v-card-title class="justify-center">
-                        <span class="primary--text">Analysing route</span>
+                        <span class="primary--text">{{title}}</span>
                     </v-card-title>
 
                     <v-card-subtitle v-if="jobStatus.messages.length > 0">
@@ -39,6 +39,10 @@ export default {
         jobStatus: {
             required: true,
             type: Object
+        },
+        title: {
+            required: true,
+            type: String
         }
     },
     computed: {

@@ -36,7 +36,7 @@
                         </span>
                     </v-col>
                     <v-col v-else>
-                        <c-loading-from-job-status :job-status="jobStatus">
+                        <c-loading-from-job-status title="Analysing route" :job-status="jobStatus">
 
                         </c-loading-from-job-status>
                     </v-col>

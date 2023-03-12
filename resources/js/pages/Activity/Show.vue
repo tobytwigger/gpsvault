@@ -40,7 +40,22 @@
                     </template>
                 </c-job-status>
 
-                <v-row>
+                <v-row v-if="activity.stats.length === 0">
+                    <v-col v-if="jobStatus === null || jobStatus.status === 'succeeded'">
+                        <span v-if="activity.file_id">
+                            Activity analysis incomplete. Please contact support at support@gpsvault.co.uk.
+                        </span>
+                        <span v-else>
+                            No path data available. Please upload the recording of your activity.
+                        </span>
+                    </v-col>
+                    <v-col v-else>
+                        <c-loading-from-job-status title="Analysing activity" :job-status="jobStatus">
+
+                        </c-loading-from-job-status>
+                    </v-col>
+                </v-row>
+                <v-row v-else>
                     <v-col :sm="12" :md="6">
 
                         <v-list flat>
@@ -224,10 +239,13 @@ import CJobStatus from '../../ui/components/CJobStatus';
 import CMap from '../../ui/components/Map/CMap';
 import CLinkStravaActivityForm from '../../ui/components/Strava/Sync/CLinkStravaActivityForm';
 import CStatsLoading from '../../ui/components/Activity/CStatsLoading';
+import CLoadingFromJobStatus from '../../ui/components/Page/CLoadingFromJobStatus.vue';
+import {client} from '@tobytwigger/laravel-job-status-js';
 
 export default {
     name: "Show",
     components: {
+        CLoadingFromJobStatus,
         CStatsLoading,
         CLinkStravaActivityForm,
         CMap,
@@ -257,10 +275,45 @@ export default {
             showingActivityUploadForm: false,
             showingActivityEditForm: false,
             showingLinkStravaForm: false,
-            showingUploadFileForm: false
+            showingUploadFileForm: false,
+            jobStatus: null,
+            listener: null
+        }
+    },
+    mounted() {
+        this.setupListeners();
+    },
+    beforeDestroy() {
+        this.removeListeners();
+    },
+    watch: {
+        jobStatus: {
+            deep: true,
+            handler: function(newVal, oldVal) {
+                if(newVal !== null && oldVal !== null && newVal?.status !== oldVal?.status) {
+                    this.$inertia.reload();
+                }
+            }
         }
     },
     methods: {
+        setupListeners() {
+            this.removeListeners();
+            this.listener = client.runs.search()
+                .whereAlias('analyse-activity-file')
+                .whereTag('activity_id', this.activity.id)
+                .listen()
+                .onUpdated((runs) => {
+                    this.jobStatus = runs.total > 0 ? runs.data[0] : null;
+                })
+                .start()
+        },
+        removeListeners() {
+            if(this.listener) {
+                this.listener.stop();
+                this.listener = null;
+            }
+        },
         refreshStravaActivity() {
             this.loadingStravaSync = true;
             axios.post(route('strava.activity.sync', this.activity.id))
