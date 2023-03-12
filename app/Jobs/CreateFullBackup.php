@@ -61,6 +61,8 @@ class CreateFullBackup implements ShouldQueue
 
         /* User */
         $zipCreator->add($this->user);
+        $this->status()->setPercentage(5);
+        $this->checkForSignals();
 
         /* Activity */
         $activityCount = 0;
@@ -69,6 +71,8 @@ class CreateFullBackup implements ShouldQueue
             $activityCount++;
         }
         $this->status()->line(sprintf('Added %u activities.', $activityCount));
+        $this->status()->setPercentage(10);
+        $this->checkForSignals();
 
         /* Route */
         $routeCount = 0;
@@ -77,6 +81,8 @@ class CreateFullBackup implements ShouldQueue
             $routeCount++;
         }
         $this->status()->line(sprintf('Added %u routes.', $routeCount));
+        $this->status()->setPercentage(20);
+        $this->checkForSignals();
 
         /* Tour */
         $tourCount = 0;
@@ -85,12 +91,14 @@ class CreateFullBackup implements ShouldQueue
             $tourCount++;
         }
         $this->status()->line(sprintf('Added %u tours.', $tourCount));
+        $this->status()->setPercentage(30);
 
         $this->checkForSignals();
 
         $this->status()->line('Generating archive.');
 
         $file = $zipCreator->archive();
+        $this->status()->setPercentage(95);
         $file->title = $file->title ?? 'Full backup ' . Carbon::now()->format('d/m/Y');
         $file->caption = $file->caption ?? 'Full backup taken at ' . Carbon::now()->format('d/m/Y H:i:s');
         $file->save();

@@ -2,10 +2,10 @@
 
     <div>
         <div>
-        <span v-if="loading && items.length === 0">
+        <span v-if="loading && items.length === 0 && prepend === false">
             Looking for items...
         </span>
-            <span v-else-if="items.length === 0">
+            <span v-else-if="items.length === 0 && prepend === false">
             No items found
         </span>
             <div v-else>

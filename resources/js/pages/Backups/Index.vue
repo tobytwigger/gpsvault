@@ -1,19 +1,10 @@
 <template>
     <c-app-wrapper title="Your Backups" :menu-items="menuItems">
-<!--        <c-job-status job="create-full-backup" :tags="{user_id: $page.props.user.id}" :poll-interval="2000" :onCompleted="$inertia.reload()">-->
-<!--            <template v-slot:incomplete>-->
-<!--                <v-progress-circular-->
-<!--                    indeterminate-->
-<!--                    color="primary"-->
-<!--                ></v-progress-circular>-->
-<!--            </template>-->
-<!--        </c-job-status>-->
-
-        <c-iterator :infinite-scroll="true" :paginator="backups" item-key="id" :prepend="isGeneratingBackup">
+        <c-iterator :infinite-scroll="true" :paginator="backups" item-key="id" :prepend="showBackupPrepend">
             <template v-slot:prepend>
                 <c-loading-backup-card
                     :job-status="jobStatus"
-                    v-if="isGeneratingBackup"
+                    v-if="showBackupPrepend"
                     @cancel="cancel">
                 </c-loading-backup-card>
             </template>
@@ -32,18 +23,15 @@ import CBackupCard from 'ui/components/Backup/CBackupCard';
 import CPaginationIterator from 'ui/reusables/table/CPaginationIterator';
 import CConfirmationDialog from 'ui/components/CConfirmationDialog';
 import CBackupForm from 'ui/components/Backup/CBackupForm';
-import CJobStatus from '../../ui/components/CJobStatus';
-import usesJobStatus from '../../ui/mixins/usesJobStatus';
 import CLoadingBackupCard from '../../ui/components/Backup/CLoadingBackupCard';
 import CIterator from '../../ui/reusables/table/CIterator';
+import {client} from '@tobytwigger/laravel-job-status-js';
 
 export default {
     name: "Index",
-    mixins: [usesJobStatus],
     components: {
         CIterator,
         CLoadingBackupCard,
-        CJobStatus,
         CBackupForm,
         CConfirmationDialog, CPaginationIterator, CBackupCard, CActivityForm, CActivityCard, CAppWrapper
     },
@@ -56,8 +44,8 @@ export default {
     watch: {
         jobStatus: {
             deep: true,
-            handler: function(oldVal) {
-                if(this.jobStatus.status === 'succeeded' && oldVal.status !== 'succeeded') {
+            handler: function(newVal, oldVal) {
+                if(newVal !== null && oldVal !== null && newVal?.status !== oldVal?.status) {
                     this.$inertia.reload();
                 }
             }
@@ -65,25 +53,63 @@ export default {
     },
     data() {
         return {
-            jobStatusAlias: 'create-full-backup',
-            jobStatusTags: {user_id: this.$page.props.user.id}
+            jobStatusTags: {user_id: this.$page.props.user.id},
+            jobStatus: null,
+            listener: null,
+            isLoading: false,
+            isUpdating: false
         }
     },
+    mounted() {
+        this.setupListener();
+    },
+    beforeDestroy() {
+        this.removeListener();
+    },
     methods: {
+        cancel() {
+            if(this.generatingArchive) {
+                client.runs.signal(this.jobStatus.id, 'cancel')
+                    .shouldCancelJob()
+                    .send();
+            }
+        },
         createBackup() {
             this.$inertia.post(route('backup.store'), {})
         },
+        setupListener() {
+            this.removeListener();
+            this.listener = client.runs.search()
+                .whereAlias('create-full-backup')
+                .listen()
+                .onStartingInitialLoad(() => this.loading = true)
+                .onStartingUpdate(() => this.isUpdating = true)
+                .onUpdated((runs) => {
+                    this.jobStatus = runs.total > 0 ? runs.data[0] : null;
+                })
+                .onFinishingUpdate(() => this.isUpdating = false)
+                .onFinishingInitialLoad(() => this.loading = false)
+                .start()
+        },
+        removeListener() {
+            if(this.listener !== null) {
+                this.listener.stop();
+                this.listener = null;
+            }
+        }
     },
     computed: {
-        isGeneratingBackup() {
-            return this.jobStatus !== null
-                && this.jobStatus.status !== 'succeeded';
+        generatingArchive() {
+            return this.jobStatus !== null && ['queued', 'started'].includes(this.jobStatus.status);
+        },
+        showBackupPrepend() {
+            return this.generatingArchive || (this.jobStatus !== null && ['cancelled', 'failed'].includes(this.jobStatus.status));
         },
         menuItems() {
             return [
                 {
                     title: 'Create Backup',
-                    disabled: this.isGeneratingBackup,
+                    disabled: this.generatingArchive,
                     icon: 'mdi-autorenew',
                     action: () => {
                         this.createBackup();

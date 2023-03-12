@@ -5,13 +5,13 @@
         outlined
     >
         <v-card-title>
-            <span v-if="jobStatus.isFinished === false">Backing up...</span>
-            <span v-else-if="jobStatus.status === 'failed'">Backup failed</span>
-            <span v-if="jobStatus.status === 'cancelled'">Backup cancelled</span>
+            <span v-if="jobStatus.status === 'failed'">Backup failed</span>
+            <span v-else-if="jobStatus.status === 'cancelled'">Backup cancelled</span>
+            <span v-else-if="jobStatus.status === 'started' || jobStatus.status === 'queued'">Backing up...</span>
         </v-card-title>
 
-        <v-card-subtitle v-if="jobStatus.lastMessage">
-            {{ jobStatus.lastMessage }}
+        <v-card-subtitle v-if="jobStatus.messages.length > 0">
+            {{ jobStatus.messages[0].message }}
         </v-card-subtitle>
 
         <v-card-text>
