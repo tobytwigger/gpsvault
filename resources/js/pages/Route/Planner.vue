@@ -79,6 +79,17 @@
 
         </template>
 
+        <v-alert
+            outlined
+            type="error"
+            border="left"
+            v-if="Object.keys(errors).length > 0"
+            v-for="error in Object.keys(errors)"
+            :key="error"
+        >
+            {{errors[error][0]}}
+        </v-alert>
+
         <c-route-planner
             :result="result"
             :schema="schema"
@@ -172,6 +183,7 @@ export default {
                     } else {
                         this.errors = {generalError: [e.response.data.message]};
                     }
+
                 })
                 .finally(() => this.searching = false);
         },
