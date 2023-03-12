@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8fa9441ff52cac68a4b951f0789a202e",
+    "content-hash": "ff84777ba9ed3c256aa1103a35159ccf",
     "packages": [
         {
             "name": "adriangibbons/php-fit-file-analysis",
@@ -14033,16 +14033,16 @@
         },
         {
             "name": "twigger/laravel-job-status",
-            "version": "v1.3.2",
+            "version": "v1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tobytwigger/laravel-job-status.git",
-                "reference": "f42ae1d5be340075289cd4a562998775a1979a67"
+                "reference": "15c65acfafa8644a5c5e3254faf511ba5324c0cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tobytwigger/laravel-job-status/zipball/f42ae1d5be340075289cd4a562998775a1979a67",
-                "reference": "f42ae1d5be340075289cd4a562998775a1979a67",
+                "url": "https://api.github.com/repos/tobytwigger/laravel-job-status/zipball/15c65acfafa8644a5c5e3254faf511ba5324c0cd",
+                "reference": "15c65acfafa8644a5c5e3254faf511ba5324c0cd",
                 "shasum": ""
             },
             "require": {
@@ -14102,7 +14102,7 @@
                 "docs": "https://tobytwigger.github.io/laravel-job-status/",
                 "email": "tobytwigger1@gmail.com",
                 "issues": "https://github.com/tobytwigger/laravel-job-status/issues",
-                "source": "https://github.com/tobytwigger/laravel-job-status/tree/v1.3.2"
+                "source": "https://github.com/tobytwigger/laravel-job-status/tree/v1.3.3"
             },
             "funding": [
                 {
@@ -14110,7 +14110,7 @@
                     "type": "buymeacoffee"
                 }
             ],
-            "time": "2023-03-04T00:33:11+00:00"
+            "time": "2023-03-12T21:21:09+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

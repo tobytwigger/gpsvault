@@ -81,6 +81,7 @@ export default {
             this.removeListener();
             this.listener = client.runs.search()
                 .whereAlias('create-full-backup')
+                .whereTag('user_id', this.$page.props.user.id)
                 .listen()
                 .onStartingInitialLoad(() => this.loading = true)
                 .onStartingUpdate(() => this.isUpdating = true)
