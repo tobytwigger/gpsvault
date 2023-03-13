@@ -16,7 +16,7 @@ class ActivityStravaIdController extends Controller
 {
     public function update(Request $request, Activity $activity)
     {
-        $validated = $request->validate([
+        $request->validate([
             'strava_id' => 'required|numeric',
         ]);
 
