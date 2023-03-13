@@ -9,6 +9,7 @@ use App\Models\Stats;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasStats
@@ -43,11 +44,10 @@ trait HasStats
 
     /**
      * A relationship to all the linked stats.
-     * @return MorphMany
      */
-    public function stats(): MorphMany
+    public function stats(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->morphMany(Stats::class, 'stats');
+        return $this->hasMany(Stats::class, 'activity_id');
     }
 
     public function file()
@@ -79,11 +79,10 @@ trait HasStats
      */
     public static function scopeOrderByStat(Builder $query, string $stat)
     {
-        $orderedActivities = Stats::where('stats_type', Activity::class)
-            ->orderByPreference()
-            ->select(['id', 'stats_id', $stat])
+        $orderedActivities = Stats::orderByPreference()
+            ->select(['id', 'activity_id', $stat])
             ->get()
-            ->unique(fn (Stats $stats) => $stats->stats_id)
+            ->unique(fn (Stats $stats) => $stats->activity_id)
             ->sort(function (Stats $a, Stats $b) use ($stat) {
                 if (!$a->{$stat}) {
                     return !$b->{$stat} ? 1 : 0;
@@ -97,9 +96,9 @@ trait HasStats
 
                 return $a->{$stat} < $b->{$stat} ? 1 : -1;
             })
-            ->map(fn (Stats $stats) => sprintf('\'%s\'', $stats->stats_id));
+            ->map(fn (Stats $stats) => sprintf('\'%s\'', $stats->activity_id));
 
-        $query->with('stats', fn (MorphMany $subQuery) => $subQuery->orderByPreference())
+        $query->with('stats', fn (HasMany $subQuery) => $subQuery->orderByPreference())
             ->when(
                 $orderedActivities->count() > 0,
                 fn (Builder $subQuery) => $subQuery->orderByRaw(sprintf('array_position(ARRAY[%s]::bigint[], id)', $orderedActivities->join(', ')))

@@ -21,7 +21,7 @@ use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
  * @property float|null $calories
  * @property float|null $cumulative_distance
  * @property int|null $order
- * @property int $stats_id
+ * @property int $activity_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $latitude
@@ -77,7 +77,7 @@ class ActivityPoint extends Model
         'battery',
         'calories',
         'cumulative_distance',
-        'stats_id',
+        'activity_id',
         'order',
     ];
 

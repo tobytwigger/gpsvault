@@ -6,8 +6,10 @@ use App\Models\Activity as ActivityModel;
 use App\Models\Stats;
 use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
+use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 class Activity
@@ -27,10 +29,12 @@ class Activity
             ? $this->createActivity($activityData, $user)
             : $this->updateActivity($activityData, $existingActivity);
 
-        $this->fillStats(
+        $stats = $this->fillStats(
             $activityData,
-            $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => $existingActivity::class])
+            $this->activity->statsFrom('strava')->first() ?? new Stats(['activity_id' => $existingActivity->id])
         );
+
+        $stats->save();
 
         return $this;
     }
@@ -86,8 +90,7 @@ class Activity
         $startedAt = isset($activityData['start_date']) ? Carbon::make($activityData['start_date']) : $stats->started_at;
         $stats->fill([
             'integration' => 'strava',
-            'stats_id' => $this->activity->id,
-            'stats_type' => \App\Models\Activity::class,
+            'activity_id' => $this->activity->id,
             'average_heartrate' => $activityData['average_heartrate'] ?? null,
             'max_heartrate' => $activityData['max_heartrate'] ?? null,
             'calories' => $activityData['calories'] ?? null,
@@ -115,6 +118,9 @@ class Activity
             ),
             'end_latitude' => Arr::first($activityData['end_latlng'] ?? [$stats->end_latitude]),
             'end_longitude' => Arr::last($activityData['end_latlng'] ?? [$stats->end_longitude]),
+            'linestring' => new LineString(collect(GooglePolylineEncoder::decodeValue($activityData['map']['polyline']))
+                ->map(fn(array $points) => new Point($points[0], $points[1], 0))
+                ->all())
         ]);
 
         return $stats;

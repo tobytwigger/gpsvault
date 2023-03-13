@@ -63,9 +63,16 @@ class AnalyseActivityFile implements ShouldQueue
         $this->status()->successMessage('Analysis finished');
 
         $this->status()->line('Saving data');
+
+        $pointLocationData = collect($analysis->getPoints())
+            ->filter(fn(Point $point) => $point->getLatitude() && $point->getLongitude() && $point->getElevation())
+            ->map(fn(Point $point) => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
+            ->toArray();
+
         $stats = Stats::updateOrCreate(
-            ['integration' => 'php', 'stats_id' => $this->activity->id, 'stats_type' => get_class($this->activity)],
+            ['integration' => 'php', 'activity_id' => $this->activity->id],
             [
+                'linestring' => count($pointLocationData) > 1 ? new LineString($pointLocationData) : null,
                 'distance' => $analysis->getDistance(),
                 'average_speed' => $analysis->getAverageSpeed(),
                 'average_pace' => $analysis->getAveragePace(),
@@ -89,49 +96,19 @@ class AnalyseActivityFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
+                'time_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getTime())->all(),
+                'cadence_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCadence())->all(),
+                'temperature_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getTemperature())->all(),
+                'heart_rate_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getHeartRate())->all(),
+                'speed_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getSpeed())->all(),
+                'grade_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getGrade())->all(),
+                'battery_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getBattery())->all(),
+                'calories_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCalories())->all(),
+                'cumulative_distance_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCumulativeDistance())->all(),
             ]
         );
 
-        $this->saveLinestring($stats, $analysis->getPoints());
-
-        $this->savePoints($stats, $analysis->getPoints());
-
         $this->status()->successMessage('Saved data');
-    }
-
-    private function savePoints(Stats $stats, array $points)
-    {
-        $stats->activityPoints()->delete();
-
-        $activityPoints = collect($points)->chunk(1000);
-        $percentage = 0;
-        $increase = 100 / ($activityPoints->count() < 1 ? 1 : $activityPoints->count());
-        $order = 0;
-
-        foreach ($activityPoints as $chunkedPoints) {
-            $stats->activityPoints()->createMany(collect($chunkedPoints)->map(function (Point $point) use (&$order) {
-                $toReturn = [
-                    'points' => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude()),
-                    'elevation' => $point->getElevation(),
-                    'time' => $point->getTime(),
-                    'cadence' => $point->getCadence(),
-                    'temperature' => $point->getTemperature(),
-                    'heart_rate' => $point->getHeartRate(),
-                    'speed' => $point->getSpeed(),
-                    'grade' => $point->getGrade(),
-                    'order' => $order,
-                    'battery' => $point->getBattery(),
-                    'calories' => $point->getCalories(),
-                    'cumulative_distance' => $point->getCumulativeDistance(),
-                ];
-                $order += 1;
-
-                return $toReturn;
-            }));
-
-            $percentage += $increase;
-            $this->status()->setPercentage($percentage);
-        }
     }
 
 //    public function middleware()
@@ -141,23 +118,4 @@ class AnalyseActivityFile implements ShouldQueue
 //        ];
 //    }
 
-    /**
-     * @param Stats $stats
-     * @param array|Point[] $points
-     */
-    private function saveLinestring(Stats $stats, array $points)
-    {
-        $convertedPoints = [];
-
-        foreach ($points as $point) {
-            if ($point->getLatitude() && $point->getLongitude() && $point->getElevation()) {
-                $convertedPoints[] = new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation());
-            }
-        }
-
-        if (count($convertedPoints) > 1) {
-            $stats->linestring = new LineString($convertedPoints);
-            $stats->save();
-        }
-    }
 }

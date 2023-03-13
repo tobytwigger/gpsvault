@@ -46,7 +46,7 @@ class LimitedActivity
 
         $this->fillStats(
             $activityData,
-            new Stats(['stats_id' => $activity->id, 'stats_type' => $activity::class])
+            new Stats(['activity_id' => $activity->id])
         )->save();
 
 
@@ -59,7 +59,7 @@ class LimitedActivity
 
         $stats = $this->fillStats(
             $activityData,
-            $existingActivity->statsFrom('strava')->first() ?? new Stats(['stats_id' => $existingActivity->id, 'stats_type' => $existingActivity::class])
+            $existingActivity->statsFrom('strava')->first() ?? new Stats(['activity_id' => $existingActivity->id])
         );
         $stats->save();
 

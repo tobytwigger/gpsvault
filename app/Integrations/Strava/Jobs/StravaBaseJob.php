@@ -24,7 +24,7 @@ abstract class StravaBaseJob implements ShouldQueue
 //    }
 
     /**
-     * Create a new job instance.
+     * Create a new job instance.4
      */
     public function __construct(Activity $activity)
     {

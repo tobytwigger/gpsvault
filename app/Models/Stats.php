@@ -16,8 +16,6 @@ use MStaack\LaravelPostgis\Geometries\LineString;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 /**
- * * @property LineString|null $linestring
- *
  * @property int $id
  * @property string $integration
  * @property float|null $distance
@@ -41,12 +39,10 @@ use MStaack\LaravelPostgis\Geometries\Point;
  * @property float|null $max_heartrate
  * @property float|null $average_heartrate
  * @property float|null $calories
- * @property mixed|null $linestring
- * @property int $stats_id
- * @property string $stats_type
+ * @property LineString|null $linestring
+ * @property int $activity_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ActivityPoint[] $activityPoints
  * @property-read int|null $activity_points_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\AdditionalData[] $additionalData
  * @property-read int|null $additional_data_count
@@ -107,9 +103,8 @@ class Stats extends Model
 
         'integration',
 
-        'stats_id',
+        'activity_id',
 
-        'stats_type',
         // Distance in metres
         'distance',
         // Date and time the ride was started
@@ -152,6 +147,16 @@ class Stats extends Model
         'max_heartrate',
         // The number of calories burned
         'calories',
+
+        'time_data',
+        'cadence_data',
+        'temperature_data',
+        'heart_rate_data',
+        'speed_data',
+        'grade_data',
+        'battery_data',
+        'calories_data',
+        'cumulative_distance_data',
     ];
 
     protected $casts = [
@@ -174,6 +179,15 @@ class Stats extends Model
         'max_heartrate' => 'float',
         'average_heartrate' => 'float',
         'calories' => 'float',
+        'time_data' => 'array',
+        'cadence_data' => 'array',
+        'temperature_data' => 'array',
+        'heart_rate_data' => 'array',
+        'speed_data' => 'array',
+        'grade_data' => 'array',
+        'battery_data' => 'array',
+        'calories_data' => 'array',
+        'cumulative_distance_data' => 'array',
     ];
 
     protected $postgisFields = [
@@ -216,9 +230,9 @@ class Stats extends Model
         });
     }
 
-    public function model(): MorphTo
+    public function activity(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->morphTo('stats');
+        return $this->belongsTo(Activity::class, 'activity_id');
     }
 
     public function getHumanStartedAtAttribute()
@@ -244,13 +258,13 @@ class Stats extends Model
         if ($this->linestring === null) {
             return null;
         }
-        $cumulativeDistancePoints = $this->activityPoints()->orderBy('order')->select('cumulative_distance')->get()->pluck('cumulative_distance');
+        $cumulativeDistancePoints = collect($this->cumulative_distance_data);
         if ($cumulativeDistancePoints->count() < $this->linestring->count()) {
-            $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), null));
+            $cumulativeDistancePoints = $cumulativeDistancePoints->merge(array_fill(0, $this->linestring->count() - $cumulativeDistancePoints->count(), 0));
         }
 
         return collect($this->linestring->getPoints())
-            ->map(fn (Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->map(fn(Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
             ->toArray();
     }
 
@@ -262,7 +276,7 @@ class Stats extends Model
     public static function scopeOrderByPreference(Builder $query)
     {
         $order = collect(StatsOrder::getValue())
-            ->map(fn (string $integration) => sprintf('\'%s\'', $integration))
+            ->map(fn(string $integration) => sprintf('\'%s\'', $integration))
             ->join(', ');
 
         return $query->orderByRaw(
@@ -273,10 +287,5 @@ class Stats extends Model
     public static function scopePreferred(Builder $query)
     {
         $query->orderByPreference();
-    }
-
-    public function activityPoints()
-    {
-        return $this->hasMany(ActivityPoint::class);
     }
 }
