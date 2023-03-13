@@ -168,13 +168,13 @@ return [
     | Here you may configure settings for DBAL/Doctrine, eg. for registering
     | custom type mappings.
     |
-    */
+     */
     'dbal' => [
         'types' => [
-            # See https://github.com/mstaack/laravel-postgis/issues/144
+            // See https://github.com/mstaack/laravel-postgis/issues/144
             'geometry' => '\Doctrine\DBAL\Types\StringType',
             'geography' => '\Doctrine\DBAL\Types\StringType',
-        ]
-    ]
+        ],
+    ],
 
 ];

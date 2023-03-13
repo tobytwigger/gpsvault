@@ -2,7 +2,6 @@
 
 namespace App\Integrations\Strava\Import\Api\Resources;
 
-use App\Services\Analysis\Parser\Point;
 use JobStatus\JobStatusModifier;
 use MStaack\LaravelPostgis\Geometries\LineString;
 
@@ -30,7 +29,7 @@ class Stats
 
         $jobStatusModifier->message('Generating linestring data');
         $linestring = new LineString(collect($statsData['time']['data'])
-            ->map(fn($timeDelta, $index) => new \MStaack\LaravelPostgis\Geometries\Point(
+            ->map(fn ($timeDelta, $index) => new \MStaack\LaravelPostgis\Geometries\Point(
                 data_get($statsData, 'latlng.data.' . $index . '.0', null),
                 data_get($statsData, 'latlng.data.' . $index . '.1', null),
                 data_get($statsData, 'altitude.data.' . $index, 0)
@@ -39,7 +38,7 @@ class Stats
         $jobStatusModifier->message('Generated linestring data');
 
         $stats->fill(array_merge($pointData, [
-            'linestring' => $linestring
+            'linestring' => $linestring,
         ]))->save();
 
         $jobStatusModifier->successMessage('Saved stats');
@@ -67,6 +66,5 @@ class Stats
                 'speed_data' => [],
                 'cumulative_distance_data' => [],
             ]);
-
     }
 }

@@ -9,7 +9,6 @@ use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\DB;
 use MStaack\LaravelPostgis\Eloquent\PostgisTrait;
 use MStaack\LaravelPostgis\Geometries\LineString;
@@ -264,7 +263,7 @@ class Stats extends Model
         }
 
         return collect($this->linestring->getPoints())
-            ->map(fn(Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
+            ->map(fn (Point $point, int $index) => [$point->getLng(), $point->getLat(), $point->getAlt(), $cumulativeDistancePoints[$index]])
             ->toArray();
     }
 
@@ -276,7 +275,7 @@ class Stats extends Model
     public static function scopeOrderByPreference(Builder $query)
     {
         $order = collect(StatsOrder::getValue())
-            ->map(fn(string $integration) => sprintf('\'%s\'', $integration))
+            ->map(fn (string $integration) => sprintf('\'%s\'', $integration))
             ->join(', ');
 
         return $query->orderByRaw(

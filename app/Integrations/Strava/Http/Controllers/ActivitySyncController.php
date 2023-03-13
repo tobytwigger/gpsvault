@@ -24,7 +24,6 @@ class ActivitySyncController extends Controller
             new LoadStravaKudos($activity),
             new LoadStravaPhotos($activity),
         ])
-        ->dispatch();
-
+            ->dispatch();
     }
 }

@@ -3,14 +3,12 @@
 namespace App\Traits;
 
 use App\Jobs\AnalyseActivityFile;
-use App\Models\Activity;
 use App\Models\File;
 use App\Models\Stats;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait HasStats
 {
@@ -45,7 +43,7 @@ trait HasStats
     /**
      * A relationship to all the linked stats.
      */
-    public function stats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function stats(): HasMany
     {
         return $this->hasMany(Stats::class, 'activity_id');
     }

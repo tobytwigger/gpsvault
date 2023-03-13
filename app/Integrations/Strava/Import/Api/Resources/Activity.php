@@ -119,8 +119,8 @@ class Activity
             'end_latitude' => Arr::first($activityData['end_latlng'] ?? [$stats->end_latitude]),
             'end_longitude' => Arr::last($activityData['end_latlng'] ?? [$stats->end_longitude]),
             'linestring' => new LineString(collect(GooglePolylineEncoder::decodeValue($activityData['map']['polyline']))
-                ->map(fn(array $points) => new Point($points[0], $points[1], 0))
-                ->all())
+                ->map(fn (array $points) => new Point($points[0], $points[1], 0))
+                ->all()),
         ]);
 
         return $stats;

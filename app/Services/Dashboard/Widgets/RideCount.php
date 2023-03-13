@@ -2,7 +2,6 @@
 
 namespace App\Services\Dashboard\Widgets;
 
-use App\Models\Activity;
 use App\Models\Stats;
 use App\Services\Dashboard\Contracts\Widget;
 use App\Services\Dashboard\Widgets\Traits\WidgetDateConstraints;

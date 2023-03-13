@@ -65,8 +65,8 @@ class AnalyseActivityFile implements ShouldQueue
         $this->status()->line('Saving data');
 
         $pointLocationData = collect($analysis->getPoints())
-            ->filter(fn(Point $point) => $point->getLatitude() && $point->getLongitude() && $point->getElevation())
-            ->map(fn(Point $point) => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
+            ->filter(fn (Point $point) => $point->getLatitude() && $point->getLongitude() && $point->getElevation())
+            ->map(fn (Point $point) => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
             ->toArray();
 
         $stats = Stats::updateOrCreate(
@@ -96,15 +96,15 @@ class AnalyseActivityFile implements ShouldQueue
                 'max_altitude' => $analysis->getMaxAltitude(),
                 'started_at' => $analysis->getStartedAt(),
                 'finished_at' => $analysis->getFinishedAt(),
-                'time_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getTime())->all(),
-                'cadence_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCadence())->all(),
-                'temperature_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getTemperature())->all(),
-                'heart_rate_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getHeartRate())->all(),
-                'speed_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getSpeed())->all(),
-                'grade_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getGrade())->all(),
-                'battery_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getBattery())->all(),
-                'calories_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCalories())->all(),
-                'cumulative_distance_data' => collect($analysis->getPoints())->map(fn(Point $point) => $point->getCumulativeDistance())->all(),
+                'time_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getTime())->all(),
+                'cadence_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getCadence())->all(),
+                'temperature_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getTemperature())->all(),
+                'heart_rate_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getHeartRate())->all(),
+                'speed_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getSpeed())->all(),
+                'grade_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getGrade())->all(),
+                'battery_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getBattery())->all(),
+                'calories_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getCalories())->all(),
+                'cumulative_distance_data' => collect($analysis->getPoints())->map(fn (Point $point) => $point->getCumulativeDistance())->all(),
             ]
         );
 
@@ -117,5 +117,4 @@ class AnalyseActivityFile implements ShouldQueue
 //            (new WithoutOverlapping('FileAnalyser')),
 //        ];
 //    }
-
 }
