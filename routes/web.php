@@ -73,9 +73,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /* Settings */
     Route::resource('settings', \App\Http\Controllers\Pages\Settings\SettingsController::class)->only(['index', 'store']);
 
-    /* Stats */
-    Route::get('/stats/{stats}/points', [\App\Http\Controllers\Pages\Stats\StatsPointsController::class, 'show'])->name('stats.points');
-
     /* Strava */
     Route::get('/integration/strava', [\App\Integrations\Strava\Http\Controllers\StravaOverviewController::class, 'index'])->name('integration.strava');
     Route::middleware('can:manage-strava-clients')->group(function () {

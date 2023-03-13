@@ -33,7 +33,7 @@ class GenerateActivityThumbnail implements ShouldQueue
     public function tags()
     {
         return [
-            'activity' => $this->stats->model->id,
+            'activity' => $this->stats->activity->id,
         ];
     }
 
@@ -43,7 +43,7 @@ class GenerateActivityThumbnail implements ShouldQueue
      */
     public function handle()
     {
-        $model = $this->stats->model;
+        $model = $this->stats->activity;
         if ($model instanceof Activity && $model->thumbnail_id === null) {
             $file = Upload::withContents(
                 StaticMap::ofPath($this->stats->linestring),

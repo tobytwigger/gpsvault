@@ -9,6 +9,7 @@ use App\Integrations\Strava\Jobs\LoadStravaKudos;
 use App\Integrations\Strava\Jobs\LoadStravaPhotos;
 use App\Integrations\Strava\Jobs\LoadStravaStats;
 use App\Models\Activity;
+use Illuminate\Support\Facades\Bus;
 
 class ActivitySyncController extends Controller
 {
@@ -16,10 +17,13 @@ class ActivitySyncController extends Controller
     {
         $this->authorize('update', $activity);
 
-        LoadStravaActivity::dispatch($activity);
-        LoadStravaStats::dispatch($activity);
-        LoadStravaComments::dispatch($activity);
-        LoadStravaKudos::dispatch($activity);
-        LoadStravaPhotos::dispatch($activity);
+        Bus::chain([
+            new LoadStravaActivity($activity),
+            new LoadStravaStats($activity),
+            new LoadStravaComments($activity),
+            new LoadStravaKudos($activity),
+            new LoadStravaPhotos($activity),
+        ])
+            ->dispatch();
     }
 }

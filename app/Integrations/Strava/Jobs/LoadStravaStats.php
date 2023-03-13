@@ -20,6 +20,8 @@ class LoadStravaStats extends StravaBaseJob
         $strava = Strava::client($this->activity->user);
         $activityStreams = $strava->activity()->getActivityStream($this->activity->getAdditionalData('strava_id'));
 
-        ApiImport::stats()->import($activityStreams, $this->activity);
+        $this->status()->line('Data retrieved, importing');
+
+        ApiImport::stats()->import($activityStreams, $this->activity, $this->status());
     }
 }
