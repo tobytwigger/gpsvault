@@ -16,7 +16,7 @@
                         disabled
                         name="email"
                         prepend-icon="mdi-account"
-                        type="text"
+                        type="email"
                         autocomplete="email"
                         :error="form.errors.hasOwnProperty('email')"
                         :error-messages="form.errors.hasOwnProperty('email') ? [form.errors.email] : []"
@@ -25,6 +25,7 @@
                     <v-text-field
                         id="password"
                         v-model="form.password"
+                        autocomplete="new-password"
                         label="Password"
                         hint="A secure password."
                         name="password"
@@ -38,6 +39,7 @@
                         id="password_confirmation"
                         v-model="form.password_confirmation"
                         label="Confirm your password"
+                        autocomplete="new-password"
                         hint="Enter your password again."
                         name="password_confirmation"
                         prepend-icon="mdi-lock"
