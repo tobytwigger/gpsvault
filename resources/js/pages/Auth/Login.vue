@@ -14,7 +14,7 @@
                         hint="Your email address."
                         name="email"
                         prepend-icon="mdi-account"
-                        type="text"
+                        type="email"
                         autocomplete="email"
                         :error="form.errors.hasOwnProperty('email')"
                         :error-messages="form.errors.hasOwnProperty('email') ? [form.errors.email] : []"
@@ -28,6 +28,8 @@
                         name="password"
                         prepend-icon="mdi-lock"
                         type="password"
+                        ref="password"
+                        autocomplete="current-password"
                         :error="form.errors.hasOwnProperty('password')"
                         :error-messages="form.errors.hasOwnProperty('password') ? [form.errors.password] : []"
                     ></v-text-field>
