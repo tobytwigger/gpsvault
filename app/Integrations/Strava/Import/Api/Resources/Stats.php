@@ -2,22 +2,32 @@
 
 namespace App\Integrations\Strava\Import\Api\Resources;
 
+use Carbon\Carbon;
+use Illuminate\Support\Benchmark;
 use JobStatus\JobStatusModifier;
 use MStaack\LaravelPostgis\Geometries\LineString;
 
 class Stats
 {
+    private Carbon $startedAt;
+
     public function import(array $statsData, \App\Models\Activity $activity, JobStatusModifier $jobStatusModifier): Stats
     {
-        if ($activity->started_at === null) {
+        $stats = $activity->statsFrom('strava')->first();
+
+        if ($stats === null) {
+            throw new \Exception('The activity must already have strava stats linked');
+        }
+
+        if ($stats->started_at === null) {
             throw new \Exception('The activity must have a start date to retrieve stats from Strava');
         }
+
+        $this->startedAt = $stats->started_at;
 
         if (!isset($statsData['time'])) {
             throw new \Exception('No time stream was returned from Strava');
         }
-
-        $stats = $activity->statsFrom('strava')->firstOrFail();
 
         $jobStatusModifier->message('Using stats with ID of #' . $stats->id);
 
@@ -50,7 +60,7 @@ class Stats
     {
         return collect($statsData['time']['data'])
             ->reduce(function ($data, $timeDelta, $index) use ($activity, $statsData) {
-                $data['time_data'][] = $activity->started_at->addSeconds($timeDelta);
+                $data['time_data'][] = $this->startedAt->clone()->addSeconds($timeDelta);
                 $data['cadence_data'][] = $statsData['cadence']['data'][$index] ?? null;
                 $data['temperature_data'][] = $statsData['temp']['data'][$index] ?? null;
                 $data['heart_rate_data'][] = $statsData['heartrate']['data'][$index] ?? null;
