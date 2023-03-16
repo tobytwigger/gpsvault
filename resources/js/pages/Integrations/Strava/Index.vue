@@ -288,7 +288,8 @@ export default {
             return (this.sync.activities_linked / (this.sync.total_activities === 0 ? 1 : this.sync.total_activities)) * 100;
         },
         canManageClients() {
-            return this.$page.props.permissions.indexOf('manage-strava-clients') > -1;
+            return this.$page.props.permissions.indexOf('manage-strava-clients') > -1
+                || this.$page.props.permissions.indexOf('superadmin') > -1;
         },
         menuItems() {
             return [

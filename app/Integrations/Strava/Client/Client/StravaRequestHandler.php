@@ -12,6 +12,7 @@ use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Psr\Http\Message\ResponseInterface;
 
 class StravaRequestHandler
@@ -59,6 +60,7 @@ class StravaRequestHandler
             try {
                 return $this->handleRequest($client, $method, $uri, $options);
             } catch (\Throwable $e) {
+                Log::error($e->getMessage(), $e->getTrace());
                 if (!($e instanceof StravaRateLimited)) {
                 }
             }

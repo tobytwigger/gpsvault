@@ -116,7 +116,8 @@ export default {
             return route('strava.client.login.start', {client: this.defaultClient.id, mobile: this.$vuetify.breakpoint.mobile})
         },
         canManageClients() {
-            return this.$page.props.permissions.indexOf('manage-strava-clients') > -1;
+            return this.$page.props.permissions.indexOf('manage-strava-clients') > -1
+                || this.$page.props.permissions.indexOf('superadmin') > -1;
         },
     }
 }

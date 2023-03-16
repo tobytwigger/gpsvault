@@ -125,7 +125,8 @@ export default {
                 'global': {
                     name: 'Global',
                     icon: 'mdi-earth',
-                    shouldShow: this.$page.props.permissions.indexOf('manage-global-settings') > -1,
+                    shouldShow: this.$page.props.permissions.indexOf('manage-global-settings') > -1
+                        || this.$page.props.permissions.indexOf('superadmin') > -1,
                     components: {
                         'strava_client_id': {
                             component: CSystemStravaClient, bind: {clients: this.stravaClients},
