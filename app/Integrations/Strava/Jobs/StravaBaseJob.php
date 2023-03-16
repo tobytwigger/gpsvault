@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\Middleware\ThrottlesExceptions;
 use Illuminate\Queue\Middleware\ThrottlesExceptionsWithRedis;
 use Illuminate\Queue\SerializesModels;
 use JobStatus\Concerns\Trackable;
@@ -24,7 +23,7 @@ abstract class StravaBaseJob implements ShouldQueue
         return [
             (new ThrottlesExceptionsWithRedis(10, 5))
                 ->by(sprintf('%s:%s', get_class($this), $this->activity->id))
-                ->backoff(5)
+                ->backoff(5),
         ];
     }
 

@@ -3,7 +3,6 @@
 namespace App\Integrations\Strava\Import\Api\Resources;
 
 use Carbon\Carbon;
-use Illuminate\Support\Benchmark;
 use JobStatus\JobStatusModifier;
 use MStaack\LaravelPostgis\Geometries\LineString;
 
