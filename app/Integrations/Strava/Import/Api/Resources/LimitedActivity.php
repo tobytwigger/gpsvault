@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\ActivityImport\ActivityImporter;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Bus;
 use MStaack\LaravelPostgis\Geometries\Point;
 
 class LimitedActivity
@@ -124,17 +125,22 @@ class LimitedActivity
 
     private function throwChildJobs(ActivityModel $existingActivity, array $activityData)
     {
-        LoadStravaActivity::dispatch($existingActivity);
-        LoadStravaStats::dispatch($existingActivity);
+        $jobs = [
+            new LoadStravaActivity($existingActivity),
+            new LoadStravaStats($existingActivity),
+        ];
 
         if ($this->getIntegerData($activityData, 'comment_count') > 0) {
-            LoadStravaComments::dispatch($existingActivity);
+            $jobs[] = new LoadStravaComments($existingActivity);
         }
         if ($this->getIntegerData($activityData, 'kudos_count') > 0) {
-            LoadStravaKudos::dispatch($existingActivity);
+            $jobs[] = new LoadStravaKudos($existingActivity);
         }
         if ($this->getIntegerData($activityData, 'total_photo_count') > 0) {
-            LoadStravaPhotos::dispatch($existingActivity);
+            $jobs[] = new LoadStravaPhotos($existingActivity);
         }
+
+        Bus::chain($jobs)->dispatch();
+
     }
 }

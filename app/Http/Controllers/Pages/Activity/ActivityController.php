@@ -72,6 +72,7 @@ class ActivityController extends Controller
             $stat->append('linestringWithDistance');
         }
 
+
         return Inertia::render('Activity/Show', [
             'activity' => $activity,
         ]);

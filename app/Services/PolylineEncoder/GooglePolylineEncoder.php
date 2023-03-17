@@ -52,7 +52,17 @@ class GooglePolylineEncoder
         return $flatten;
     }
 
-    // https://github.com/emcconville/google-map-polyline-encoding-tool/blob/master/src/Polyline.php
+    /**
+     * Apply Google Polyline algorithm to list of points.
+     *
+     * https://github.com/emcconville/google-map-polyline-encoding-tool/blob/master/src/Polyline.php
+     *
+     * @param array $points List of points to encode. Can be a list of tuples,
+     *                      or a flat, one-dimensional array.
+     * @param int   $precision
+     *
+     * @return string encoded string
+     */
     public static function encode(array $points, int $precision = 5)
     {
         $points = self::flatten($points);
