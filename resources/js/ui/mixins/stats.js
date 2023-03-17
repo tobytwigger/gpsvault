@@ -145,7 +145,7 @@ export default {
                     icon: 'mdi-ruler',
                     title: 'Distance',
                     label: 'distance',
-                    disabled: true,
+                    disabled: false,
                     pointLabel: 'cumulative_distance',
                     data: [
                         {value: this.distance, label: 'total'},
@@ -156,7 +156,7 @@ export default {
                     title: 'Time',
                     label: 'time',
                     pointLabel: 'time',
-                    disabled: true,
+                    disabled: false,
                     data: [
                         {value: this.movingTime, label: 'moving'},
                         {value: this.duration, label: 'total'},

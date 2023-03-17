@@ -88,11 +88,6 @@ export default {
             required: true,
             type: Number
         },
-        forceUseDistance: {
-            required: false,
-            type: Boolean,
-            default: null
-        }
     },
     data() {
         return {
@@ -107,11 +102,6 @@ export default {
         useDistance() {
             this.loadChartData();
         },
-        forceUseDistance(val) {
-            if(val !== null) {
-                this.useDistance = val;
-            }
-        }
     },
     methods: {
         loadChartData() {
@@ -131,7 +121,6 @@ export default {
                 this.chart = null;
                 this.mapCanvas.remove();
             }
-
             if (this.chartInformation !== null) {
                 this.mapCanvas = document.createElement('canvas');
                 this.mapCanvas.height = 250;
@@ -159,12 +148,18 @@ export default {
             activityPoints.forEach(p => {
                 if (this.useDistance === false && p.time) {
                     labels.push(moment(p.time).unix() * 1000);
-                    data.push(p[this.statSchema.pointLabel]);
-                }
-                if (this.useDistance === true && p.cumulative_distance) {
+                    data.push(
+                        this.statSchema.pointLabel === 'time'
+                            ? moment(p[this.statSchema.pointLabel]).unix() * 1000
+                            : p[this.statSchema.pointLabel]);
+                } else if(p.cumulative_distance) {
                     labels.push(this.convert(p.cumulative_distance, 'distance').value);
-                    data.push(p[this.statSchema.pointLabel]);
+                    data.push(
+                        this.statSchema.pointLabel === 'time'
+                            ? moment(p[this.statSchema.pointLabel]).unix() * 1000
+                            : p[this.statSchema.pointLabel]);
                 }
+
             });
 
             return {
@@ -177,7 +172,13 @@ export default {
                                 unit: 'minute'
                             }
                         },
-                        y: {type: 'linear', beginAtZero: true},
+                        y: this.statSchema.pointLabel === 'time'
+                            ? {
+                                type: 'time',
+                                beginAtZero: false,
+                                min: Math.min(...data)
+                            }
+                            : {type: 'linear'},
                     },
                     plugins: {
                         title: {
@@ -238,9 +239,6 @@ export default {
 
     mounted() {
         this.loadChartData();
-        if(this.forceUseDistance !== null) {
-            this.useDistance = this.forceUseDistance;
-        }
     }
 }
 </script>
