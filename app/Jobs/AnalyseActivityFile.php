@@ -65,8 +65,8 @@ class AnalyseActivityFile implements ShouldQueue
         $this->status()->line('Saving data');
 
         $pointLocationData = collect($analysis->getPoints())
-            ->filter(fn (Point $point) => $point->getLatitude() && $point->getLongitude() && $point->getElevation())
-            ->map(fn (Point $point) => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation()))
+            ->filter(fn (Point $point) => $point->getLatitude() && $point->getLongitude())
+            ->map(fn (Point $point) => new \MStaack\LaravelPostgis\Geometries\Point($point->getLatitude(), $point->getLongitude(), $point->getElevation() ?? 0))
             ->toArray();
 
         $stats = Stats::updateOrCreate(
