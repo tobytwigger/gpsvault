@@ -246,7 +246,7 @@ class Stats extends Model
             if(array_search(0, $uniqueCount) !== false) {
                 unset($uniqueCount[array_search(0, $uniqueCount)]);
             }
-            if(count(array_unique($count)) > 1) {
+            if($uniqueCount > 1) {
                 throw new \Exception('All data arrays must be the same length');
             }
         });
