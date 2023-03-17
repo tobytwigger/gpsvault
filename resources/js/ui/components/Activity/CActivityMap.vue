@@ -1,7 +1,6 @@
 <template>
     <div>
-        <div v-if="loading">Loading map</div>
-        <div v-else-if="geojson.coordinates === null">No route could be plotted</div>
+        <div v-if="geojson.coordinates === null">No route could be plotted</div>
         <c-map :geojson="geojson" v-else></c-map>
     </div>
 </template>
@@ -15,11 +14,6 @@ export default {
         stats: {
             required: true,
             type: Object
-        }
-    },
-    data() {
-        return {
-            loading: false,
         }
     },
     computed: {

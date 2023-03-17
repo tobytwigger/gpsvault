@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Jobs\GenerateActivityThumbnail;
 use App\Services\Geocoding\Geocoder;
+use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
@@ -95,6 +96,18 @@ class Stats extends Model
     protected $appends = [
         'human_started_at',
         'human_ended_at',
+    ];
+
+    protected $hidden = [
+        'time_data',
+        'cadence_data',
+        'temperature_data',
+        'heart_rate_data',
+        'speed_data',
+        'grade_data',
+        'battery_data',
+        'calories_data',
+        'cumulative_distance_data',
     ];
 
     protected $fillable = [

@@ -87,6 +87,11 @@ export default {
         statId: {
             required: true,
             type: Number
+        },
+        forceUseDistance: {
+            required: false,
+            type: Boolean,
+            default: null
         }
     },
     data() {
@@ -101,6 +106,11 @@ export default {
     watch: {
         useDistance() {
             this.loadChartData();
+        },
+        forceUseDistance(val) {
+            if(val !== null) {
+                this.useDistance = val;
+            }
         }
     },
     methods: {
@@ -228,6 +238,9 @@ export default {
 
     mounted() {
         this.loadChartData();
+        if(this.forceUseDistance !== null) {
+            this.useDistance = this.forceUseDistance;
+        }
     }
 }
 </script>
