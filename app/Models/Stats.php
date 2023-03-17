@@ -229,7 +229,7 @@ class Stats extends Model
 
     protected static function booted()
     {
-        static::saving(function(Stats $stats) {
+        static::saving(function (Stats $stats) {
             $count = [];
             $count[] = count($stats->linestring?->getPoints() ?? []) ?? 0;
             $count[] = count($stats->time_data ?? []) ?? 0;
@@ -243,10 +243,10 @@ class Stats extends Model
             $count[] = count($stats->cumulative_distance_data ?? []) ?? 0;
 
             $uniqueCount = array_unique($count);
-            if(array_search(0, $uniqueCount) !== false) {
+            if (array_search(0, $uniqueCount) !== false) {
                 unset($uniqueCount[array_search(0, $uniqueCount)]);
             }
-            if($uniqueCount > 1) {
+            if ($uniqueCount > 1) {
                 throw new \Exception('All data arrays must be the same length');
             }
         });
