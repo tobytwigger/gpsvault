@@ -141,6 +141,5 @@ class LimitedActivity
         }
 
         Bus::chain($jobs)->dispatch();
-
     }
 }
