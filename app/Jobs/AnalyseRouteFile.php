@@ -19,7 +19,6 @@ use Location\Polyline;
 use Location\Processor\Polyline\SimplifyBearing;
 use Location\Processor\Polyline\SimplifyDouglasPeucker;
 use MStaack\LaravelPostgis\Geometries\LineString;
-use MStaack\LaravelPostgis\Geometries\Point as PostgisPoint;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnalyseRouteFile implements ShouldQueue
