@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Jobs\GenerateActivityThumbnail;
 use App\Services\Geocoding\Geocoder;
-use App\Services\PolylineEncoder\GooglePolylineEncoder;
 use App\Settings\StatsOrder;
 use App\Traits\HasAdditionalData;
 use Illuminate\Database\Eloquent\Builder;
