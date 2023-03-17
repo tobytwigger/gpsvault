@@ -13,7 +13,6 @@
 
                     <v-tab-item :value="'tab-' + s.label" v-for="s of statSchema" :key="'tab-content-' + s.label">
                         <c-stat-analysis
-                            :force-use-distance="(s.pointLabel === 'cumulative_distance' ? false : (s.pointLabel === 'time' ? true : null))"
                             v-if="'tab-' + s.label === selectedTab" :stat-id="stats?.id" :stat-schema="s" :activity="activity">
 
                         </c-stat-analysis>
