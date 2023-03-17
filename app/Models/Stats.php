@@ -229,6 +229,27 @@ class Stats extends Model
 
     protected static function booted()
     {
+        static::saving(function(Stats $stats) {
+            $count = [];
+            $count[] = count($stats->linestring?->getPoints() ?? []) ?? 0;
+            $count[] = count($stats->time_data ?? []) ?? 0;
+            $count[] = count($stats->cadence_data ?? []) ?? 0;
+            $count[] = count($stats->temperature_data ?? []) ?? 0;
+            $count[] = count($stats->heart_rate_data ?? []) ?? 0;
+            $count[] = count($stats->speed_data ?? []) ?? 0;
+            $count[] = count($stats->grade_data ?? []) ?? 0;
+            $count[] = count($stats->battery_data ?? []) ?? 0;
+            $count[] = count($stats->calories_data ?? []) ?? 0;
+            $count[] = count($stats->cumulative_distance_data ?? []) ?? 0;
+
+            $uniqueCount = array_unique($count);
+            if(array_search(0, $uniqueCount) !== false) {
+                unset($uniqueCount[array_search(0, $uniqueCount)]);
+            }
+            if(count(array_unique($count)) > 1) {
+                throw new \Exception('All data arrays must be the same length');
+            }
+        });
         static::created(function (Stats $stats) {
             if ($stats->linestring !== null) {
                 GenerateActivityThumbnail::dispatch($stats);
