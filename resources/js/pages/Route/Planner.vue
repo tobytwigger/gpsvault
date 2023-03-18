@@ -60,6 +60,35 @@
                 color="primary"
             ></v-progress-circular>
 
+            <c-confirmation-dialog
+                ref="clearUnsavedChangesDialog"
+                title="Clear unsaved changes?" button-text="Clear" :loading="false"
+                cancel-button-text="Keep"
+                @confirm="clearUnsavedChanges">
+                <template v-slot:activator="{trigger,showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                data-hint="Click here to clear all unsaved changes to your route."
+                                icon
+                                v-bind="attrs"
+                                v-on="on"
+                                @click="trigger"
+                                :disabled="showing || !schemaUnsaved"
+                                :loading="false"
+                            >
+                                <v-icon >mdi-undo</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Clear unsaved changes</span>
+                    </v-tooltip>
+                </template>
+
+                This will clear all unsaved changes to your route. Are you sure you want to do this?
+
+            </c-confirmation-dialog>
+
+
             <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
@@ -105,10 +134,11 @@ import CAppWrapper from '../../ui/layouts/CAppWrapper';
 import CRoutePlanner from '../../ui/components/Route/CRoutePlanner';
 import polyline from '@mapbox/polyline';
 import {cloneDeep, isEqual} from 'lodash';
+import CConfirmationDialog from '../../ui/components/CConfirmationDialog.vue';
 
 export default {
     name: "Planner",
-    components: {CRoutePlanner, CAppWrapper},
+    components: {CConfirmationDialog, CRoutePlanner, CAppWrapper},
     props: {
         routeModel: {
             required: false,
@@ -147,6 +177,10 @@ export default {
         }
     },
     methods: {
+        clearUnsavedChanges() {
+            this.updateSchemaFromRoute();
+            this.$refs.clearUnsavedChangesDialog.close();
+        },
         updateSchema(schema, needsSaving = true) {
             if(needsSaving && !isEqual(schema, this.schema)) {
                 this.schemaUnsaved = true;
@@ -242,13 +276,8 @@ export default {
                     use_hills: this.schema.use_hills
                 }
             }
-        }
-    },
-    mounted() {
-        if(this.schema.waypoints.length > 1) {
-            this.performSearch();
-        }
-        if(this.routeModel) {
+        },
+        updateSchemaFromRoute() {
             this.updateSchema({
                 waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
                     return {
@@ -262,7 +291,15 @@ export default {
                 use_roads: this.routeModel?.path?.settings?.use_roads ?? 0.25,
                 use_hills: this.routeModel?.path?.settings?.use_hills ?? 0.4,
                 name: this.routeModel.name ?? 'New Route'
-            }, false)
+            }, false);
+        }
+    },
+    mounted() {
+        if(this.schema.waypoints.length > 1) {
+            this.performSearch();
+        }
+        if(this.routeModel) {
+            this.updateSchemaFromRoute();
         }
     },
 }
