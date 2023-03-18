@@ -89,7 +89,7 @@
             </c-confirmation-dialog>
 
 
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="routeModel">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         data-hint="Click here to save your route."
@@ -106,6 +106,42 @@
                 </template>
                 <span>Save</span>
             </v-tooltip>
+
+            <c-confirmation-dialog
+                v-else
+                ref="changeNameForNewRouteDialog"
+                title="Route Name" button-text="Save" :loading="false"
+                cancel-button-text="Cancel"
+                @confirm="save">
+                <template v-slot:activator="{trigger,showing}">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                data-hint="Click here to save your route."
+                                icon
+                                v-bind="attrs"
+                                :class="{'attention-grab': schemaUnsaved}"
+                                v-on="on"
+                                @click="trigger"
+                                :disabled="!schemaUnsaved"
+                                :loading="isSaving"
+                            >
+                                <v-icon >mdi-content-save</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Save</span>
+                    </v-tooltip>
+                </template>
+                <v-text-field
+                    id="name"
+                    v-model="schema.name"
+                    label="name"
+                    hint="Route name"
+                    name="name"
+                    type="text"
+                ></v-text-field>
+
+            </c-confirmation-dialog>
 
         </template>
 
@@ -225,6 +261,7 @@ export default {
         },
         save() {
             this.isSaving = true;
+            this.$refs.changeNameForNewRouteDialog?.close();
             if(this.routeModel) {
                 this.$inertia.patch(route('planner.update', this.routeModel.id), this._calculateDataArray(), {
                     onSuccess: (page) => {
