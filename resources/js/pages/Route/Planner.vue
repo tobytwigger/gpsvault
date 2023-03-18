@@ -3,23 +3,23 @@
 
         <template #headerActions>
 
-            <v-alert
-                outlined
-                type="warning"
-                border="left"
-                v-if="schema?.waypoints?.length < 2"
-            >
-                Add a start and end point to start planning
-            </v-alert>
+<!--            <v-alert-->
+<!--                outlined-->
+<!--                type="warning"-->
+<!--                border="left"-->
+<!--                v-if="schema?.waypoints?.length < 2"-->
+<!--            >-->
+<!--                Add a start and end point to start planning-->
+<!--            </v-alert>-->
 
-            <v-alert
-                outlined
-                type="warning"
-                border="left"
-                v-else-if="schemaUnsaved"
-            >
-                You have unsaved changes.
-            </v-alert>
+<!--            <v-alert-->
+<!--                outlined-->
+<!--                type="warning"-->
+<!--                border="left"-->
+<!--                v-else-if="schemaUnsaved"-->
+<!--            >-->
+<!--                You have unsaved changes.-->
+<!--            </v-alert>-->
 
             <v-snackbar
                 v-model="recentlySaved"
@@ -95,6 +95,7 @@
                         data-hint="Click here to save your route."
                         icon
                         v-bind="attrs"
+                        :class="{'attention-grab': schemaUnsaved}"
                         v-on="on"
                         @click="save"
                         :disabled="!schemaUnsaved"
@@ -180,6 +181,7 @@ export default {
         clearUnsavedChanges() {
             this.updateSchemaFromRoute();
             this.$refs.clearUnsavedChangesDialog.close();
+            this.schemaUnsaved = false;
         },
         updateSchema(schema, needsSaving = true) {
             if(needsSaving && !isEqual(schema, this.schema)) {
@@ -278,20 +280,29 @@ export default {
             }
         },
         updateSchemaFromRoute() {
-            this.updateSchema({
-                waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
-                    return {
-                        id: waypoint.id ?? null,
-                        location: [waypoint.location.coordinates[1], waypoint.location.coordinates[0]],
-                        name: waypoint.name ?? null,
-                        notes: waypoint.notes ?? null,
-                        place_id: waypoint.place_id ?? null
-                    }
-                }),
-                use_roads: this.routeModel?.path?.settings?.use_roads ?? 0.25,
-                use_hills: this.routeModel?.path?.settings?.use_hills ?? 0.4,
-                name: this.routeModel.name ?? 'New Route'
-            }, false);
+            if(this.routeModel) {
+                this.updateSchema({
+                    waypoints: (this.routeModel?.path?.waypoints ?? []).map(waypoint => {
+                        return {
+                            id: waypoint.id ?? null,
+                            location: [waypoint.location.coordinates[1], waypoint.location.coordinates[0]],
+                            name: waypoint.name ?? null,
+                            notes: waypoint.notes ?? null,
+                            place_id: waypoint.place_id ?? null
+                        }
+                    }),
+                    use_roads: this.routeModel?.path?.settings?.use_roads ?? 0.25,
+                    use_hills: this.routeModel?.path?.settings?.use_hills ?? 0.4,
+                    name: this.routeModel.name ?? 'New Route'
+                }, false);
+            } else {
+                this.updateSchema({
+                    waypoints: [],
+                    use_roads: 0.3,
+                    use_hills: 0.5,
+                    name: 'New Route'
+                });
+            }
         }
     },
     mounted() {
@@ -306,4 +317,37 @@ export default {
 </script>
 
 <style scoped>
+.attention-grab {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: attention-grab 3s;
+
+    /* When the animation is finished, start again */
+    animation-iteration-count: infinite;
+}
+
+@keyframes attention-grab {
+    10% {
+        transform: scale(1.3);
+    }
+
+    20% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.3);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+
+}
+
+
 </style>
