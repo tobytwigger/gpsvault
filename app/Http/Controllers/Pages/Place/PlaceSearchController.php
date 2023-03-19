@@ -19,6 +19,8 @@ class PlaceSearchController extends Controller
             'southwest_lng' => 'required_with:southwest_lat,northeast_lat,northeast_lng|numeric|min:-180|max:180',
             'northeast_lat' => 'required_with:southwest_lat,southwest_lng,northeast_lng|numeric|min:-90|max:90',
             'northeast_lng' => 'required_with:southwest_lat,southwest_lng,northeast_lat|numeric|min:-180|max:180',
+            'types' => 'sometimes|nullable|array',
+            'types.*' => 'sometimes|nullable|string|in:food_drink,shops,tourist,accommodation,other,toilets,water',
         ]);
 
         return Place::when(
@@ -36,6 +38,10 @@ class PlaceSearchController extends Controller
                 return $query->whereNotIn('id', $placeIds);
             }
         )
+            ->when(
+                $request->has('types'),
+                fn (Builder $query) => $query->whereIn('type', $request->input('types'))
+            )
             ->when(
                 $request->has(['southwest_lat', 'southwest_lng', 'northeast_lat', 'northeast_lng']),
                 // longitude min, latitude min, long mx, lat max

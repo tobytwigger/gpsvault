@@ -54,12 +54,6 @@
                 <span>View</span>
             </v-tooltip>
 
-            <v-progress-circular
-                indeterminate
-                v-if="searching"
-                color="primary"
-            ></v-progress-circular>
-
             <c-confirmation-dialog
                 ref="clearUnsavedChangesDialog"
                 title="Clear unsaved changes?" button-text="Clear" :loading="false"
@@ -74,7 +68,7 @@
                                 v-bind="attrs"
                                 v-on="on"
                                 @click="trigger"
-                                :disabled="showing || !schemaUnsaved"
+                                :disabled="showing || !schemaUnsaved || searching"
                                 :loading="false"
                             >
                                 <v-icon >mdi-undo</v-icon>
@@ -88,8 +82,13 @@
 
             </c-confirmation-dialog>
 
+            <v-progress-circular
+                indeterminate
+                v-if="searching"
+                color="primary"
+            ></v-progress-circular>
 
-            <v-tooltip bottom v-if="routeModel">
+            <v-tooltip bottom v-if="routeModel && !searching">
                 <template v-slot:activator="{ on, attrs }">
                     <v-btn
                         data-hint="Click here to save your route."
@@ -108,7 +107,7 @@
             </v-tooltip>
 
             <c-confirmation-dialog
-                v-else
+                v-else-if="!searching"
                 ref="changeNameForNewRouteDialog"
                 title="Route Name" button-text="Save" :loading="false"
                 cancel-button-text="Cancel"
