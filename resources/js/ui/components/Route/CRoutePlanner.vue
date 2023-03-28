@@ -393,13 +393,28 @@ export default {
                 let resolvedPlace = this.places.find((place) => place.id.toString() === placeId.toString());
                 window.open(route('place.show', placeId), '_blank');
             });
+            let addToStartButton = this._createPopupButton('Add to start', 'add-to-start', (e) => {
+                let waypoint = this._newWaypoint([place.location.coordinates[1], place.location.coordinates[0]]);
+                let schema = cloneDeep(this._schema);
+                schema.waypoints.unshift(waypoint);
+                this._schema = schema;
+            });
+
+            let addToEndButton = this._createPopupButton('Go to place', 'go-to-place-' + place.id, (e) => {
+                let placeId = (e.target.id ?? '').replace('go-to-place-', '');
+                let resolvedPlace = this.places.find((place) => place.id.toString() === placeId.toString());
+                window.open(route('place.show', placeId), '_blank');
+            });
             let titleSpan = document.createElement('span');
             titleSpan.innerHTML = place.name;
             // let addAsPlaceBtn = this._createPopupButton('Add as a place', 'add-as-place-' + waypoint.id, (e) => console.log('Add as a place'));
             let buttonDiv = document.createElement('div');
             buttonDiv
                 .appendChild(titleSpan)
-                .appendChild(goToPlaceButton);
+                .appendChild(goToPlaceButton)
+                .appendChild(addToStartButton)
+                // .appendChild(addAsWaypointButton)
+                // .appendChild(addToEndButton);
             let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(buttonDiv);
             let marker = new maplibregl.Marker({element: markerEl, draggable: false})
                 .setLngLat([place.location.coordinates[0], place.location.coordinates[1]])
