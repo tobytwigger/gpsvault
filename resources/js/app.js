@@ -1,8 +1,9 @@
 import {createInertiaApp, Link} from '@inertiajs/inertia-vue';
 import { InertiaProgress } from '@inertiajs/progress';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
-import vuetify from './plugins/vuetify';
-import Vue from 'vue';
+import { createApp, h } from 'vue';
+import {createVuetify} from 'vuetify'
+
 
 import Settings from '@tobytwigger/laravel-settings-vue/dist/index';
 import JobStatus from '@tobytwigger/laravel-job-status-vue';
@@ -27,10 +28,13 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => require(`./pages/${name}.vue`),
     setup({ el, app, props }) {
-        new Vue({
-            vuetify,
-            render: h => h(app, props),
-        }).$mount(el)
+        createApp({ render: () => h(App, props) })
+            .use(createVuetify({
+                icons: {
+                    iconfont: 'mdiSvg',
+                },
+            }))
+            .mount(el)
     },
 })
 

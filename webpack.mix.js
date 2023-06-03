@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
-const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader')
+const { VuetifyPlugin } = require('webpack-plugin-vuetify');
 
 /*
  |--------------------------------------------------------------------------
@@ -28,7 +29,10 @@ mix.js('resources/js/app.js', 'dist/js')
 
 mix.webpackConfig({
     plugins: [
-        new VuetifyLoaderPlugin()
+        new VueLoaderPlugin(),
+        new VuetifyPlugin({
+
+        })
     ]
 })
 
