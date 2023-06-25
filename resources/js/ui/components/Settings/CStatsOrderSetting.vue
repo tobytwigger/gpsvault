@@ -4,8 +4,8 @@
             <draggable
                 v-model="schema"
             >
-                <template v-for="(source, index) in schema">
-                    <v-list-item :key="source.value">
+                <template v-for="(source, index) in schema" :key="source.value">
+                    <v-list-item>
                         <v-list-item-icon>
                             <v-icon>mdi-menu</v-icon>
                         </v-list-item-icon>

@@ -1,5 +1,4 @@
-import {createInertiaApp, Link} from '@inertiajs/inertia-vue';
-import { InertiaProgress } from '@inertiajs/progress';
+import {createInertiaApp, Link} from '@inertiajs/vue3';
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 import { createApp, h } from 'vue';
 import {createVuetify} from 'vuetify'
@@ -11,13 +10,6 @@ import JobStatus from '@tobytwigger/laravel-job-status-vue';
 require('./bootstrap');
 import { applyPolyfills, defineCustomElements } from '@bruit/component/loader';
 Vue.config.ignoredElements = [/bruit-\w*/];
-Vue.use(Settings, {
-    axios: axios
-});
-Vue.use(JobStatus, {
-    axios: axios,
-    url: '/_api'
-});
 
 
 applyPolyfills().then(() => {
@@ -25,17 +17,24 @@ applyPolyfills().then(() => {
 });
 
 createInertiaApp({
+    progress: { color: '#4B5563' },
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => require(`./pages/${name}.vue`),
-    setup({ el, app, props }) {
+    setup({ el, App, props }) {
         createApp({ render: () => h(App, props) })
             .use(createVuetify({
                 icons: {
                     iconfont: 'mdiSvg',
                 },
             }))
+            .use(JobStatus, {
+                axios: axios,
+                url: '/_api'
+            })
+            .use(Settings, {
+                axios: axios
+            })
             .mount(el)
     },
 })
 
-InertiaProgress.init({ color: '#4B5563' });

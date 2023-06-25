@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { Head } from '@inertiajs/inertia-vue';
+import { Head } from '@inertiajs/vue3';
 import CPublicNavBar from '../components/Page/CPublicNavBar';
 import CSidebar from '../components/Page/CSidebar';
 import CBasePage from './CVuetifyWrapper';

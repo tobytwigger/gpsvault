@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import {Head} from '@inertiajs/inertia-vue';
+import {Head} from '@inertiajs/vue3';
 import CAppNavBar from '../components/Page/CAppNavBar';
 import CSidebar from '../components/Page/CSidebar';
 import CBasePage from './CVuetifyWrapper';

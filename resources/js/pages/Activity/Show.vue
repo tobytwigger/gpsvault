@@ -31,112 +31,112 @@
 
         <v-tabs-items v-model="tab">
             <v-tab-item value="tab-summary">
-                <c-job-status job="load-strava-activity" :tags="{activity_id: activity.id}">
-                    <template v-slot:incomplete>
-                        <v-progress-circular
-                            indeterminate
-                            color="primary"
-                        ></v-progress-circular>
-                    </template>
-                </c-job-status>
+<!--                <c-job-status job="load-strava-activity" :tags="{activity_id: activity.id}">-->
+<!--                    <template v-slot:incomplete>-->
+<!--                        <v-progress-circular-->
+<!--                            indeterminate-->
+<!--                            color="primary"-->
+<!--                        ></v-progress-circular>-->
+<!--                    </template>-->
+<!--                </c-job-status>-->
 
-                <v-row v-if="activity.stats.length === 0">
-                    <v-col v-if="jobStatus === null || jobStatus.status === 'succeeded'">
-                        <span v-if="activity.file_id">
-                            Activity analysis incomplete. Please contact support at support@gpsvault.co.uk.
-                        </span>
-                        <span v-else>
-                            No path data available. Please upload the recording of your activity.
-                        </span>
-                    </v-col>
-                    <v-col v-else>
-                        <c-loading-from-job-status title="Analysing activity" :job-status="jobStatus">
+<!--                <v-row v-if="activity.stats.length === 0">-->
+<!--                    <v-col v-if="jobStatus === null || jobStatus.status === 'succeeded'">-->
+<!--                        <span v-if="activity.file_id">-->
+<!--                            Activity analysis incomplete. Please contact support at support@gpsvault.co.uk.-->
+<!--                        </span>-->
+<!--                        <span v-else>-->
+<!--                            No path data available. Please upload the recording of your activity.-->
+<!--                        </span>-->
+<!--                    </v-col>-->
+<!--                    <v-col v-else>-->
+<!--                        <c-loading-from-job-status title="Analysing activity" :job-status="jobStatus">-->
 
-                        </c-loading-from-job-status>
-                    </v-col>
-                </v-row>
-                <v-row v-else>
-                    <v-col :sm="12" :md="6">
+<!--                        </c-loading-from-job-status>-->
+<!--                    </v-col>-->
+<!--                </v-row>-->
+<!--                <v-row v-else>-->
+<!--                    <v-col :sm="12" :md="6">-->
 
-                        <v-list flat>
-                            <v-list-item v-if="activity.description">
-                                <v-list-item-icon>
-                                    <v-tooltip left>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-icon
-                                                v-bind="attrs"
-                                                v-on="on">
-                                                mdi-text
-                                            </v-icon>
-                                        </template>
-                                        <span>Activity description</span>
-                                    </v-tooltip>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="activity.description"></v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item v-if="startedAt">
-                                <v-list-item-icon>
-                                    <v-tooltip left>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-icon
-                                                v-bind="attrs"
-                                                v-on="on">
-                                                mdi-calendar-clock
-                                            </v-icon>
-                                        </template>
-                                        <span>Started at</span>
-                                    </v-tooltip>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <v-list-item-title v-text="startedAt.value"></v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item v-if="humanStartedAt && humanEndedAt">
-                                <v-list-item-icon>
-                                    <v-tooltip left>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-icon
-                                                v-bind="attrs"
-                                                v-on="on">
-                                                mdi-map-marker
-                                            </v-icon>
-                                        </template>
-                                        <span>Activity start/end points</span>
-                                    </v-tooltip>
-                                </v-list-item-icon>
-                                <v-list-item-content>
-                                    <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list>
-                    </v-col>
-                    <v-col>
-                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>
-                        <div v-else>
-                            <c-stats-loading>
+<!--                        <v-list flat>-->
+<!--                            <v-list-item v-if="activity.description">-->
+<!--                                <v-list-item-icon>-->
+<!--                                    <v-tooltip left>-->
+<!--                                        <template v-slot:activator="{ on, attrs }">-->
+<!--                                            <v-icon-->
+<!--                                                v-bind="attrs"-->
+<!--                                                v-on="on">-->
+<!--                                                mdi-text-->
+<!--                                            </v-icon>-->
+<!--                                        </template>-->
+<!--                                        <span>Activity description</span>-->
+<!--                                    </v-tooltip>-->
+<!--                                </v-list-item-icon>-->
+<!--                                <v-list-item-content>-->
+<!--                                    <v-list-item-title v-text="activity.description"></v-list-item-title>-->
+<!--                                </v-list-item-content>-->
+<!--                            </v-list-item>-->
+<!--                            <v-list-item v-if="startedAt">-->
+<!--                                <v-list-item-icon>-->
+<!--                                    <v-tooltip left>-->
+<!--                                        <template v-slot:activator="{ on, attrs }">-->
+<!--                                            <v-icon-->
+<!--                                                v-bind="attrs"-->
+<!--                                                v-on="on">-->
+<!--                                                mdi-calendar-clock-->
+<!--                                            </v-icon>-->
+<!--                                        </template>-->
+<!--                                        <span>Started at</span>-->
+<!--                                    </v-tooltip>-->
+<!--                                </v-list-item-icon>-->
+<!--                                <v-list-item-content>-->
+<!--                                    <v-list-item-title v-text="startedAt.value"></v-list-item-title>-->
+<!--                                </v-list-item-content>-->
+<!--                            </v-list-item>-->
+<!--                            <v-list-item v-if="humanStartedAt && humanEndedAt">-->
+<!--                                <v-list-item-icon>-->
+<!--                                    <v-tooltip left>-->
+<!--                                        <template v-slot:activator="{ on, attrs }">-->
+<!--                                            <v-icon-->
+<!--                                                v-bind="attrs"-->
+<!--                                                v-on="on">-->
+<!--                                                mdi-map-marker-->
+<!--                                            </v-icon>-->
+<!--                                        </template>-->
+<!--                                        <span>Activity start/end points</span>-->
+<!--                                    </v-tooltip>-->
+<!--                                </v-list-item-icon>-->
+<!--                                <v-list-item-content>-->
+<!--                                    <c-activity-location-summary v-if="hasStats" :started-at="humanStartedAt" :ended-at="humanEndedAt"></c-activity-location-summary>-->
+<!--                                </v-list-item-content>-->
+<!--                            </v-list-item>-->
+<!--                        </v-list>-->
+<!--                    </v-col>-->
+<!--                    <v-col>-->
+<!--                        <c-stats v-if="hasStats" :schema="statSchema" :limit="4"></c-stats>-->
+<!--                        <div v-else>-->
+<!--                            <c-stats-loading>-->
 
-                            </c-stats-loading>
-                        </div>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col class="pa-8">
-                        <c-job-status job="load-strava-stats" :tags="{activity_id: activity.id}">
-                            <template v-slot:incomplete>
-                                <v-progress-circular
-                                    indeterminate
-                                    color="primary"
-                                ></v-progress-circular>
-                            </template>
-                        </c-job-status>
-<!--                        <c-map v-if="hasStats && stats.linestring" :geojson="stats.linestring" :key="'map-' + stats.integration"></c-map>-->
-                        <v-container>
-                            <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>
-                        </v-container>
-                    </v-col>
-                </v-row>
+<!--                            </c-stats-loading>-->
+<!--                        </div>-->
+<!--                    </v-col>-->
+<!--                </v-row>-->
+<!--                <v-row>-->
+<!--                    <v-col class="pa-8">-->
+<!--                        <c-job-status job="load-strava-stats" :tags="{activity_id: activity.id}">-->
+<!--                            <template v-slot:incomplete>-->
+<!--                                <v-progress-circular-->
+<!--                                    indeterminate-->
+<!--                                    color="primary"-->
+<!--                                ></v-progress-circular>-->
+<!--                            </template>-->
+<!--                        </c-job-status>-->
+<!--&lt;!&ndash;                        <c-map v-if="hasStats && stats.linestring" :geojson="stats.linestring" :key="'map-' + stats.integration"></c-map>&ndash;&gt;-->
+<!--                        <v-container>-->
+<!--                            <c-activity-map v-if="hasStats" :key="'map-' + stats.integration" :stats="stats"></c-activity-map>-->
+<!--                        </v-container>-->
+<!--                    </v-col>-->
+<!--                </v-row>-->
             </v-tab-item>
             <v-tab-item value="tab-analysis">
                 <c-activity-analysis :activity="activity"></c-activity-analysis>
@@ -177,14 +177,13 @@
 
                     <v-col>
                         <v-list two-line v-if="hasComments">
-                            <v-subheader>Comments
+                            <v-subheader>
+                                Comments
                                 <v-badge :value="commentsCount" :content="commentsCount" inline></v-badge>
                             </v-subheader>
 
-                            <template v-for="comment in comments">
-                                <v-list-item
-                                    :key="comment.id"
-                                >
+                            <div v-for="comment in comments" :key="comment.id">
+                                <v-list-item>
                                     <v-list-item-content>
                                         <v-list-item-title>{{ comment.name }}</v-list-item-title>
                                         <v-list-item-subtitle>
@@ -192,7 +191,7 @@
                                             &mdash; {{comment.text}} </v-list-item-subtitle>
                                     </v-list-item-content>
                                 </v-list-item>
-                            </template>
+                            </div>
                         </v-list>
                     </v-col>
                 </v-row>

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-    import { Head } from '@inertiajs/inertia-vue';
+    import { Head } from '@inertiajs/vue3';
     import CAuthWrapper from 'ui/layouts/CAuthWrapper';
 
     export default {

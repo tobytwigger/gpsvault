@@ -6,8 +6,6 @@
             </template>
         </c-iterator>
 
-        </c-pagination-iterator>
-
         <template #headerActions>
             <c-place-form title="Add new place" button-text="Create">
                 <template v-slot:activator="{trigger, showing}">

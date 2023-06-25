@@ -22,7 +22,7 @@ window.axios.defaults.withCredentials = true;
  */
 import VueEasyLightbox from 'vue-easy-lightbox'
 import UiKit from 'ui/install';
-import {Link} from '@inertiajs/inertia-vue';
+import {Link} from '@inertiajs/vue3';
 
 Vue.use(UiKit);
 Vue.use(VueEasyLightbox);
