@@ -1,37 +1,32 @@
 <template>
     <div>
-        <div style="height: 800px" ref="map"></div>
-        <div id="routing-control">
-            <c-routing-control :errors="errors" :schema.sync="_schema" :result="result"></c-routing-control>
-        </div>
-        <div id="elevation-control">
-            <c-elevation-control :coordinates="result.coordinates" :selected="selectedIndex" @update:selected="selectedIndex = $event"></c-elevation-control>
-        </div>
-        <div id="place-control">
-            <c-place-control :bounds="bounds" :places.sync="places" :zoom="zoom"></c-place-control>
-        </div>
+        <map-canvas ref="map"></map-canvas>
     </div>
 </template>
 
 <script>
 import maplibregl from 'maplibre-gl';
-import RoutingControl from './controls/routing/RoutingControl';
-import CRoutingControl from './controls/routing/CRoutingControl';
-
-import ElevationControl from './controls/elevation/ElevationControl';
-import CElevationControl from './controls/elevation/CElevationControl';
-
-import PlaceControl from './controls/places/PlaceControl';
-import CPlaceControl from './controls/places/CPlaceControl';
 
 import CryptoJS from 'crypto-js';
 import {cloneDeep} from 'lodash';
 import polyline from '@mapbox/polyline';
 import units from '../../mixins/units';
 
+import MapCanvas from 'ui/tools/maps/MapCanvas';
+import Map from 'ui/tools/maps/map';
+
+import ElevationControl from 'ui/tools/maps/controls/ElevationControl';
+import FullscreenControl from 'ui/tools/maps/controls/FullscreenControl';
+import RoutingControl from 'ui/tools/maps/controls/RoutingControl';
+import PlaceControl from 'ui/tools/maps/controls/PlaceControl';
+import GeolocateControl from 'ui/tools/maps/controls/GeolocateControl';
+import NavigationControl from 'ui/tools/maps/controls/NavigationControl';
+import ScaleControl from 'ui/tools/maps/controls/ScaleControl';
+
+
 export default {
     name: "CRoutePlanner",
-    components: {CElevationControl, CRoutingControl, CPlaceControl},
+    components: {MapCanvas},
     mixins: [units],
     props: {
         errors: {
@@ -67,7 +62,7 @@ export default {
             bounds: null,
             places: [],
             placeMarkers: {},
-            map: null,
+            // map: null,
             zoom: 1,
             geojsonMarker: null,
             hoverLngLat: {lng: null, lat: null},
@@ -78,50 +73,21 @@ export default {
         }
     },
     mounted() {
-        this.map = new maplibregl.Map({
-            container: this.$refs.map,
-            // style: 'https://demotiles.maplibre.org/style.json', // style URL
-            center: [0, 51], // starting position [lng, lat]
-            zoom: 1, // starting zoom
-            style: {
-                version: 8,
-                sources: {
-                    osm: {
-                        type: 'raster',
-                        tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                        attribution: '&copy; OpenStreetMap Contributors',
-                        maxzoom: 19
-                    },
-                    opentopo: {
-                        type: 'raster',
-                        tiles: ['https://a.tile.opentopomap.org/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                        attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>',
-                        maxzoom: 19
-                    },
-                    simple: {
-                        type: 'raster',
-                        tiles: ['https://a.tile.opentopomap.org/{z}/{x}/{y}.png'],
-                        tileSize: 256,
-                        attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>',
-                        maxzoom: 19
-                    },
-                },
-                layers: [
-                    {
-                        id: 'osm',
-                        type: 'raster',
-                        source: 'osm'
-                    },
-                ],
-            },
-        });
-
-        this.map.on('load', () => {
-            this.ready = true;
-            this.setupMap();
-        });
+        this.map = new Map({
+            container: this.$refs.map.ref,
+            controls: [
+                new ElevationControl(),
+                new FullscreenControl(),
+                new GeolocateControl(),
+                new NavigationControl(),
+                new PlaceControl(),
+                new RoutingControl(),
+                new ScaleControl()
+                    .setConfig({
+                        unit: this.$setting.unit_system || 'metric'
+                    })
+            ]
+        }, {});
     },
     watch: {
         schema: {
@@ -226,50 +192,6 @@ export default {
 
         },
         setupMap: function () {
-            this.map.addControl(
-                new maplibregl.NavigationControl({
-                    showZoom: true,
-                    showCompass: true
-                })
-            );
-
-            // this.map.addControl(
-            //     new maplibregl.ScaleControl({
-            //         maxWidth: 350,
-            //         unit: this.$setting.unit_system || 'metric'
-            //     })
-            // );
-
-            this.map.addControl(
-                new RoutingControl()
-            );
-
-            this.map.addControl(
-                new PlaceControl()
-            );
-
-            this.map.addControl(
-                new ElevationControl()
-            );
-
-            this.map.addControl(
-                new maplibregl.GeolocateControl({
-                    positionOptions: {
-                        enableHighAccuracy: false,
-                        maximumAge: 0,
-                        timeout: 6000 /* 6 sec */
-                    },
-                    fitBoundsOptions: {
-                        maxZoom: 15
-                    },
-                    trackUserLocation: false,
-                    showAccuracyCircle: true,
-                    showUserLocation: true
-                })
-            );
-
-            this.map.addControl(new maplibregl.FullscreenControl({}));
-
             this._createGeneralClickHandler();
 
             this.syncMap();
@@ -319,10 +241,18 @@ export default {
                 if(waypoint?.id) {
                     // Check if the marker exists
                     if(this.markers.hasOwnProperty(waypoint.id)) {
-                        // If it does exist, make sure the location matches.
-                        if(waypoint.location !== this.markers[waypoint.id].getLngLat()) {
+                        // If it does exist, see if we should update it.
+                        let backgroundImage = this._getBackgroundImage(parseInt(waypointIndex) + 1);
+                        let currentBackgroundImage = this.markers[waypoint.id].getElement().style.backgroundImage;
+                        if(currentBackgroundImage === '') {
+                            currentBackgroundImage = null;
+                        }
+                        if(
+                            (waypoint.location !== this.markers[waypoint.id].getLngLat())
+                            || (currentBackgroundImage !== backgroundImage)
+                        ) {
                             this.markers[waypoint.id].setLngLat([waypoint.location[1], waypoint.location[0]]);
-                            this.markers[waypoint.id].getElement().style.backgroundImage = this._getBackgroundImage(parseInt(waypointIndex) + 1)
+                            this.markers[waypoint.id].getElement().style.backgroundImage = backgroundImage;
                         }
                     } else {
                         // Otherwise create it
@@ -393,13 +323,28 @@ export default {
                 let resolvedPlace = this.places.find((place) => place.id.toString() === placeId.toString());
                 window.open(route('place.show', placeId), '_blank');
             });
+            let addToStartButton = this._createPopupButton('Add to start', 'add-to-start', (e) => {
+                let waypoint = this._newWaypoint([place.location.coordinates[1], place.location.coordinates[0]]);
+                let schema = cloneDeep(this._schema);
+                schema.waypoints.unshift(waypoint);
+                this._schema = schema;
+            });
+
+            let addToEndButton = this._createPopupButton('Go to place', 'go-to-place-' + place.id, (e) => {
+                let placeId = (e.target.id ?? '').replace('go-to-place-', '');
+                let resolvedPlace = this.places.find((place) => place.id.toString() === placeId.toString());
+                window.open(route('place.show', placeId), '_blank');
+            });
             let titleSpan = document.createElement('span');
             titleSpan.innerHTML = place.name;
             // let addAsPlaceBtn = this._createPopupButton('Add as a place', 'add-as-place-' + waypoint.id, (e) => console.log('Add as a place'));
             let buttonDiv = document.createElement('div');
             buttonDiv
                 .appendChild(titleSpan)
-                .appendChild(goToPlaceButton);
+                .appendChild(goToPlaceButton)
+                .appendChild(addToStartButton)
+                // .appendChild(addAsWaypointButton)
+                // .appendChild(addToEndButton);
             let popup = new maplibregl.Popup({ offset: 25 }).setDOMContent(buttonDiv);
             let marker = new maplibregl.Marker({element: markerEl, draggable: false})
                 .setLngLat([place.location.coordinates[0], place.location.coordinates[1]])
@@ -414,7 +359,10 @@ export default {
             markerEl.id = 'waypoint-' + waypoint.id;
             markerEl.className = 'marker clickable';
             markerEl.style.cursor = 'pointer';
-            markerEl.style.backgroundImage = this._getBackgroundImage(parseInt(index) + 1);
+            let backgroundImage = this._getBackgroundImage(parseInt(index) + 1);
+            if(backgroundImage !== null) {
+                markerEl.style.backgroundImage = backgroundImage;
+            }
             markerEl.style.width = '20px';
             markerEl.style.height = '48px';
 
@@ -483,6 +431,9 @@ export default {
                     _northEast: {lat: bounds._ne.lat, lng: bounds._ne.lng},
                     _southWest: {lat: bounds._sw.lat, lng: bounds._sw.lng},
                 };
+            });
+            this.map.on('zoomend', function(e) {
+                self.syncMap();
             });
             this.map.on('moveend', function(e) {
                 let bounds = e.target.getBounds();
@@ -558,29 +509,33 @@ export default {
             })
         },
         _getBackgroundImage(text) {
-            return 'url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'utf-8\'%3F%3E%3Csvg viewBox=\'0 0 500 500\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:bx=\'https://boxy-svg.com\'%3E%3Cellipse style=\'stroke: rgb(0, 0, 0);\' cx=\'253.821\' cy=\'257.697\' rx=\'183.5\' ry=\'183.5\'/%3E%3Ctext style=\'fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 15.5px; white-space: pre;\' x=\'267.442\' y=\'224.806\' transform=\'matrix(0, 0, 0, 0, 0, 0)\'%3E2%3C/text%3E%3Ctext style=\'fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: ' + (text > 9 ? '2' : '3') + '00px; font-weight: 700; paint-order: fill; stroke-miterlimit: 7; stroke-width: 9px; white-space: pre;\' x=\'171.095\' y=\'363.411\' bx:origin=\'0.49881 0.5\'%3E' + text +'%3C/text%3E%3C/svg%3E")';
+            let shouldShowWaypoints = this.map.getZoom() > 10;
+            if(!shouldShowWaypoints) {
+                return null;
+            }
+            return 'url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'utf-8\'%3F%3E%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 500 500\'  xmlns:bx=\'https://boxy-svg.com\'%3E%3Cellipse style=\'stroke: rgb(0, 0, 0);\' cx=\'253.821\' cy=\'257.697\' rx=\'183.5\' ry=\'183.5\'/%3E%3Ctext style=\'fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 15.5px; white-space: pre;\' x=\'267.442\' y=\'224.806\' transform=\'matrix(0, 0, 0, 0, 0, 0)\'%3E2%3C/text%3E%3Ctext style=\'fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: ' + (text > 9 ? '2' : '3') + '00px; font-weight: 700; paint-order: fill; stroke-miterlimit: 7; stroke-width: 9px; white-space: pre;\' x=\'171.095\' y=\'363.411\' bx:origin=\'0.49881 0.5\'%3E' + text +'%3C/text%3E%3C/svg%3E")';
         },
         _getPlaceBackgroundImage(type) {
             if(type === 'food_drink') {
-                return 'url(/dist/images/map/food_drink.svg)';
+                return 'url("/dist/images/map/food_drink.svg")';
             }
             if(type === 'shops') {
-                return 'url(/dist/images/map/basket.svg)';
+                return 'url("/dist/images/map/basket.svg")';
             }
             if(type === 'tourist') {
-                return 'url(/dist/images/map/eiffel-tower.svg)';
+                return 'url("/dist/images/map/eiffel-tower.svg")';
             }
             if(type === 'accommodation') {
-                return 'url(/dist/images/map/accommodation.svg)';
+                return 'url("/dist/images/map/accommodation.svg")';
             }
             if(type === 'water') {
-                return 'url(/dist/images/map/water.svg)';
+                return 'url("/dist/images/map/water.svg")';
             }
             if(type === 'toilets') {
-                return 'url(/dist/images/map/toilets.svg)';
+                return 'url("/dist/images/map/toilets.svg")';
             }
             if(type === 'other') {
-                return 'url(/dist/images/map/other.svg)';
+                return 'url("/dist/images/map/help.svg")';
             }
             return null;
         }

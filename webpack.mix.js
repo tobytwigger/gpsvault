@@ -24,7 +24,22 @@ mix.js('resources/js/app.js', 'dist/js')
     .css('resources/css/app.css', 'dist/css')
     .webpackConfig(require('./webpack.config'))
     .sourceMaps()
-    .copy('resources/images', 'public/dist/images');
+    .copy('resources/images', 'public/dist/images')
+    .webpackConfig({
+        module: {
+            rules: [
+                {
+                    test: /\.tsx?$/,
+                    loader: "ts-loader",
+                    options: { appendTsSuffixTo: [/\.vue$/] },
+                    exclude: /node_modules/
+                }
+            ]
+        },
+        resolve: {
+            extensions: ["*", ".js", ".jsx", ".vue", ".ts", ".tsx"]
+        }
+    });
 
 mix.webpackConfig({
     plugins: [

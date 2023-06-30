@@ -27,6 +27,8 @@
         "pusher-js": "^4.3",
         "sass": "~1.32",
         "sass-loader": "^12.4.0",
+        "ts-loader": "^9.4.4",
+        "typescript": "^5.1.6",
         "uuid": "^3.4.0",
         "vue": "^2.6.0",
         "vue-loader": "^15.9.8",
