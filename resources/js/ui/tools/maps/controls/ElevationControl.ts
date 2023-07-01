@@ -1,17 +1,26 @@
-import {Control} from "../types/MapType";
+import {Control, MapState} from "../types/MapType";
 import BaseElevationControl from './../../../components/Route/controls/elevation/ElevationControl.js';
-import {IControl} from "maplibre-gl";
+import {IControl, Map} from "maplibre-gl";
 
 class ElevationControl implements Control {
     config: object = {};
 
-    setConfig(config: object = {}): this {
+    private triggerStateUpdate: () => void = () => undefined;
+
+    constructor(config: object = {}){
         this.config = config;
-        return this;
     };
 
     createControl(): IControl {
         return new BaseElevationControl({});
+    }
+
+    initialise(map: Map, triggerStateUpdate: () => void) {
+
+    }
+
+    modifyState(state: MapState, oldState: MapState): MapState {
+        return state;
     }
 }
 

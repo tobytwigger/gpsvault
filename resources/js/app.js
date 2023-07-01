@@ -19,9 +19,9 @@ Vue.use(JobStatus, {
 });
 
 
-applyPolyfills().then(() => {
-    defineCustomElements(window);
-});
+// applyPolyfills().then(() => {
+//     defineCustomElements(window);
+// });
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

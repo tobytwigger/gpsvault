@@ -10,7 +10,7 @@
                         color="light-blue"
                         dark
                     >
-                        <v-toolbar-title>Places</v-toolbar-title>
+                        <v-toolbar-title>Places ({{places.length}})</v-toolbar-title>
 
                         <v-spacer></v-spacer>
 
@@ -37,7 +37,7 @@
                         <v-subheader>Filter place types</v-subheader>
 
                         <v-list-item-group
-                            v-model="selectedPlaceTypes"
+                            v-model="dynamicSelectedPlaceTypes"
                             multiple
                             active-class=""
                         >
@@ -72,12 +72,9 @@
 
 <script>
 
-import units from '../../../../mixins/units';
-import {debounce, throttle} from 'lodash';
 
 export default {
     name: "CPlaceControl",
-    mixins: [units],
     data() {
         return {
             placeTypes: [
@@ -89,86 +86,37 @@ export default {
                 {key: 'toilets', 'title': 'Toilets', 'icon': 'mdi-toilet'},
                 {key: 'other', 'title': 'Other', 'icon': 'mdi-crosshairs-question'},
             ],
-            selectedPlaceTypes: ['food_drink'],
-            loading: false,
+            selectedPlaceTypes: [],
+            places: [],
+            errors: {}
         }
     },
-    props: {
-        zoom: {
-            type: Number,
-            required: false,
-            default: 1
-        },
-        places: {
-            required: false,
-            type: Array,
-            default: () => {
-                return [];
-            }
-        },
-        errors: {
-            required: false,
-            type: Object,
-            default: () => {
-                return {};
-            }
-        },
-        bounds: {
-            required: false,
-            default: () => {
-                return null;
-            }
-        },
-    },
-    watch: {
-        bounds: {
-            handler: function (val) {
-                this.loadPlaces();
-            },
-            deep: true
-        },
-        selectedPlaceTypes: {
-            handler: function (val) {
-                this.loadPlaces();
-            },
-            deep: true
-        },
-        zoom: {
-            handler: function (val) {
-                this.loadPlaces();
-            },
-            deep: true
-        },
-    },
-    methods: {
-        loadPlaces: throttle(function(val) {
-            this.loading = true;
-            if(this.zoom < 10) {
-                this.loading = false;
-                this.$emit('update:places', []);
-            } else {
-                axios.get(route('place.search'), {params: this.searchData})
-                    .then(response => this.$emit('update:places', response.data.data))
-                    .then(() => this.loading = false);
-            }
-        }, 1000)
+    mounted() {
+        this.selectedPlaceTypes = this.placeControl.visibleTypes;
+        this.placeControl.onPlacesUpdated((places) => {
+            this.places = places;
+        });
+        this.placeControl.onErrorsUpdated((errors) => {
+            this.errors = errors;
+        });
     },
     computed: {
-        searchData() {
-            let data = {};
-            if(this.bounds) {
-                data.southwest_lat = this.bounds._southWest.lat;
-                data.southwest_lng = this.bounds._southWest.lng
-                data.northeast_lat = this.bounds._northEast.lat;
-                data.northeast_lng = this.bounds._northEast.lng;
+        dynamicSelectedPlaceTypes: {
+            get() {
+                return this.selectedPlaceTypes;
+            },
+            set(val) {
+                this.placeControl.setVisibleTypes(val);
+                this.selectedPlaceTypes = val;
             }
-            data.types = this.selectedPlaceTypes;
-            data.perPage = 100;
-            // Filter by types!
-            return data;
         }
     },
 
+    props: {
+        placeControl: {
+            required: true
+        },
+    },
 }
 </script>
 

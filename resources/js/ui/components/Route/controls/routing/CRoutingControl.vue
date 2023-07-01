@@ -166,31 +166,14 @@ export default {
         draggable
     },
     props: {
-        errors: {
+        RoutingControl: {
             required: false,
-            type: Object,
-            default: () => {
-                return {};
-            }
         },
-        schema: {
-            required: false,
-//            required: true,
-            type: Object,
-            default: () => {
-                return {
-
-                }
-            }
-        },
-        result: {
-            required: true,
-            type: Object
-        }
     },
     data() {
         return {
             showSettings: false,
+            errors: []
         }
     },
     computed: {

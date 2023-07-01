@@ -1,13 +1,13 @@
-import {Control} from "../types/MapType";
-import maplibregl, {IControl} from "maplibre-gl";
+import {Control, MapState} from "../types/MapType";
+import maplibregl, {IControl, Map} from "maplibre-gl";
 
 class NavigationControl implements Control {
     config: object = {};
 
-    setConfig(config: object = {}): this {
-        this.config = config;
+    private triggerStateUpdate: () => void = () => undefined;
 
-        return this;
+    constructor(config: object = {}){
+        this.config = config;
     };
 
     createControl(): IControl {
@@ -16,6 +16,13 @@ class NavigationControl implements Control {
             showCompass: true
         })
     };
+
+    initialise(map: Map, triggerStateUpdate: () => void) {
+    }
+
+    modifyState(state: MapState, oldState: MapState): MapState {
+        return state;
+    }
 }
 
 

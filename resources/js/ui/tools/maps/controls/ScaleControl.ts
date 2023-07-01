@@ -1,5 +1,5 @@
-import {Control} from "../types/MapType";
-import maplibregl, {IControl, Unit} from "maplibre-gl";
+import {Control, MapState} from "../types/MapType";
+import maplibregl, {IControl, Unit, Map} from "maplibre-gl";
 
 interface ScaleControlOptions {
     unit?: Unit;
@@ -10,12 +10,13 @@ class ScaleControl implements Control {
         unit: 'metric',
     };
 
-    setConfig(config: ScaleControlOptions = {}): this {
+    private triggerStateUpdate: () => void = () => undefined;
+
+    constructor(config: ScaleControlOptions = {}){
         if(this.config.unit === undefined) {
             this.config.unit = 'metric';
         }
         this.config = config;
-        return this;
     };
 
     createControl(): IControl {
@@ -24,6 +25,13 @@ class ScaleControl implements Control {
             unit: this.config.unit
         })
     };
+
+    initialise(map: Map, triggerStateUpdate: () => void) {
+    }
+
+    modifyState(state: MapState, oldState: MapState): MapState {
+        return state;
+    }
 
 }
 
