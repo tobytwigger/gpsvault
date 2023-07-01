@@ -163,8 +163,6 @@ class Map {
     }
 
     redraw() {
-        // console.log(new Error().stack);
-        console.log('Redrawing');
         this.debouncedRedraw();
     }
 
