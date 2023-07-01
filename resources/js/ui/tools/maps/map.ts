@@ -15,7 +15,7 @@ class Map {
 
     private _controls: Control[];
 
-    debouncedRedraw: () => void = throttle(this.redrawRaw.bind(this), 500);
+    debouncedRedraw: () => void = debounce(this.redrawRaw.bind(this), 50);
 
     private stateUpdatedCallbacks: ((state: MapState) => void)[] = [];
 
@@ -191,7 +191,8 @@ class Map {
         }
 
         // Add popups to the map
-        let popups = Object.keys(state.popups);
+        let popups = Object.keys(state.popups)
+            .filter((key) => state.popups[key] !== null);
 
         let popupIdsToKeep: string[] = [];
         for(let popupKey of popups) {

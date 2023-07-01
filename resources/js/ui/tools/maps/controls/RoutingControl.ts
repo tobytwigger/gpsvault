@@ -22,6 +22,7 @@ class RoutingControl implements Control {
 
     initialise(map: Map, triggerStateUpdate: () => void) {
         let self = this;
+        this.triggerStateUpdate = triggerStateUpdate;
 
         map.on('click', (e: MapMouseEvent) => {
             if((e.originalEvent.target as HTMLElement).classList.contains('clickable') === false) {
@@ -31,6 +32,7 @@ class RoutingControl implements Control {
                     this.existingGeneralPopup = null;
                 } else {
                     // Otherwise, create a new popup
+                    // TODO Set the marker the popup uses
                     this.existingGeneralPopup = createPopup()
                         .addButton('Add to Start', () => {
                             console.log('Add to start');
@@ -89,8 +91,9 @@ class RoutingControl implements Control {
                         .setLocation({longitude: e.lngLat.lng, latitude: e.lngLat.lat})
                         .create();
 
-                    this.triggerStateUpdate();
                 }
+
+                this.triggerStateUpdate();
             }
         })
     }
@@ -98,6 +101,8 @@ class RoutingControl implements Control {
     modifyState(state: MapState, oldState: MapState): MapState {
         if(this.existingGeneralPopup) {
             state.popups.routingGeneralPopup = this.existingGeneralPopup;
+        } else {
+            state.popups.routingGeneralPopup = null;
         }
         return state;
     }

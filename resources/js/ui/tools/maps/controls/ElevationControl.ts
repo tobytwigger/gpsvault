@@ -16,7 +16,7 @@ class ElevationControl implements Control {
     }
 
     initialise(map: Map, triggerStateUpdate: () => void) {
-
+        this.triggerStateUpdate = triggerStateUpdate;
     }
 
     modifyState(state: MapState, oldState: MapState): MapState {

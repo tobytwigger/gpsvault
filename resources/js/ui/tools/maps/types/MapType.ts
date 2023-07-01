@@ -20,7 +20,7 @@ interface MapState {
         [key: string]: MapMarkerCollection
     },
     popups: {
-        [key: string]: MapMarkerPopup
+        [key: string]: MapMarkerPopup|null
     }
 }
 
