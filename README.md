@@ -22,5 +22,3 @@ Cycle store is an open source, one-stop shop for route planning and analysing yo
 - Take automatic backups of your data.
 - Integrates with Strava and DropBox.
 - Transfer routes to your Wahoo headunit.
-
-Get started at https://cycle.linkeys.app, or read the documentation at https://tobytwigger.github.io/cycle-store.
